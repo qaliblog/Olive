@@ -1,5 +1,5 @@
 import { type Accessor, createMemo } from "solid-js"
-import { createSimpleContext } from "@opencode/ui/context"
+import { createSimpleContext } from "@olive/ui/context"
 import { useProviders } from "@/providers/catalog/providers"
 import { useGlobal } from "@/runtime/server/runtime"
 
@@ -17,7 +17,7 @@ function modelKey(model: ModelKey) {
 }
 
 export const isFreeModel = (model: { provider: { id: string }; cost?: { input: number } }) =>
-  model.provider.id === "opencode" && (!model.cost || model.cost.input === 0)
+  model.provider.id === "olive" && (!model.cost || model.cost.input === 0)
 
 // The newest release of each family per provider. A free model shares its family and release date with its paid twin,
 // so the two are grouped apart. A tie keeps the first model listed.
@@ -84,7 +84,7 @@ const createModelsController = (directory: Accessor<string | undefined>) => {
 
   const latestSet = createMemo(() => new Set(latest().map((x) => modelKey(x))))
 
-  // OpenCode's free models (Big Pickle) stay on offer long after release, so they are listed regardless of age or a
+  // Olive's free models (Big Pickle) stay on offer long after release, so they are listed regardless of age or a
   // newer free model in the same family.
   const freeSet = createMemo(
     () =>

@@ -1,21 +1,21 @@
 import { describe, expect } from "bun:test"
 import path from "path"
 import { Effect, Layer } from "effect"
-import { LanguageModel } from "@opencode/ai/effect"
-import { OpenAIChat } from "@opencode/ai/protocols/openai-chat"
-import { TestLLM } from "@opencode/ai/testing"
-import { Agent } from "@opencode/core/agent"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode/core/effect/app-node-platform"
-import { Watcher } from "@opencode/core/filesystem/watcher"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { Model } from "@opencode/core/model"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { SessionRunnerModel } from "@opencode/core/session/runner/model"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
+import { LanguageModel } from "@olive/ai/effect"
+import { OpenAIChat } from "@olive/ai/protocols/openai-chat"
+import { TestLLM } from "@olive/ai/testing"
+import { Agent } from "@olive/core/agent"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@olive/core/effect/app-node-platform"
+import { Watcher } from "@olive/core/filesystem/watcher"
+import { LocationServiceMap } from "@olive/core/location-service-map"
+import { Model } from "@olive/core/model"
+import { Provider } from "@olive/core/provider"
+import { AbsolutePath } from "@olive/core/schema"
+import { Session } from "@olive/core/session"
+import { SessionRunnerModel } from "@olive/core/session/runner/model"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Global } from "@olive/util/global"
 import { tempGlobalLayer } from "../fixture/global"
 import { offlineModels } from "../fixture/models"
 import { tmpdirScoped } from "../fixture/tmpdir"
@@ -133,7 +133,7 @@ function project(
     const definition = { description: "Review code", template: "Review $ARGUMENTS: !`printf ready`", ...command }
     yield* Effect.promise(() =>
       Bun.write(
-        path.join(tmp.path, "opencode.json"),
+        path.join(tmp.path, "olive.json"),
         JSON.stringify({
           agents: { reviewer: { mode: "subagent", model: "test/child" } },
           ...(format === "markdown" ? {} : { commands: { review: definition } }),
@@ -143,7 +143,7 @@ function project(
     if (format === "markdown")
       yield* Effect.promise(() =>
         Bun.write(
-          path.join(tmp.path, ".opencode/commands/review.md"),
+          path.join(tmp.path, ".olive/commands/review.md"),
           [
             "---",
             "description: Review code",

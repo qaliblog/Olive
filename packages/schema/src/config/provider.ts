@@ -57,7 +57,7 @@ class Limit extends Schema.Class<Limit>("Config.Model.Limit")({
   output: Schema.Int.pipe(optional),
 }) {}
 
-// models.dev v2's `capabilities.reasoning`. OpenCode builds the model's variants from it; no control means none.
+// models.dev v2's `capabilities.reasoning`. Olive builds the model's variants from it; no control means none.
 export const Reasoning = Schema.Union([
   Schema.Struct({ supported: Schema.Literal(false) }),
   Schema.Struct({

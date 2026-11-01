@@ -1,6 +1,6 @@
 {
-  "$schema": "https://opencode.ai/desktop-theme.json",
-  "name": "OpenCode",
+  "$schema": "https://olive.ai/desktop-theme.json",
+  "name": "Olive",
   "id": "oc-2",
   "light": {
     "palette": {

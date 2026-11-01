@@ -1,5 +1,5 @@
 import { Effect, JsonSchema, Schema } from "effect"
-import type { Content } from "@opencode/schema/tool"
+import type { Content } from "@olive/schema/tool"
 import type {
   Freeform,
   ToolCallPart,

@@ -1,17 +1,17 @@
 import fs from "fs/promises"
 import { expect } from "bun:test"
-import { App } from "@opencode/core/app"
-import { Bus } from "@opencode/core/bus"
-import { Database } from "@opencode/core/database/database"
-import { Watcher } from "@opencode/core/filesystem/watcher"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { ModelsDev } from "@opencode/core/models-dev"
-import { Session } from "@opencode/core/session"
-import { SessionExecution } from "@opencode/core/session/execution"
-import { Location } from "@opencode/schema/location"
-import { AbsolutePath } from "@opencode/schema/schema"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
+import { App } from "@olive/core/app"
+import { Bus } from "@olive/core/bus"
+import { Database } from "@olive/core/database/database"
+import { Watcher } from "@olive/core/filesystem/watcher"
+import { LocationServiceMap } from "@olive/core/location-service-map"
+import { ModelsDev } from "@olive/core/models-dev"
+import { Session } from "@olive/core/session"
+import { SessionExecution } from "@olive/core/session/execution"
+import { Location } from "@olive/schema/location"
+import { AbsolutePath } from "@olive/schema/schema"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Global } from "@olive/util/global"
 import { Context, Effect, Layer, RcMap } from "effect"
 import { HttpEffect, HttpRouter, HttpServer } from "effect/http"
 import { tempGlobalLayer } from "../../core/test/fixture/global"
@@ -52,7 +52,7 @@ it.live("admits synthetic messages and compaction requests without booting or re
     const post = (route: string, body: unknown) =>
       Effect.promise(() =>
         handler(
-          new Request(`http://opencode.local${route}`, {
+          new Request(`http://olive.local${route}`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(body),

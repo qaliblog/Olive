@@ -11,7 +11,7 @@ const source = 'throw new Error("Plugin code must not run during resolution")'
 const name = "@fixture/plugin"
 
 async function fixture(files: Record<string, string>, installed = false) {
-  const root = await realpath(await mkdtemp(path.join(tmpdir(), "opencode-host-")))
+  const root = await realpath(await mkdtemp(path.join(tmpdir(), "olive-host-")))
   const directory = installed ? path.join(root, "node_modules", name) : root
   await Promise.all(
     Object.entries(files).map(async ([file, content]) => {
@@ -181,7 +181,7 @@ describe("Host.resolve", () => {
   it("resolves a local directory through its package.json exports, as the published package", async () => {
     await using plugin = await fixture({
       "package.json": JSON.stringify({
-        name: "opencode-acme-plugin",
+        name: "olive-acme-plugin",
         exports: { ".": "./src/index.ts", "./gui-experimental": "./dist/gui-experimental.cjs" },
       }),
       "src/index.ts": source,
@@ -199,10 +199,10 @@ describe("Host.resolve", () => {
   })
 
   it("names a plugin without a server part after its package, or its local directory", async () => {
-    await using named = await fixture({ "package.json": JSON.stringify({ name: "@acme/opencode-gui" }) })
+    await using named = await fixture({ "package.json": JSON.stringify({ name: "@acme/olive-gui" }) })
     await using unnamed = await fixture({ "tui.tsx": source })
     await using published = await fixture({ "package.json": JSON.stringify({ name }) }, true)
-    assert.equal(Host.packageID(named.target), "@acme/opencode-gui")
+    assert.equal(Host.packageID(named.target), "@acme/olive-gui")
     assert.equal(Host.packageID(unnamed.target), path.basename(unnamed.target.directory))
     assert.equal(Host.packageID(published.target), name)
   })

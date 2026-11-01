@@ -70,7 +70,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "کریڈٹ شامل کریں۔",
   "dialog.usageExceeded.freeTier.title": "مفت استعمال کی حد پوری ہو گئی",
   "dialog.usageExceeded.freeTier.description":
-    "$10/ماہ میں بہترین اوپن سورس ماڈلز تک قابل اعتماد رسائی کے لیے OpenCode Go کو سبسکرائب کریں۔",
+    "$10/ماہ میں بہترین اوپن سورس ماڈلز تک قابل اعتماد رسائی کے لیے Olive Go کو سبسکرائب کریں۔",
   "dialog.usageExceeded.freeTier.actionLabel": "سبسکرائب کریں۔",
   "ui.sessionTurn.status.delegating": "کام سونپا جا رہا ہے",
   "ui.sessionTurn.status.planning": "اگلے اقدامات کی منصوبہ بندی کی جا رہی ہے",

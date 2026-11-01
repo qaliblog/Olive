@@ -1,9 +1,9 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { expect } from "bun:test"
-import { Config } from "@opencode/core/config"
-import { Generate } from "@opencode/core/generate"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { Config } from "@olive/core/config"
+import { Generate } from "@olive/core/generate"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { Effect, Layer, Predicate } from "effect"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
@@ -34,14 +34,14 @@ const generate = makeLocationNode({
 
 it.live("uses base configuration without depending on process.cwd()", () =>
   Effect.gen(function* () {
-    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-generate-endpoint-")))
+    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("olive-generate-endpoint-")))
     const global = path.join(tmp.path, "global")
     const project = path.join(tmp.path, "project")
     yield* Effect.promise(() => Promise.all([fs.mkdir(global), fs.mkdir(project)]))
     yield* Effect.promise(() =>
       Promise.all([
-        fs.writeFile(path.join(global, "opencode.json"), JSON.stringify({ model: "base/default" })),
-        fs.writeFile(path.join(project, "opencode.json"), JSON.stringify({ model: "project/default" })),
+        fs.writeFile(path.join(global, "olive.json"), JSON.stringify({ model: "base/default" })),
+        fs.writeFile(path.join(project, "olive.json"), JSON.stringify({ model: "project/default" })),
       ]),
     )
     const handler = yield* ServerFetch.make(
@@ -55,17 +55,17 @@ it.live("uses base configuration without depending on process.cwd()", () =>
     )
 
     expect(global).not.toBe(process.cwd())
-    expect(yield* request(handler, new URL("http://opencode.local/api/experimental/generate/text"))).toEqual({
+    expect(yield* request(handler, new URL("http://olive.local/api/experimental/generate/text"))).toEqual({
       model: { providerID: "base", model: "default" },
     })
 
-    const legacy = new URL("http://opencode.local/api/experimental/generate/text")
+    const legacy = new URL("http://olive.local/api/experimental/generate/text")
     legacy.searchParams.set("location[directory]", project)
     expect(yield* request(handler, legacy)).toEqual({
       model: { providerID: "base", model: "default" },
     })
 
-    const deprecatedPath = new URL("http://opencode.local/api/experimental/generate")
+    const deprecatedPath = new URL("http://olive.local/api/experimental/generate")
     expect(yield* request(handler, deprecatedPath)).toEqual({
       model: { providerID: "base", model: "default" },
     })
@@ -74,7 +74,7 @@ it.live("uses base configuration without depending on process.cwd()", () =>
 
 it.live("rejects unknown image and decision models and duplicate question names", () =>
   Effect.gen(function* () {
-    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-generate-media-")))
+    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("olive-generate-media-")))
     const handler = yield* ServerFetch.make({
       database: { path: ":memory:" },
       config: { directory: tmp.path },
@@ -86,7 +86,7 @@ it.live("rejects unknown image and decision models and duplicate question names"
     const post = (path: string, body: unknown) =>
       Effect.promise(() =>
         handler(
-          new Request(`http://opencode.local/api/experimental/generate/${path}`, {
+          new Request(`http://olive.local/api/experimental/generate/${path}`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(body),

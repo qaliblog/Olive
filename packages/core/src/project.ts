@@ -7,12 +7,12 @@ import path from "path"
 import { AbsolutePath } from "./schema.js"
 import { Bus } from "./bus.js"
 import { Database } from "./database/database.js"
-import { Worktree } from "@opencode/schema/worktree"
-import { FSUtil } from "@opencode/util/fs-util"
+import { Worktree } from "@olive/schema/worktree"
+import { FSUtil } from "@olive/util/fs-util"
 import { Git } from "./git.js"
-import { AppProcess } from "@opencode/util/process"
-import { makeGlobalNode } from "@opencode/util/effect/app-node"
-import { Hash } from "@opencode/util/hash"
+import { AppProcess } from "@olive/util/process"
+import { makeGlobalNode } from "@olive/util/effect/app-node"
+import { Hash } from "@olive/util/hash"
 import { ProjectSchema } from "./project/schema.js"
 import { ProjectTable, upsertProject } from "./project/sql.js"
 import { ProjectIcon } from "./project/icon.js"
@@ -70,7 +70,7 @@ export interface Options {
   readonly now?: () => number
 }
 
-const Now = Context.Reference<() => number>("@opencode/Project/Now", { defaultValue: () => Date.now })
+const Now = Context.Reference<() => number>("@olive/Project/Now", { defaultValue: () => Date.now })
 
 export interface ListInput {
   /** Includes archived Projects when true. */
@@ -98,7 +98,7 @@ export interface Interface {
   readonly sweep: () => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Project") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/Project") {}
 
 function fromRow(row: typeof ProjectTable.$inferSelect): Info {
   const icon =
@@ -307,7 +307,7 @@ const layer = Layer.effect(
       })
 
     const cached = Effect.fnUntraced(function* (dir: string) {
-      return yield* fs.readFileString(path.join(dir, "opencode")).pipe(
+      return yield* fs.readFileString(path.join(dir, "olive")).pipe(
         Effect.map((value) => value.trim()),
         Effect.map((value) => (value ? ID.make(value) : undefined)),
         Effect.orElseSucceed(() => undefined),

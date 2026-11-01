@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun"
-import { OpenCode } from "@opencode/client"
-import { Service } from "@opencode/client/service"
-import { parse } from "@opencode/script/highlights"
+import { Olive } from "@olive/client"
+import { Service } from "@olive/client/service"
+import { parse } from "@olive/script/highlights"
 import { rm } from "fs/promises"
 import path from "path"
 import { parseArgs } from "util"
@@ -62,7 +62,7 @@ if (!base) throw new Error("No stable V2 release tag was found")
 console.log(`Comparing ${commitRange(base, values.to)}`)
 await generateReview(base, values.to)
 
-if (!(await Bun.file(review).exists())) throw new Error("OpenCode did not create RELEASE_REVIEW.md")
+if (!(await Bun.file(review).exists())) throw new Error("Olive did not create RELEASE_REVIEW.md")
 if (values.print) {
   process.stdout.write(await Bun.file(review).text())
   process.exit(0)
@@ -105,7 +105,7 @@ console.log(`Triggered the ${version} release`)
 
 async function generateReview(base: string, head: string) {
   const endpoint = await Service.ensure()
-  const client = OpenCode.make({
+  const client = Olive.make({
     baseUrl: endpoint.url,
     headers: Service.headers(endpoint),
     fetch: ((request: RequestInfo | URL, init?: RequestInit) =>
@@ -114,12 +114,12 @@ async function generateReview(base: string, head: string) {
   const controller = new AbortController()
   const events = client.event.subscribe({ signal: controller.signal })[Symbol.asyncIterator]()
   const connected = await events.next()
-  if (connected.done) throw new Error("OpenCode event stream disconnected")
+  if (connected.done) throw new Error("Olive event stream disconnected")
 
   const session = await client.session.create({
     title: `Review ${version} release`,
     location: { directory: root },
-    model: { providerID: "opencode", id: "gpt-5.6-sol", variant: "low" },
+    model: { providerID: "olive", id: "gpt-5.6-sol", variant: "low" },
     permissions: [
       { action: "*", resource: "*", effect: "deny" },
       { action: "read", resource: "*", effect: "allow" },
@@ -133,12 +133,12 @@ async function generateReview(base: string, head: string) {
   const completed = (async () => {
     while (true) {
       const next = await events.next()
-      if (next.done) throw new Error("OpenCode event stream disconnected during release review")
+      if (next.done) throw new Error("Olive event stream disconnected during release review")
       if (!("sessionID" in next.value.data) || next.value.data.sessionID !== session.id) continue
       if (next.value.type === "session.execution.succeeded") return
       if (next.value.type === "session.execution.failed") throw new Error(next.value.data.error.message)
       if (next.value.type === "session.execution.interrupted")
-        throw new Error(`OpenCode release review was interrupted: ${next.value.data.reason}`)
+        throw new Error(`Olive release review was interrupted: ${next.value.data.reason}`)
     }
   })()
 
@@ -148,7 +148,7 @@ async function generateReview(base: string, head: string) {
     const messages = await client.message.list({ sessionID: session.id, limit: 100, order: "desc" })
     const response = messages.data.find((message) => message.type === "assistant")
     const text = response?.content.flatMap((part) => (part.type === "text" ? [part.text] : [])).join("\n")
-    if (!text) throw new Error("OpenCode did not return a release review")
+    if (!text) throw new Error("Olive did not return a release review")
     await Bun.write(review, text)
   } finally {
     controller.abort()
@@ -172,8 +172,8 @@ only on commit titles. Write a
 user-facing changelog with sections for Core, TUI, Desktop, SDK, and Extensions, omitting empty sections and changes that
 are entirely internal. Group bug fixes separately from improvements. Preserve community contributor attribution when it
 is available from merged pull requests, but never thank authors listed in .github/TEAM_MEMBERS. Leave out changes to
-the @opencode/ai package in packages/ai unless they change how OpenCode itself behaves for users; then describe only
-that OpenCode behavior.
+the @olive/ai package in packages/ai unless they change how Olive itself behaves for users; then describe only
+that Olive behavior.
 
 Start the changelog with a "### Highlights" section: the few changes worth telling people about, written for humans.
 Pick 2 to 5 user-visible changes a user would notice, try, or share: new capabilities, clearly better workflows, or fixes
@@ -189,7 +189,7 @@ you can now do and why it matters. Vary the sentence openings, and leave contrib
 sections. For example:
 
 - **Reopen Closed Tabs**: Right-click the new-session button in the tab bar to bring back a session you closed by
-  mistake. ([#123](https://github.com/anomalyco/opencode/pull/123))
+  mistake. ([#123](https://github.com/anomalyco/olive/pull/123))
 
 Every highlight must also appear in the detailed sections that follow. Use "###" for Highlights and each release section,
 "####" for Improvements and Bug fixes, and never use "#" or "##" headings in the changelog, since each release is filed

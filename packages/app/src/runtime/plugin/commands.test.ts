@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import type { BuiltinCommand } from "@opencode/plugin/gui/builtin"
+import type { BuiltinCommand } from "@olive/plugin/gui/builtin"
 import { pluginCommandItems } from "./commands"
 import type { Item } from "./host"
 

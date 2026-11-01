@@ -23,27 +23,27 @@ function label(labels: ReturnType<typeof composerModelLabels>, providerID: strin
   return labels.get(composerModelLabelKey(providerID, modelID))
 }
 
-const root = provider("opencode", "Anomaly / OpenCode", { integrationID: "opencode", models: [] })
+const root = provider("olive", "Anomaly / Olive", { integrationID: "olive", models: [] })
 
-const managed = provider("console-openai", "Anomaly / OpenAI", { integrationID: "opencode", canonical: "openai" })
+const managed = provider("console-openai", "Anomaly / OpenAI", { integrationID: "olive", canonical: "openai" })
 
 test.each([
-  provider("opencode", "Anomaly / OpenCode", { integrationID: "opencode" }),
-  provider("opencode", "OpenCode"),
+  provider("olive", "Anomaly / Olive", { integrationID: "olive" }),
+  provider("olive", "Olive"),
 ])("omits native provider $name", (native) => {
   const all = catalog(native)
 
-  expect(composerProviderName("opencode", all)).toBeUndefined()
-  expect(label(composerModelLabels(all), "opencode", "m")).toEqual({ provider: undefined, model: "Model" })
+  expect(composerProviderName("olive", all)).toBeUndefined()
+  expect(label(composerModelLabels(all), "olive", "m")).toEqual({ provider: undefined, model: "Model" })
 })
 
 test.each([
   { direct: provider("openai", "Renamed", { models: [] }), connected: [], expected: "OpenAI" },
-  { direct: provider("openai", "Renamed", { models: [] }), connected: ["openai"], expected: "OpenCode / OpenAI" },
+  { direct: provider("openai", "Renamed", { models: [] }), connected: ["openai"], expected: "Olive / OpenAI" },
   {
     direct: provider("account", "Owls", { integrationID: "openai", models: [] }),
     connected: ["account"],
-    expected: "OpenCode / OpenAI",
+    expected: "Olive / OpenAI",
   },
   {
     direct: provider("proxy", "OpenAI", { canonical: "openai", models: [] }),
@@ -71,7 +71,7 @@ test("only connected providers get labels", () => {
 test("unknown managed routes do not infer identity from console prefixes or display names", () => {
   const all = catalog(
     root,
-    provider("console-openai", "Anomaly / OpenAI", { integrationID: "opencode" }),
+    provider("console-openai", "Anomaly / OpenAI", { integrationID: "olive" }),
     provider("openai", "OpenAI"),
   )
 

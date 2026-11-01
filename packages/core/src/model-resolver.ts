@@ -1,6 +1,6 @@
 export * as ModelResolver from "./model-resolver.js"
 
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import {
   DecisionModel,
   DecisionModelCompatibility,
@@ -11,15 +11,15 @@ import {
   LanguageModel,
   ProviderConfigurationError,
   type ProviderPackage,
-} from "@opencode/ai/effect"
-import { Auth, mergeHttpOptions } from "@opencode/ai/route"
+} from "@olive/ai/effect"
+import { Auth, mergeHttpOptions } from "@olive/ai/route"
 import { Context, Effect, Layer, Schema, Struct } from "effect"
 import { AISDK } from "./aisdk.js"
 import { Credential } from "./credential.js"
 import { Integration } from "./integration.js"
 import { Capabilities, ID, Info, Model, Ref, VariantID } from "./model.js"
 import type { RuntimeInfo } from "./model.js"
-import { Npm } from "@opencode/util/npm"
+import { Npm } from "@olive/util/npm"
 import { Provider } from "./provider.js"
 
 export class VariantUnavailableError extends Schema.TaggedError<VariantUnavailableError>()(
@@ -155,7 +155,7 @@ export interface Interface {
   readonly resolveDecision: (ref: Ref) => Effect.Effect<DecisionModel | undefined, MediaError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ModelResolver") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/ModelResolver") {}
 
 // Variant resolution adds request-local overlays without changing the committed model snapshot.
 export const withVariant = (
@@ -386,7 +386,7 @@ const nativeCredentialSettings = (model: RuntimeInfo, specifier: string, credent
   if (credential.type === "key") return { apiKey: credential.key }
   if (credential.type === "oauth") return tokenSettings(specifier, credential.access)
   // The Bedrock plugin projects the saved profile into settings; SigV4 keeps an ambient bearer token from taking over.
-  if (specifier.startsWith("@opencode/ai/providers/amazon-bedrock")) return { auth: "sigv4" }
+  if (specifier.startsWith("@olive/ai/providers/amazon-bedrock")) return { auth: "sigv4" }
   // The Azure plugin's request hooks replace this with an Entra ID token from the Azure CLI; it only gets the
   // request past the package's own credential check.
   if (model.providerID === Provider.ID.azure) return tokenSettings(specifier, "azure-cli")
@@ -394,11 +394,11 @@ const nativeCredentialSettings = (model: RuntimeInfo, specifier: string, credent
 }
 
 const tokenSettings = (specifier: string, token: string) => {
-  if (specifier === "@opencode/ai/providers/anthropic" || specifier === "@opencode/ai/providers/anthropic-compatible")
+  if (specifier === "@olive/ai/providers/anthropic" || specifier === "@olive/ai/providers/anthropic-compatible")
     return { authToken: token }
   if (
-    specifier === "@opencode/ai/providers/google-vertex" ||
-    specifier.startsWith("@opencode/ai/providers/google-vertex/")
+    specifier === "@olive/ai/providers/google-vertex" ||
+    specifier.startsWith("@olive/ai/providers/google-vertex/")
   )
     return { accessToken: token }
   return { apiKey: token }
@@ -552,28 +552,28 @@ function usesAPIKeyAuth(packageName: string | undefined) {
     name === "@ai-sdk/xai" ||
     name === "@openrouter/ai-sdk-provider" ||
     name === "@ai-sdk/azure" ||
-    name === "@opencode/ai/providers/openai" ||
-    name?.startsWith("@opencode/ai/providers/openai/") === true ||
-    name === "@opencode/ai/providers/anthropic" ||
-    name === "@opencode/ai/providers/anthropic-compatible" ||
-    name === "@opencode/ai/providers/baseten" ||
-    name === "@opencode/ai/providers/cerebras" ||
-    name === "@opencode/ai/providers/cloudflare-ai-gateway" ||
-    name === "@opencode/ai/providers/cloudflare-workers-ai" ||
-    name === "@opencode/ai/providers/deepinfra" ||
-    name === "@opencode/ai/providers/deepseek" ||
-    name === "@opencode/ai/providers/fireworks" ||
-    name === "@opencode/ai/providers/openai-compatible" ||
-    name === "@opencode/ai/providers/google" ||
-    name === "@opencode/ai/providers/google/interactions" ||
-    name === "@opencode/ai/providers/groq" ||
-    name === "@opencode/ai/providers/mistral" ||
-    name === "@opencode/ai/providers/togetherai" ||
-    name === "@opencode/ai/providers/vercel-ai-gateway" ||
-    name === "@opencode/ai/providers/xai" ||
-    name === "@opencode/ai/providers/openrouter" ||
-    name === "@opencode/ai/providers/azure" ||
-    name?.startsWith("@opencode/ai/providers/azure/") === true
+    name === "@olive/ai/providers/openai" ||
+    name?.startsWith("@olive/ai/providers/openai/") === true ||
+    name === "@olive/ai/providers/anthropic" ||
+    name === "@olive/ai/providers/anthropic-compatible" ||
+    name === "@olive/ai/providers/baseten" ||
+    name === "@olive/ai/providers/cerebras" ||
+    name === "@olive/ai/providers/cloudflare-ai-gateway" ||
+    name === "@olive/ai/providers/cloudflare-workers-ai" ||
+    name === "@olive/ai/providers/deepinfra" ||
+    name === "@olive/ai/providers/deepseek" ||
+    name === "@olive/ai/providers/fireworks" ||
+    name === "@olive/ai/providers/openai-compatible" ||
+    name === "@olive/ai/providers/google" ||
+    name === "@olive/ai/providers/google/interactions" ||
+    name === "@olive/ai/providers/groq" ||
+    name === "@olive/ai/providers/mistral" ||
+    name === "@olive/ai/providers/togetherai" ||
+    name === "@olive/ai/providers/vercel-ai-gateway" ||
+    name === "@olive/ai/providers/xai" ||
+    name === "@olive/ai/providers/openrouter" ||
+    name === "@olive/ai/providers/azure" ||
+    name?.startsWith("@olive/ai/providers/azure/") === true
   )
 }
 

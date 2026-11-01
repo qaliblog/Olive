@@ -1,5 +1,5 @@
-import { getFilename } from "@opencode/util/path"
-import type { PromptAttachment } from "@opencode/client/promise"
+import { getFilename } from "@olive/util/path"
+import type { PromptAttachment } from "@olive/client/promise"
 
 export const MIN_IMAGE_PLACEHOLDER_PX = 96
 

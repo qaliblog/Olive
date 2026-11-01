@@ -3,9 +3,9 @@ name = "opencode-pty"
 version = "0.4.0"
 edition = "2024"
 rust-version = "1.90"
-description = "Persistent PTY service for OpenCode"
+description = "Persistent PTY service for Olive"
 license = "MIT"
-repository = "https://github.com/anomalyco/opencode"
+repository = "https://github.com/anomalyco/olive"
 links = "ghostty-vt"
 
 [dependencies]

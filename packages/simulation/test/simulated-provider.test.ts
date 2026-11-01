@@ -2,21 +2,21 @@ import { expect, test } from "bun:test"
 import { mkdir, mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { Agent } from "@opencode/core/agent"
-import { Config } from "@opencode/core/config"
-import { Database } from "@opencode/core/database/database"
-import { makeGlobalNode } from "@opencode/util/effect/app-node"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Bus } from "@opencode/core/bus"
-import { Location } from "@opencode/core/location"
-import { LocationServiceMap } from "@opencode/core/location-services"
-import { Plugin } from "@opencode/core/plugin"
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { SessionMessage } from "@opencode/core/session/message"
-import { Tool } from "@opencode/core/tool"
+import { Agent } from "@olive/core/agent"
+import { Config } from "@olive/core/config"
+import { Database } from "@olive/core/database/database"
+import { makeGlobalNode } from "@olive/util/effect/app-node"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Bus } from "@olive/core/bus"
+import { Location } from "@olive/core/location"
+import { LocationServiceMap } from "@olive/core/location-services"
+import { Plugin } from "@olive/core/plugin"
+import { SdkPlugins } from "@olive/core/plugin/sdk"
+import { AbsolutePath } from "@olive/core/schema"
+import { Session } from "@olive/core/session"
+import { SessionMessage } from "@olive/core/session/message"
+import { Tool } from "@olive/core/tool"
 import { Deferred, Effect, Fiber, Layer, Queue, Stream } from "effect"
 import type { Scope } from "effect/Scope"
 import { SimulatedProvider } from "../src/backend/simulated-provider"
@@ -44,7 +44,7 @@ test("streams a Drive-controlled provider response and removes the finished invo
         result: {
           protocolVersion: 1,
           role: "backend",
-          server: { name: "opencode", version: expect.any(String) },
+          server: { name: "olive", version: expect.any(String) },
           capabilities: expect.arrayContaining(["llm.attach", "llm.request"]),
         },
       })
@@ -214,7 +214,7 @@ test("fails the provider stream when Drive disconnects the invocation", async ()
 
 test("controls arbitrary tools through scoped SDK overlays", async () => {
   const endpoint = availableEndpoint()
-  const directory = await mkdtemp(join(tmpdir(), "opencode-simulated-tools-"))
+  const directory = await mkdtemp(join(tmpdir(), "olive-simulated-tools-"))
   const secondDirectory = join(directory, "second")
   await mkdir(secondDirectory)
   try {

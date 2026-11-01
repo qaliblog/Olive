@@ -1,34 +1,34 @@
 import { expect, test } from "bun:test"
-import { EnvironmentDriver } from "@opencode/core/environment/driver"
-import { EnvironmentFiles } from "@opencode/core/environment/files"
-import { Location as CoreLocation } from "@opencode/core/location"
-import { WorkspaceDriver } from "@opencode/core/workspace/driver"
-import { SessionInbox as CoreSessionInbox } from "@opencode/core/session/inbox"
-import { SessionMessage as CoreSessionMessage } from "@opencode/core/session/message"
-import { Agent } from "@opencode/schema/agent"
-import { Config } from "@opencode/schema/config"
-import { Event } from "@opencode/schema/event"
-import { Location } from "@opencode/schema/location"
-import { Model } from "@opencode/schema/model"
-import { Project } from "@opencode/schema/project"
-import { Provider } from "@opencode/schema/provider"
-import { WebSearch } from "@opencode/schema/websearch"
-import { Session } from "@opencode/schema/session"
-import { SessionInbox } from "@opencode/schema/session-inbox"
-import { SessionMessage } from "@opencode/schema/session-message"
-import { Workspace } from "@opencode/schema/workspace"
-import { Worktree } from "@opencode/schema/worktree"
-import { Api } from "@opencode/server/api"
-import { ClientApi, clientNamespace, groupNames, promiseOmitEndpoints } from "@opencode/protocol/client"
-import { compile, emitPromise } from "@opencode/httpapi-codegen"
+import { EnvironmentDriver } from "@olive/core/environment/driver"
+import { EnvironmentFiles } from "@olive/core/environment/files"
+import { Location as CoreLocation } from "@olive/core/location"
+import { WorkspaceDriver } from "@olive/core/workspace/driver"
+import { SessionInbox as CoreSessionInbox } from "@olive/core/session/inbox"
+import { SessionMessage as CoreSessionMessage } from "@olive/core/session/message"
+import { Agent } from "@olive/schema/agent"
+import { Config } from "@olive/schema/config"
+import { Event } from "@olive/schema/event"
+import { Location } from "@olive/schema/location"
+import { Model } from "@olive/schema/model"
+import { Project } from "@olive/schema/project"
+import { Provider } from "@olive/schema/provider"
+import { WebSearch } from "@olive/schema/websearch"
+import { Session } from "@olive/schema/session"
+import { SessionInbox } from "@olive/schema/session-inbox"
+import { SessionMessage } from "@olive/schema/session-message"
+import { Workspace } from "@olive/schema/workspace"
+import { Worktree } from "@olive/schema/worktree"
+import { Api } from "@olive/server/api"
+import { ClientApi, clientNamespace, groupNames, promiseOmitEndpoints } from "@olive/protocol/client"
+import { compile, emitPromise } from "@olive/httpapi-codegen"
 
 const SDK = await import("../src/index")
 const SDKEffect = await import("../src/effect")
-const CoreAgent = await import("@opencode/core/agent")
-const CoreModel = await import("@opencode/core/model")
-const CoreProject = await import("@opencode/core/project")
-const CoreSession = await import("@opencode/core/session")
-const CoreWorktree = await import("@opencode/core/worktree")
+const CoreAgent = await import("@olive/core/agent")
+const CoreModel = await import("@olive/core/model")
+const CoreProject = await import("@olive/core/project")
+const CoreSession = await import("@olive/core/session")
+const CoreWorktree = await import("@olive/core/worktree")
 
 test("re-exports canonical contracts directly from Schema", () => {
   expect(SDK.Agent).toBe(Agent)
@@ -51,7 +51,7 @@ test("re-exports canonical contracts directly from Schema", () => {
     "Integration",
     "Location",
     "Model",
-    "OpenCode",
+    "Olive",
     "Permission",
     "PermissionSaved",
     "Project",
@@ -103,7 +103,7 @@ test("client and Server contracts generate identically", () => {
   expect(emitPromise(client)).toEqual(emitPromise(server))
 })
 
-test("re-exports workspace and environment driver contracts from @opencode/sdk/effect", () => {
+test("re-exports workspace and environment driver contracts from @olive/sdk/effect", () => {
   expect(SDKEffect.WorkspaceDriver).toBe(WorkspaceDriver)
   expect(SDKEffect.EnvironmentDriver).toBe(EnvironmentDriver)
   expect(SDKEffect.EnvironmentFiles).toBe(EnvironmentFiles)

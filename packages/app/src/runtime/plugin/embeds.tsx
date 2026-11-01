@@ -2,9 +2,9 @@ import { createEffect, on, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
-import { prefersReducedMotion } from "@opencode/ui/motion"
-import type { EmbedProps, Embeds } from "@opencode/plugin/gui"
-import type { Bridge } from "@opencode/plugin/gui/host"
+import { prefersReducedMotion } from "@olive/ui/motion"
+import type { EmbedProps, Embeds } from "@olive/plugin/gui"
+import type { Bridge } from "@olive/plugin/gui/host"
 
 const geometry =
   /^(inset|left|right|top|bottom|translate|transform|scale|rotate|margin|padding|flex|grid|gap|row-gap|column-gap)|(^|-)(width|height)$/

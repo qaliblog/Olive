@@ -1,5 +1,5 @@
-import type { OpenCodeEvent } from "@opencode/client/promise"
-import { createClientConnection, type ClientConnectionStatus } from "@opencode/client/solid"
+import type { OliveEvent } from "@olive/client/promise"
+import { createClientConnection, type ClientConnectionStatus } from "@olive/client/solid"
 import { createGlobalEmitter } from "@solid-primitives/event-bus"
 import { type Accessor, createEffect, on, onCleanup } from "solid-js"
 import { createApiForServer, type ServerApi } from "@/runtime/server/api"
@@ -12,21 +12,21 @@ import { createRequestQueue } from "@/runtime/server/request-queue"
 import { ServerScope } from "@/runtime/server/scope"
 import { useServer } from "./current"
 
-type OpenCodeEventMap = { [Type in OpenCodeEvent["type"]]: Extract<OpenCodeEvent, { type: Type }> }
+type OliveEventMap = { [Type in OliveEvent["type"]]: Extract<OliveEvent, { type: Type }> }
 
-export type OpenCodeEventStream = {
-  on<Type extends OpenCodeEvent["type"]>(type: Type, handler: (event: OpenCodeEventMap[Type]) => void): VoidFunction
-  listen(handler: (event: OpenCodeEvent) => void): VoidFunction
+export type OliveEventStream = {
+  on<Type extends OliveEvent["type"]>(type: Type, handler: (event: OliveEventMap[Type]) => void): VoidFunction
+  listen(handler: (event: OliveEvent) => void): VoidFunction
 }
 
-type OpenCodeEventSource = OpenCodeEventStream & {
-  location(directory: string): OpenCodeEventStream
+type OliveEventSource = OliveEventStream & {
+  location(directory: string): OliveEventStream
 }
 
-export function createOpenCodeEventSource() {
-  const emitter = createGlobalEmitter<OpenCodeEventMap>()
+export function createOliveEventSource() {
+  const emitter = createGlobalEmitter<OliveEventMap>()
 
-  function stream(directory?: string): OpenCodeEventStream {
+  function stream(directory?: string): OliveEventStream {
     return {
       on(type, handler) {
         return emitter.on(type, (event) => {
@@ -43,7 +43,7 @@ export function createOpenCodeEventSource() {
     }
   }
 
-  const event: OpenCodeEventSource = {
+  const event: OliveEventSource = {
     ...stream(),
     location: (directory) => stream(directory),
   }
@@ -52,7 +52,7 @@ export function createOpenCodeEventSource() {
 
   return {
     event,
-    publish(event: OpenCodeEvent) {
+    publish(event: OliveEvent) {
       emitter.emit(event.type, event)
     },
   }
@@ -73,7 +73,7 @@ type ServerSDKBase = {
     attempt: Accessor<number>
     error: Accessor<string | undefined>
   }
-  event: OpenCodeEventSource
+  event: OliveEventSource
 }
 
 function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerScope): ServerSDKBase {
@@ -87,7 +87,7 @@ function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerS
     media.dispose()
   })
 
-  const events = createOpenCodeEventSource()
+  const events = createOliveEventSource()
   const reconnect = resolveEndpoint(server)
 
   const connection = createClientConnection(transport.api, {
@@ -226,7 +226,7 @@ export const useServerSDK = () => {
 
 export type LocationContext = {
   directory: string
-  event: OpenCodeEventStream
+  event: OliveEventStream
 }
 
 function createDirSdkContext(directory: string, serverSDK: ServerSDKBase): LocationContext {

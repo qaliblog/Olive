@@ -1,5 +1,5 @@
-import { SessionMessage } from "@opencode/schema/session-message"
-import type { SessionMessageUser } from "@opencode/client/promise"
+import { SessionMessage } from "@olive/schema/session-message"
+import type { SessionMessageUser } from "@olive/client/promise"
 import { createEffect, createRoot, createSignal, getOwner, onCleanup, runWithOwner, type Accessor } from "solid-js"
 import type { PromptComment } from "./comment-note"
 import type { PromptHistoryComment } from "./history/entry"

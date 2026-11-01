@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/solid-query"
 import { QueryOptionsApi } from "../sync"
 import { directoryKey, type DirectoryKey } from "./utils"
 import type { ServerScope } from "@/runtime/server/scope"
-import type { Data } from "@opencode/client/solid"
+import type { Data } from "@olive/client/solid"
 import { normalizeAgentList, normalizeProviderList } from "./utils"
 import { ProjectState, VcsState } from "../persistence"
 

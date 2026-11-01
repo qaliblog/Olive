@@ -1,3 +1,3 @@
-# @opencode/core
+# @olive/core
 
-Core runtime services for OpenCode.
+Core runtime services for Olive.

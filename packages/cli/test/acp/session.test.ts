@@ -22,26 +22,26 @@ describe("acp session lifecycle over the wire", () => {
         mcpCapabilities: { http: true, sse: false },
         promptCapabilities: { embeddedContext: true, image: true },
         sessionCapabilities: { additionalDirectories: {}, close: {}, delete: {}, fork: {}, list: {}, resume: {} },
-        _meta: { "opencode/child-session-updates": true },
+        _meta: { "olive/child-session-updates": true },
       },
-      agentInfo: { name: "OpenCode" },
+      agentInfo: { name: "Olive" },
     })
     expect(plain.authMethods).toEqual([
-      { id: "opencode-login", name: "Login with opencode", description: "Run `opencode auth login` in the terminal" },
+      { id: "olive-login", name: "Login with olive", description: "Run `olive auth login` in the terminal" },
     ])
     expect(terminal.authMethods?.[0]?._meta).toEqual({
-      "terminal-auth": { command: "opencode", args: ["auth", "login"], label: "OpenCode Login" },
+      "terminal-auth": { command: "olive", args: ["auth", "login"], label: "Olive Login" },
     })
     expect(standard.authMethods).toEqual([
       {
-        id: "opencode-login",
-        name: "Login with opencode",
-        description: "Run `opencode auth login` in the terminal",
+        id: "olive-login",
+        name: "Login with olive",
+        description: "Run `olive auth login` in the terminal",
         type: "terminal",
         args: ["--login"],
       },
     ])
-    expect(await acp.request("authenticate", { methodId: "opencode-login" })).toEqual({})
+    expect(await acp.request("authenticate", { methodId: "olive-login" })).toEqual({})
     expect(await rpcError(acp.request("authenticate", { methodId: "missing" }))).toMatchObject({
       code: -32602,
       data: { methodId: "missing" },

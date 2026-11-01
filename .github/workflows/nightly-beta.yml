@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   dispatch:
-    if: github.repository == 'anomalyco/opencode'
+    if: github.repository == 'anomalyco/olive'
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch beta test runs

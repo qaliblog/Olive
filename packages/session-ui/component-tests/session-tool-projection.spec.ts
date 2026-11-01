@@ -63,7 +63,7 @@ story("lists a failed execute's calls and keeps its error under the failed call"
   await call.click()
   await expect(call).toHaveAttribute("aria-expanded", "true")
   await expect(failed.locator('[data-slot="execute-tool-call-input"]')).toContainText(
-    "url:file:///C:/tmp/opencode/throne-of-glass-luke.html",
+    "url:file:///C:/tmp/olive/throne-of-glass-luke.html",
   )
   await expect(error).toContainText(
     "The connected server must be able to reach the address; localhost refers to that server.",
@@ -127,14 +127,14 @@ story("labels skill tools from IDs and result metadata", async ({ mount }) => {
   await group.getByRole("button").click()
   const loaded = group.locator('[data-component="tool-loaded-item"]')
   await expect(loaded).toHaveCount(1)
-  await expect(loaded).toHaveAttribute("aria-label", "Loaded frontend-design, OpenCode skills")
+  await expect(loaded).toHaveAttribute("aria-label", "Loaded frontend-design, Olive skills")
   await expect(loaded).toHaveCSS("line-height", "16px")
   await expect(loaded.locator('[data-slot="tool-loaded-label"]')).toHaveText("Loaded")
   await expect(loaded.locator('[data-slot="tool-loaded-kind"]')).toHaveText("skills")
   const names = loaded.locator('[data-component="text-shimmer"]')
   await expect(names).toHaveCount(2)
   await expect(names.nth(0)).toHaveAttribute("aria-label", "frontend-design")
-  await expect(names.nth(1)).toHaveAttribute("aria-label", "OpenCode")
+  await expect(names.nth(1)).toHaveAttribute("aria-label", "Olive")
 })
 
 // Moved from packages/app/e2e/regression/session-timeline-reducer-projection.spec.ts

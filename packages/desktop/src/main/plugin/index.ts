@@ -28,7 +28,7 @@ export interface Interface {
   readonly configure: (window: number, servers: readonly PluginEndpoint[]) => void
 }
 
-export class Service extends Context.Service<Service, Interface>()("opencode/desktop/Plugins") {}
+export class Service extends Context.Service<Service, Interface>()("olive/desktop/Plugins") {}
 
 export const layer = Layer.effect(
   Service,

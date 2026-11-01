@@ -153,7 +153,7 @@ export default function Enterprise() {
                         />
                       </svg>
                     </div>
-                    Thanks to OpenCode, we found a way to create software to track all our assets — even the imaginary
+                    Thanks to Olive, we found a way to create software to track all our assets — even the imaginary
                     ones.
                     <div data-component="testimonial-logo">
                       <svg width="80" height="79" viewBox="0 0 80 79" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -352,7 +352,7 @@ export default function Enterprise() {
               </li>
               <li>
                 <Faq question={i18n.t("enterprise.faq.q5")}>
-                  {i18n.t("enterprise.faq.a5.before")} <a href="https://trust.opencode.ai">trust.opencode.ai</a>{" "}
+                  {i18n.t("enterprise.faq.a5.before")} <a href="https://trust.olive.ai">trust.olive.ai</a>{" "}
                   {i18n.t("enterprise.faq.a5.after")}
                 </Faq>
               </li>

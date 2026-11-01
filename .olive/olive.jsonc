@@ -1,0 +1,19 @@
+{
+  "$schema": "https://olive.ai/config.json",
+  "provider": {},
+  "permission": {},
+  "references": {
+    "effect": {
+      "repository": "github.com/Effect-TS/effect-smol",
+      "description": "Use for Effect v4 and effect-smol implementation details",
+    },
+    "olive-local": {
+      "path": "~/.local/share/olive",
+      "description": "Contains olive logs and data",
+    },
+  },
+  "mcp": {},
+  "tools": {
+    "github-pr-search": false,
+  },
+}

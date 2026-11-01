@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   deploy:
-    if: github.repository == 'anomalyco/opencode' && (github.ref_name == 'dev' || github.ref_name == 'production' || github.ref_name == 'beta')
+    if: github.repository == 'anomalyco/olive' && (github.ref_name == 'dev' || github.ref_name == 'production' || github.ref_name == 'beta')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     environment: ${{ github.ref_name }}
     steps:
@@ -32,7 +32,7 @@ jobs:
         if: github.ref_name != 'beta'
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
-          role-session-name: opencode-${{ github.run_id }}
+          role-session-name: olive-${{ github.run_id }}
           aws-region: us-east-1
 
       - run: bun sst deploy --stage=${{ github.ref_name }}

@@ -39,7 +39,7 @@ describe("Config.Entry", () => {
         { action: "integration.use", resource: "skill:team:review", effect: "deny" },
         { action: "integration.use", resource: "plugin:@acme/plugin", effect: "deny" },
         { action: "integration.use", resource: "*", effect: "deny" },
-        { action: "integration.use", resource: "opencode#org_01", effect: "allow" },
+        { action: "integration.use", resource: "olive#org_01", effect: "allow" },
         { action: "integration.use", resource: "https://ai.acme.com", effect: "allow" },
         { action: "integration.use", resource: "constructor:x", effect: "allow" },
         { action: "integration.connect", resource: "mcp:x", effect: "allow" },
@@ -51,7 +51,7 @@ describe("Config.Entry", () => {
       { action: "plugin.use", resource: "@acme/plugin", effect: "deny" },
       // A bare wildcard keeps its action, which now means every integration.
       { action: "integration.use", resource: "*", effect: "deny" },
-      { action: "integration.use", resource: "opencode#org_01", effect: "allow" },
+      { action: "integration.use", resource: "olive#org_01", effect: "allow" },
       { action: "integration.use", resource: "https://ai.acme.com", effect: "allow" },
       { action: "integration.use", resource: "constructor:x", effect: "allow" },
       { action: "integration.connect", resource: "mcp:x", effect: "allow" },
@@ -111,7 +111,7 @@ describe("Config.Entry", () => {
     const entries = [
       new Config.Document({
         type: "document",
-        path: AbsolutePath.make("/project/opencode.json"),
+        path: AbsolutePath.make("/project/olive.json"),
         info: new Config.Info({
           permissions: [
             { action: "shell", resource: "*", effect: "ask" },
@@ -120,7 +120,7 @@ describe("Config.Entry", () => {
         }),
       }),
       new Config.Document({ type: "document", info: new Config.Info({ shell: "/bin/zsh" }) }),
-      new Config.Directory({ type: "directory", path: AbsolutePath.make("/project/.opencode") }),
+      new Config.Directory({ type: "directory", path: AbsolutePath.make("/project/.olive") }),
     ]
 
     const encoded = Schema.encodeSync(Schema.Array(Config.Entry))(entries)

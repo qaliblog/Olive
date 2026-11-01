@@ -1,16 +1,16 @@
 import { expect, test } from "bun:test"
-import { compile } from "@opencode/httpapi-codegen"
+import { compile } from "@olive/httpapi-codegen"
 import {
   ClientApi,
   clientNamespace,
   effectOmitEndpoints,
   groupNames,
   promiseOmitEndpoints,
-} from "@opencode/protocol/client"
+} from "@olive/protocol/client"
 import { Effect } from "effect"
 import { HttpClient } from "effect/http"
-import { OpenCode as EffectOpenCode } from "../src/effect/index"
-import { OpenCode as PromiseOpenCode } from "../src/promise/index"
+import { Olive as EffectOlive } from "../src/effect/index"
+import { Olive as PromiseOlive } from "../src/promise/index"
 
 // The pre-experimental paths stay until the next minor.
 const aliases = (omitEndpoints: ReadonlySet<string>) =>
@@ -30,11 +30,11 @@ const expectSameFunctions = (client: unknown, list: ReturnType<typeof aliases>) 
 }
 
 test("every Promise client alias is the same function as its client.experimental path", () => {
-  expectSameFunctions(PromiseOpenCode.make({ baseUrl: "http://localhost:3000" }), aliases(promiseOmitEndpoints))
+  expectSameFunctions(PromiseOlive.make({ baseUrl: "http://localhost:3000" }), aliases(promiseOmitEndpoints))
 })
 
 test("every Effect client alias is the same function as its client.experimental path", async () => {
-  const client = await EffectOpenCode.make({ baseUrl: "http://localhost:3000" }).pipe(
+  const client = await EffectOlive.make({ baseUrl: "http://localhost:3000" }).pipe(
     Effect.provideService(
       HttpClient.HttpClient,
       HttpClient.make(() => Effect.die("unused")),

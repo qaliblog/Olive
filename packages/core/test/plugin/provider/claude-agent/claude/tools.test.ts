@@ -1,7 +1,7 @@
 import { describe, expect } from "bun:test"
 import { Effect, Exit, Fiber, Scope } from "effect"
 import { TestClock } from "effect/testing"
-import { ClaudeSessions } from "@opencode/core/plugin/provider/claude-agent/claude/sessions"
+import { ClaudeSessions } from "@olive/core/plugin/provider/claude-agent/claude/sessions"
 import { it } from "../../../../lib/effect"
 import { FakeClaude } from "../lib/fake-claude"
 import { TestSessions } from "../lib/sessions"
@@ -16,7 +16,7 @@ describe("Claude tool steps", () => {
       const prompt = TestTools.prompt()
       const steps = []
       for (let i = 0; i < 3; i++) {
-        // Subagents and unanswered permission prompts can keep OpenCode's tools running this long.
+        // Subagents and unanswered permission prompts can keep Olive's tools running this long.
         yield* TestClock.adjust(ClaudeSessions.IDLE_MS * 2)
         const parts = yield* TestTools.step(test.model, prompt)
         steps.push(parts)
@@ -121,7 +121,7 @@ describe("Claude tool steps", () => {
     }),
   )
 
-  it.effect("a turn left waiting for tool results stops IDLE_MS after OpenCode stops running the session", () =>
+  it.effect("a turn left waiting for tool results stops IDLE_MS after Olive stops running the session", () =>
     Effect.gen(function* () {
       const cancel = FakeClaude.replay("tools-waiting-cancel")
       const nextUser = cancel.findIndex(
@@ -137,7 +137,7 @@ describe("Claude tool steps", () => {
     }),
   )
 
-  it.effect("a process exit while OpenCode runs tools resumes with their saved results", () =>
+  it.effect("a process exit while Olive runs tools resumes with their saved results", () =>
     Effect.gen(function* () {
       const steps = FakeClaude.replay("tools-cancel")
       const interrupt = steps.findIndex(
@@ -342,11 +342,11 @@ describe("Claude tool steps", () => {
     }),
   )
 
-  it.effect("an unavailable OpenCode server fails closed", () =>
+  it.effect("an unavailable Olive server fails closed", () =>
     Effect.gen(function* () {
       const turn = FakeClaude.expectTurn()
       const init = turn.replies.find((message) => message.type === "system" && message.subtype === "init")
-      init.mcp_servers = [{ name: "opencode", status: "failed" }]
+      init.mcp_servers = [{ name: "olive", status: "failed" }]
       const claude = FakeClaude.make([
         FakeClaude.expectStartup(),
         turn,
@@ -355,7 +355,7 @@ describe("Claude tool steps", () => {
       ])
       const test = yield* TestSessions.start(claude)
       const error = yield* TestTools.step(test.model, TestTools.prompt()).pipe(Effect.flip)
-      expect(String(error.cause)).toContain("OpenCode tool server did not connect")
+      expect(String(error.cause)).toContain("Olive tool server did not connect")
       expect(claude.runs).toHaveLength(1)
       yield* test.registry.close()
       claude.check()

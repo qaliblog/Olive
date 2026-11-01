@@ -1,8 +1,8 @@
 import { Predicate, Schema, SchemaGetter } from "effect"
 import { HttpApi, HttpApiEndpoint, HttpApiGroup, HttpApiSchema } from "effect/http-api"
-import { PersistentPty } from "@opencode/schema/persistent-pty"
-import { Pty } from "@opencode/schema/pty"
-import { Worktree } from "@opencode/schema/worktree"
+import { PersistentPty } from "@olive/schema/persistent-pty"
+import { Pty } from "@olive/schema/pty"
+import { Worktree } from "@olive/schema/worktree"
 
 // Handlers answer plain fixture data: undefined properties are dropped, and other non-JSON values become null.
 const Json = Schema.Json.pipe(

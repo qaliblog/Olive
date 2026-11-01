@@ -1,5 +1,5 @@
 import { BrowserWindow } from "electron"
-import { nextDesktopZoomLevel, type DesktopMenuAction } from "@opencode/app/desktop-menu"
+import { nextDesktopZoomLevel, type DesktopMenuAction } from "@olive/app/desktop-menu"
 import { setZoomLevel } from "../windows"
 
 export type DesktopMenuActionHandlers = Partial<{

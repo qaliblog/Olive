@@ -1,16 +1,16 @@
 import { describe, expect, test } from "bun:test"
-import { SystemPart } from "@opencode/ai/effect"
-import { Agent } from "@opencode/core/agent"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHooks } from "@opencode/core/plugin/hooks"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { IdentityPlugin } from "@opencode/core/plugin/identity"
-import { OptimizePlugin } from "@opencode/core/plugin/optimize"
-import { Session } from "@opencode/core/session"
-import { SessionSystemPrompt } from "@opencode/core/session/system-prompt"
-import type { SessionHooks } from "@opencode/plugin/effect/session"
-import { Model } from "@opencode/schema/model"
-import { Provider } from "@opencode/core/provider"
+import { SystemPart } from "@olive/ai/effect"
+import { Agent } from "@olive/core/agent"
+import { Plugin } from "@olive/core/plugin"
+import { PluginHooks } from "@olive/core/plugin/hooks"
+import { PluginHost } from "@olive/core/plugin/host"
+import { IdentityPlugin } from "@olive/core/plugin/identity"
+import { OptimizePlugin } from "@olive/core/plugin/optimize"
+import { Session } from "@olive/core/session"
+import { SessionSystemPrompt } from "@olive/core/session/system-prompt"
+import type { SessionHooks } from "@olive/plugin/effect/session"
+import { Model } from "@olive/schema/model"
+import { Provider } from "@olive/core/provider"
 import { Effect } from "effect"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
@@ -49,11 +49,11 @@ const context = (id: string, system = fallback): SessionHooks["context"] => ({
 describe("OptimizePlugin", () => {
   test("enables prompt plugins without model-specific tool optimization", () => {
     expect(OptimizePlugin.Plugins.map((plugin) => plugin.id)).toEqual([
-      "opencode.prompt.openai",
-      "opencode.prompt.anthropic",
-      "opencode.prompt.kimi",
-      "opencode.prompt.arcee",
-      "opencode.prompt.meta",
+      "olive.prompt.openai",
+      "olive.prompt.anthropic",
+      "olive.prompt.kimi",
+      "olive.prompt.arcee",
+      "olive.prompt.meta",
     ])
   })
 
@@ -128,7 +128,7 @@ describe("OptimizePlugin", () => {
         SessionSystemPrompt.render(PROMPT_GPT, Object.keys(event.tools)),
         "Project instructions",
       ])
-      expect(event.system[0]?.text).not.toContain("${OPENCODE_TOOL_GUIDANCE}")
+      expect(event.system[0]?.text).not.toContain("${OLIVE_TOOL_GUIDANCE}")
       expect(Object.keys(event.tools).sort()).toEqual(["edit", "glob", "grep", "patch", "read", "shell", "write"])
     }),
   )

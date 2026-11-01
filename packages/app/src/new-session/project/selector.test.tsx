@@ -19,7 +19,7 @@ describe("new session project selection", () => {
 
     const controls: PromptProjectControls = {
       available: [generic, current],
-      directory: "/repo/.opencode/worktree/feature",
+      directory: "/repo/.olive/worktree/feature",
       projectID: "current",
       select() {},
       add() {},
@@ -76,9 +76,9 @@ describe("new session project selection", () => {
       available: [
         entry("local-unused", local, 9, false),
         entry("local-used", local, 2, true),
-        entry("opencode", local, 1, true),
+        entry("olive", local, 1, true),
         entry("apollo-unused", apollo, 5, false),
-        entry("opencode", apollo, 3, true),
+        entry("olive", apollo, 3, true),
       ],
       directory: "/elsewhere",
       server: "sidecar",
@@ -89,9 +89,9 @@ describe("new session project selection", () => {
     createRoot((dispose) => {
       const controller = createPromptProjectController({ controls: () => controls })
       expect(controller.projects().map((project) => `${project.server?.name}:${project.id}`)).toEqual([
-        "apollo:opencode",
+        "apollo:olive",
         "hailmary:local-used",
-        "hailmary:opencode",
+        "hailmary:olive",
         "hailmary:local-unused",
         "apollo:apollo-unused",
       ])

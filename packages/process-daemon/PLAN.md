@@ -18,7 +18,7 @@
 - [x] Add raw replay-to-live subscriptions and bounded slow-subscriber handling.
 - [x] Add exclusive controller and observer roles with explicit takeover.
 - [x] Transport authoritative snapshots and VT checkpoints over IPC.
-- [x] Add a lazy OpenCode backend proxy with independent per-server runtime identities.
+- [x] Add a lazy Olive backend proxy with independent per-server runtime identities.
 
 ## Next
 

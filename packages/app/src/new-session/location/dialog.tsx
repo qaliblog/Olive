@@ -1,20 +1,20 @@
-import { Badge } from "@opencode/ui/badge"
-import { Dialog, DialogBody } from "@opencode/ui/dialog"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { Icon } from "@opencode/ui/icon"
-import { Keybind } from "@opencode/ui/keybind"
-import { MenuScroll } from "@opencode/ui/menu-scroll"
+import { Badge } from "@olive/ui/badge"
+import { Dialog, DialogBody } from "@olive/ui/dialog"
+import { useDialog } from "@olive/ui/context/dialog"
+import { Icon } from "@olive/ui/icon"
+import { Keybind } from "@olive/ui/keybind"
+import { MenuScroll } from "@olive/ui/menu-scroll"
 import {
   displayName,
   getProjectAvatarGenerated,
   getProjectAvatarSource,
   getProjectAvatarVariant,
   ProjectAvatar,
-} from "@opencode/ui/project-avatar"
-import { TextInput } from "@opencode/ui/text-input"
-import { createTypeahead } from "@opencode/ui/typeahead"
+} from "@olive/ui/project-avatar"
+import { TextInput } from "@olive/ui/text-input"
+import { createTypeahead } from "@olive/ui/typeahead"
 import { createEventListener } from "@solid-primitives/event-listener"
-import { getFilename } from "@opencode/util/path"
+import { getFilename } from "@olive/util/path"
 import { createEffect, createMemo, createResource, For, Match, onCleanup, Show, Switch } from "solid-js"
 import { createStore } from "solid-js/store"
 import type { PromptProject, PromptProjectController, PromptServer } from "@/new-session/project/selector"

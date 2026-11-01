@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # verify-artifacts.sh <dir>: checks every artifact downloaded into <dir>/<name> against its SHA256SUMS and that it
 # holds exactly the listed files. Artifacts made by sign jobs (sign-*) must also match the manifest digest their
-# job reported (OPENCODE_DIGESTS="name=digest ..."), so an artifact replaced after that job finished is rejected.
+# job reported (OLIVE_DIGESTS="name=digest ..."), so an artifact replaced after that job finished is rejected.
 . "$(dirname "$0")/lib.sh"
 
 root=$(posix "$1")
 for dir in "$root"/*/; do
   name=$(basename "$dir")
   digest=""
-  for pair in ${OPENCODE_DIGESTS:-}; do
+  for pair in ${OLIVE_DIGESTS:-}; do
     if [ "${pair%%=*}" = "$name" ]; then digest=${pair#*=}; fi
   done
   case "$name" in sign-*) [[ "$digest" =~ ^[0-9a-f]{64}$ ]] || die "Missing digest for $name" ;; esac

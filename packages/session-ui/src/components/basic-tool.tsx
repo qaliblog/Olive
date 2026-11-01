@@ -12,11 +12,11 @@ import {
   type JSX,
 } from "solid-js"
 import { Option, Schema } from "effect"
-import { useI18n } from "@opencode/ui/context/i18n"
+import { useI18n } from "@olive/ui/context/i18n"
 import { createStore } from "solid-js/store"
-import { Collapsible } from "@opencode/ui/collapsible"
-import type { IconProps } from "@opencode/ui/icon"
-import { TextShimmer } from "@opencode/ui/text-shimmer"
+import { Collapsible } from "@olive/ui/collapsible"
+import type { IconProps } from "@olive/ui/icon"
+import { TextShimmer } from "@olive/ui/text-shimmer"
 
 export type TriggerTitle = {
   title: string

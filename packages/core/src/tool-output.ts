@@ -3,10 +3,10 @@ export * as ToolOutput from "./tool-output.js"
 import path from "path"
 import type { Tool } from "./tool.js"
 import { Context, Duration, Effect, Layer, Schedule } from "effect"
-import { makeGlobalNode, makeLocationNode } from "@opencode/util/effect/app-node"
-import { FSUtil } from "@opencode/util/fs-util"
-import { Global } from "@opencode/util/global"
-import { Identifier } from "@opencode/schema/identifier"
+import { makeGlobalNode, makeLocationNode } from "@olive/util/effect/app-node"
+import { FSUtil } from "@olive/util/fs-util"
+import { Global } from "@olive/util/global"
+import { Identifier } from "@olive/schema/identifier"
 import { FileRetention } from "./file-retention.js"
 import { State } from "./state.js"
 
@@ -35,7 +35,7 @@ export interface Interface extends State.Transformable<Editor> {
   readonly cleanup: () => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ToolOutput") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/ToolOutput") {}
 
 const cleanup = Effect.fn("ToolOutput.cleanup")(function* (fs: FSUtil.Interface, directory: string) {
   const entries = yield* fs.readDirectory(directory).pipe(

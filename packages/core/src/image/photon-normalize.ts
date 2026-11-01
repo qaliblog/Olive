@@ -36,7 +36,7 @@ export const available = photonWasm !== ""
 
 export async function load(): Promise<Photon> {
   if (!available) throw new Error("photon wasm is unavailable")
-  ;(globalThis as typeof globalThis & { __OPENCODE_PHOTON_WASM_PATH?: string }).__OPENCODE_PHOTON_WASM_PATH =
+  ;(globalThis as typeof globalThis & { __OLIVE_PHOTON_WASM_PATH?: string }).__OLIVE_PHOTON_WASM_PATH =
     path.isAbsolute(photonWasm) ? photonWasm : fileURLToPath(new URL(photonWasm, import.meta.url))
   return await import("@silvia-odwyer/photon-node")
 }

@@ -1,5 +1,5 @@
 import { createMemo, type Accessor } from "solid-js"
-import { createKeyed, type MountedSession } from "@opencode/plugin/gui"
+import { createKeyed, type MountedSession } from "@olive/plugin/gui"
 
 const location = (session: MountedSession) => (session.directory ? { directory: session.directory } : undefined)
 

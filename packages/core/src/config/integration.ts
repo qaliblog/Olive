@@ -1,12 +1,12 @@
 export * as ConfigIntegration from "./integration.js"
 
 import { Option, Schema, SchemaGetter } from "effect"
-import { Config, type Entry } from "@opencode/schema/config"
-import { ConfigMCP } from "@opencode/schema/config/mcp"
-import { ConfigPolicy } from "@opencode/schema/config/policy"
-import { ConfigProvider } from "@opencode/schema/config/provider"
-import { Connection } from "@opencode/schema/connection"
-import { IntegrationID } from "@opencode/schema/integration-id"
+import { Config, type Entry } from "@olive/schema/config"
+import { ConfigMCP } from "@olive/schema/config/mcp"
+import { ConfigPolicy } from "@olive/schema/config/policy"
+import { ConfigProvider } from "@olive/schema/config/provider"
+import { Connection } from "@olive/schema/connection"
+import { IntegrationID } from "@olive/schema/integration-id"
 
 // Drop statements whose action or effect is a value this version does not know, so a newer remote source can
 // extend either enum. Malformed statements still fail validation.
@@ -38,7 +38,7 @@ export const Remote = Schema.Struct({
 export type Remote = typeof Remote.Type
 
 /**
- * A config document delivered by an integration connection, such as the OpenCode Console's config. Config loads it
+ * A config document delivered by an integration connection, such as the Olive Console's config. Config loads it
  * right after managed policies, so user and project config override its settings while its policies outrank theirs.
  * Its providers authenticate with, and only exist for, that connection.
  */

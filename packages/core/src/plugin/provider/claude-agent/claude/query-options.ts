@@ -7,7 +7,7 @@ import type { PendingTools } from "../tools/pending.js"
 import { ToolServer } from "../tools/server.js"
 import type { ClaudeIO } from "./io.js"
 
-// Claude Code features that duplicate opencode's. opencode's version wins (specs/v2/claude-agent-provider.md, "Turned Off").
+// Claude Code features that duplicate olive's. olive's version wins (specs/v2/claude-agent-provider.md, "Turned Off").
 const ISOLATION_ENV = {
   CLAUDE_CODE_DISABLE_CLAUDE_MDS: "1",
   CLAUDE_CODE_DISABLE_AUTO_MEMORY: "1",
@@ -17,13 +17,13 @@ const ISOLATION_ENV = {
   CLAUDE_CODE_DISABLE_ADVISOR_TOOL: "1",
   CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK: "1",
   CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK: "1",
-  // Raised so opencode's own truncation applies instead
+  // Raised so olive's own truncation applies instead
   MAX_MCP_OUTPUT_TOKENS: "200000",
   // Skips OAuth, so the subscription would not be used
   CLAUDE_CODE_SIMPLE: undefined,
-  // A shell-level effort override would take precedence over OpenCode's live effort settings.
+  // A shell-level effort override would take precedence over Olive's live effort settings.
   CLAUDE_CODE_EFFORT_LEVEL: undefined,
-  // Caps every OpenCode tool call, which would fail subagents and permission prompts that run longer
+  // Caps every Olive tool call, which would fail subagents and permission prompts that run longer
   MCP_TOOL_TIMEOUT: undefined,
 }
 
@@ -61,13 +61,13 @@ export function base(input: {
     env: { ...input.io.env(), ...input.connection, ...ISOLATION_ENV },
     settingSources: [],
     settings: { disableAllHooks: true },
-    // Without summaries, OpenCode has no reasoning text to display
+    // Without summaries, Olive has no reasoning text to display
     thinking: { type: "adaptive", display: "summarized" },
     strictMcpConfig: true,
     skills: [],
     tools: [],
     permissionMode: "dontAsk",
-    allowedTools: ["mcp__opencode__*"],
+    allowedTools: ["mcp__olive__*"],
     verbatimPrompts: true,
   }
 }
@@ -101,7 +101,7 @@ export async function session(input: {
   if (input.maxOutputTokens !== undefined) {
     options.env = { ...options.env, CLAUDE_CODE_MAX_OUTPUT_TOKENS: String(input.maxOutputTokens) }
   }
-  if (input.tools.length > 0) options.mcpServers = { opencode: await ToolServer.make(input.tools, input.pending) }
+  if (input.tools.length > 0) options.mcpServers = { olive: await ToolServer.make(input.tools, input.pending) }
   if (input.resume !== undefined) {
     options.resume = input.resume
     return options

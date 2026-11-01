@@ -3,14 +3,14 @@ import { Schema } from "effect"
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { getHeapSpaceStatistics, getHeapStatistics, writeHeapSnapshot } from "node:v8"
-import type { Plugin } from "@opencode/plugin/gui/main"
+import type { Plugin } from "@olive/plugin/gui/main"
 import { HeapSnapshots, MemoryDiagnostics } from "./contract"
 import { summarize, traceConfig } from "./memory-infra"
 import { startMemoryLog } from "./memory-log"
 import { debugBuild, memoryLogInterval } from "./options"
 import { captureServer } from "./server-heap"
 import { signalIncludesServer, snapshotDirectory } from "./signal"
-import { ProcessSignal } from "@opencode/util/process-signal"
+import { ProcessSignal } from "@olive/util/process-signal"
 
 /** A desktop process the manifest lists: the file written, or why there is none. */
 type Snapshot = { readonly process: "main" | "window"; readonly pid: number; readonly window?: number } & (
@@ -60,7 +60,7 @@ const setup: Plugin.MainSetup = (ctx) => {
   const queue: Queue = { tail: Promise.resolve() }
 
   const capture = async (root: string, includeServer: boolean) => {
-    const directory = path.join(root, `opencode-heap-${new Date().toISOString().replace(/[:.]/g, "")}`)
+    const directory = path.join(root, `olive-heap-${new Date().toISOString().replace(/[:.]/g, "")}`)
 
     // Snapshots hold prompts, file contents and credentials. Recursive, because Downloads can be missing on Linux.
     await mkdir(directory, { recursive: true, mode: 0o700 })
@@ -176,7 +176,7 @@ const setup: Plugin.MainSetup = (ctx) => {
   if (!debugBuild(ctx.app)) return
 
   // The environment turns diagnostics on for this launch; otherwise the debug bar's stored toggle does.
-  const envInterval = memoryLogInterval(process.env.OPENCODE_DESKTOP_MEMORY_LOG)
+  const envInterval = memoryLogInterval(process.env.OLIVE_DESKTOP_MEMORY_LOG)
   // Whether the debug bar turned memory diagnostics on.
   const stored = ctx.storage.store("memory", { schema: Schema.Boolean, initial: false })
   const running: Running = {}

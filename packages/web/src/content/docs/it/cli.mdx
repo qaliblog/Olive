@@ -1,30 +1,30 @@
 ---
 title: CLI
-description: Opzioni e comandi della CLI di OpenCode.
+description: Opzioni e comandi della CLI di Olive.
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components"
 
-La CLI di OpenCode, per impostazione predefinita, avvia la [TUI](/docs/tui) quando viene eseguita senza argomenti.
+La CLI di Olive, per impostazione predefinita, avvia la [TUI](/docs/tui) quando viene eseguita senza argomenti.
 
 ```bash
-opencode
+olive
 ```
 
-Ma accetta anche i comandi documentati in questa pagina. Questo ti permette di interagire con OpenCode in modo programmatico.
+Ma accetta anche i comandi documentati in questa pagina. Questo ti permette di interagire con Olive in modo programmatico.
 
 ```bash
-opencode run "Explain how closures work in JavaScript"
+olive run "Explain how closures work in JavaScript"
 ```
 
 ---
 
 ### tui
 
-Avvia l'interfaccia testuale di OpenCode (interfaccia utente da terminale).
+Avvia l'interfaccia testuale di Olive (interfaccia utente da terminale).
 
 ```bash
-opencode [project]
+olive [project]
 ```
 
 #### Flag
@@ -44,26 +44,26 @@ opencode [project]
 
 ## Comandi
 
-La CLI di OpenCode include anche i seguenti comandi.
+La CLI di Olive include anche i seguenti comandi.
 
 ---
 
 ### attach
 
-Collega un terminale a un backend server di OpenCode già in esecuzione avviato tramite i comandi `serve` o `web`.
+Collega un terminale a un backend server di Olive già in esecuzione avviato tramite i comandi `serve` o `web`.
 
 ```bash
-opencode attach [url]
+olive attach [url]
 ```
 
-Questo consente di usare la TUI con un backend OpenCode remoto. Per esempio:
+Questo consente di usare la TUI con un backend Olive remoto. Per esempio:
 
 ```bash
 # Start the backend server for web/mobile access
-opencode web --port 4096 --hostname 0.0.0.0
+olive web --port 4096 --hostname 0.0.0.0
 
 # In un altro terminale, collega la TUI al backend in esecuzione
-opencode attach http://10.20.30.40:4096
+olive attach http://10.20.30.40:4096
 ```
 
 #### Flag
@@ -74,8 +74,8 @@ opencode attach http://10.20.30.40:4096
 | <nobr><code>{"--continue"}</code></nobr> | `-c`  | Continua l'ultima sessione                                                                      |
 | <nobr><code>{"--session"}</code></nobr>  | `-s`  | ID sessione da continuare                                                                       |
 | <nobr><code>{"--fork"}</code></nobr>     |       | Crea un fork della sessione durante la continuazione (usa con `--continue` o `--session`)       |
-| <nobr><code>{"--password"}</code></nobr> | `-p`  | Password per l'autenticazione di base (predefinita: `OPENCODE_SERVER_PASSWORD`)                 |
-| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nome utente per l'autenticazione di base (predefinito: `OPENCODE_SERVER_USERNAME` o `opencode`) |
+| <nobr><code>{"--password"}</code></nobr> | `-p`  | Password per l'autenticazione di base (predefinita: `OLIVE_SERVER_PASSWORD`)                 |
+| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nome utente per l'autenticazione di base (predefinito: `OLIVE_SERVER_USERNAME` o `olive`) |
 
 ---
 
@@ -84,20 +84,20 @@ opencode attach http://10.20.30.40:4096
 Comando per gestire le credenziali e il login dei provider.
 
 ```bash
-opencode auth [command]
+olive auth [command]
 ```
 
 ---
 
 #### login
 
-OpenCode si basa sull'elenco provider di [Models.dev](https://models.dev), quindi puoi usare `opencode auth login` per configurare le API key per qualunque provider tu voglia usare. Le credenziali vengono salvate in `~/.local/share/opencode/auth.json`.
+Olive si basa sull'elenco provider di [Models.dev](https://models.dev), quindi puoi usare `olive auth login` per configurare le API key per qualunque provider tu voglia usare. Le credenziali vengono salvate in `~/.local/share/olive/auth.json`.
 
 ```bash
-opencode auth login
+olive auth login
 ```
 
-Quando OpenCode si avvia, carica i provider dal file delle credenziali e, se presenti, anche eventuali key definite nell'ambiente o in un file `.env` nel progetto.
+Quando Olive si avvia, carica i provider dal file delle credenziali e, se presenti, anche eventuali key definite nell'ambiente o in un file `.env` nel progetto.
 
 ---
 
@@ -106,13 +106,13 @@ Quando OpenCode si avvia, carica i provider dal file delle credenziali e, se pre
 Elenca tutti i provider autenticati come salvati nel file delle credenziali.
 
 ```bash
-opencode auth list
+olive auth list
 ```
 
 Oppure la versione corta.
 
 ```bash
-opencode auth ls
+olive auth ls
 ```
 
 ---
@@ -122,7 +122,7 @@ opencode auth ls
 Esegue il logout da un provider rimuovendolo dal file delle credenziali.
 
 ```bash
-opencode auth logout
+olive auth logout
 ```
 
 ---
@@ -132,7 +132,7 @@ opencode auth logout
 Gestisci l'agente GitHub per l'automazione dei repository.
 
 ```bash
-opencode github [command]
+olive github [command]
 ```
 
 ---
@@ -142,7 +142,7 @@ opencode github [command]
 Installa l'agente GitHub nel tuo repository.
 
 ```bash
-opencode github install
+olive github install
 ```
 
 Questo configura il workflow GitHub Actions necessario e ti guida nel processo di configurazione. [Scopri di più](/docs/github).
@@ -154,7 +154,7 @@ Questo configura il workflow GitHub Actions necessario e ti guida nel processo d
 Esegui l'agente GitHub. Tipicamente usato in GitHub Actions.
 
 ```bash
-opencode github run
+olive github run
 ```
 
 ##### Flag
@@ -171,7 +171,7 @@ opencode github run
 Gestisci i server Model Context Protocol.
 
 ```bash
-opencode mcp [command]
+olive mcp [command]
 ```
 
 ---
@@ -181,7 +181,7 @@ opencode mcp [command]
 Aggiungi un server MCP alla tua configurazione.
 
 ```bash
-opencode mcp add
+olive mcp add
 ```
 
 Questo comando ti guida nell'aggiunta di un server MCP locale o remoto.
@@ -193,13 +193,13 @@ Questo comando ti guida nell'aggiunta di un server MCP locale o remoto.
 Elenca tutti i server MCP configurati e il loro stato di connessione.
 
 ```bash
-opencode mcp list
+olive mcp list
 ```
 
 Oppure la versione corta.
 
 ```bash
-opencode mcp ls
+olive mcp ls
 ```
 
 ---
@@ -209,7 +209,7 @@ opencode mcp ls
 Autentica con un server MCP con OAuth abilitato.
 
 ```bash
-opencode mcp auth [name]
+olive mcp auth [name]
 ```
 
 Se non fornisci un nome server, ti verrà chiesto di selezionare tra i server OAuth-capable disponibili.
@@ -217,13 +217,13 @@ Se non fornisci un nome server, ti verrà chiesto di selezionare tra i server OA
 Puoi anche elencare i server OAuth-capable e il loro stato di autenticazione.
 
 ```bash
-opencode mcp auth list
+olive mcp auth list
 ```
 
 Oppure la versione corta.
 
 ```bash
-opencode mcp auth ls
+olive mcp auth ls
 ```
 
 ---
@@ -233,7 +233,7 @@ opencode mcp auth ls
 Rimuovi le credenziali OAuth per un server MCP.
 
 ```bash
-opencode mcp logout [name]
+olive mcp logout [name]
 ```
 
 ---
@@ -243,7 +243,7 @@ opencode mcp logout [name]
 Esegui debug di problemi di connessione OAuth per un server MCP.
 
 ```bash
-opencode mcp debug <name>
+olive mcp debug <name>
 ```
 
 ---
@@ -253,7 +253,7 @@ opencode mcp debug <name>
 Elenca tutti i modelli disponibili dai provider configurati.
 
 ```bash
-opencode models [provider]
+olive models [provider]
 ```
 
 Questo comando mostra tutti i modelli disponibili tra i provider configurati nel formato `provider/model`.
@@ -263,7 +263,7 @@ Questo comando mostra tutti i modelli disponibili tra i provider configurati nel
 Puoi anche passare opzionalmente un ID provider per filtrare i modelli a quel provider.
 
 ```bash
-opencode models anthropic
+olive models anthropic
 ```
 
 #### Flag
@@ -273,36 +273,36 @@ opencode models anthropic
 | <nobr><code>{"--refresh"}</code></nobr> | Aggiorna la cache modelli da models.dev            |
 | <nobr><code>{"--verbose"}</code></nobr> | Output più verboso (include metadati come i costi) |
 
-Usa `--refresh` per aggiornare l'elenco modelli in cache. È utile quando nuovi modelli vengono aggiunti a un provider e vuoi vederli in OpenCode.
+Usa `--refresh` per aggiornare l'elenco modelli in cache. È utile quando nuovi modelli vengono aggiunti a un provider e vuoi vederli in Olive.
 
 ```bash
-opencode models --refresh
+olive models --refresh
 ```
 
 ---
 
 ### run
 
-Esegui opencode in modalità non interattiva passando un prompt direttamente.
+Esegui olive in modalità non interattiva passando un prompt direttamente.
 
 ```bash
-opencode run [message..]
+olive run [message..]
 ```
 
 È utile per scripting, automazione o quando vuoi una risposta rapida senza avviare la TUI completa. Per esempio:
 
-```bash "opencode run"
-opencode run Explain the use of context in Go
+```bash "olive run"
+olive run Explain the use of context in Go
 ```
 
-Puoi anche collegarti a una istanza `opencode serve` già in esecuzione per evitare i cold boot dei server MCP ad ogni esecuzione:
+Puoi anche collegarti a una istanza `olive serve` già in esecuzione per evitare i cold boot dei server MCP ad ogni esecuzione:
 
 ```bash
 # Avvia un server headless in un terminale
-opencode serve
+olive serve
 
 # In un altro terminale, esegui comandi che si collegano ad esso
-opencode run --attach http://localhost:4096 "Explain async/await in JavaScript"
+olive run --attach http://localhost:4096 "Explain async/await in JavaScript"
 ```
 
 #### Flag
@@ -318,9 +318,9 @@ opencode run --attach http://localhost:4096 "Explain async/await in JavaScript"
 | <nobr><code>{"--file"}</code></nobr>     | `-f`  | File da allegare al messaggio                                                                   |
 | <nobr><code>{"--format"}</code></nobr>   |       | Formato: default (formattato) o json (eventi JSON grezzi)                                       |
 | <nobr><code>{"--title"}</code></nobr>    |       | Titolo sessione (usa prompt troncato se non viene fornito un valore)                            |
-| <nobr><code>{"--attach"}</code></nobr>   |       | Attach a un server opencode in esecuzione (es. http://localhost:4096)                           |
-| <nobr><code>{"--password"}</code></nobr> | `-p`  | Password per l'autenticazione di base (predefinita: `OPENCODE_SERVER_PASSWORD`)                 |
-| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nome utente per l'autenticazione di base (predefinito: `OPENCODE_SERVER_USERNAME` o `opencode`) |
+| <nobr><code>{"--attach"}</code></nobr>   |       | Attach a un server olive in esecuzione (es. http://localhost:4096)                           |
+| <nobr><code>{"--password"}</code></nobr> | `-p`  | Password per l'autenticazione di base (predefinita: `OLIVE_SERVER_PASSWORD`)                 |
+| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nome utente per l'autenticazione di base (predefinito: `OLIVE_SERVER_USERNAME` o `olive`) |
 | <nobr><code>{"--dir"}</code></nobr>      |       | Directory di esecuzione, o percorso sul server remoto durante il collegamento                   |
 | <nobr><code>{"--variant"}</code></nobr>  |       | Variante del modello (sforzo di ragionamento specifico del provider)                            |
 | <nobr><code>{"--thinking"}</code></nobr> |       | Mostra blocchi di pensiero                                                                      |
@@ -330,13 +330,13 @@ opencode run --attach http://localhost:4096 "Explain async/await in JavaScript"
 
 ### serve
 
-Avvia un server OpenCode headless per accesso via API. Vedi le [server docs](/docs/server) per l'interfaccia HTTP completa.
+Avvia un server Olive headless per accesso via API. Vedi le [server docs](/docs/server) per l'interfaccia HTTP completa.
 
 ```bash
-opencode serve
+olive serve
 ```
 
-Avvia un server HTTP che espone accesso API alle funzionalità di opencode senza la TUI. Imposta `OPENCODE_SERVER_PASSWORD` per abilitare HTTP basic auth (username di default `opencode`).
+Avvia un server HTTP che espone accesso API alle funzionalità di olive senza la TUI. Imposta `OLIVE_SERVER_PASSWORD` per abilitare HTTP basic auth (username di default `olive`).
 
 #### Flag
 
@@ -351,20 +351,20 @@ Avvia un server HTTP che espone accesso API alle funzionalità di opencode senza
 
 ### session
 
-Gestisci le sessioni OpenCode.
+Gestisci le sessioni Olive.
 
 ```bash
-opencode session [command]
+olive session [command]
 ```
 
 ---
 
 #### list
 
-Elenca tutte le sessioni OpenCode.
+Elenca tutte le sessioni Olive.
 
 ```bash
-opencode session list
+olive session list
 ```
 
 ##### Flag
@@ -378,10 +378,10 @@ opencode session list
 
 ### stats
 
-Mostra statistiche di utilizzo token e costo per le sessioni OpenCode.
+Mostra statistiche di utilizzo token e costo per le sessioni Olive.
 
 ```bash
-opencode stats
+olive stats
 ```
 
 #### Flag
@@ -400,7 +400,7 @@ opencode stats
 Esporta i dati di sessione come JSON.
 
 ```bash
-opencode export [sessionID]
+olive export [sessionID]
 ```
 
 Se non fornisci un ID sessione, ti verrà chiesto di selezionare tra le sessioni disponibili.
@@ -412,24 +412,24 @@ Se non fornisci un ID sessione, ti verrà chiesto di selezionare tra le sessioni
 Importa i dati di sessione da un file JSON.
 
 ```bash
-opencode import <file>
+olive import <file>
 ```
 
 ```bash
-opencode import session.json
+olive import session.json
 ```
 
 ---
 
 ### web
 
-Avvia un server OpenCode headless con interfaccia web.
+Avvia un server Olive headless con interfaccia web.
 
 ```bash
-opencode web
+olive web
 ```
 
-Avvia un server HTTP e apre un browser per accedere a OpenCode tramite interfaccia web. Imposta `OPENCODE_SERVER_PASSWORD` per abilitare HTTP basic auth (username di default `opencode`).
+Avvia un server HTTP e apre un browser per accedere a Olive tramite interfaccia web. Imposta `OLIVE_SERVER_PASSWORD` per abilitare HTTP basic auth (username di default `olive`).
 
 #### Flag
 
@@ -447,7 +447,7 @@ Avvia un server HTTP e apre un browser per accedere a OpenCode tramite interfacc
 Avvia un server ACP (Agent Client Protocol).
 
 ```bash
-opencode acp
+olive acp
 ```
 
 Questo comando avvia un server ACP che comunica via stdin/stdout usando nd-JSON.
@@ -464,10 +464,10 @@ Questo comando avvia un server ACP che comunica via stdin/stdout usando nd-JSON.
 
 ### uninstall
 
-Disinstalla OpenCode e rimuove tutti i file correlati.
+Disinstalla Olive e rimuove tutti i file correlati.
 
 ```bash
-opencode uninstall
+olive uninstall
 ```
 
 #### Flag
@@ -483,22 +483,22 @@ opencode uninstall
 
 ### upgrade
 
-Aggiorna opencode all'ultima versione o a una versione specifica.
+Aggiorna olive all'ultima versione o a una versione specifica.
 
 ```bash
-opencode upgrade [target]
+olive upgrade [target]
 ```
 
 Per aggiornare all'ultima versione:
 
 ```bash
-opencode upgrade
+olive upgrade
 ```
 
 Per aggiornare a una versione specifica:
 
 ```bash
-opencode upgrade v0.1.48
+olive upgrade v0.1.48
 ```
 
 #### Flag
@@ -511,7 +511,7 @@ opencode upgrade v0.1.48
 
 ## Flag globali
 
-La CLI di opencode accetta i seguenti flag globali.
+La CLI di olive accetta i seguenti flag globali.
 
 | Flag                                       | Breve | Descrizione                            |
 | ------------------------------------------ | ----- | -------------------------------------- |
@@ -524,33 +524,33 @@ La CLI di opencode accetta i seguenti flag globali.
 
 ## Variabili d'ambiente
 
-OpenCode può essere configurato tramite variabili d'ambiente.
+Olive può essere configurato tramite variabili d'ambiente.
 
 | Variabile                             | Tipo    | Descrizione                                                 |
 | ------------------------------------- | ------- | ----------------------------------------------------------- |
-| `OPENCODE_GIT_BASH_PATH`              | string  | Percorso all'eseguibile Git Bash su Windows                 |
-| `OPENCODE_CONFIG`                     | string  | Percorso al file di configurazione                          |
-| `OPENCODE_TUI_CONFIG`                 | string  | Percorso al file di configurazione TUI                      |
-| `OPENCODE_CONFIG_DIR`                 | string  | Percorso alla directory di configurazione                   |
-| `OPENCODE_CONFIG_CONTENT`             | string  | Contenuto JSON di config inline                             |
-| `OPENCODE_DISABLE_AUTOUPDATE`         | boolean | Disabilita i controlli automatici di aggiornamento          |
-| `OPENCODE_DISABLE_PRUNE`              | boolean | Disabilita la potatura dei dati vecchi                      |
-| `OPENCODE_DISABLE_TERMINAL_TITLE`     | boolean | Disabilita aggiornamenti automatici del titolo terminale    |
-| `OPENCODE_PERMISSION`                 | string  | Config permessi JSON inline                                 |
-| `OPENCODE_DISABLE_DEFAULT_PLUGINS`    | boolean | Disabilita i plugin di default                              |
-| `OPENCODE_DISABLE_LSP_DOWNLOAD`       | boolean | Disabilita download automatico dei server LSP               |
-| `OPENCODE_ENABLE_EXPERIMENTAL_MODELS` | boolean | Abilita modelli sperimentali                                |
-| `OPENCODE_DISABLE_AUTOCOMPACT`        | boolean | Disabilita compaction automatica del contesto               |
-| `OPENCODE_DISABLE_CLAUDE_CODE`        | boolean | Disabilita lettura da `.claude` (prompt + skill)            |
-| `OPENCODE_DISABLE_CLAUDE_CODE_PROMPT` | boolean | Disabilita lettura di `~/.claude/CLAUDE.md`                 |
-| `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS` | boolean | Disabilita caricamento di `.claude/skills`                  |
-| `OPENCODE_DISABLE_MODELS_FETCH`       | boolean | Disabilita fetch dei modelli da fonti remote                |
-| `OPENCODE_FAKE_VCS`                   | string  | Provider VCS finto per scopi di test                        |
-| `OPENCODE_CLIENT`                     | string  | Identificatore client (default `cli`)                       |
-| `OPENCODE_ENABLE_EXA`                 | boolean | Abilita gli strumenti di web search Exa                     |
-| `OPENCODE_SERVER_PASSWORD`            | string  | Abilita basic auth per `serve`/`web`                        |
-| `OPENCODE_SERVER_USERNAME`            | string  | Sovrascrive lo username basic auth (default `opencode`)     |
-| `OPENCODE_MODELS_URL`                 | string  | URL personalizzato per recuperare la configurazione modelli |
+| `OLIVE_GIT_BASH_PATH`              | string  | Percorso all'eseguibile Git Bash su Windows                 |
+| `OLIVE_CONFIG`                     | string  | Percorso al file di configurazione                          |
+| `OLIVE_TUI_CONFIG`                 | string  | Percorso al file di configurazione TUI                      |
+| `OLIVE_CONFIG_DIR`                 | string  | Percorso alla directory di configurazione                   |
+| `OLIVE_CONFIG_CONTENT`             | string  | Contenuto JSON di config inline                             |
+| `OLIVE_DISABLE_AUTOUPDATE`         | boolean | Disabilita i controlli automatici di aggiornamento          |
+| `OLIVE_DISABLE_PRUNE`              | boolean | Disabilita la potatura dei dati vecchi                      |
+| `OLIVE_DISABLE_TERMINAL_TITLE`     | boolean | Disabilita aggiornamenti automatici del titolo terminale    |
+| `OLIVE_PERMISSION`                 | string  | Config permessi JSON inline                                 |
+| `OLIVE_DISABLE_DEFAULT_PLUGINS`    | boolean | Disabilita i plugin di default                              |
+| `OLIVE_DISABLE_LSP_DOWNLOAD`       | boolean | Disabilita download automatico dei server LSP               |
+| `OLIVE_ENABLE_EXPERIMENTAL_MODELS` | boolean | Abilita modelli sperimentali                                |
+| `OLIVE_DISABLE_AUTOCOMPACT`        | boolean | Disabilita compaction automatica del contesto               |
+| `OLIVE_DISABLE_CLAUDE_CODE`        | boolean | Disabilita lettura da `.claude` (prompt + skill)            |
+| `OLIVE_DISABLE_CLAUDE_CODE_PROMPT` | boolean | Disabilita lettura di `~/.claude/CLAUDE.md`                 |
+| `OLIVE_DISABLE_CLAUDE_CODE_SKILLS` | boolean | Disabilita caricamento di `.claude/skills`                  |
+| `OLIVE_DISABLE_MODELS_FETCH`       | boolean | Disabilita fetch dei modelli da fonti remote                |
+| `OLIVE_FAKE_VCS`                   | string  | Provider VCS finto per scopi di test                        |
+| `OLIVE_CLIENT`                     | string  | Identificatore client (default `cli`)                       |
+| `OLIVE_ENABLE_EXA`                 | boolean | Abilita gli strumenti di web search Exa                     |
+| `OLIVE_SERVER_PASSWORD`            | string  | Abilita basic auth per `serve`/`web`                        |
+| `OLIVE_SERVER_USERNAME`            | string  | Sovrascrive lo username basic auth (default `olive`)     |
+| `OLIVE_MODELS_URL`                 | string  | URL personalizzato per recuperare la configurazione modelli |
 
 ---
 
@@ -560,20 +560,20 @@ Queste variabili d'ambiente abilitano funzionalità sperimentali che potrebbero 
 
 | Variabile                                       | Tipo    | Descrizione                                             |
 | ----------------------------------------------- | ------- | ------------------------------------------------------- |
-| `OPENCODE_EXPERIMENTAL`                         | boolean | Abilita funzionalità sperimentali sotto il flag globale |
-| `OPENCODE_EXPERIMENTAL_ICON_DISCOVERY`          | boolean | Abilita icon discovery                                  |
-| `OPENCODE_EXPERIMENTAL_DISABLE_COPY_ON_SELECT`  | boolean | Disabilita copy on select nella TUI                     |
-| `OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS` | number  | Timeout di default per comandi bash in ms               |
-| `OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX`        | number  | Massimo token di output per risposte LLM                |
-| `OPENCODE_EXPERIMENTAL_FILEWATCHER`             | boolean | Abilita file watcher per l'intera dir                   |
-| `OPENCODE_EXPERIMENTAL_OXFMT`                   | boolean | Abilita formatter oxfmt                                 |
-| `OPENCODE_EXPERIMENTAL_LSP_TOOL`                | boolean | Abilita strumento LSP sperimentale                      |
-| `OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER`     | boolean | Disabilita file watcher                                 |
-| `OPENCODE_EXPERIMENTAL_EXA`                     | boolean | Abilita funzionalità Exa sperimentali                   |
-| `OPENCODE_EXPERIMENTAL_LSP_TY`                  | boolean | Abilita TY LSP per i file python                        |
-| `OPENCODE_EXPERIMENTAL_PLAN_MODE`               | boolean | Abilita plan mode                                       |
-| `OPENCODE_EXPERIMENTAL_EVENT_SYSTEM`            | boolean | Abilita sistema eventi sperimentale                     |
-| `OPENCODE_EXPERIMENTAL_NATIVE_LLM`              | boolean | Abilita percorso nativo di richiesta LLM                |
-| `OPENCODE_EXPERIMENTAL_PARALLEL`                | boolean | Abilita esecuzione parallela della ricerca web          |
-| `OPENCODE_EXPERIMENTAL_SCOUT`                   | boolean | Abilita subagent Scout                                  |
-| `OPENCODE_EXPERIMENTAL_WORKSPACES`              | boolean | Abilita supporto workspace                              |
+| `OLIVE_EXPERIMENTAL`                         | boolean | Abilita funzionalità sperimentali sotto il flag globale |
+| `OLIVE_EXPERIMENTAL_ICON_DISCOVERY`          | boolean | Abilita icon discovery                                  |
+| `OLIVE_EXPERIMENTAL_DISABLE_COPY_ON_SELECT`  | boolean | Disabilita copy on select nella TUI                     |
+| `OLIVE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS` | number  | Timeout di default per comandi bash in ms               |
+| `OLIVE_EXPERIMENTAL_OUTPUT_TOKEN_MAX`        | number  | Massimo token di output per risposte LLM                |
+| `OLIVE_EXPERIMENTAL_FILEWATCHER`             | boolean | Abilita file watcher per l'intera dir                   |
+| `OLIVE_EXPERIMENTAL_OXFMT`                   | boolean | Abilita formatter oxfmt                                 |
+| `OLIVE_EXPERIMENTAL_LSP_TOOL`                | boolean | Abilita strumento LSP sperimentale                      |
+| `OLIVE_EXPERIMENTAL_DISABLE_FILEWATCHER`     | boolean | Disabilita file watcher                                 |
+| `OLIVE_EXPERIMENTAL_EXA`                     | boolean | Abilita funzionalità Exa sperimentali                   |
+| `OLIVE_EXPERIMENTAL_LSP_TY`                  | boolean | Abilita TY LSP per i file python                        |
+| `OLIVE_EXPERIMENTAL_PLAN_MODE`               | boolean | Abilita plan mode                                       |
+| `OLIVE_EXPERIMENTAL_EVENT_SYSTEM`            | boolean | Abilita sistema eventi sperimentale                     |
+| `OLIVE_EXPERIMENTAL_NATIVE_LLM`              | boolean | Abilita percorso nativo di richiesta LLM                |
+| `OLIVE_EXPERIMENTAL_PARALLEL`                | boolean | Abilita esecuzione parallela della ricerca web          |
+| `OLIVE_EXPERIMENTAL_SCOUT`                   | boolean | Abilita subagent Scout                                  |
+| `OLIVE_EXPERIMENTAL_WORKSPACES`              | boolean | Abilita supporto workspace                              |

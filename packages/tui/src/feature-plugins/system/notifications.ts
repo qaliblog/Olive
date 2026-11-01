@@ -1,5 +1,5 @@
-import { Plugin } from "@opencode/plugin/tui"
-import type { AttentionSoundName } from "@opencode/plugin/tui/context"
+import { Plugin } from "@olive/plugin/tui"
+import type { AttentionSoundName } from "@olive/plugin/tui/context"
 
 function notify(
   context: Plugin.Context,
@@ -32,7 +32,7 @@ function hasRunningChild(context: Plugin.Context, sessionID: string) {
 }
 
 export default Plugin.define({
-  id: "opencode.notifications",
+  id: "olive.notifications",
   setup(context) {
     const errored = new Set<string>()
     const terminal = new Set<string>()

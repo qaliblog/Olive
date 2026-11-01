@@ -12,12 +12,12 @@ Add Console as a model provider in `~/.codex/config.toml` and make it the defaul
 
 ```toml title="~/.codex/config.toml"
 model = "gpt-6.1-sol"
-model_provider = "opencode"
+model_provider = "olive"
 
-[model_providers.opencode]
-name = "OpenCode Console"
-base_url = "https://opencode.ai/inference/openai/v1"
-env_key = "OPENCODE_API_KEY"
+[model_providers.olive]
+name = "Olive Console"
+base_url = "https://olive.ai/inference/openai/v1"
+env_key = "OLIVE_API_KEY"
 wire_api = "responses"
 ```
 
@@ -25,7 +25,7 @@ Codex appends `/responses` to the base URL and reads the key from `env_key`. Cre
 [personal API key](/console/harnesses#get-an-api-key), then export it.
 
 ```bash
-export OPENCODE_API_KEY="oc_sk_..."
+export OLIVE_API_KEY="oc_sk_..."
 codex
 ```
 
@@ -39,12 +39,12 @@ Use the Go base URL and a key from a workspace with a [Go](/console/go) subscrip
 
 ```toml title="~/.codex/config.toml"
 model = "kimi-k3"
-model_provider = "opencode-go"
+model_provider = "olive-go"
 
-[model_providers.opencode-go]
-name = "OpenCode Go"
-base_url = "https://opencode.ai/inference/go/openai/v1"
-env_key = "OPENCODE_API_KEY"
+[model_providers.olive-go]
+name = "Olive Go"
+base_url = "https://olive.ai/inference/go/openai/v1"
+env_key = "OLIVE_API_KEY"
 wire_api = "responses"
 ```
 
@@ -67,7 +67,7 @@ profile file that switches to Go.
 
 ```toml title="~/.codex/go.config.toml"
 model = "kimi-k3"
-model_provider = "opencode-go"
+model_provider = "olive-go"
 ```
 
 ```bash
@@ -79,11 +79,11 @@ codex --profile go
 Add the [Console MCP](/console/harnesses#console-mcp) server and sign in from the browser.
 
 ```bash
-codex mcp add opencode-console --url https://opencode.ai/console/mcp
+codex mcp add olive-console --url https://olive.ai/console/mcp
 ```
 
 If the sign-in doesn't start automatically, run it yourself.
 
 ```bash
-codex mcp login opencode-console
+codex mcp login olive-console
 ```

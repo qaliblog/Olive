@@ -19,7 +19,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "body": "{\"modelId\":\"us.anthropic.claude-sonnet-4-6\",\"messages\":[{\"role\":\"user\",\"content\":[{\"text\":\"How many primes are below 60? Reply with the number only.\"}]}],\"inferenceConfig\":{\"maxTokens\":4000},\"additionalModelRequestFields\":{\"thinking\":{\"type\":\"adaptive\",\"display\":\"summarized\"},\"output_config\":{\"effort\":\"high\"}},\"serviceTier\":{\"type\":\"default\"},\"requestMetadata\":{\"suite\":\"opencode-ai\"}}"
+        "body": "{\"modelId\":\"us.anthropic.claude-sonnet-4-6\",\"messages\":[{\"role\":\"user\",\"content\":[{\"text\":\"How many primes are below 60? Reply with the number only.\"}]}],\"inferenceConfig\":{\"maxTokens\":4000},\"additionalModelRequestFields\":{\"thinking\":{\"type\":\"adaptive\",\"display\":\"summarized\"},\"output_config\":{\"effort\":\"high\"}},\"serviceTier\":{\"type\":\"default\"},\"requestMetadata\":{\"suite\":\"olive-ai\"}}"
       },
       "response": {
         "status": 200,

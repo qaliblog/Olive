@@ -1,5 +1,5 @@
-import { define } from "@opencode/plugin/effect/plugin"
-import type { Entry } from "@opencode/schema/config"
+import { define } from "@olive/plugin/effect/plugin"
+import type { Entry } from "@olive/schema/config"
 import { Duration, Effect, Option, Schedule, type Schema, Semaphore, Stream } from "effect"
 import { HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 import photonWasm from "#photon-wasm"
@@ -66,7 +66,7 @@ export function createLocalProviderPlugin<Discovered>(input: {
           providers.update(input.providerID, (provider) => {
             provider.name = input.name
             provider.activation = "enabled"
-            provider.package = "@opencode/ai/providers/openai-compatible"
+            provider.package = "@olive/ai/providers/openai-compatible"
             provider.settings = {
               baseURL: source.current.baseURL,
               provider: input.providerID,

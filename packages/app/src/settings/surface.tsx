@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "@solidjs/router"
 import { batch, createEffect, createMemo, on } from "solid-js"
 import { createStore } from "solid-js/store"
-import { createSimpleContext } from "@opencode/ui/context"
+import { createSimpleContext } from "@olive/ui/context"
 import { useLayout, type LayoutRoute } from "@/shell/state/layout"
 import { useTabs } from "@/shell/tabs/tabs"
 import { useServers } from "@/runtime/server/registry"

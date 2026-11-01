@@ -1,7 +1,7 @@
-import { Icon } from "@opencode/ui/icon"
-import { Switch } from "@opencode/ui/switch"
-import { Tabs } from "@opencode/ui/tabs"
-import { Button } from "@opencode/ui/button"
+import { Icon } from "@olive/ui/icon"
+import { Switch } from "@olive/ui/switch"
+import { Tabs } from "@olive/ui/tabs"
+import { Button } from "@olive/ui/button"
 import { useQuery } from "@tanstack/solid-query"
 import {
   type Component,
@@ -379,7 +379,7 @@ export const ProjectSettingsExtensions: Component<{
                 kind="skills"
                 empty={projectSkills().length === 0}
                 action={
-                  <ExternalLink class="settings-extension-link" href="https://opencode.ai/v2/docs/skills">
+                  <ExternalLink class="settings-extension-link" href="https://olive.ai/v2/docs/skills">
                     {language.t("settings.extensions.addSkills")}
                   </ExternalLink>
                 }

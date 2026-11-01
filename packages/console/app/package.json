@@ -1,5 +1,5 @@
 {
-  "name": "@opencode/console-app",
+  "name": "@olive/console-app",
   "version": "2.2.5",
   "type": "module",
   "license": "MIT",
@@ -16,8 +16,8 @@
   "dependencies": {
     "@ibm/plex": "6.4.1",
     "@kobalte/core": "catalog:",
-    "@opencode/console-resource": "workspace:*",
-    "@opencode/ui": "workspace:*",
+    "@olive/console-resource": "workspace:*",
+    "@olive/ui": "workspace:*",
     "@solidjs/meta": "catalog:",
     "@solidjs/router": "catalog:",
     "@solidjs/start": "catalog:",

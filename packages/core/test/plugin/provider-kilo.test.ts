@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { ProviderPlugins } from "@opencode/core/plugin/provider"
-import { KiloPlugin } from "@opencode/core/plugin/provider/kilo"
-import { Provider } from "@opencode/core/provider"
+import { Plugin } from "@olive/core/plugin"
+import { PluginHost } from "@olive/core/plugin/host"
+import { ProviderPlugins } from "@olive/core/plugin/provider"
+import { KiloPlugin } from "@olive/core/plugin/provider/kilo"
+import { Provider } from "@olive/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -18,7 +18,7 @@ const addPlugin = Effect.fn(function* () {
 
 describe("KiloPlugin", () => {
   test("is registered so legacy referer headers can be applied", () => {
-    expect(ProviderPlugins.map((item) => item.id)).toContain("opencode.provider.kilo")
+    expect(ProviderPlugins.map((item) => item.id)).toContain("olive.provider.kilo")
   })
 
   it.effect("applies legacy referer headers only to Kilo endpoints", () =>
@@ -26,7 +26,7 @@ describe("KiloPlugin", () => {
       const catalog = yield* Provider.Service
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.make("kilo"), (provider) => {
-          provider.package = "@opencode/ai/providers/openai-compatible"
+          provider.package = "@olive/ai/providers/openai-compatible"
           provider.settings = { baseURL: "https://api.kilo.ai/api/gateway" }
           provider.headers = { Existing: "value" }
         })
@@ -35,8 +35,8 @@ describe("KiloPlugin", () => {
       yield* addPlugin()
       expect((yield* catalog.get(Provider.ID.make("kilo")))?.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
-        "X-Title": "opencode",
+        "HTTP-Referer": "https://olive.ai/",
+        "X-Title": "olive",
       })
       expect((yield* catalog.get(Provider.ID.openrouter))?.headers).toBeUndefined()
     }),
@@ -47,15 +47,15 @@ describe("KiloPlugin", () => {
       const catalog = yield* Provider.Service
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.make("kilo"), (provider) => {
-          provider.package = "@opencode/ai/providers/openai-compatible"
+          provider.package = "@olive/ai/providers/openai-compatible"
           provider.settings = { baseURL: "https://api.kilo.ai/api/gateway" }
         })
       })
       yield* addPlugin()
 
       expect((yield* catalog.get(Provider.ID.make("kilo")))?.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
-        "X-Title": "opencode",
+        "HTTP-Referer": "https://olive.ai/",
+        "X-Title": "olive",
       })
       expect((yield* catalog.get(Provider.ID.make("kilo")))?.headers).not.toHaveProperty("http-referer")
       expect((yield* catalog.get(Provider.ID.make("kilo")))?.headers).not.toHaveProperty("x-title")
@@ -71,7 +71,7 @@ describe("KiloPlugin", () => {
           provider.package = Provider.aisdk("kilo")
         })
         catalog.update(Provider.ID.make("custom-kilo"), (provider) => {
-          provider.package = "@opencode/ai/providers/openai-compatible"
+          provider.package = "@olive/ai/providers/openai-compatible"
           provider.settings = { baseURL: "https://api.kilo.ai/api/gateway" }
         })
       })
@@ -79,8 +79,8 @@ describe("KiloPlugin", () => {
 
       expect((yield* catalog.get(Provider.ID.make("kilo")))?.headers).toBeUndefined()
       expect((yield* catalog.get(Provider.ID.make("custom-kilo")))?.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
-        "X-Title": "opencode",
+        "HTTP-Referer": "https://olive.ai/",
+        "X-Title": "olive",
       })
     }),
   )

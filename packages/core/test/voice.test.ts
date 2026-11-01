@@ -1,8 +1,8 @@
 import { expect } from "bun:test"
-import { RequestExecutor } from "@opencode/ai/route"
-import { Credential } from "@opencode/core/credential"
-import { Integration } from "@opencode/core/integration"
-import { Voice } from "@opencode/core/voice"
+import { RequestExecutor } from "@olive/ai/route"
+import { Credential } from "@olive/core/credential"
+import { Integration } from "@olive/core/integration"
+import { Voice } from "@olive/core/voice"
 import { Effect, Layer } from "effect"
 import { HttpClient, type HttpClientRequest, HttpClientResponse } from "effect/http"
 import { TestClock } from "effect/testing"
@@ -22,10 +22,10 @@ const keys: Record<string, string> = {
   stored: "sk-stored",
   XAI_API_KEY: "xai-env-key",
   GEMINI_API_KEY: "gemini-env-key",
-  OPENCODE_API_KEY: "opencode-env-key",
+  OLIVE_API_KEY: "olive-env-key",
 }
 
-// A ChatGPT sign-in can't start voice sessions, so resolving one fails the test; an OpenCode Console sign-in can.
+// A ChatGPT sign-in can't start voice sessions, so resolving one fails the test; an Olive Console sign-in can.
 const resolveCredential: Integration.Interface["connection"]["resolve"] = (connection) => {
   if (connection.type === "env") return Effect.succeed(Credential.Key.make({ type: "key", key: keys[connection.name] }))
   if (connection.id === "chatgpt") return Effect.die("a ChatGPT sign-in was resolved")
@@ -153,28 +153,28 @@ it.effect("uses the first key or env connection Integration lists and never a Ch
 )
 
 it.effect(
-  "starts GPT-Live on OpenCode's hosted endpoint with an OpenCode Console connection only without an OpenAI key",
+  "starts GPT-Live on Olive's hosted endpoint with an Olive Console connection only without an OpenAI key",
   () =>
     Effect.gen(function* () {
       const requests: HttpClientRequest.HttpClientRequest[] = []
-      const opencode = { opencode: [credential("console", "oauth")] }
+      const olive = { olive: [credential("console", "oauth")] }
 
-      yield* start("gpt-live-1", { openai: [credential("chatgpt", "oauth")], ...opencode }, requests)
-      yield* start("gpt-live-1", { opencode: [{ type: "env", name: "OPENCODE_API_KEY" }] }, requests)
-      yield* start("gpt-live-1", { openai: [credential("active", "key")], ...opencode }, requests)
+      yield* start("gpt-live-1", { openai: [credential("chatgpt", "oauth")], ...olive }, requests)
+      yield* start("gpt-live-1", { olive: [{ type: "env", name: "OLIVE_API_KEY" }] }, requests)
+      yield* start("gpt-live-1", { openai: [credential("active", "key")], ...olive }, requests)
       expect(
         requests.map((req): (string | undefined)[] => [
           req.url,
           req.headers.authorization,
-          req.headers["x-opencode-org-id"],
+          req.headers["x-olive-org-id"],
         ]),
       ).toEqual([
-        ["https://opencode.ai/inference/openai/v1/live/sessions", "Bearer console-access", "wrk_console"],
-        ["https://opencode.ai/inference/openai/v1/live/sessions", "Bearer opencode-env-key", undefined],
+        ["https://olive.ai/inference/openai/v1/live/sessions", "Bearer console-access", "wrk_console"],
+        ["https://olive.ai/inference/openai/v1/live/sessions", "Bearer olive-env-key", undefined],
         ["https://api.openai.com/v1/live/sessions", "Bearer sk-active", undefined],
       ])
 
-      const realtime = yield* start("gpt-realtime-2.1", opencode, requests).pipe(Effect.flip)
+      const realtime = yield* start("gpt-realtime-2.1", olive, requests).pipe(Effect.flip)
       expect(realtime).toMatchObject({ _tag: "Voice.UnavailableError", service: "openai" })
       expect(requests).toHaveLength(3)
     }),
@@ -213,10 +213,10 @@ it.effect("lists voice models with availability and default without resolving cr
     })
 
     expect(
-      yield* list({ openai: [credential("chatgpt", "oauth")], opencode: [credential("console", "oauth")] }),
+      yield* list({ openai: [credential("chatgpt", "oauth")], olive: [credential("console", "oauth")] }),
     ).toEqual({
       models: [
-        { model: "gpt-live-1", provider: "opencode", transports: ["webrtc"], available: true },
+        { model: "gpt-live-1", provider: "olive", transports: ["webrtc"], available: true },
         { model: "gpt-realtime-2.1", provider: "openai", transports: ["webrtc", "websocket"], available: false },
         { model: "grok-voice-3.0", provider: "xai", transports: ["websocket"], available: false },
         { model: "gemini-3.8-live", provider: "google", transports: ["websocket"], available: false },

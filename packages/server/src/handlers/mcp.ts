@@ -1,9 +1,9 @@
-import { Location } from "@opencode/core/location"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { Mcp } from "@opencode/core/mcp/index"
-import { PtyTicket } from "@opencode/core/pty/ticket"
-import { ForbiddenError, McpServerNotFoundError } from "@opencode/protocol/errors"
-import { PTY_CONNECT_TOKEN_HEADER, PTY_CONNECT_TOKEN_HEADER_VALUE } from "@opencode/protocol/groups/pty"
+import { Location } from "@olive/core/location"
+import { LocationServiceMap } from "@olive/core/location-service-map"
+import { Mcp } from "@olive/core/mcp/index"
+import { PtyTicket } from "@olive/core/pty/ticket"
+import { ForbiddenError, McpServerNotFoundError } from "@olive/protocol/errors"
+import { PTY_CONNECT_TOKEN_HEADER, PTY_CONNECT_TOKEN_HEADER_VALUE } from "@olive/protocol/groups/pty"
 import { Effect, Queue } from "effect"
 import { HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
@@ -109,7 +109,7 @@ export const McpHandler = HttpApiBuilder.group(Api, "server.mcp", (handlers) =>
 
           return yield* Effect.gen(function* () {
             const mcp = yield* Mcp.Service
-            const { McpSocketClient } = yield* Effect.promise(() => import("@opencode/core/mcp/socket-client"))
+            const { McpSocketClient } = yield* Effect.promise(() => import("@olive/core/mcp/socket-client"))
             const socket = yield* Effect.orDie(ctx.request.upgrade)
             const outbox = yield* Queue.unbounded<Outbound>()
             yield* holdLocation(outbox)

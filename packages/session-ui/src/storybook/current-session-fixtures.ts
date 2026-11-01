@@ -9,7 +9,7 @@ import type {
   SessionMessageInfo,
   SessionMessageUser,
   SessionStatus,
-} from "@opencode/client/promise"
+} from "@olive/client/promise"
 import type { SessionDocument } from "../document"
 import type { SessionUserPresentation } from "../timeline/session-timeline"
 
@@ -372,7 +372,7 @@ export const fileChangeLoadingDocument = document(
           args: {
             path: "packages/app/src/components/empty-session.tsx",
             oldString: "No messages yet",
-            newString: "Ask OpenCode to start working",
+            newString: "Ask Olive to start working",
           },
         }),
       ],
@@ -395,7 +395,7 @@ export const fileChangeRunningDocument = document(
           args: {
             path: "packages/app/src/components/empty-session.tsx",
             oldString: "No messages yet",
-            newString: "Ask OpenCode to start working",
+            newString: "Ask Olive to start working",
           },
         }),
       ],
@@ -522,10 +522,10 @@ export const expandedShellDocument = document([
         offset: 52_300,
         args: {
           command:
-            "opencode2 api get /openapi.json > /private/var/folders/j/gd69b2|16y91666jzf3p9g22asdasc0000gn/T/opencode/temp/tes",
+            "olive2 api get /openapi.json > /private/var/folders/j/gd69b2|16y91666jzf3p9g22asdasc0000gn/T/olive/temp/tes",
         },
         output:
-          '{"location":{"directory":"/Users/usrnk1","project":{"id":"global","directory":"/","canonical":"/"}},"data":[{"id":"opencode","name":"OpenCode","description":"Use this skill for any question about OpenCode itself, including how OpenCode works, using or configuring it, migrating from V1 to V2, troubleshooting it, developing plugins or integrations, using the OpenCode SDK, clients, server, or API, and contributing to the OpenCode codebase."}]}',
+          '{"location":{"directory":"/Users/usrnk1","project":{"id":"global","directory":"/","canonical":"/"}},"data":[{"id":"olive","name":"Olive","description":"Use this skill for any question about Olive itself, including how Olive works, using or configuring it, migrating from V1 to V2, troubleshooting it, developing plugins or integrations, using the Olive SDK, clients, server, or API, and contributing to the Olive codebase."}]}',
         metadata: { exit: 0 },
       }),
     ],
@@ -544,13 +544,13 @@ export const executeCodeDocument = document([
         name: "execute",
         offset: 52_300,
         args: {
-          code: 'const tab = await tools.browser.tabs.open({ url: "http://localhost:4399" })\nconst usage = await tools.opencode_console.get_usage({ range: "24h" })\nreturn { tab: tab.id, cost: usage.cost_usd }',
+          code: 'const tab = await tools.browser.tabs.open({ url: "http://localhost:4399" })\nconst usage = await tools.olive_console.get_usage({ range: "24h" })\nreturn { tab: tab.id, cost: usage.cost_usd }',
         },
         output: '{\n  "tab": "tab_4f1c",\n  "cost": 0.42\n}',
         metadata: {
           toolCalls: [
             { tool: "browser.tabs.open", status: "completed", input: { url: "http://localhost:4399" } },
-            { tool: "opencode_console.get_usage", status: "completed", input: { range: "24h" } },
+            { tool: "olive_console.get_usage", status: "completed", input: { range: "24h" } },
           ],
         },
       }),
@@ -567,10 +567,10 @@ export const executeCodeDocument = document([
         name: "execute",
         offset: 52_700,
         args: {
-          code: 'return await tools.mesh.exec({ target: "blade", script: "foreach ($t in \'\\\\opencode-mesh\\\\sync\', \'\\\\opencode-mesh\\\\run\') { schtasks /delete /tn $t /f 2>&1 | Out-Null; \\"deleted $t\\" }" })',
+          code: 'return await tools.mesh.exec({ target: "blade", script: "foreach ($t in \'\\\\olive-mesh\\\\sync\', \'\\\\olive-mesh\\\\run\') { schtasks /delete /tn $t /f 2>&1 | Out-Null; \\"deleted $t\\" }" })',
         },
         output:
-          "deleted \\opencode-mesh\\sync\ndeleted \\opencode-mesh\\run\nCleanup finished on blade after removing both scheduled tasks and their trigger history.",
+          "deleted \\olive-mesh\\sync\ndeleted \\olive-mesh\\run\nCleanup finished on blade after removing both scheduled tasks and their trigger history.",
         metadata: {
           toolCalls: [
             {
@@ -579,7 +579,7 @@ export const executeCodeDocument = document([
               input: {
                 target: "blade",
                 script:
-                  "foreach ($t in '\\opencode-mesh\\sync', '\\opencode-mesh\\run') { schtasks /delete /tn $t /f 2>&1 | Out-Null; \"deleted $t\" }",
+                  "foreach ($t in '\\olive-mesh\\sync', '\\olive-mesh\\run') { schtasks /delete /tn $t /f 2>&1 | Out-Null; \"deleted $t\" }",
               },
             },
           ],
@@ -840,9 +840,9 @@ export const loadedResourcesDocument = document([
         id: "tool_loaded_file",
         name: "read",
         offset: 80_100,
-        args: { path: "C:/workspaces/opencode/packages/cli/AGENTS.md" },
+        args: { path: "C:/workspaces/olive/packages/cli/AGENTS.md" },
         output: "Project instructions loaded.",
-        metadata: { loaded: ["C:/workspaces/opencode/packages/cli/AGENTS.md"] },
+        metadata: { loaded: ["C:/workspaces/olive/packages/cli/AGENTS.md"] },
       }),
       completedTool({
         id: "tool_skill_rtl",
@@ -1167,7 +1167,7 @@ export const attachmentsAndCommentsPresentation = {
   },
 } satisfies Record<string, SessionUserPresentation>
 
-// The header and body as the OpenCode iOS app's `VoiceHandoff.format` writes them.
+// The header and body as the Olive iOS app's `VoiceHandoff.format` writes them.
 const voiceHeader =
   "Voice delegation. The user is on a voice call with a voice agent, which hands their requests to you. Instruction is the user's own spoken words since the previous delegation, transcribed from speech, so it may contain recognition errors and disfluencies: resolve meaning from the complete utterance, not a disfluent prefix. Voice, when present, is how the voice agent framed the request. Transcript delta is the surrounding voice conversation, both sides, for context, not additional commands. Lead your reply with one or two plain sentences suitable for reading aloud, then any detail; answer only what was asked, with no unrequested tips. If this arrives while you are already working (a follow-up, nudge, or status check), answer it promptly: a clear status update, the finished result if you have enough, or the precise blocker or input you need; then continue on the fastest safe path."
 

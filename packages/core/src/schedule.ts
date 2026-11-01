@@ -3,8 +3,8 @@ export * as Schedule from "./schedule.js"
 import { randomUUID } from "node:crypto"
 import { and, asc, eq, gt, isNull, lte, min, or, sql } from "drizzle-orm"
 import { Cause, Clock, Context, Cron, DateTime, Effect, Latch, Layer, Option, Result, Schedule as EffectSchedule, Schema } from "effect"
-import { Node, makeGlobalNode } from "@opencode/util/effect/app-node"
-import { LayerNode } from "@opencode/util/effect/layer-node"
+import { Node, makeGlobalNode } from "@olive/util/effect/app-node"
+import { LayerNode } from "@olive/util/effect/layer-node"
 import {
   Condition,
   ConditionInput,
@@ -19,7 +19,7 @@ import {
   type StoredCheck,
   toCreateInput,
   When,
-} from "@opencode/schema/schedule"
+} from "@olive/schema/schedule"
 import { Config } from "./config.js"
 import { Database } from "./database/database.js"
 import { FileSystem } from "./filesystem.js"
@@ -73,13 +73,13 @@ export interface Interface {
   readonly tick: Effect.Effect<void>
   /**
    * Runs `tick` whenever a schedule falls due, until interrupted. Elects at most one active leader per SQLite
-   * database via a lease row, so auxiliary processes (`opencode acp`, `--standalone`) sharing a data directory
+   * database via a lease row, so auxiliary processes (`olive acp`, `--standalone`) sharing a data directory
    * never double-fire alongside a managed service.
    */
   readonly run: Effect.Effect<never>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Schedule") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/Schedule") {}
 
 type Row = typeof ScheduleTable.$inferSelect
 

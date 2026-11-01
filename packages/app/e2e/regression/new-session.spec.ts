@@ -1,7 +1,7 @@
 import { expect, test, type Locator, type Page } from "@playwright/test"
-import type { OpenCodeEvent, WorktreeDirectory } from "@opencode/client/promise"
+import type { OliveEvent, WorktreeDirectory } from "@olive/client/promise"
 import { draftHref, expectPath, NO_PROVIDER, project, provider, seed, sessionHref, T0 } from "../utils/app"
-import { mockOpenCodeServer } from "../utils/mock-server"
+import { mockOliveServer } from "../utils/mock-server"
 import {
   newSessionLocation,
   newSessionWorktree,
@@ -11,9 +11,9 @@ import {
   type WorkspaceInput,
 } from "../utils/workspace"
 
-const directory = "C:/OpenCode/WorkspacePending"
+const directory = "C:/Olive/WorkspacePending"
 
-const workspace = "C:/OpenCode/pending-workspace"
+const workspace = "C:/Olive/pending-workspace"
 
 const projectID = "proj_workspace_pending"
 
@@ -34,7 +34,7 @@ const submit = (page: Page) => page.locator('[data-action="composer-submit"]')
 const tabLink = (page: Page, sessionID: string) =>
   page.locator(`[data-titlebar-tab-link][href="${sessionHref(sessionID)}"]`)
 
-// A draft on the local project (C:/OpenCode/WorkspacePending) beside one other session tab.
+// A draft on the local project (C:/Olive/WorkspacePending) beside one other session tab.
 const pendingDraft = {
   name: "WorkspacePending",
   draftID,
@@ -59,11 +59,11 @@ test("the new session screen does not show session details", async ({ page }) =>
 })
 
 test("the location shortcuts choose worktrees from every state and keep cycling", async ({ page }) => {
-  const existing = "C:/OpenCode/LocationShortcut/.worktrees/quiet-river"
+  const existing = "C:/Olive/LocationShortcut/.worktrees/quiet-river"
 
   const view = await openDraft(page, {
     name: "LocationShortcut",
-    worktrees: () => [{ directory: "C:/OpenCode/LocationShortcut" }, { directory: existing, strategy: "git" }],
+    worktrees: () => [{ directory: "C:/Olive/LocationShortcut" }, { directory: existing, strategy: "git" }],
   })
 
   const modifier = await page.evaluate(() => (/Mac/i.test(navigator.platform) ? "Meta" : "Control"))
@@ -81,7 +81,7 @@ test("the location shortcuts choose worktrees from every state and keep cycling"
   await expect(page.locator('[data-slot="new-session-location-icon"]')).toHaveCount(0)
   await view.editor.press(`${modifier}+Alt+KeyO`)
   await expect(search).toBeFocused()
-  await page.getByRole("option", { name: /LocationShortcut C:\/OpenCode\/LocationShortcut$/ }).click()
+  await page.getByRole("option", { name: /LocationShortcut C:\/Olive\/LocationShortcut$/ }).click()
   await view.editor.press(`${modifier}+Alt+KeyL`)
   await expect(newSessionWorktree(page)).toContainText("New worktree")
   await view.editor.press(`${modifier}+Alt+KeyO`)
@@ -157,7 +157,7 @@ test("the worktree picker shortcut is disabled for non-Git projects", async ({ p
 })
 
 test("picker scrollbars overlay full-width rows and support dragging", async ({ page }) => {
-  const root = "C:/OpenCode/OverlayMenus"
+  const root = "C:/Olive/OverlayMenus"
 
   await openDraft(page, {
     name: "OverlayMenus",
@@ -197,12 +197,12 @@ test("picker scrollbars overlay full-width rows and support dragging", async ({ 
 for (const row of [
   {
     name: "POSIX",
-    directory: "/Users/alice/.local/share/opencode/worktree/123456/my-project",
+    directory: "/Users/alice/.local/share/olive/worktree/123456/my-project",
     pattern: /^\/Users\/.*…\/123456\/my-project$/,
   },
   {
     name: "Windows",
-    directory: "C:\\Users\\alice\\Documents\\opencode\\worktree\\123456\\my-project",
+    directory: "C:\\Users\\alice\\Documents\\olive\\worktree\\123456\\my-project",
     pattern: /^C:\\.*…\\123456\\my-project$/,
   },
 ]) {
@@ -237,7 +237,7 @@ test("the combined location picker shows checkout branches and chooses the base 
 }) => {
   const listed = Promise.withResolvers<string[]>()
   const searches: { directory: string; search?: string; limit?: number }[] = []
-  const existing = "C:/OpenCode/BranchContext/.worktrees/stellar-orchid"
+  const existing = "C:/Olive/BranchContext/.worktrees/stellar-orchid"
 
   const view = await openWorktreeDraft(page, {
     name: "BranchContext",
@@ -246,7 +246,7 @@ test("the combined location picker shows checkout branches and chooses the base 
       current: directory === existing ? "model-picker-dialog" : "timeline-quotes",
       default: "main",
     }),
-    worktrees: () => [{ directory: "C:/OpenCode/BranchContext" }, { directory: existing, strategy: "git" }],
+    worktrees: () => [{ directory: "C:/Olive/BranchContext" }, { directory: existing, strategy: "git" }],
     branches: (input) => {
       searches.push(input)
 
@@ -311,7 +311,7 @@ test("the combined location picker shows checkout branches and chooses the base 
   await page.getByRole("combobox", { name: "Search projects", exact: true }).press("ArrowRight")
   await page.getByRole("combobox", { name: "Search worktrees", exact: true }).fill("Custom project")
   await expect(page.getByRole("option")).toHaveCount(1)
-  await page.getByRole("option", { name: /Custom project C:\/OpenCode\/BranchContext/ }).click()
+  await page.getByRole("option", { name: /Custom project C:\/Olive\/BranchContext/ }).click()
   await expect(view.editor).toBeFocused()
   await expect(screen.getByRole("button", { name: "Local", exact: true })).toBeVisible()
   // The local checkout's branch is context, not a control: the app cannot switch it.
@@ -336,12 +336,12 @@ test("the combined location picker shows checkout branches and chooses the base 
 })
 
 test("the worktree trigger opens the current project's worktree step", async ({ page }) => {
-  const existing = "C:/OpenCode/BranchWorktrees/.worktrees/quiet-river"
+  const existing = "C:/Olive/BranchWorktrees/.worktrees/quiet-river"
 
   const view = await openDraft(page, {
     name: "BranchWorktrees",
     vcs: (directory) => ({ current: directory === existing ? "quiet-river-branch" : "dev", default: "main" }),
-    worktrees: () => [{ directory: "C:/OpenCode/BranchWorktrees" }, { directory: existing, strategy: "git" }],
+    worktrees: () => [{ directory: "C:/Olive/BranchWorktrees" }, { directory: existing, strategy: "git" }],
   })
 
   const screen = page.locator('[data-component="new-session"]')
@@ -917,7 +917,7 @@ test("executes a selected slash command after creating its worktree", async ({ p
       },
     ])
   // The server owns command expansion; the client receives the expanded inbox item.
-  // SAFETY: the fixture event matches the generated OpenCodeEvent shape for its type.
+  // SAFETY: the fixture event matches the generated OliveEvent shape for its type.
   await mock.push([
     {
       id: "evt_workspace_review",
@@ -929,7 +929,7 @@ test("executes a selected slash command after creating its worktree", async ({ p
         inboxID: "msg_workspace_review",
         item: { type: "user", payload: { text: expanded }, delivery: "steer" },
       },
-    } as OpenCodeEvent,
+    } as OliveEvent,
   ])
   await expect(pending.shimmer).toHaveCount(0)
   await expect(page.locator('[data-slot="user-message-text"]')).toHaveText(expanded)
@@ -945,19 +945,19 @@ test("the location dialog separates added projects from server projects and tags
   const entry = (id: string, directory: string, active: number) =>
     project({ id, directory, time: { created: T0, updated: T0, active: T0 + active } })
 
-  const remote = entry("proj_apollo_opencode", "/home/dax/opencode", 4)
+  const remote = entry("proj_apollo_olive", "/home/dax/olive", 4)
   const files: string[] = []
   page.on("request", (request) => {
     const url = new URL(request.url())
 
     if (url.origin === apollo && url.pathname === "/api/fs/list") files.push(url.pathname)
   })
-  await mockOpenCodeServer(page, {
+  await mockOliveServer(page, {
     server: apollo,
     directory: remote.worktree,
     project: remote,
     projects: () => [remote, entry("proj_apollo_sst", "/home/dax/sst", 3)],
-    worktrees: () => [{ directory: remote.worktree }, { directory: "/home/dax/opencode-beta", strategy: "git" }],
+    worktrees: () => [{ directory: remote.worktree }, { directory: "/home/dax/olive-beta", strategy: "git" }],
     provider: NO_PROVIDER,
     sessions: [],
     pageMessages: () => ({ items: [] }),
@@ -971,9 +971,9 @@ test("the location dialog separates added projects from server projects and tags
     ],
     usedProjects: { [apollo]: [remote.id] },
   })
-  const local = entry("proj_opencode", "C:/work/opencode", 2)
+  const local = entry("proj_olive", "C:/work/olive", 2)
   await openDraft(page, {
-    name: "opencode",
+    name: "olive",
     hostname: "hailmary",
     directory: local.worktree,
     project: { time: local.time },
@@ -992,15 +992,15 @@ test("the location dialog separates added projects from server projects and tags
   const paths = options.locator(".command-palette-description")
   const back = dialog.getByRole("button", { name: "Back to projects", exact: true })
   // Only the projects added to this client open expanded; other ready-server projects remain discoverable.
-  await expect(names).toHaveText(["opencodeapollo", "opencode"])
-  await expect(paths).toHaveText(["/home/dax/opencode", "C:/work/opencode"])
+  await expect(names).toHaveText(["oliveapollo", "olive"])
+  await expect(paths).toHaveText(["/home/dax/olive", "C:/work/olive"])
   const others = options.filter({ hasText: "Other projects" })
   await expect(others).toBeVisible()
   await expect(others.locator(".new-session-location-count")).toHaveText("2")
   await expect(dialog.locator(".command-palette-group-title")).toHaveCount(0)
   await expect(options.locator(".command-palette-title")).toHaveText([
-    "opencode",
-    "opencode",
+    "olive",
+    "olive",
     "Other projects",
     "Add project",
   ])
@@ -1040,34 +1040,34 @@ test("the location dialog separates added projects from server projects and tags
   await search.fill("")
   await expect(names).toHaveText(["console", "sstapollo"])
   await search.press("ArrowLeft")
-  await expect(names).toHaveText(["opencodeapollo", "opencode"])
+  await expect(names).toHaveText(["oliveapollo", "olive"])
   await search.press("ArrowRight")
   await expect(names).toHaveText(["console", "sstapollo"])
   await search.press("Backspace")
   await search.press("Enter")
   await expect(names).toHaveText(["console", "sstapollo"])
   await search.press("Escape")
-  await expect(names).toHaveText(["opencodeapollo", "opencode"])
+  await expect(names).toHaveText(["oliveapollo", "olive"])
   await others.click()
   await back.click()
-  await expect(names).toHaveText(["opencodeapollo", "opencode"])
+  await expect(names).toHaveText(["oliveapollo", "olive"])
 
   await search.fill("apollo")
-  await expect(names).toHaveText(["opencodeapollo", "sstapollo"])
+  await expect(names).toHaveText(["oliveapollo", "sstapollo"])
   await expect(dialog.locator(".command-palette-group-title")).toHaveText("Other projects")
 
   // The worktree step keeps the project's avatar and server tag in its main-checkout row.
-  await search.fill("opencode")
-  await expect(paths).toHaveText(["/home/dax/opencode", "C:/work/opencode"])
+  await search.fill("olive")
+  await expect(paths).toHaveText(["/home/dax/olive", "C:/work/olive"])
   await expect(rows.nth(0)).toHaveAttribute("aria-selected", "true")
   await page.keyboard.press("ArrowRight")
   // The worktree step has no "Add project".
   await expect(add).toHaveCount(0)
   await expect(back).toHaveText("Run session in")
   await expect(options.nth(0).locator('[data-component="tag"]')).toHaveText("apollo")
-  await expect(options.locator(".command-palette-title")).toHaveText(["opencode", "New worktree", "opencode-beta"])
+  await expect(options.locator(".command-palette-title")).toHaveText(["olive", "New worktree", "olive-beta"])
   await expect(dialog.getByRole("separator")).toHaveCount(1)
-  await search.fill("opencode-beta")
+  await search.fill("olive-beta")
   await expect(options).toHaveCount(1)
   await expect(dialog.getByRole("separator")).toHaveCount(0)
   await search.fill("no-worktree-matches")
@@ -1076,7 +1076,7 @@ test("the location dialog separates added projects from server projects and tags
   await search.fill("")
   await expect(options.nth(0)).toHaveAttribute("aria-selected", "true")
   await page.keyboard.press("Backspace")
-  await expect(search).toHaveValue("opencode")
+  await expect(search).toHaveValue("olive")
   await expect(rows.nth(0)).toHaveAttribute("aria-selected", "true")
 
   // Adding a project picks one of the ready servers first, then browses that server.
@@ -1124,7 +1124,7 @@ for (const binding of ["mod+alt+p", "none"]) {
   })
 }
 
-const accentRoot = "C:/OpenCode/WorkspaceAccent"
+const accentRoot = "C:/Olive/WorkspaceAccent"
 
 const accentWorkspace = `${accentRoot}/.worktrees/feature`
 
@@ -1132,7 +1132,7 @@ for (const row of [
   { name: "a managed worktree", directory: accentWorkspace, accent: true },
   {
     name: "the main root written with Windows case and separators",
-    directory: "c:\\OPENCODE\\workspaceaccent\\",
+    directory: "c:\\OLIVE\\workspaceaccent\\",
     accent: false,
   },
 ]) {
@@ -1156,7 +1156,7 @@ for (const row of [
         {
           id: "ses_workspace_accent",
           title: "Workspace accent",
-          model: { id: "accent-model", providerID: "opencode" },
+          model: { id: "accent-model", providerID: "olive" },
         },
       ],
       pageMessages: () => ({
@@ -1193,7 +1193,7 @@ for (const row of [
       (response) => new URL(response.url()).pathname === "/api/worktree" && response.request().method() === "GET",
     )
 
-    // SAFETY: the fixture event matches the generated OpenCodeEvent shape for its type.
+    // SAFETY: the fixture event matches the generated OliveEvent shape for its type.
     await view.push([
       {
         id: "evt_accent_inventory",
@@ -1201,12 +1201,12 @@ for (const row of [
         type: "worktree.updated",
         data: { projectID: "proj_workspaceaccent" },
       },
-    ] as OpenCodeEvent[])
+    ] as OliveEvent[])
     expect((await refreshed).ok()).toBe(true)
     await expect(page).toHaveURL(url)
     await expect(view.editor).toHaveText("Inspect this fixture workspace.")
     await expectBackground(send, "icon-button-contrast")
-    // SAFETY: the fixture event matches the generated OpenCodeEvent shape for its type.
+    // SAFETY: the fixture event matches the generated OliveEvent shape for its type.
     await view.push([
       {
         id: "evt_accent_running",
@@ -1215,7 +1215,7 @@ for (const row of [
         durable: { aggregateID: "ses_workspace_accent", seq: 1, version: 1 },
         data: { sessionID: "ses_workspace_accent" },
       },
-    ] as OpenCodeEvent[])
+    ] as OliveEvent[])
     await view.editor.fill("")
     const stop = composer.getByRole("button", { name: "Stop", exact: true })
     await expect(stop).toBeEnabled()
@@ -1224,7 +1224,7 @@ for (const row of [
 }
 
 function renamed(sessionID: string) {
-  // SAFETY: the fixture event matches the generated OpenCodeEvent shape for its type.
+  // SAFETY: the fixture event matches the generated OliveEvent shape for its type.
   return {
     id: "evt_generated_title",
     type: "session.renamed",
@@ -1232,7 +1232,7 @@ function renamed(sessionID: string) {
     location: { directory: workspace },
     durable: { aggregateID: sessionID, seq: 1, version: 1 },
     data: { sessionID, title: "Generated session title" },
-  } as OpenCodeEvent
+  } as OliveEvent
 }
 
 async function draftFollowUp(page: Page) {

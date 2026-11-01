@@ -2,7 +2,7 @@
 title: "Providers"
 ---
 
-OpenCode includes a provider and model catalog from [models.dev](https://models.dev). For most providers, connect an
+Olive includes a provider and model catalog from [models.dev](https://models.dev). For most providers, connect an
 account first, then select a model.
 
 ## Setup
@@ -16,12 +16,12 @@ Run `/connect`, choose a provider, and enter its credentials. Then run `/models`
 
 ## Go
 
-[OpenCode Go](/console/go) is an optional subscription for coding models tested by the OpenCode team. Subscribe in the
-[console](https://opencode.ai/console), copy your API key, then connect it as **OpenCode Go**.
+[Olive Go](/console/go) is an optional subscription for coding models tested by the Olive team. Subscribe in the
+[console](https://olive.ai/console), copy your API key, then connect it as **Olive Go**.
 
 ```text
 /connect
-# Select OpenCode Go, then paste your API key.
+# Select Olive Go, then paste your API key.
 /models
 ```
 
@@ -39,7 +39,7 @@ or one of the legacy **Codex** sign-in methods. Usage counts against your plan, 
 
 ### Context limits
 
-By default, OpenCode caps the context window for these sign-ins below each model's real limit. The caps match the
+By default, Olive caps the context window for these sign-ins below each model's real limit. The caps match the
 defaults in Codex, so your plan usage is consumed at a similar rate as it would be in other OpenAI products.
 
 | Model                 | Input limit |
@@ -50,9 +50,9 @@ defaults in Codex, so your plan usage is consumed at a similar rate as it would 
 To opt out, disable the cap plugin in your config. The `-` prefix turns off a built-in plugin; all other plugins stay
 enabled.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "plugins": ["-opencode.provider.openai-context-caps"],
+  "plugins": ["-olive.provider.openai-context-caps"],
 }
 ```
 
@@ -61,14 +61,14 @@ enabled.
 Add a provider when its API is not already in the catalog. This OpenAI-compatible example defines the credential,
 runtime package, endpoint, and first model together.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "acme": {
       "name": "Acme",
       "env": ["ACME_API_KEY"],
-      "package": "@opencode/ai/providers/openai-compatible",
+      "package": "@olive/ai/providers/openai-compatible",
       "settings": {
         "baseURL": "https://llm.acme.example/v1",
       },
@@ -91,19 +91,19 @@ The `providers` object is keyed by the provider ID used in model references, suc
 | `package` | Runtime provider package. |
 | `canonical` | Built-in provider ID whose catalog defaults this provider inherits. |
 | `compatibility` | API quirks shared by every model of this provider. See [Compatibility](/models#compatibility). |
-| `settings` | Typed OpenCode controls and JSON options passed to the runtime package. |
+| `settings` | Typed Olive controls and JSON options passed to the runtime package. |
 | `headers` | String-valued HTTP headers added to requests. |
 | `body` | JSON fields merged into request bodies. |
-| `models` | Models to add or override, keyed by the OpenCode model ID. |
+| `models` | Models to add or override, keyed by the Olive model ID. |
 
 ## Endpoint
 
 Override `settings.baseURL` to send a catalog provider through a proxy or compatible endpoint. Its existing package,
 models, and connection still apply.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "anthropic": {
       "settings": {
@@ -120,9 +120,9 @@ models, and connection still apply.
 
 Use `headers` for additional HTTP headers and `body` for JSON fields that should be merged into every request body.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openai": {
       "headers": {
@@ -130,7 +130,7 @@ Use `headers` for additional HTTP headers and `body` for JSON fields that should
       },
       "body": {
         "metadata": {
-          "application": "opencode",
+          "application": "olive",
         },
       },
     },
@@ -140,9 +140,9 @@ Use `headers` for additional HTTP headers and `body` for JSON fields that should
 
 Both fields can also be set on a model or variant when only part of a provider's traffic needs the override.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openai": {
       "models": {
@@ -169,9 +169,9 @@ or to `false` to disable it. `settings.timeout` additionally bounds the whole re
 completes; it has no default. These configuration settings apply provider-wide, not per model or variant. On a
 WebSocket transport, `chunkTimeout` bounds the gap between frames instead and defaults to thirty minutes.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "anthropic": {
       "settings": {
@@ -183,7 +183,7 @@ WebSocket transport, `chunkTimeout` bounds the gap between frames instead and de
 }
 ```
 
-A request that exceeds either limit fails with a transport error. OpenCode retries a timed-out request up to three
+A request that exceeds either limit fails with a transport error. Olive retries a timed-out request up to three
 times before giving up.
 
 ## Request encoding
@@ -193,9 +193,9 @@ on a provider, model, or variant; the most specific value wins. Only enable an e
 providers and gateways reject compressed bodies. OpenAI defaults to `"zstd"` when signed in with ChatGPT and no custom
 `baseURL` is configured; API keys send plain JSON. WebSocket messages are unaffected.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openai": {
       "settings": { "encoding": "none" },
@@ -209,12 +209,12 @@ providers and gateways reject compressed bodies. OpenAI defaults to `"zstd"` whe
 The `package` field selects the runtime that communicates with a provider. Use the compatible runtime for APIs that
 implement the OpenAI request format.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "acme": {
-      "package": "@opencode/ai/providers/openai-compatible",
+      "package": "@olive/ai/providers/openai-compatible",
       "settings": {
         "baseURL": "https://llm.acme.example/v1",
       },
@@ -228,38 +228,38 @@ implement the OpenAI request format.
 
 Native package options include:
 
-- `@opencode/ai/providers/openai`
-- `@opencode/ai/providers/openai/chat`
-- `@opencode/ai/providers/openai/responses`
-- `@opencode/ai/providers/openai-compatible`
-- `@opencode/ai/providers/openai-compatible/responses`
-- `@opencode/ai/providers/anthropic`
-- `@opencode/ai/providers/anthropic-compatible`
-- `@opencode/ai/providers/google`
-- `@opencode/ai/providers/google-vertex`
-- `@opencode/ai/providers/google-vertex/gemini`
-- `@opencode/ai/providers/google-vertex/chat`
-- `@opencode/ai/providers/google-vertex/responses`
-- `@opencode/ai/providers/google-vertex/messages`
-- `@opencode/ai/providers/azure`
-- `@opencode/ai/providers/azure/chat`
-- `@opencode/ai/providers/azure/responses`
-- `@opencode/ai/providers/amazon-bedrock`
-- `@opencode/ai/providers/amazon-bedrock/mantle`
-- `@opencode/ai/providers/amazon-bedrock/mantle/chat`
-- `@opencode/ai/providers/amazon-bedrock/mantle/messages`
-- `@opencode/ai/providers/amazon-bedrock/mantle/responses`
-- `@opencode/ai/providers/openrouter`
-- `@opencode/ai/providers/xai`
+- `@olive/ai/providers/openai`
+- `@olive/ai/providers/openai/chat`
+- `@olive/ai/providers/openai/responses`
+- `@olive/ai/providers/openai-compatible`
+- `@olive/ai/providers/openai-compatible/responses`
+- `@olive/ai/providers/anthropic`
+- `@olive/ai/providers/anthropic-compatible`
+- `@olive/ai/providers/google`
+- `@olive/ai/providers/google-vertex`
+- `@olive/ai/providers/google-vertex/gemini`
+- `@olive/ai/providers/google-vertex/chat`
+- `@olive/ai/providers/google-vertex/responses`
+- `@olive/ai/providers/google-vertex/messages`
+- `@olive/ai/providers/azure`
+- `@olive/ai/providers/azure/chat`
+- `@olive/ai/providers/azure/responses`
+- `@olive/ai/providers/amazon-bedrock`
+- `@olive/ai/providers/amazon-bedrock/mantle`
+- `@olive/ai/providers/amazon-bedrock/mantle/chat`
+- `@olive/ai/providers/amazon-bedrock/mantle/messages`
+- `@olive/ai/providers/amazon-bedrock/mantle/responses`
+- `@olive/ai/providers/openrouter`
+- `@olive/ai/providers/xai`
 
-You can also use an npm package such as `@acme/opencode-provider` or an absolute `file://` URL for a local package.
+You can also use an npm package such as `@acme/olive-provider` or an absolute `file://` URL for a local package.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "acme": {
-      "package": "@acme/opencode-provider",
+      "package": "@acme/olive-provider",
       "models": { "acme-coder": {} },
     },
   },
@@ -268,12 +268,12 @@ You can also use an npm package such as `@acme/opencode-provider` or an absolute
 
 ## Models
 
-Add or override models in a provider's `models` map. The map key is the model ID used by OpenCode; `modelID` changes the
+Add or override models in a provider's `models` map. The map key is the model ID used by Olive; `modelID` changes the
 ID sent to the provider.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "model": "openai/coding",
   "providers": {
     "openai": {
@@ -296,7 +296,7 @@ ID sent to the provider.
 | `type` | What the model produces, such as `chat`, `image` or `decision`. Defaults to `chat`; only chat models are offered for sessions. |
 | `releaseDate` | Release date as `YYYY-MM-DD` or `YYYY-MM`. |
 | `package` | Runtime override for this model. |
-| `settings` | Model-level OpenCode controls and package-specific JSON settings. |
+| `settings` | Model-level Olive controls and package-specific JSON settings. |
 | `headers` | Additional string-valued request headers. |
 | `body` | Additional JSON request body fields. |
 | `capabilities` | Tool support, accepted input and output media types, temperature support, and reasoning controls. |
@@ -314,9 +314,9 @@ Azure's standard catalog endpoint needs a resource name in addition to its crede
 once, then connect an API key or use the Microsoft Entra ID session from the Azure CLI as described in
 [Provider accounts](/cli/providers).
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "azure": {
       "settings": {
@@ -355,14 +355,14 @@ az login --tenant TENANT_ID
 az account set --subscription NAME_OR_ID
 ```
 
-Instead of configuration, `AZURE_RESOURCE_NAME` supplies the resource name to the OpenCode server. The legacy
+Instead of configuration, `AZURE_RESOURCE_NAME` supplies the resource name to the Olive server. The legacy
 `AZURE_COGNITIVE_SERVICES_RESOURCE_NAME` variable also works.
 
 ### Deployments
 
-Azure serves a model only through a deployment, so OpenCode lists the deployments of your resource and shows those
+Azure serves a model only through a deployment, so Olive lists the deployments of your resource and shows those
 instead of the whole Azure catalog. The list loads in the background after startup, after connecting, and after
-switching accounts. To pick up a deployment added later, restart OpenCode or connect again.
+switching accounts. To pick up a deployment added later, restart Olive or connect again.
 
 - Until the list loads for a connection, or if it fails, the whole catalog stays available.
 - A failed reload for the same connection keeps its last complete inventory.
@@ -373,21 +373,21 @@ Deployment names are their model IDs, in lowercase because Azure ignores case in
 `azure/gpt-production`. A deployment named after its model, such as `gpt-6-luna`, keeps the catalog ID. These IDs stay
 stable when other deployments are added or removed.
 
-OpenCode matches a deployment to the catalog by the model it deploys, or by its name when Azure spells the model
+Olive matches a deployment to the catalog by the model it deploys, or by its name when Azure spells the model
 differently, as with `gpt-4` for GPT-4 Turbo. A deployment named after another model, such as `gpt-6.1-sol` deploying
 `gpt-6-luna`, shows that model's name, limits, and costs.
 
-With the Azure CLI, OpenCode lists deployments through the Azure management API, which needs read access to the
+With the Azure CLI, Olive lists deployments through the Azure management API, which needs read access to the
 resource. If that fails, and always with an API key, it uses the resource's legacy deployment inventory. Discovery reads
 every page before publishing the list. A custom `settings.baseURL` keeps the catalog.
 
 Configure a deployment explicitly when its model is not in the catalog, such as a fine-tuned model, or to map a model ID
-to a deployment yourself. OpenCode logs a warning naming such deployments. Explicitly configured models are always
+to a deployment yourself. Olive logs a warning naming such deployments. Explicitly configured models are always
 kept.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "azure": {
       "models": {
@@ -413,7 +413,7 @@ az login --tenant TENANT_ID
 
 ## Bedrock
 
-Amazon Bedrock uses the AWS default credential chain. A named AWS profile is the simplest durable setup; OpenCode also
+Amazon Bedrock uses the AWS default credential chain. A named AWS profile is the simplest durable setup; Olive also
 recognizes access-key environments, web identity, and container credentials.
 
 ```bash
@@ -424,9 +424,9 @@ aws sso login --profile work
 Select the profile and region in provider settings. A configured `profile`, `AWS_PROFILE`, `AWS_ACCESS_KEY_ID`, web
 identity token file, or container credential URI activates the provider; a region alone does not.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "amazon-bedrock": {
       "settings": {
@@ -438,12 +438,12 @@ identity token file, or container credential URI activates the provider; a regio
 }
 ```
 
-Without an explicit region, OpenCode uses `AWS_REGION`, then `AWS_DEFAULT_REGION`, then `us-east-1`. For a private or
+Without an explicit region, Olive uses `AWS_REGION`, then `AWS_DEFAULT_REGION`, then `us-east-1`. For a private or
 VPC endpoint, set `baseURL` while keeping the same profile and region.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "amazon-bedrock": {
       "settings": {
@@ -456,7 +456,7 @@ VPC endpoint, set `baseURL` while keeping the same profile and region.
 }
 ```
 
-Bedrock API keys use `AWS_BEARER_TOKEN_BEDROCK`. Other AWS variables feed SigV4 and are not stored as OpenCode API-key
+Bedrock API keys use `AWS_BEARER_TOKEN_BEDROCK`. Other AWS variables feed SigV4 and are not stored as Olive API-key
 accounts.
 
 ## Vertex
@@ -468,9 +468,9 @@ Create local ADC, then set the project and location in provider settings.
 gcloud auth application-default login
 ```
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "google-vertex": {
       "settings": {
@@ -482,12 +482,12 @@ gcloud auth application-default login
 }
 ```
 
-OpenCode also resolves the project from `GOOGLE_VERTEX_PROJECT`, `GOOGLE_CLOUD_PROJECT`, `GCP_PROJECT`, or
+Olive also resolves the project from `GOOGLE_VERTEX_PROJECT`, `GOOGLE_CLOUD_PROJECT`, `GCP_PROJECT`, or
 `GCLOUD_PROJECT`, in that order. It resolves the location from `GOOGLE_VERTEX_LOCATION`, `GOOGLE_CLOUD_LOCATION`, or
 `VERTEX_LOCATION`, and defaults to `us-central1`.
 
 ```bash
-GOOGLE_CLOUD_PROJECT=my-project GOOGLE_VERTEX_LOCATION=europe-west4 opencode --standalone
+GOOGLE_CLOUD_PROJECT=my-project GOOGLE_VERTEX_LOCATION=europe-west4 olive --standalone
 ```
 
 Service accounts work through the same ADC path. Point `GOOGLE_APPLICATION_CREDENTIALS` at the service-account JSON
@@ -496,7 +496,7 @@ file and still provide a project through settings or one of the project variable
 ```bash
 GOOGLE_APPLICATION_CREDENTIALS=/secure/vertex.json \
 GOOGLE_CLOUD_PROJECT=my-project \
-opencode --standalone
+olive --standalone
 ```
 
 Use the single `google-vertex` provider ID for Gemini, Anthropic, and OpenAI-compatible Vertex catalog models. The old
@@ -513,7 +513,7 @@ GitHub Enterprise, finish the device flow, then open `/models`.
 /models
 ```
 
-For GitHub Enterprise, enter the deployment URL or domain when prompted. OpenCode uses a Copilot API endpoint returned
+For GitHub Enterprise, enter the deployment URL or domain when prompted. Olive uses a Copilot API endpoint returned
 by GitHub when available; otherwise it derives the endpoint from the enterprise domain.
 
 ```text
@@ -521,12 +521,12 @@ company.ghe.com
 ```
 
 The connected account needs Copilot Chat access. If GitHub reports no entitlement, sign up for Copilot Free or ask the
-organization to assign a Copilot seat, then connect again. OpenCode fetches the account's current model list after login
+organization to assign a Copilot seat, then connect again. Olive fetches the account's current model list after login
 and whenever the active Copilot account changes.
 
 ## Ollama
 
-Start Ollama and pull a model. OpenCode probes `http://127.0.0.1:11434`, discovers completion models, and adds them to
+Start Ollama and pull a model. Olive probes `http://127.0.0.1:11434`, discovers completion models, and adds them to
 `/models` without an account connection.
 
 ```bash
@@ -534,13 +534,13 @@ ollama serve
 ollama pull qwen3:8b
 ```
 
-Point OpenCode at a remote or proxied Ollama server with `settings.baseURL`. Include `/v1`; OpenCode derives the native
+Point Olive at a remote or proxied Ollama server with `settings.baseURL`. Include `/v1`; Olive derives the native
 `/api/tags` and `/api/show` discovery paths from it. `apiKey` is optional and is sent as a bearer token to discovery and
 model requests.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "ollama": {
       "settings": {
@@ -553,16 +553,16 @@ model requests.
 ```
 
 Discovery refreshes periodically and keeps the last successful inventory during a temporary outage. Embedding-only
-models do not appear because OpenCode only adds models whose Ollama metadata includes the `completion` capability.
+models do not appear because Olive only adds models whose Ollama metadata includes the `completion` capability.
 
 ## Runtimes
 
 LM Studio and vLLM also have built-in local discovery. Their default endpoints are
 `http://127.0.0.1:1234/v1` and `http://127.0.0.1:8000/v1`.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "lmstudio": {
       "settings": { "baseURL": "http://gpu-host:1234/v1" },
@@ -580,12 +580,12 @@ runtime, use the [custom provider](#custom) recipe and list its models explicitl
 
 ## Gateways
 
-OpenRouter uses its native runtime and catalog. Provide `OPENROUTER_API_KEY` to the OpenCode server or connect an
+OpenRouter uses its native runtime and catalog. Provide `OPENROUTER_API_KEY` to the Olive server or connect an
 OpenRouter account, then refer to models with the full OpenRouter model ID after the provider prefix.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "model": "openrouter/anthropic/claude-sonnet-5.5",
 }
 ```
@@ -593,9 +593,9 @@ OpenRouter account, then refer to models with the full OpenRouter model ID after
 Keep the native OpenRouter package when overriding its endpoint or routing through an OpenRouter-compatible gateway.
 This preserves OpenRouter request and reasoning behavior.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openrouter": {
       "settings": {
@@ -612,14 +612,14 @@ This preserves OpenRouter request and reasoning behavior.
 For a gateway that exposes an OpenAI-compatible API but has its own model inventory, define a custom provider instead.
 The configuration key becomes the provider prefix and each `models` key becomes a selectable model ID.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "model": "company/coder",
   "providers": {
     "company": {
       "env": ["COMPANY_GATEWAY_KEY"],
-      "package": "@opencode/ai/providers/openai-compatible",
+      "package": "@olive/ai/providers/openai-compatible",
       "settings": {
         "baseURL": "https://gateway.example.com/v1",
       },
@@ -640,7 +640,7 @@ ID before changing packages.
 | --- | --- |
 | `No model is available for session ...` | No enabled model is currently selectable. Finish the provider-specific setup, then choose a model in `/models`. |
 | `Model unavailable: provider/model` | The provider is inactive, the model ID is absent or disabled, or dynamic discovery no longer returns it. For custom aliases, check the `models` map key rather than `modelID`. |
-| `Cannot initialize provider/model: NAME is required to resolve the provider endpoint` | A `${NAME}` placeholder remains in `baseURL`. Set that variable on the OpenCode server or replace the template with a complete endpoint. |
+| `Cannot initialize provider/model: NAME is required to resolve the provider endpoint` | A `${NAME}` placeholder remains in `baseURL`. Set that variable on the Olive server or replace the template with a complete endpoint. |
 | `Azure resource name is missing` | Set `providers.azure.settings.resourceName`, `AZURE_RESOURCE_NAME`, or a complete `settings.baseURL`. |
 | Vertex does not appear | Set a resolvable project in provider settings or a supported project variable. ADC alone does not activate the provider. |
 | Bedrock does not appear | Provide a profile or another supported AWS credential-chain input. `AWS_REGION` by itself only selects a region. |
@@ -656,9 +656,9 @@ OpenAI, xAI, and supported Azure Responses models can keep one WebSocket connect
 reuse the unchanged request prefix and only send content added since the previous response, reducing uploads in long
 sessions.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openai": {
       "settings": { "transport": "http" },

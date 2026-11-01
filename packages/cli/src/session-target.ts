@@ -1,5 +1,5 @@
-import type { LocationGetOutput, ModelRef, OpenCodeClient, SessionInfo } from "@opencode/client/promise"
-import { Model } from "@opencode/schema/model"
+import type { LocationGetOutput, ModelRef, OliveClient, SessionInfo } from "@olive/client/promise"
+import { Model } from "@olive/schema/model"
 import path from "node:path"
 import { errorMessage } from "./util/error"
 
@@ -14,7 +14,7 @@ export type SessionTarget = {
 }
 
 export type SessionTargetPreparation = (input: {
-  client: OpenCodeClient
+  client: OliveClient
   location: LocationGetOutput
   session: SessionInfo | undefined
   model: ModelRef | undefined
@@ -31,7 +31,7 @@ export class SessionTargetMutationError extends Error {
 }
 
 export async function resolveSessionTarget(input: {
-  client: OpenCodeClient
+  client: OliveClient
   location?: { directory?: string; workspace?: string }
   continue?: boolean
   session?: string
@@ -96,7 +96,7 @@ export function parseSessionTargetModel(value?: string): ModelRef | undefined {
 }
 
 async function selectSession(input: {
-  client: OpenCodeClient
+  client: OliveClient
   location?: { directory?: string }
   continue?: boolean
   session?: string
@@ -134,7 +134,7 @@ async function selectSession(input: {
 
 /** Create a new worktree of the location's project, keeping the caller's subfolder when the worktree has it. */
 export async function createWorktreeLocation(input: {
-  client: OpenCodeClient
+  client: OliveClient
   location?: { directory?: string }
   name?: string
   signal?: AbortSignal
@@ -158,7 +158,7 @@ export async function createWorktreeLocation(input: {
   )
 }
 
-export function findSession(client: OpenCodeClient, sessionID: string, signal?: AbortSignal) {
+export function findSession(client: OliveClient, sessionID: string, signal?: AbortSignal) {
   return client.session.get({ sessionID }, ...requestOptions(signal)).catch((error) => {
     if (error && typeof error === "object" && "_tag" in error && error._tag === "SessionNotFoundError") return undefined
     throw error
@@ -166,7 +166,7 @@ export function findSession(client: OpenCodeClient, sessionID: string, signal?: 
 }
 
 async function latestSession(
-  client: OpenCodeClient,
+  client: OliveClient,
   location: LocationGetOutput,
   cursor?: string,
   signal?: AbortSignal,
@@ -187,7 +187,7 @@ async function latestSession(
   return latestSession(client, location, page.cursor.next, signal)
 }
 
-function resolveLocation(client: OpenCodeClient, location?: { directory?: string }, signal?: AbortSignal) {
+function resolveLocation(client: OliveClient, location?: { directory?: string }, signal?: AbortSignal) {
   if (!location && !signal) return client.location.get()
   if (!location) return client.location.get(undefined, { signal })
   return client.location.get({ location }, ...requestOptions(signal))

@@ -1,6 +1,6 @@
 import { Marked, type Tokens } from "marked"
 
-const REPO_URL = "https://github.com/anomalyco/opencode"
+const REPO_URL = "https://github.com/anomalyco/olive"
 
 export type ChangelogEntry = {
   tag: string
@@ -88,7 +88,7 @@ function safeHref(href: string) {
 
 function external(href: string) {
   if (!/^https?:/i.test(href) || !URL.canParse(href)) return false
-  return new URL(href).hostname !== "opencode.ai"
+  return new URL(href).hostname !== "olive.ai"
 }
 
 function anchorTag(href: string, label: string) {

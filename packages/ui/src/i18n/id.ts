@@ -74,7 +74,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Batas gratis tercapai",
   "dialog.usageExceeded.freeTier.description":
-    "Berlangganan OpenCode Go seharga $10/bulan untuk akses andal ke model sumber terbuka terbaik.",
+    "Berlangganan Olive Go seharga $10/bulan untuk akses andal ke model sumber terbuka terbaik.",
   "dialog.usageExceeded.freeTier.actionLabel": "Berlangganan",
 
   "ui.sessionTurn.status.delegating": "Mendelegasikan pekerjaan",

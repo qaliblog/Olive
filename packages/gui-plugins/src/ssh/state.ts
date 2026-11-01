@@ -1,7 +1,7 @@
 import { Effect, Fiber, Schedule } from "effect"
 import { onCleanup, type Accessor } from "solid-js"
 import { createStore } from "solid-js/store"
-import { createKeyed, type IpcClient } from "@opencode/plugin/gui"
+import { createKeyed, type IpcClient } from "@olive/plugin/gui"
 import type { Ssh, SshConfig, SshItem } from "./contract"
 import { isSshConnecting } from "./name"
 

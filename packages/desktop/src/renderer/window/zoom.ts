@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-License-Identifier: MIT
 
-import { nextDesktopZoomLevel, type DesktopZoomLevel } from "@opencode/app/desktop-menu"
+import { nextDesktopZoomLevel, type DesktopZoomLevel } from "@olive/app/desktop-menu"
 import { createSignal } from "solid-js"
 import { api } from "../api"
 

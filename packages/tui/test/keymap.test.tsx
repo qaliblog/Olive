@@ -1,5 +1,5 @@
 /** @jsxImportSource @opentui/solid */
-import type { KeymapCommand } from "@opencode/plugin/tui/context"
+import type { KeymapCommand } from "@olive/plugin/tui/context"
 import { useKeymap } from "@opentui/keymap/solid"
 import { testRender } from "@opentui/solid"
 import { expect, test } from "bun:test"
@@ -103,11 +103,11 @@ test("returns every formatted command shortcut", async () => {
   }
 })
 
-test("re-registered commands keep their opencode object until its data changes", async () => {
+test("re-registered commands keep their olive object until its data changes", async () => {
   const [title, setTitle] = createSignal("Demo")
   const [description, setDescription] = createSignal<string | undefined>("Runs the demo")
   const [version, setVersion] = createSignal(0)
-  let opencode = () => undefined as KeymapCommand | undefined
+  let olive = () => undefined as KeymapCommand | undefined
   let command = () => undefined as KeymapCommand | undefined
 
   function Harness() {
@@ -125,9 +125,9 @@ test("re-registered commands keep their opencode object until its data changes",
         },
       ],
     }))
-    opencode = () =>
+    olive = () =>
       keymap.getCommandEntries({ visibility: "registered" }).find((entry) => entry.command.name === "demo.command")
-        ?.command.opencode
+        ?.command.olive
     command = () => commands().find((item) => item.id === "demo.command")
     return <box />
   }
@@ -140,12 +140,12 @@ test("re-registered commands keep their opencode object until its data changes",
     </ConfigProvider>
   ))
   try {
-    const first = opencode()
+    const first = olive()
     setVersion(1)
-    expect(opencode()).toBe(first)
+    expect(olive()).toBe(first)
 
     setTitle("Renamed")
-    expect(opencode()).not.toBe(first)
+    expect(olive()).not.toBe(first)
     expect(command()?.title).toBe("Renamed")
 
     setDescription(undefined)
@@ -158,7 +158,7 @@ test("re-registered commands keep their opencode object until its data changes",
 test("re-registered commands keep inline slash objects until their fields change", async () => {
   const [aliases, setAliases] = createSignal(["d"])
   const [version, setVersion] = createSignal(0)
-  let registered = () => undefined as { opencode?: unknown; slash?: unknown } | undefined
+  let registered = () => undefined as { olive?: unknown; slash?: unknown } | undefined
   let command = () => undefined as KeymapCommand | undefined
 
   function Harness() {
@@ -192,11 +192,11 @@ test("re-registered commands keep inline slash objects until their fields change
   try {
     const first = registered()
     setVersion(1)
-    expect(registered()?.opencode).toBe(first?.opencode)
+    expect(registered()?.olive).toBe(first?.olive)
     expect(registered()?.slash).toBe(first?.slash)
 
     setAliases(["d", "dm"])
-    expect(registered()?.opencode).not.toBe(first?.opencode)
+    expect(registered()?.olive).not.toBe(first?.olive)
     expect(command()?.slash?.aliases).toEqual(["d", "dm"])
   } finally {
     app.renderer.destroy()

@@ -1,5 +1,5 @@
-import type { DesktopMenuAction, DesktopZoomLevel } from "@opencode/app/desktop-menu"
-import type { DesktopNativeBundle } from "@opencode/app/i18n/desktop-native"
+import type { DesktopMenuAction, DesktopZoomLevel } from "@olive/app/desktop-menu"
+import type { DesktopNativeBundle } from "@olive/app/i18n/desktop-native"
 import type { WindowBootstrap } from "../shared/window-bootstrap"
 import type {
   ClipboardImage,

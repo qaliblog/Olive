@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "@opencode/script",
+  "name": "@olive/script",
   "type": "module",
   "license": "MIT",
   "scripts": {

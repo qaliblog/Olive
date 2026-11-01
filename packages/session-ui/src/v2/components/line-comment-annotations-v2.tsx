@@ -8,9 +8,9 @@ import {
   type SavedLineComment,
   type LineCommentStateProps,
 } from "../../components/line-comment-annotations"
-import { useI18n } from "@opencode/ui/context/i18n"
+import { useI18n } from "@olive/ui/context/i18n"
 import { cloneSelectedLineRange } from "../../pierre/selection-bridge"
-import { LineCommentEditor, LineComment, type LineCommentEditorMention } from "@opencode/ui/line-comment"
+import { LineCommentEditor, LineComment, type LineCommentEditorMention } from "@olive/ui/line-comment"
 
 type LineCommentControllerV2Props<T extends SavedLineComment> = {
   comments: Accessor<T[]>

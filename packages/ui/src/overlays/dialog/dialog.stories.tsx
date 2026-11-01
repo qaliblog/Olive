@@ -1,7 +1,7 @@
 import { Overlay, Portal, Root, Trigger } from "@kobalte/core/dialog"
 import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle, DialogTitleGroup } from "./dialog"
-import { Button } from "@opencode/ui/button"
-import { useDialog } from "@opencode/ui/context/dialog"
+import { Button } from "@olive/ui/button"
+import { useDialog } from "@olive/ui/context/dialog"
 import { onMount } from "solid-js"
 
 const docs = `### Overview

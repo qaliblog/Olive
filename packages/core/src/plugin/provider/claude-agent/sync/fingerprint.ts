@@ -27,7 +27,7 @@ function hash(value: unknown) {
   return createHash("sha256").update(canonical(value)).digest("hex")
 }
 
-// opencode sends thinking and provider options differently depending on the target model, so they don't count.
+// olive sends thinking and provider options differently depending on the target model, so they don't count.
 function visible(message: Exclude<LanguageModelV3Message, { role: "system" }>) {
   const parts: unknown[] = []
   let text = ""
@@ -70,7 +70,7 @@ function visible(message: Exclude<LanguageModelV3Message, { role: "system" }>) {
   return parts
 }
 
-// OpenCode lowers tool attachments into this separate user message.
+// Olive lowers tool attachments into this separate user message.
 function isToolMedia(message: LanguageModelV3Message) {
   return (
     message.role === "user" &&

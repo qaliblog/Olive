@@ -1,6 +1,6 @@
-import type { UsageLimitsBudget, UsageLimitsInfo } from "@opencode/client/promise"
-import { Button } from "@opencode/ui/button"
-import { useDialog } from "@opencode/ui/context/dialog"
+import type { UsageLimitsBudget, UsageLimitsInfo } from "@olive/client/promise"
+import { Button } from "@olive/ui/button"
+import { useDialog } from "@olive/ui/context/dialog"
 import { onMount } from "solid-js"
 import { UsageDialogContent } from "./dialog"
 import type { CurrentModel } from "./limits"
@@ -8,8 +8,8 @@ import type { CurrentModel } from "./limits"
 const resetsAt = Date.UTC(2026, 10, 1)
 const hour = 3_600_000
 
-const opus = { providerID: "opencode", modelID: "claude-opus-5", name: "Claude Opus 5" }
-const sonnet = { providerID: "opencode", modelID: "claude-sonnet-5", name: "Claude Sonnet 5" }
+const opus = { providerID: "olive", modelID: "claude-opus-5", name: "Claude Opus 5" }
+const sonnet = { providerID: "olive", modelID: "claude-sonnet-5", name: "Claude Sonnet 5" }
 
 const budget = (input: Partial<UsageLimitsBudget> & Pick<UsageLimitsBudget, "id">): UsageLimitsBudget => ({
   limit: 150,
@@ -31,7 +31,7 @@ const anthropic = (spent: number) =>
 const pool = (spent: number) => budget({ id: "pool", scope: "combined", shared: true, limit: 1_000, spent })
 
 const info = (budgets: UsageLimitsBudget[], go = false): UsageLimitsInfo => ({
-  workspace: { id: "wrk_1", name: "Acme", usageURL: "https://opencode.ai/wrk_1/activity/overview" },
+  workspace: { id: "wrk_1", name: "Acme", usageURL: "https://olive.ai/wrk_1/activity/overview" },
   ...(go
     ? {
         go: {

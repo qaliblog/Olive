@@ -1,14 +1,14 @@
-import { useDialog } from "@opencode/ui/context/dialog"
-import { Button } from "@opencode/ui/button"
-import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@opencode/ui/dialog"
-import { Divider } from "@opencode/ui/divider"
-import { Loader } from "@opencode/ui/loader"
-import { RadioGroup, RadioItem } from "@opencode/ui/radio"
-import { TextInput } from "@opencode/ui/text-input"
+import { useDialog } from "@olive/ui/context/dialog"
+import { Button } from "@olive/ui/button"
+import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@olive/ui/dialog"
+import { Divider } from "@olive/ui/divider"
+import { Loader } from "@olive/ui/loader"
+import { RadioGroup, RadioItem } from "@olive/ui/radio"
+import { TextInput } from "@olive/ui/text-input"
 import { createMemo, For, Show } from "solid-js"
 import { createStore } from "solid-js/store"
-import { showToast } from "@opencode/ui/toast"
-import { usePlugin, type Context, type IpcClient } from "@opencode/plugin/gui"
+import { showToast } from "@olive/ui/toast"
+import { usePlugin, type Context, type IpcClient } from "@olive/plugin/gui"
 import type { Wsl, WslServersState } from "./contract"
 import { useWslAddServerProbes } from "./probes"
 import { addServerViewModel, type AddServerText } from "./model"
@@ -357,8 +357,8 @@ function useWslAddServerController(props: DialogWslServerProps) {
 
     if (!distro || !action) return
 
-    if (action === "install-opencode") {
-      await run(() => api().installOpencode({ name: distro }))
+    if (action === "install-olive") {
+      await run(() => api().installOlive({ name: distro }))
 
       return
     }
@@ -483,7 +483,7 @@ function unavailable(error: string): WslServersState {
     installed: [],
     online: [],
     distroProbes: {},
-    opencodeChecks: {},
+    oliveChecks: {},
     pendingRestart: false,
     servers: [],
     job: null,

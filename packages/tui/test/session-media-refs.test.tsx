@@ -100,7 +100,7 @@ async function openSession(server: { inbox?: unknown[]; plugins?: string[]; resp
       const [, id, rest] = /^\/api\/(?:experimental\/)?session\/([^/]+)(.*)$/.exec(url.pathname) ?? []
       const info = [session, forked].find((item) => item.id === id)
       if (rest === "/message") {
-        capabilities.set(url.pathname, request.headers.get("x-opencode-capabilities"))
+        capabilities.set(url.pathname, request.headers.get("x-olive-capabilities"))
         return json({ data: id === session.id ? messages : id === forked.id ? forkedMessages : [], cursor: {} })
       }
       if (url.pathname === "/api/session") return json({ data: [session], cursor: {} })

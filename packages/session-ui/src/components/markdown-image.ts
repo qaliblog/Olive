@@ -1,5 +1,5 @@
-import { abort } from "@opencode/util/abort"
-import { isLineRangeHash, parsePathLineSuffix } from "@opencode/util/path"
+import { abort } from "@olive/util/abort"
+import { isLineRangeHash, parsePathLineSuffix } from "@olive/util/path"
 import type { ReadMarkdownImage } from "../context/markdown"
 
 export function localImagePath(source: string) {

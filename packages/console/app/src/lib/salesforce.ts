@@ -1,4 +1,4 @@
-import { Resource } from "@opencode/console-resource"
+import { Resource } from "@olive/console-resource"
 
 async function login() {
   const url = Resource.SALESFORCE_INSTANCE_URL.value.replace(/\/$/, "")

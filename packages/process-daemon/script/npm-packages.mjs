@@ -43,7 +43,7 @@ for (const target of targets) {
         {
           name,
           version: manifest.version,
-          description: `OpenCode persistent PTY service for ${suffix}`,
+          description: `Olive persistent PTY service for ${suffix}`,
           license: "MIT",
           repository: { ...manifest.repository, directory: "packages/process-daemon" },
           os: [target.platform],

@@ -1,5 +1,5 @@
 import { HoverCard } from "@kobalte/core/hover-card"
-import { prefersReducedMotion } from "@opencode/ui/motion"
+import { prefersReducedMotion } from "@olive/ui/motion"
 import { createEffect, createSignal, For, on, onCleanup, Show, type JSXElement } from "solid-js"
 import { useLanguage } from "@/runtime/i18n/language"
 import { createMediaQuery } from "@solid-primitives/media"

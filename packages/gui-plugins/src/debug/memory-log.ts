@@ -2,7 +2,7 @@ import { appendFile, mkdir } from "node:fs/promises"
 import path from "node:path"
 import { app, webContents } from "electron"
 import { Schema } from "effect"
-import type { Log } from "@opencode/plugin/gui/main"
+import type { Log } from "@olive/plugin/gui/main"
 import { memoryRecord, RendererMemory, type RendererRecord } from "./memory-record"
 
 // Runs only while diagnostics are on; no preload hooks, observers, or store subscriptions.

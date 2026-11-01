@@ -1,7 +1,7 @@
 import { Show, createEffect, createMemo, on, onMount, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
 import type { ModelSelection } from "@/providers/models/selection"
-import { STORY_MODEL, emptySessionDocument, pendingAndQueuedDocument } from "@opencode/session-ui/storybook"
+import { STORY_MODEL, emptySessionDocument, pendingAndQueuedDocument } from "@olive/session-ui/storybook"
 import { Composer } from "./composer"
 import type { ComposerModel } from "./model"
 import { createComposerEditor } from "./editor/interaction"
@@ -9,7 +9,7 @@ import type { ComposerPersistedState, ComposerSuggestion } from "./types"
 import { buildPromptRequest } from "./request"
 import { promptLength } from "./prompt-parts"
 import { SessionPreview } from "@/session/story-model"
-import { Skill } from "@opencode/schema/skill"
+import { Skill } from "@olive/schema/skill"
 import { resolveSessionComposerSelection } from "@/session/composer/selection"
 
 const pixel = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
@@ -374,7 +374,7 @@ type FlowArgs = {
 }
 
 export default {
-  title: "OpenCode/Composer/Flow",
+  title: "Olive/Composer/Flow",
   component: Composer,
   parameters: { layout: "centered" },
   // States that only change the composer's props share this render, so moving between them keeps one composer.

@@ -9,11 +9,11 @@ use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use base64::Engine;
-use opencode_pty::daemon::Registration;
-use opencode_pty::protocol::{
+use olive_pty::daemon::Registration;
+use olive_pty::protocol::{
     AttachmentRole, Envelope, Request, Response, read_frame, write_frame,
 };
-use opencode_pty::service::TerminalInfo;
+use olive_pty::service::TerminalInfo;
 
 struct Daemon {
     child: Child,
@@ -225,7 +225,7 @@ fn owner_loss_stops_terminals_despite_blocked_clients() {
 
 #[test]
 fn subscription_delivers_final_exit_frame_before_closing() {
-    use opencode_pty::protocol::{SubscriptionEvent, read_subscription_event};
+    use olive_pty::protocol::{SubscriptionEvent, read_subscription_event};
 
     let mut daemon = Daemon::start();
     let (owner, response) = daemon.own(None);
@@ -310,7 +310,7 @@ fn shutdown_ends_an_idle_subscription() {
 
 #[test]
 fn rename_is_advertised_and_served() {
-    use opencode_pty::protocol::{SubscriptionEvent, read_subscription_event};
+    use olive_pty::protocol::{SubscriptionEvent, read_subscription_event};
 
     let mut daemon = Daemon::start();
     assert_eq!(daemon.registration.features, ["rename"]);

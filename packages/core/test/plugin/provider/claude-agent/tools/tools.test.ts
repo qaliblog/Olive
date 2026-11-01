@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { LanguageModelV3FunctionTool, LanguageModelV3Prompt } from "@ai-sdk/provider"
-import { ToolNames } from "@opencode/core/plugin/provider/claude-agent/tools/names"
-import { ToolResult } from "@opencode/core/plugin/provider/claude-agent/tools/result"
+import { ToolNames } from "@olive/core/plugin/provider/claude-agent/tools/names"
+import { ToolResult } from "@olive/core/plugin/provider/claude-agent/tools/result"
 
 describe("tool bridge conversion", () => {
   test("names round-trip within Claude's limit, including names that need sanitizing", () => {
@@ -20,7 +20,7 @@ describe("tool bridge conversion", () => {
     expect(ToolNames.original("Bash", tools)).toBeUndefined()
   })
 
-  test("long subagent descriptions retain the actual OpenCode agent list", () => {
+  test("long subagent descriptions retain the actual Olive agent list", () => {
     const description = ToolNames.description({
       type: "function",
       name: "subagent",

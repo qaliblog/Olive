@@ -251,7 +251,7 @@ export function make(script: readonly Step[], options?: { readonly probes?: bool
         : message.request?.subtype === "initialize"
           ? "startup"
           : message.request?.subtype
-    // Embedded OpenCode loads plugins for several locations. Its login probes are independent of chat ordering.
+    // Embedded Olive loads plugins for several locations. Its login probes are independent of chat ordering.
     if (probeReply && isProbe(run.args) && type === "startup") {
       process.stdout.write(JSON.stringify(startupResponse(message.request_id, probeReply)) + "\n")
       return

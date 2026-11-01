@@ -1,8 +1,8 @@
 import { Show, onCleanup, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
-import { Icon } from "@opencode/ui/icon"
-import { Menu } from "@opencode/ui/menu"
-import { usePlugin } from "@opencode/plugin/gui"
+import { Icon } from "@olive/ui/icon"
+import { Menu } from "@olive/ui/menu"
+import { usePlugin } from "@olive/plugin/gui"
 
 /**
  * A terminal's side panel tab label: renamed by double-click or its context menu, which also closes it. Without

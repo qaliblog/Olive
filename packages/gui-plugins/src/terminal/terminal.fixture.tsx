@@ -1,9 +1,9 @@
-import { OpenCode } from "@opencode/client/promise"
-import { ThemeProvider } from "@opencode/ui/theme/context"
+import { Olive } from "@olive/client/promise"
+import { ThemeProvider } from "@olive/ui/theme/context"
 import { createSignal } from "solid-js"
 import { render } from "solid-js/web"
-import { PluginContext } from "@opencode/plugin/gui/host"
-import type { Context, ServerRef } from "@opencode/plugin/gui"
+import { PluginContext } from "@olive/plugin/gui/host"
+import type { Context, ServerRef } from "@olive/plugin/gui"
 import en from "./i18n/en"
 import type { TerminalModel } from "./model"
 import { Terminal } from "./terminal"
@@ -33,7 +33,7 @@ export function mountTerminal(input: { url: string; ptyID: string }) {
     id: input.url,
     name: input.url,
     url: input.url,
-    client: OpenCode.make({ baseUrl: input.url }),
+    client: Olive.make({ baseUrl: input.url }),
     local: true,
     builtin: false,
     compatible: true,

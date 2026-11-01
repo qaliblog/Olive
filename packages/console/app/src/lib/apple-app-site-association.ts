@@ -1,10 +1,10 @@
-// Lets https://opencode.ai/pair links open the OpenCode iOS app. Only /pair may open the app.
+// Lets https://olive.ai/pair links open the Olive iOS app. Only /pair may open the app.
 // Served from middleware because the file router skips dot directories like /.well-known.
 const body = JSON.stringify({
   applinks: {
     details: [
       {
-        appIDs: ["5NZ4Q7NXJ4.ai.opencode.mobilecode"],
+        appIDs: ["5NZ4Q7NXJ4.ai.olive.mobilecode"],
         components: [{ "/": "/pair", comment: "pairing links, payload in the fragment" }, { "/": "/pair/*" }],
       },
     ],

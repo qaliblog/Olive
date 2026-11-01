@@ -1,9 +1,9 @@
 export * as Mcp from "./index.js"
 
-import { Mcp } from "@opencode/schema/mcp"
-import { McpEvent } from "@opencode/schema/mcp-event"
-import { ephemeral } from "@opencode/schema/event"
-import type { Session } from "@opencode/schema/session"
+import { Mcp } from "@olive/schema/mcp"
+import { McpEvent } from "@olive/schema/mcp-event"
+import { ephemeral } from "@olive/schema/event"
+import type { Session } from "@olive/schema/session"
 import type { Transport } from "@modelcontextprotocol/client"
 import { createHash } from "node:crypto"
 import { isDeepStrictEqual } from "node:util"
@@ -22,7 +22,7 @@ import {
   Stream,
   Types,
 } from "effect"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { Credential } from "../credential.js"
 import { Bus } from "../bus.js"
 import { Environment } from "../environment/index.js"
@@ -30,7 +30,7 @@ import { Form } from "../form.js"
 import { Integration } from "../integration.js"
 import { KeyedMutex } from "../effect/keyed-mutex.js"
 import { Location } from "../location.js"
-import { waitForAbort } from "@opencode/util/process"
+import { waitForAbort } from "@olive/util/process"
 import { State } from "../state.js"
 import type { McpClient } from "./client.js"
 
@@ -181,7 +181,7 @@ export interface Interface extends State.Transformable<Editor> {
   }) => Effect.Effect<ResourceContent | undefined, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/MCP") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/MCP") {}
 
 export const Options = Schema.Struct({
   clientInfo: Schema.optional(

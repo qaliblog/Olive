@@ -1,11 +1,11 @@
-import type { OpenCodeEvent } from "@opencode/client/promise"
+import type { OliveEvent } from "@olive/client/promise"
 import { expect, test, type Page } from "@playwright/test"
 import { SERVER, sessionHref } from "../utils/app"
 import { installSseTransport } from "../utils/sse-transport"
 import { expectSessionTitle } from "../utils/waits"
 import { mockWorkspace, type WorkspaceInput } from "../utils/workspace"
 
-const directory = "C:/OpenCode/RequestDocks"
+const directory = "C:/Olive/RequestDocks"
 
 const sessionID = "ses_request_docks"
 
@@ -257,14 +257,14 @@ test("loads a running subagent's question without polling idle subagents on ever
   await workspace.push(
     [...idleIDs, sessionID].map(
       (id, index) =>
-        // SAFETY: the fixture event matches the generated OpenCodeEvent shape for its type.
+        // SAFETY: the fixture event matches the generated OliveEvent shape for its type.
         ({
           id: `evt_request_rename_${index}`,
           created: index + 2,
           type: "session.renamed",
           durable: { aggregateID: id, seq: 1, version: 1 },
           data: { sessionID: id, title: id === sessionID ? "Renamed request docks" : `${id} renamed` },
-        }) as OpenCodeEvent,
+        }) as OliveEvent,
     ),
   )
   await expect(page.getByRole("heading", { name: "Renamed request docks", exact: true })).toBeVisible()

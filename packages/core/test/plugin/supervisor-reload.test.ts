@@ -3,25 +3,25 @@ import fs from "fs/promises"
 import path from "path"
 import { Deferred, Duration, Effect, Fiber, Layer, LayerMap, Schedule } from "effect"
 import { TestClock } from "effect/testing"
-import { define } from "@opencode/plugin/effect/plugin"
-import { Event } from "@opencode/schema/config"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Config } from "@opencode/core/config"
-import { Integration } from "@opencode/core/integration"
-import { Global } from "@opencode/util/global"
-import { Npm } from "@opencode/util/npm"
-import { Bus } from "@opencode/core/bus"
-import { Command } from "@opencode/core/command"
-import { Database } from "@opencode/core/database/database"
-import { Watcher } from "@opencode/core/filesystem/watcher"
-import { Instance } from "@opencode/core/instance"
-import { LocationServiceMap } from "@opencode/core/location-services"
-import { Location } from "@opencode/core/location"
-import { Plugin } from "@opencode/core/plugin"
-import { Rpc } from "@opencode/core/rpc"
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import { AbsolutePath } from "@opencode/core/schema"
+import { define } from "@olive/plugin/effect/plugin"
+import { Event } from "@olive/schema/config"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Config } from "@olive/core/config"
+import { Integration } from "@olive/core/integration"
+import { Global } from "@olive/util/global"
+import { Npm } from "@olive/util/npm"
+import { Bus } from "@olive/core/bus"
+import { Command } from "@olive/core/command"
+import { Database } from "@olive/core/database/database"
+import { Watcher } from "@olive/core/filesystem/watcher"
+import { Instance } from "@olive/core/instance"
+import { LocationServiceMap } from "@olive/core/location-services"
+import { Location } from "@olive/core/location"
+import { Plugin } from "@olive/core/plugin"
+import { Rpc } from "@olive/core/rpc"
+import { SdkPlugins } from "@olive/core/plugin/sdk"
+import { AbsolutePath } from "@olive/core/schema"
 import { tempGlobalLayer } from "../fixture/global"
 import { organizationPolicy } from "../fixture/policy"
 import { offlineModels } from "../fixture/models"
@@ -145,7 +145,7 @@ describe("PluginSupervisor reload", () => {
         yield* Effect.promise(async () => {
           await Bun.write(file, entry)
           await Bun.write(helper, source(1))
-          await Bun.write(path.join(directory.path, ".opencode/opencode.json"), JSON.stringify({ plugins: [root] }))
+          await Bun.write(path.join(directory.path, ".olive/olive.json"), JSON.stringify({ plugins: [root] }))
         })
         const watcher = yield* Watcher.Test
         const locations = yield* LocationServiceMap.Service
@@ -200,14 +200,14 @@ describe("PluginSupervisor reload", () => {
         const directory = yield* tmpdirScoped()
         const file = path.join(
           directory.path,
-          mode === "discovered" ? ".opencode/plugins/greeter.ts" : "external/greeter/index.ts",
+          mode === "discovered" ? ".olive/plugins/greeter.ts" : "external/greeter/index.ts",
         )
         yield* Effect.promise(async () => {
           await Bun.write(file, greeter("greet-v1"))
           await fs.utimes(file, new Date(0), new Date(0))
           if (mode === "configured") {
             await Bun.write(
-              path.join(directory.path, ".opencode/opencode.json"),
+              path.join(directory.path, ".olive/olive.json"),
               JSON.stringify({ plugins: [path.dirname(file)] }),
             )
           }
@@ -252,7 +252,7 @@ describe("PluginSupervisor reload", () => {
   it.live("keeps the running generation when an updated local plugin fails to import", () =>
     Effect.gen(function* () {
       const directory = yield* tmpdirScoped()
-      const file = path.join(directory.path, ".opencode/plugins/greeter.ts")
+      const file = path.join(directory.path, ".olive/plugins/greeter.ts")
       // Local plugin revisions key on mtime, so give each rewrite a distinct timestamp.
       const write = (content: string, mtime: Date) =>
         Effect.promise(async () => {
@@ -303,7 +303,7 @@ describe("PluginSupervisor reload", () => {
       )
       yield* Effect.promise(() => Bun.write(path.join(npm.directory, "server.ts"), greeter("greet-pkg")))
       yield* Effect.promise(() =>
-        Bun.write(path.join(directory.path, ".opencode/opencode.json"), JSON.stringify({ plugins: ["fixture-pkg"] })),
+        Bun.write(path.join(directory.path, ".olive/olive.json"), JSON.stringify({ plugins: ["fixture-pkg"] })),
       )
       const bus = yield* Bus.Service
       const locations = yield* LocationServiceMap.Service
@@ -346,7 +346,7 @@ it.live("applies organization integration changes to running external plugins", 
     const directory = yield* tmpdirScoped()
     const root = path.join(directory.path, "external/policy-fixture")
     const entered = path.join(directory.path, "entered")
-    const configuration = path.join(directory.path, ".opencode/opencode.json")
+    const configuration = path.join(directory.path, ".olive/olive.json")
     yield* Effect.promise(async () => {
       await Bun.write(
         path.join(root, "index.ts"),
@@ -377,7 +377,7 @@ it.live("applies organization integration changes to running external plugins", 
       )
       expect(yield* Effect.promise(() => Bun.file(entered).exists())).toBe(true)
       yield* config.integration?.(
-        Integration.ID.make("opencode"),
+        Integration.ID.make("olive"),
         organizationPolicy([{ action: "plugin.use", resource: root, effect: "deny" }]),
       ) ?? Effect.void
       yield* commands.get("policy-greet").pipe(
@@ -386,7 +386,7 @@ it.live("applies organization integration changes to running external plugins", 
       )
       yield* plugins.awaitActivation
       expect((yield* plugins.list()).some((plugin) => plugin.id === "greeter")).toBe(false)
-      yield* config.integration?.(Integration.ID.make("opencode"), undefined) ?? Effect.void
+      yield* config.integration?.(Integration.ID.make("olive"), undefined) ?? Effect.void
       yield* commands.get("policy-greet").pipe(
         Effect.flatMap((command) => (command ? Effect.void : Effect.fail("pending"))),
         Effect.retry({ times: 200, schedule: Schedule.spaced("10 millis") }),

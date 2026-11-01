@@ -1,6 +1,6 @@
 ---
 title: "SSO"
-description: "Sign in to an OpenCode Console workspace through your identity provider with OIDC or SAML."
+description: "Sign in to an Olive Console workspace through your identity provider with OIDC or SAML."
 ---
 
 Single sign-on (SSO) sends workspace members through your company's identity provider when they sign in. Owners
@@ -22,7 +22,7 @@ Each workspace has one SSO connection.
 4. Copy the **Callback URL** from the connection into your provider's allowed redirect URIs.
 
 ```text
-https://opencode.ai/console/auth/sso/ssoconn_.../callback
+https://olive.ai/console/auth/sso/ssoconn_.../callback
 ```
 
 Console checks that the issuer is reachable when you save. SSO is active as soon as the connection is saved.
@@ -37,8 +37,8 @@ Console checks that the issuer is reachable when you save. SSO is active as soon
 4. Review the details and click **Activate SSO**.
 
 ```text
-ACS URL:       https://opencode.ai/console/auth/sso/ssoconn_.../callback
-SP Entity ID:  https://opencode.ai/console/auth/sso/ssoconn_.../metadata
+ACS URL:       https://olive.ai/console/auth/sso/ssoconn_.../callback
+SP Entity ID:  https://olive.ai/console/auth/sso/ssoconn_.../metadata
 ```
 
 Your provider must sign the response or the assertion, and send the user's email as an `email` attribute or as the
@@ -46,12 +46,12 @@ NameID.
 
 ## Verify email domains
 
-People who sign in to the [Console](https://opencode.ai/console) with an email on a verified domain are sent to your
+People who sign in to the [Console](https://olive.ai/console) with an email on a verified domain are sent to your
 identity provider. Once SSO is active, click **Add domain** under **Email domains**, enter your domain, and publish
 the TXT record shown.
 
 ```text
-Name:   _opencode-console-challenge.example.com
+Name:   _olive-console-challenge.example.com
 Type:   TXT
 Value:  oc-verify=...
 ```
@@ -62,7 +62,7 @@ belong to only one workspace.
 ## SSO enforcement
 
 Once a workspace has SSO, admins and members must sign in through it to open the workspace, and Console redirects
-them automatically. Connecting OpenCode with `/connect` follows the same rule.
+them automatically. Connecting Olive with `/connect` follows the same rule.
 
 Owners can also sign in without SSO, so a misconfigured provider cannot lock the workspace out of its settings.
 

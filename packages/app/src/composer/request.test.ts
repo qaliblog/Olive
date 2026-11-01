@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
-import { Skill } from "@opencode/schema/skill"
-import { Session } from "@opencode/schema/session"
+import { Skill } from "@olive/schema/skill"
+import { Session } from "@olive/schema/session"
 import type { ImageAttachmentPart, Prompt } from "@/composer/state"
 import type { FileSelection } from "@/workspaces/files/model"
 import { buildPromptRequest } from "./request"

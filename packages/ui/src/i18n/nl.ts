@@ -106,7 +106,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Tegoed toevoegen",
   "dialog.usageExceeded.freeTier.title": "Gratis limiet bereikt",
   "dialog.usageExceeded.freeTier.description":
-    "Abonneer je voor $ 10 per maand op OpenCode Go voor betrouwbare toegang tot de beste open-sourcemodellen.",
+    "Abonneer je voor $ 10 per maand op Olive Go voor betrouwbare toegang tot de beste open-sourcemodellen.",
   "dialog.usageExceeded.freeTier.actionLabel": "Abonneer je",
   "ui.sessionTurn.status.delegating": "Werk delegeren",
   "ui.sessionTurn.status.planning": "Volgende stappen plannen",

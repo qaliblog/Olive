@@ -1,4 +1,4 @@
-import { TextShimmer } from "@opencode/ui/text-shimmer"
+import { TextShimmer } from "@olive/ui/text-shimmer"
 import { For, type JSX } from "solid-js"
 import { CurrentSessionProviders } from "../storybook/current-session-story"
 import { storyDocument, storyTool } from "../storybook/current-session-scenarios"
@@ -6,7 +6,7 @@ import { timelinePresets } from "../timeline/detail"
 import { SessionTimeline } from "../timeline/session-timeline"
 
 export default {
-  title: "OpenCode/Work/Subagent row variants",
+  title: "Olive/Work/Subagent row variants",
   id: "current-subagent-row-variants",
   parameters: {
     layout: "fullscreen",

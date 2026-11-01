@@ -4,7 +4,7 @@
  * Payloads are structured-clone values already encoded with the Ipc's schemas. The `ipc` fields name an Ipc by id.
  */
 
-import type { PluginInfo } from "@opencode/client/promise"
+import type { PluginInfo } from "@olive/client/promise"
 import { Cause, Exit, Predicate, Schema } from "effect"
 import type { BuiltinStoreDeclaration } from "./builtin.js"
 import type { Cleanup, OS, PluginOptions } from "./core.js"
@@ -258,7 +258,7 @@ export function evaluatePluginBundle(code: string, host: PluginBundleHost): Plug
     const problem = Exit.isFailure(decoded) ? Cause.pretty(decoded.cause) : "it does not match"
 
     throw new Error(
-      `A plugin's ./gui-experimental bundle must default-export a \`Plugin.define\` from \`@opencode/plugin/gui\`: ${problem}`,
+      `A plugin's ./gui-experimental bundle must default-export a \`Plugin.define\` from \`@olive/plugin/gui\`: ${problem}`,
     )
   }
 
@@ -307,7 +307,7 @@ const matchesPlugin = Schema.is(BundleDefinition)
 
 /**
  * Whether a plugin's GUI may take an id. Built-ins win: a plugin cannot take a built-in's id, an id that nests under
- * one or that one nests under (tokens and stored keys resolve by dot-separated prefix), or the `opencode` namespace.
+ * one or that one nests under (tokens and stored keys resolve by dot-separated prefix), or the `olive` namespace.
  * Both hosts check it, each against its own built-ins.
  *
  * @param id - The server plugin's id.
@@ -315,7 +315,7 @@ const matchesPlugin = Schema.is(BundleDefinition)
  * @returns True when no built-in claims the id.
  */
 export function pluginIdAvailable(id: string, builtins: readonly Pick<Entry, "id">[]) {
-  return [{ id: "opencode" }, ...builtins].every(
+  return [{ id: "olive" }, ...builtins].every(
     (taken) => id !== taken.id && !id.startsWith(`${taken.id}.`) && !taken.id.startsWith(`${id}.`),
   )
 }
@@ -395,7 +395,7 @@ export interface BridgePluginGui {
   readonly revision: string
   /** The bundle's CommonJS code. */
   readonly code: string
-  /** The plugin's options from `opencode.json`, its GUI's `ctx.options`. */
+  /** The plugin's options from `olive.json`, its GUI's `ctx.options`. */
   readonly options: PluginOptions
 }
 
@@ -554,7 +554,7 @@ export interface Bridge {
       readonly id: string
       /** Its base URL. */
       readonly url: string
-      /** The HTTP basic password; the user name is always `opencode`. */
+      /** The HTTP basic password; the user name is always `olive`. */
       readonly password?: string
     }[],
   ): void

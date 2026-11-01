@@ -1,15 +1,15 @@
 import { expect, test } from "bun:test"
 import { createRoot } from "solid-js"
 import { createData, settleMs, type CreateDataInput } from "../src/solid"
-import { OpenCode, type OpenCodeEvent, type SessionInfo } from "../src/promise"
+import { Olive, type OliveEvent, type SessionInfo } from "../src/promise"
 
 test("config reads and update refreshes are opt-in", async () => {
   const listeners = new Set<Parameters<CreateDataInput["event"]["listen"]>[0]>()
   const requests: string[] = []
   const location = { directory: "/project" }
   let model = "provider/first"
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       const url = new URL(request.url)
@@ -35,7 +35,7 @@ test("config reads and update refreshes are opt-in", async () => {
     }),
     dispose,
   }))
-  const event: OpenCodeEvent = { id: "evt_config", created: 1, type: "config.updated", location, data: {} }
+  const event: OliveEvent = { id: "evt_config", created: 1, type: "config.updated", location, data: {} }
   try {
     await setup.data.location.sync()
     listeners.forEach((listener) => listener({ name: event.type, details: event }))
@@ -66,8 +66,8 @@ test("event refreshes report failures, remain retryable, and preserve explicit r
     time: { created: 0, updated: 0, idle: 2 },
     location: { directory: "/project" },
   }
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: async () => {
       state.requests++
       if (state.offline) throw new TypeError("Failed to fetch")
@@ -92,7 +92,7 @@ test("event refreshes report failures, remain retryable, and preserve explicit r
     }),
     dispose,
   }))
-  const event: OpenCodeEvent = {
+  const event: OliveEvent = {
     id: "evt_refresh_failure",
     created: 2,
     type: "session.viewed",
@@ -123,8 +123,8 @@ test.each(["reconnecting", "disposed"] as const)("background reads respect %s ow
   const pending = Promise.withResolvers<Response>()
   const errors: unknown[] = []
   const state = { requests: 0, status: "connected" as "connected" | "reconnecting" }
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: () => {
       if (state.requests++ === 0) return Promise.resolve(Response.json({ location: { directory: "/project" }, data: [] }))
       return pending.promise
@@ -148,7 +148,7 @@ test.each(["reconnecting", "disposed"] as const)("background reads respect %s ow
   }))
   await setup.data.location.command.sync()
   state.status = mode === "reconnecting" ? "reconnecting" : "connected"
-  const event: OpenCodeEvent = {
+  const event: OliveEvent = {
     id: "evt_refresh_owner",
     type: "command.updated",
     location: { directory: "/project" },
@@ -172,8 +172,8 @@ test("a burst of mcp.status.changed events refetches the server list once it set
   const listeners = new Set<Parameters<CreateDataInput["event"]["listen"]>[0]>()
   const requests: string[] = []
   const location = { directory: "/project" }
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       requests.push(new URL(request.url).pathname)
@@ -198,7 +198,7 @@ test("a burst of mcp.status.changed events refetches the server list once it set
     await setup.data.location.mcp.server.sync()
     expect(requests.filter((path) => path === "/api/mcp")).toHaveLength(1)
     for (const server of ["a", "b", "c", "d", "e"]) {
-      const event: OpenCodeEvent = { id: `evt_${server}`, created: 1, type: "mcp.status.changed", location, data: { server } }
+      const event: OliveEvent = { id: `evt_${server}`, created: 1, type: "mcp.status.changed", location, data: { server } }
       listeners.forEach((listener) => listener({ name: event.type, details: event }))
     }
     expect(requests.filter((path) => path === "/api/mcp")).toHaveLength(1)
@@ -212,8 +212,8 @@ test("a burst of mcp.status.changed events refetches the server list once it set
 test("invalidations that land before a queued reload starts are absorbed by it", async () => {
   const pending: Array<PromiseWithResolvers<Response>> = []
   const location = { directory: "/project" }
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: () => {
       const deferred = Promise.withResolvers<Response>()
       pending.push(deferred)
@@ -262,8 +262,8 @@ test("event-driven session reads evict missing sessions without reporting an err
     time: { created: 0, updated: 0, idle: 1 },
     location: { directory: "/project" },
   }
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: async () =>
       Response.json(
         { _tag: "SessionNotFoundError", sessionID: session.id, message: `Session not found: ${session.id}` },
@@ -285,7 +285,7 @@ test("event-driven session reads evict missing sessions without reporting an err
     }),
     dispose,
   }))
-  const viewed: OpenCodeEvent = {
+  const viewed: OliveEvent = {
     id: "evt_ephemeral_viewed",
     created: 2,
     type: "session.viewed",
@@ -333,8 +333,8 @@ test("delayed metadata and family reads do not resurrect sessions deleted while 
   const familyStarted = Promise.withResolvers<void>()
   const familyRelease = Promise.withResolvers<void>()
   const requests: string[] = []
-  const api = OpenCode.make({
-    baseUrl: "http://opencode.local",
+  const api = Olive.make({
+    baseUrl: "http://olive.local",
     fetch: async (input, init) => {
       const url = new URL((input instanceof Request ? input : new Request(input, init)).url)
       requests.push(`${url.pathname}${url.search}`)
@@ -370,7 +370,7 @@ test("delayed metadata and family reads do not resurrect sessions deleted while 
     dispose,
   }))
   const emitDeleted = (sessionID: string, seq: number) => {
-    const event: OpenCodeEvent = {
+    const event: OliveEvent = {
       id: `evt_del_${seq}`,
       created: seq,
       type: "session.deleted",

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "opencode-changelog",
+  "name": "olive-changelog",
   "main": "src/index.ts",
   "compatibility_date": "2026-07-15",
   "workers_dev": false,
@@ -11,12 +11,12 @@
   // Exact path plus subpaths, so the Console keeps /changelog.json and the localized /<locale>/changelog pages.
   "routes": [
     {
-      "pattern": "opencode.ai/changelog",
-      "zone_name": "opencode.ai",
+      "pattern": "olive.ai/changelog",
+      "zone_name": "olive.ai",
     },
     {
-      "pattern": "opencode.ai/changelog/*",
-      "zone_name": "opencode.ai",
+      "pattern": "olive.ai/changelog/*",
+      "zone_name": "olive.ai",
     },
   ],
   "observability": {

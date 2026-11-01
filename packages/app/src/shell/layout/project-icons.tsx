@@ -1,4 +1,4 @@
-import { ProjectIconStoreProvider, type GeneratedProjectIcon } from "@opencode/ui/project-avatar"
+import { ProjectIconStoreProvider, type GeneratedProjectIcon } from "@olive/ui/project-avatar"
 import { Schema } from "effect"
 import type { ParentProps } from "solid-js"
 import { Persist, persisted } from "@/runtime/persistence/storage"

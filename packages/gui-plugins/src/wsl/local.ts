@@ -8,7 +8,7 @@ const execFileAsync = promisify(execFile)
 
 /** Development only: builds the Linux CLI from this checkout so WSL runs the same source. */
 export async function buildLocalWslCli(input: { version: string; script: string; output: string }) {
-  const directory = await mkdtemp(join(tmpdir(), "opencode-wsl-cli-"))
+  const directory = await mkdtemp(join(tmpdir(), "olive-wsl-cli-"))
   const root = join(dirname(input.script), "../../..")
 
   const build = async () => {
@@ -28,11 +28,11 @@ export async function buildLocalWslCli(input: { version: string; script: string;
       [packageManager, input.script, "--skip-install", "--skip-web-ui", `--outdir=${directory}`],
       {
         cwd: root,
-        env: { ...process.env, OPENCODE_VERSION: input.version, OPENCODE_TARGET: target },
+        env: { ...process.env, OLIVE_VERSION: input.version, OLIVE_TARGET: target },
         windowsHide: true,
       },
     )
-    await copyFile(join(directory, `cli-${target}`, "bin", "opencode"), input.output)
+    await copyFile(join(directory, `cli-${target}`, "bin", "olive"), input.output)
 
     return input.output
   }

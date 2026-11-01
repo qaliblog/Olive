@@ -1,4 +1,4 @@
-import type { JsonValue, SessionMessageAssistant, SessionMessageAssistantTool } from "@opencode/client/promise"
+import type { JsonValue, SessionMessageAssistant, SessionMessageAssistantTool } from "@olive/client/promise"
 import { createMemo } from "solid-js"
 import { createStore } from "solid-js/store"
 import type { SessionDocument } from "../document"
@@ -18,7 +18,7 @@ import { timelinePresets } from "./detail"
 import { SessionTimeline } from "./session-timeline"
 
 export default {
-  title: "OpenCode/Work/Research and agents",
+  title: "Olive/Work/Research and agents",
   id: "current-session-research-agents",
   component: SessionTimeline,
   parameters: {
@@ -244,7 +244,7 @@ const LoadingSpecializedSkills = {
       description="Active and completed skills display their identifier or resolved name."
       document={storyDocument([
         storyTool("tool_skill_id", "skill", "running", { id: "frontend-design" }),
-        storyTool("tool_skill_name", "skill", "completed", { id: "opencode" }, { metadata: { name: "OpenCode" } }),
+        storyTool("tool_skill_name", "skill", "completed", { id: "olive" }, { metadata: { name: "Olive" } }),
       ])}
     />
   ),

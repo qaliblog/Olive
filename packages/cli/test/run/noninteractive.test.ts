@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import {
-  OpenCode,
+  Olive,
   type EventSubscribeOutput,
   type SessionMessageAssistantTool,
   type SessionMessageInfo,
-} from "@opencode/client/promise"
+} from "@olive/client/promise"
 import { runNonInteractivePrompt } from "../../src/run/noninteractive"
 
 type V2Event = EventSubscribeOutput
@@ -219,7 +219,7 @@ async function run(input: {
   wait?: () => Promise<void>
   terminalDelay?: number
 }) {
-  const sdk = OpenCode.make({ baseUrl: "https://opencode.test" })
+  const sdk = Olive.make({ baseUrl: "https://olive.test" })
   const values: V2Event[] = [{ id: "evt_connected", type: "server.connected", data: {} }]
   let wake: (() => void) | undefined
   const wait = Promise.withResolvers<void>()
@@ -469,7 +469,7 @@ describe("runNonInteractivePrompt", () => {
     })
     const globalOptions = {
       headers: {
-        "x-opencode-directory": "%2Fwork%20tree",
+        "x-olive-directory": "%2Fwork%20tree",
       },
     }
     expect(sdk.session.form.cancel).toHaveBeenCalledWith({ sessionID: "global", formID: "frm_live" }, globalOptions)

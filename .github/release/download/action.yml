@@ -18,4 +18,4 @@ runs:
     - shell: bash
       run: bash "${GITHUB_ACTION_PATH//\\//}/../verify-artifacts.sh" "$RUNNER_TEMP/in"
       env:
-        OPENCODE_DIGESTS: ${{ inputs.digests }}
+        OLIVE_DIGESTS: ${{ inputs.digests }}

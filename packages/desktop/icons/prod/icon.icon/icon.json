@@ -1,10 +1,10 @@
 {
   "groups": [
     {
-      "name": "OpenCode",
+      "name": "Olive",
       "layers": [
         {
-          "name": "OpenCode",
+          "name": "Olive",
           "image-name": "icon.png",
           "glass": false
         }

@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
-import type { SessionMessageInfo } from "@opencode/client/promise"
-import { DataContext, useData, type TurnDiffSource } from "@opencode/session-ui/context"
-import { MarkdownContext, useMarkdown, type ReadMarkdownImage } from "@opencode/session-ui/context/markdown"
+import type { SessionMessageInfo } from "@olive/client/promise"
+import { DataContext, useData, type TurnDiffSource } from "@olive/session-ui/context"
+import { MarkdownContext, useMarkdown, type ReadMarkdownImage } from "@olive/session-ui/context/markdown"
 import {
   batch,
   createComponent,

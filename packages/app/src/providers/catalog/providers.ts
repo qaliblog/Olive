@@ -1,8 +1,8 @@
 import { useData } from "@/runtime/server/current"
 import { useServerSDK } from "@/runtime/server/client"
 import { normalizeProviderList } from "@/runtime/server/global-sync/utils"
-import { isServiceUnavailableError } from "@opencode/client/promise"
-import { retry } from "@opencode/util/retry"
+import { isServiceUnavailableError } from "@olive/client/promise"
+import { retry } from "@olive/util/retry"
 import { Iterable, pipe } from "effect"
 import { createEffect, createMemo, type Accessor } from "solid-js"
 import type { ProviderListResponse } from "@/runtime/server/types"
@@ -90,7 +90,7 @@ export function useProviders(directory: Accessor<string | undefined>) {
         (v) => Array.from(v),
       )
     },
-    // Any stored or detected connection, or a provider with models beyond the keyless OpenCode catalog.
+    // Any stored or detected connection, or a provider with models beyond the keyless Olive catalog.
     // Undefined until both catalogs load, so callers never mistake loading for a first run.
     anyConnection: () => {
       if (!integrations.ready() || !ready()) return undefined
@@ -98,7 +98,7 @@ export function useProviders(directory: Accessor<string | undefined>) {
       if (integrations.list().some((integration) => integration.connections.length > 0)) return true
 
       return providers().connected.some(
-        (id) => id !== "opencode" && Object.keys(providers().all.get(id)?.models ?? {}).length > 0,
+        (id) => id !== "olive" && Object.keys(providers().all.get(id)?.models ?? {}).length > 0,
       )
     },
     paid: () => {
@@ -109,7 +109,7 @@ export function useProviders(directory: Accessor<string | undefined>) {
           providers().all,
           ([id]) =>
             connected.has(id) &&
-            (id !== "opencode" || Object.values(providers().all.get(id)?.models ?? {}).some((m) => m.cost?.input)),
+            (id !== "olive" || Object.values(providers().all.get(id)?.models ?? {}).some((m) => m.cost?.input)),
         ),
       ]
 

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
-import type { OpenCodeEvent, SessionMessageInfo } from "@opencode/client/promise"
-import { timelinePresets } from "@opencode/session-ui/timeline/detail"
+import type { OliveEvent, SessionMessageInfo } from "@olive/client/promise"
+import { timelinePresets } from "@olive/session-ui/timeline/detail"
 import { expected, messages } from "../utils/markdown-sessions"
 import { expectPath, holdRoute, seed, sessionHref, type SeedInput } from "../utils/app"
 import type { MockServerConfig } from "../utils/mock-server"
@@ -112,7 +112,7 @@ test("reloads a transcript only after inline file links have their final styling
           id: "answer_cold_paths",
           type: "assistant",
           agent: "build",
-          model: { id: "test", providerID: "opencode" },
+          model: { id: "test", providerID: "olive" },
           time: { created: 2, completed: 3 },
           content: [
             {
@@ -170,8 +170,8 @@ test("reloads a transcript only after inline file links have their final styling
 })
 
 test("keeps verified inline paths across a workspace tab switch", async ({ page }) => {
-  const directory = "C:/OpenCode/InlinePaths"
-  const other = "C:/OpenCode/OtherInlinePaths"
+  const directory = "C:/Olive/InlinePaths"
+  const other = "C:/Olive/OtherInlinePaths"
   const sourceID = "ses_inline_source"
   const targetID = "ses_inline_target"
   const queries: { query: string; directory: string }[] = []
@@ -193,7 +193,7 @@ test("keeps verified inline paths across a workspace tab switch", async ({ page 
           id: `answer_${id}`,
           type: "assistant",
           agent: "build",
-          model: { id: "test", providerID: "opencode" },
+          model: { id: "test", providerID: "olive" },
           time: { created: 2, completed: 3 },
           content: [{ type: "text", text: "Inspect `src/file.ts`." }],
         },
@@ -343,7 +343,7 @@ test("focuses Find in the selected cached timeline", async ({ page }) => {
 })
 
 test("keeps the old workspace's shell on its own Location while destination history is loading", async ({ page }) => {
-  const destination = "C:/OpenCode/OtherProject"
+  const destination = "C:/Olive/OtherProject"
   const requested = Promise.withResolvers<void>()
   const release = Promise.withResolvers<void>()
   const reads: string[] = []
@@ -363,7 +363,7 @@ test("keeps the old workspace's shell on its own Location while destination hist
                   id: "msg_workspace_shell",
                   type: "assistant",
                   agent: "build",
-                  model: { id: "claude-opus-4-6", providerID: "opencode" },
+                  model: { id: "claude-opus-4-6", providerID: "olive" },
                   time: { created: 2 },
                   content: [
                     {
@@ -493,7 +493,7 @@ for (const grouped of [true, false]) {
             id: `msg_assistant_${id}`,
             type: "assistant",
             agent: "build",
-            model: { id: "claude-opus-4-6", providerID: "opencode" },
+            model: { id: "claude-opus-4-6", providerID: "olive" },
             time: { created: 2, completed: 3 },
             content: [
               {
@@ -606,7 +606,7 @@ function part(page: Page, sessionID: string) {
   return page.locator(`[data-timeline-part-id="answer_${sessionID}:text:0"]`)
 }
 
-function textEnded(sessionID: string, directory: string): OpenCodeEvent {
+function textEnded(sessionID: string, directory: string): OliveEvent {
   return {
     id: `evt_text_${sessionID}`,
     created: 4,

@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process"
 import { existsSync } from "node:fs"
 import { join } from "node:path"
-import type { MainContext } from "@opencode/plugin/gui/main"
+import type { MainContext } from "@olive/plugin/gui/main"
 import type { WslDistroProbe, WslInstalledDistro, WslOnlineDistro, WslRuntimeCheck } from "./contract"
 import { discoverScript, installScript, parseVersion, versionScript } from "./remote-cli"
 
@@ -304,7 +304,7 @@ export function createWslRuntime(t: MainContext["t"]) {
         DEFAULT_WSL_INSTALL_TIMEOUT_MS,
       )
 
-      requireSuccess(result, t("error.installOpencode"))
+      requireSuccess(result, t("error.installOlive"))
     },
 
     async probeDistro(name: string, opts?: RunWslOptions): Promise<WslDistroProbe> {

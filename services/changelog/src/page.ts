@@ -1,12 +1,12 @@
 import { escape, type ChangelogEntry } from "./markdown"
 import { style } from "./style"
 
-const SITE = "https://opencode.ai"
-const REPO = "https://github.com/anomalyco/opencode"
+const SITE = "https://olive.ai"
+const REPO = "https://github.com/anomalyco/olive"
 export const CHANGELOG_FILE_URL = `${REPO}/blob/dev/CHANGELOG.md`
 
 const logo =
-  '<svg viewBox="0 0 234 42" role="img" aria-label="OpenCode" xmlns="http://www.w3.org/2000/svg"><path d="M18 30H6V18H18V30Z" class="i"/><path d="M18 12H6V30H18V12ZM24 36H0V6H24V36Z" class="o"/><path d="M48 30H36V18H48V30Z" class="i"/><path d="M36 30H48V12H36V30ZM54 36H36V42H30V6H54V36Z" class="o"/><path d="M84 24V30H66V24H84Z" class="i"/><path d="M84 24H66V30H84V36H60V6H84V24ZM66 18H78V12H66V18Z" class="o"/><path d="M108 36H96V18H108V36Z" class="i"/><path d="M108 12H96V36H90V6H108V12ZM114 36H108V12H114V36Z" class="o"/><path d="M144 30H126V18H144V30Z" class="i"/><path d="M144 12H126V30H144V36H120V6H144V12Z" class="c"/><path d="M168 30H156V18H168V30Z" class="i"/><path d="M168 12H156V30H168V12ZM174 36H150V6H174V36Z" class="c"/><path d="M198 30H186V18H198V30Z" class="i"/><path d="M198 12H186V30H198V12ZM204 36H180V6H198V0H204V36Z" class="c"/><path d="M234 24V30H216V24H234Z" class="i"/><path d="M216 12V18H228V12H216ZM234 24H216V30H234V36H210V6H234V24Z" class="c"/></svg>'
+  '<svg viewBox="0 0 234 42" role="img" aria-label="Olive" xmlns="http://www.w3.org/2000/svg"><path d="M18 30H6V18H18V30Z" class="i"/><path d="M18 12H6V30H18V12ZM24 36H0V6H24V36Z" class="o"/><path d="M48 30H36V18H48V30Z" class="i"/><path d="M36 30H48V12H36V30ZM54 36H36V42H30V6H54V36Z" class="o"/><path d="M84 24V30H66V24H84Z" class="i"/><path d="M84 24H66V30H84V36H60V6H84V24ZM66 18H78V12H66V18Z" class="o"/><path d="M108 36H96V18H108V36Z" class="i"/><path d="M108 12H96V36H90V6H108V12ZM114 36H108V12H114V36Z" class="o"/><path d="M144 30H126V18H144V30Z" class="i"/><path d="M144 12H126V30H144V36H120V6H144V12Z" class="c"/><path d="M168 30H156V18H168V30Z" class="i"/><path d="M168 12H156V30H168V12ZM174 36H150V6H174V36Z" class="c"/><path d="M198 30H186V18H198V30Z" class="i"/><path d="M198 12H186V30H198V12ZM204 36H180V6H198V0H204V36Z" class="c"/><path d="M234 24V30H216V24H234Z" class="i"/><path d="M216 12V18H228V12H216ZM234 24H216V30H234V36H210V6H234V24Z" class="c"/></svg>'
 
 const download =
   '<svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M12.1875 9.75L9.00001 12.9375L5.8125 9.75M9.00001 2.0625L9 12.375M14.4375 15.9375H3.5625" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>'
@@ -62,13 +62,13 @@ export function renderPage(state: PageState) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenCode | Changelog</title>
-<meta name="description" content="OpenCode release notes and changelog">
+<title>Olive | Changelog</title>
+<meta name="description" content="Olive release notes and changelog">
 <link rel="canonical" href="${SITE}/changelog">
 <link rel="icon" href="/favicon.ico">
 <link rel="preload" href="/changelog/fonts/IBMPlexSerif-Regular-Latin1.woff2" as="font" type="font/woff2" crossorigin>
-<meta property="og:title" content="OpenCode | Changelog">
-<meta property="og:description" content="OpenCode release notes and changelog">
+<meta property="og:title" content="Olive | Changelog">
+<meta property="og:description" content="Olive release notes and changelog">
 <meta property="og:url" content="${SITE}/changelog">
 <style>${style}</style>
 <script src="/changelog/status.js" defer></script>
@@ -87,16 +87,16 @@ export function renderPage(state: PageState) {
 </ul></nav>
 </div></header>
 <main>
-<section class="hero"><h1>Changelog</h1><p>New updates and improvements to OpenCode</p></section>
+<section class="hero"><h1>Changelog</h1><p>New updates and improvements to Olive</p></section>
 <div class="releases">${body}</div>
-<p class="v1"><a href="${REPO}/releases" ${external}>OpenCode 1 release notes are on GitHub Releases</a></p>
+<p class="v1"><a href="${REPO}/releases" ${external}>Olive 1 release notes are on GitHub Releases</a></p>
 </main>
 <footer>
 <a href="${REPO}" ${external}>GitHub</a>
 <a href="${SITE}/docs">Docs</a>
 <a href="${SITE}/changelog">Changelog</a>
 <a href="${SITE}/discord">Discord</a>
-<a href="https://x.com/opencode">X</a>
+<a href="https://x.com/olive">X</a>
 </footer>
 <div class="legal">
 <span>©${new Date().getUTCFullYear()} <a href="https://anoma.ly">Anomaly</a></span>

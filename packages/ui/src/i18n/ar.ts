@@ -77,7 +77,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "تم الوصول إلى الحد المجاني",
   "dialog.usageExceeded.freeTier.description":
-    "اشترك في OpenCode Go مقابل $10/شهر للحصول على وصول موثوق إلى أفضل النماذج مفتوحة المصدر.",
+    "اشترك في Olive Go مقابل $10/شهر للحصول على وصول موثوق إلى أفضل النماذج مفتوحة المصدر.",
   "dialog.usageExceeded.freeTier.actionLabel": "اشترك",
 
   "ui.sessionTurn.status.delegating": "جارٍ تفويض العمل",

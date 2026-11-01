@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js"
 import { createStore } from "solid-js/store"
 import { createEventListener } from "@solid-primitives/event-listener"
-import type { Panel, PanelProps, SessionRef } from "@opencode/plugin/gui"
+import type { Panel, PanelProps, SessionRef } from "@olive/plugin/gui"
 import { adjacentTabKey } from "@/shell/titlebar/tab-order"
 
 /** The most closed tabs a session keeps. */
@@ -93,18 +93,18 @@ export type ClosedTabsModifier = "alt" | "shift" | "ctrl" | "meta"
 
 /**
  * Dev builds only, while the design is evaluated: the held key that turns the side panel's "+" into a "Recently closed"
- * menu, from `localStorage["opencode.dev.closedTabsModifier"]`. Off unless set.
+ * menu, from `localStorage["olive.dev.closedTabsModifier"]`. Off unless set.
  */
 export function closedTabsModifier(): ClosedTabsModifier | undefined {
   if (!import.meta.env.DEV) return
-  const value = localStorage.getItem("opencode.dev.closedTabsModifier")
+  const value = localStorage.getItem("olive.dev.closedTabsModifier")
 
   return value === "alt" || value === "shift" || value === "ctrl" || value === "meta" ? value : undefined
 }
 
 /** Whether the swap waits for the pointer to rest on "+", or shows whenever the key is down. Hover unless the dev flag says "global". */
 export function closedTabsSwap(): "hover" | "global" {
-  return import.meta.env.DEV && localStorage.getItem("opencode.dev.closedTabsSwap") === "global" ? "global" : "hover"
+  return import.meta.env.DEV && localStorage.getItem("olive.dev.closedTabsSwap") === "global" ? "global" : "hover"
 }
 
 /** Whether an input event carries the modifier. */

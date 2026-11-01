@@ -2,11 +2,11 @@ import { createEffect, createMemo, createResource, Match, Show, Switch, untrack 
 import { createStore, unwrap } from "solid-js/store"
 import { Portal } from "solid-js/web"
 import { useLocation, useNavigate } from "@solidjs/router"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { IconButton } from "@opencode/ui/icon-button"
-import { Icon } from "@opencode/ui/icon"
-import { Keybind } from "@opencode/ui/keybind"
-import { Tooltip } from "@opencode/ui/tooltip"
+import { useDialog } from "@olive/ui/context/dialog"
+import { IconButton } from "@olive/ui/icon-button"
+import { Icon } from "@olive/ui/icon"
+import { Keybind } from "@olive/ui/keybind"
+import { Tooltip } from "@olive/ui/tooltip"
 
 import { LayoutRoute, useLayout } from "@/shell/state/layout"
 import { usePlatform } from "@/runtime/platform/platform"
@@ -30,7 +30,7 @@ import { MobileDrawer, MobileDrawerContent, MobileDrawerLabel, MobileDrawerTrigg
 import { sessionTabTitle } from "./tab-title"
 import { SessionTabAvatarView } from "@/shell/layout/session-tab-avatar"
 import { useSessionTabAvatarState } from "@/shell/layout/project-avatar-state"
-import { ActivityRing } from "@opencode/ui/activity-ring"
+import { ActivityRing } from "@olive/ui/activity-ring"
 import { RecentlyClosedTabsMenu } from "./recently-closed-tabs-menu"
 import { useSettingsDialog } from "@/settings/command"
 import { rootSession } from "@/shell/routes/session"
@@ -764,7 +764,7 @@ export function Titlebar(props: { verticalTabs?: { mount?: HTMLElement } }) {
                                 class="flex h-7 shrink-0 items-center gap-2 rounded-[6px] px-2 text-[13px] leading-4 text-v2-text-text-faint hover:bg-v2-background-bg-layer-02 focus-visible:outline-none focus-visible:bg-v2-background-bg-layer-02"
                                 onClick={() => {
                                   setMobileTabs("open", false)
-                                  platform.openExternal("https://opencode.ai/desktop-feedback")
+                                  platform.openExternal("https://olive.ai/desktop-feedback")
                                 }}
                               >
                                 <Icon name="help" size="small" />

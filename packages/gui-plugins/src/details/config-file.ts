@@ -1,4 +1,4 @@
-import type { ConfigEntry } from "@opencode/client"
+import type { ConfigEntry } from "@olive/client"
 import { Predicate } from "effect"
 
 type ConfigInfo = Extract<ConfigEntry, { type: "document" }>["info"]
@@ -19,14 +19,14 @@ export function serviceConfigFile(entries: readonly ConfigEntry[], service: "mcp
 
 /**
  * The global configuration directory, else the location itself. The server lists a `directory` entry for each config
- * root, the global one before any project's, and a project root is always a `.opencode` folder. So the first root is
+ * root, the global one before any project's, and a project root is always a `.olive` folder. So the first root is
  * the global one unless it is a project's, which means global configuration is off. A project config in an ancestor of
  * the worktree is not mistaken for it.
  */
 export function globalConfigDirectory(entries: readonly ConfigEntry[], directory: string) {
   const root = entries.find((entry) => entry.type === "directory")
 
-  return root && !/[\\/]\.opencode[\\/]?$/.test(root.path) ? root.path.replace(/[\\/]+$/, "") : directory
+  return root && !/[\\/]\.olive[\\/]?$/.test(root.path) ? root.path.replace(/[\\/]+$/, "") : directory
 }
 
 function configDocuments(entries: readonly ConfigEntry[]) {

@@ -1,4 +1,4 @@
-import type { OpenCodeClient } from "@opencode/client/promise"
+import type { OliveClient } from "@olive/client/promise"
 import type { Schema } from "effect"
 
 /**
@@ -38,15 +38,15 @@ export type Catalog = {
   readonly [locale: string]: Messages
 }
 
-/** A JSON value, as plugin options in `opencode.json` hold. */
+/** A JSON value, as plugin options in `olive.json` hold. */
 export type Json = string | number | boolean | null | readonly Json[] | { readonly [key: string]: Json }
 
-/** A plugin's options from its `opencode.json` entry, as server and TUI plugins receive them. */
+/** A plugin's options from its `olive.json` entry, as server and TUI plugins receive them. */
 export type PluginOptions = { readonly [key: string]: Json }
 
 /** The running app. One shape in the window and in main, with the fields server and TUI plugins get in `ctx.app`. */
 export interface App {
-  /** The app's name, `opencode`, as in a server plugin's `ctx.app.name`. */
+  /** The app's name, `olive`, as in a server plugin's `ctx.app.name`. */
   readonly name: string
   /**
    * The app version, e.g. `2.0.20`. Web and desktop windows always know it; it is `""` only in a window whose platform
@@ -328,11 +328,11 @@ export interface IpcProvider<S extends IpcSpec> {
  */
 export interface BaseContext {
   /**
-   * The plugin's options from `opencode.json`, as `ctx.options` in its server and TUI halves. Empty for a built-in.
+   * The plugin's options from `olive.json`, as `ctx.options` in its server and TUI halves. Empty for a built-in.
    *
    * @example
    * ```ts
-   * // "plugins": [{ "package": "opencode-acme", "options": { "team": "core" } }]
+   * // "plugins": [{ "package": "olive-acme", "options": { "team": "core" } }]
    * const team = ctx.options.team
    * ```
    */
@@ -347,7 +347,7 @@ export interface BaseContext {
    * const result = await ctx.client.rpc(Acme).search({ query })
    * ```
    */
-  readonly client: OpenCodeClient
+  readonly client: OliveClient
   /**
    * The plugin's id, as its `Plugin.define` declares it.
    *

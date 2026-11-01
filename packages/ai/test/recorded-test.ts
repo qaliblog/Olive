@@ -1,4 +1,4 @@
-import { HttpRecorder } from "@opencode/http-recorder"
+import { HttpRecorder } from "@olive/http-recorder"
 import { NodeWS } from "@effect/platform-node"
 import { Effect, Layer } from "effect"
 import { Socket } from "effect/socket"

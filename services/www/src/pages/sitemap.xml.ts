@@ -4,6 +4,6 @@ import { renderSitemap } from "../docs/lib/sitemap"
 export const prerender = true
 
 export const GET: APIRoute = ({ site }) =>
-  new Response(renderSitemap(site ?? new URL("https://opencode.ai")), {
+  new Response(renderSitemap(site ?? new URL("https://olive.ai")), {
     headers: { "Content-Type": "application/xml; charset=utf-8" },
   })

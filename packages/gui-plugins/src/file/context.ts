@@ -1,7 +1,7 @@
 import { createContext, useContext, type Accessor } from "solid-js"
-import type { Browser } from "@opencode/plugin/gui/browser"
-import type { Changes } from "@opencode/plugin/gui/review"
-import type { LineRange, Live, MountedSession, OpenOptions } from "@opencode/plugin/gui"
+import type { Browser } from "@olive/plugin/gui/browser"
+import type { Changes } from "@olive/plugin/gui/review"
+import type { LineRange, Live, MountedSession, OpenOptions } from "@olive/plugin/gui"
 import type { OpenApp } from "./apps"
 
 /** An open-in-app request in flight: the app it opens, or undefined while none is. */

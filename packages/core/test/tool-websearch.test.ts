@@ -1,18 +1,18 @@
 import { describe, expect } from "bun:test"
 import { Context, Effect, Layer } from "effect"
 import type { HttpClientError } from "effect/http"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Permission } from "@opencode/core/permission"
-import { KV } from "@opencode/core/kv"
-import { Form } from "@opencode/core/form"
-import { WebSearch } from "@opencode/core/websearch"
-import { Session } from "@opencode/core/session"
-import { toSessionError } from "@opencode/core/session/to-session-error"
-import { Tool } from "@opencode/core/tool"
-import { WebSearchTool } from "@opencode/core/tool/plugin/websearch"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
-import { Image } from "@opencode/core/image"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Permission } from "@olive/core/permission"
+import { KV } from "@olive/core/kv"
+import { Form } from "@olive/core/form"
+import { WebSearch } from "@olive/core/websearch"
+import { Session } from "@olive/core/session"
+import { toSessionError } from "@olive/core/session/to-session-error"
+import { Tool } from "@olive/core/tool"
+import { WebSearchTool } from "@olive/core/tool/plugin/websearch"
+import { makeLocationNode } from "@olive/util/effect/app-node"
+import { Image } from "@olive/core/image"
 import { testEffect } from "./lib/effect"
 import { imagePassthrough } from "./lib/image"
 import { permissionLayer } from "./lib/permission"
@@ -227,7 +227,7 @@ describe("WebSearchTool registration", () => {
           fields: [
             {
               key: "choice",
-              description: "Allow OpenCode to search the web for up-to-date information?",
+              description: "Allow Olive to search the web for up-to-date information?",
               type: "string",
               required: true,
               custom: false,

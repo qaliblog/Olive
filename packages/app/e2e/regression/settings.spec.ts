@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
-import type { ConfigEntry, OpenCodeEvent, SessionMessageInfo, WorktreeDirectory } from "@opencode/client/promise"
+import type { ConfigEntry, OliveEvent, SessionMessageInfo, WorktreeDirectory } from "@olive/client/promise"
 import { NO_PROVIDER, REMOTE_SERVER, SERVER, holdRoute, project, seed, session } from "../utils/app"
-import { mockMissingLocation, mockOpenCodeServer } from "../utils/mock-server"
+import { mockMissingLocation, mockOliveServer } from "../utils/mock-server"
 import { mockRemoteServer, mockWorkspace, openSession, openSettings, type WorkspaceInput } from "../utils/workspace"
 import { recordNotifications } from "../utils/notifications"
 import { installSseTransport } from "../utils/sse-transport"
@@ -15,7 +15,7 @@ const sandboxes = Array.from({ length: 12 }, (_, index) => `${directory}/workspa
 const override =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' fill='red'/%3E%3C/svg%3E"
 
-const contributors = "https://api.github.com/repos/anomalyco/opencode/contributors?anon=1&per_page=1"
+const contributors = "https://api.github.com/repos/anomalyco/olive/contributors?anon=1&per_page=1"
 
 test.use({ serviceWorkers: "block" })
 
@@ -27,8 +27,8 @@ function open(page: Page, input: Partial<WorkspaceInput> = {}) {
     project: { icon: { color: "orange", override }, commands: { start: "echo setup" }, sandboxes },
     provider: NO_PROVIDER,
     configEntries: [
-      { type: "document", path: "/home/test/.config/opencode/opencode.jsonc", info: { shell: "/bin/zsh" } },
-      { type: "directory", path: "/home/test/.config/opencode" },
+      { type: "document", path: "/home/test/.config/olive/olive.jsonc", info: { shell: "/bin/zsh" } },
+      { type: "directory", path: "/home/test/.config/olive" },
     ],
     shells: [
       { path: "/bin/zsh", name: "zsh", acceptable: true },
@@ -174,7 +174,7 @@ test("request events use real Questions settings without disabling Permissions a
   const event = (
     kind: "question" | "mcp-elicitation" | "websearch.provider" | "permission",
     index: number,
-  ): OpenCodeEvent => {
+  ): OliveEvent => {
     const base = {
       id: `evt_request_${index}`,
       created: 1700000001000 + index,
@@ -298,7 +298,7 @@ for (const locale of ["en", "ar"]) {
           id: "shell_activity_settings",
           status: "running",
           command: "sleep 120",
-          cwd: "C:/OpenCode/Activity settings",
+          cwd: "C:/Olive/Activity settings",
           shell: "bash",
           file: "/tmp/activity.out",
           metadata: { sessionID: id },
@@ -469,7 +469,7 @@ test("several servers share one selected server across per-server pages", async 
 })
 
 test("project list menus rename, edit, add, and stay inside the scrollport", async ({ page }) => {
-  const projects = ["rebase", "dinocms", "opencode", "Playground"].map((name, index) =>
+  const projects = ["rebase", "dinocms", "olive", "Playground"].map((name, index) =>
     project({ id: `project-${index}`, directory: `/projects/${name}`, name }),
   )
 
@@ -952,7 +952,7 @@ test.describe("pages open before slow data", () => {
       await expect(settings.getByRole("link", { name: "935 others", exact: true })).toBeVisible()
       await expect(settings.getByRole("button", { name: "Back to app" })).toBeVisible()
 
-      const website = settings.getByRole("link", { name: "www.opencode.ai", exact: true })
+      const website = settings.getByRole("link", { name: "www.olive.ai", exact: true })
       await website.focus()
 
       const settled = fails
@@ -1020,7 +1020,7 @@ test("worktrees follow inventory events, wait for session counts, and delete by 
   // SAFETY: a worktree.updated event carries only the project ID, which is all the app reads from it.
   await view.push([
     { id: "evt_settings_worktree_updated", created: Date.now(), type: "worktree.updated", data: { projectID } },
-  ] as OpenCodeEvent[])
+  ] as OliveEvent[])
   expect((await listed).ok()).toBe(true)
   await expect(settings.getByText(discovered, { exact: true })).toBeVisible()
   expect((await read).ok()).toBe(true)
@@ -1149,12 +1149,12 @@ test.describe("worktrees prefetch", () => {
 const lsp: ConfigEntry[] = [
   {
     type: "document",
-    path: "/config/opencode.json",
+    path: "/config/olive.json",
     info: { lsp: { typescript: { command: ["typescript-language-server", "--stdio"], extensions: [".ts", ".tsx"] } } },
   },
   {
     type: "document",
-    path: `${directory}/opencode.jsonc`,
+    path: `${directory}/olive.jsonc`,
     info: { lsp: { typescript: { disabled: true }, rust: { command: ["rust-analyzer"], extensions: [".rs"] } } },
   },
 ]
@@ -1203,7 +1203,7 @@ for (const row of ["configured", "disabled", "failure"] as const) {
   })
 }
 
-// Zen and the Console account share the id `opencode`: the provider comes from models.dev, the
+// Zen and the Console account share the id `olive`: the provider comes from models.dev, the
 // integration carries the account sign-in.
 for (const row of [
   { name: "a fresh install offers the Console sign-in", paid: false, connections: [], console: true },
@@ -1225,8 +1225,8 @@ for (const row of [
       provider: {
         all: [
           {
-            id: "opencode",
-            name: "OpenCode Zen",
+            id: "olive",
+            name: "Olive Zen",
             models: {
               "claude-sonnet-4-6": {
                 id: "claude-sonnet-4-6",
@@ -1236,20 +1236,20 @@ for (const row of [
             },
           },
         ],
-        connected: ["opencode"],
+        connected: ["olive"],
         default: {},
       },
       integrations: [
         {
-          id: "opencode",
-          name: "OpenCode Console",
+          id: "olive",
+          name: "Olive Console",
           methods: [
-            { id: "device", type: "oauth", label: "OpenCode Console account" },
+            { id: "device", type: "oauth", label: "Olive Console account" },
             { type: "key", label: "API key (service account)" },
           ],
           connections: row.connections,
         },
-        { id: "opencode-go", name: "OpenCode Go", methods: [{ type: "key" }], connections: [] },
+        { id: "olive-go", name: "Olive Go", methods: [{ type: "key" }], connections: [] },
         { id: "anthropic", name: "Anthropic", methods: [{ type: "key" }], connections: [] },
       ],
     })
@@ -1258,55 +1258,55 @@ for (const row of [
     await expect(settings.getByRole("heading", { name: "Popular providers" })).toBeVisible()
     const connected = settings.locator('[data-component="connected-providers-section"]')
 
-    if (row.paid) await expect(connected.getByText("OpenCode Zen", { exact: true })).toBeVisible()
+    if (row.paid) await expect(connected.getByText("Olive Zen", { exact: true })).toBeVisible()
 
     if (!row.paid) await expect(settings.getByText("No connected providers")).toBeVisible()
     // Anthropic only exists in the integration fixture, so its row proves the integration list has loaded.
     await expect(settings.getByText("Anthropic", { exact: true })).toBeVisible()
-    await expect(settings.getByText("OpenCode Console", { exact: true })).toHaveCount(row.console ? 1 : 0)
+    await expect(settings.getByText("Olive Console", { exact: true })).toHaveCount(row.console ? 1 : 0)
   })
 }
 
 const consoleIntegrations = [
   {
-    id: "opencode",
-    name: "OpenCode Console",
+    id: "olive",
+    name: "Olive Console",
     methods: [
-      { id: "device", type: "oauth", label: "OpenCode Console account" },
+      { id: "device", type: "oauth", label: "Olive Console account" },
       { type: "key", label: "API key (service account)" },
     ],
     connections: [],
   },
-  { id: "opencode-go", name: "OpenCode Go", methods: [{ type: "key" }], connections: [] },
+  { id: "olive-go", name: "Olive Go", methods: [{ type: "key" }], connections: [] },
 ]
 
-test("providers: OpenCode Console signs in from its method list", async ({ page, context }) => {
+test("providers: Olive Console signs in from its method list", async ({ page, context }) => {
   const url = "https://auth.example.test/device?user_code=ABCD-EFGH"
   await context.route("https://auth.example.test/**", (route) => route.fulfill({ body: "Sign in" }))
   const { settings } = await open(page, { integrations: consoleIntegrations, onIntegrationOAuth: () => ({ url }) })
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   await settings
-    .locator(".settings-provider-row", { hasText: "OpenCode Console" })
+    .locator(".settings-provider-row", { hasText: "Olive Console" })
     .getByRole("button", { name: "Connect", exact: true })
     .click()
-  const methods = page.getByRole("dialog", { name: "Connect OpenCode Console", exact: true })
+  const methods = page.getByRole("dialog", { name: "Connect Olive Console", exact: true })
   // The methods come from the integration in the TUI's order: sign-ins first, API keys last.
   await expect(methods.locator('[data-action="provider-connect-method"]')).toHaveText([
-    "OpenCode Console account",
+    "Olive Console account",
     "API key (service account)",
   ])
 
   const popup = page.waitForEvent("popup")
-  await methods.getByRole("button", { name: "OpenCode Console account", exact: true }).click()
+  await methods.getByRole("button", { name: "Olive Console account", exact: true }).click()
   await expect(await popup).toHaveURL(url)
 
-  const signIn = page.getByRole("dialog", { name: "Connecting to OpenCode Console", exact: true })
+  const signIn = page.getByRole("dialog", { name: "Connecting to Olive Console", exact: true })
   await expect(signIn.getByRole("group", { name: "Device code: ABCD-EFGH", exact: true })).toBeVisible()
   await expect(signIn.getByRole("button", { name: "Copy sign-in link", exact: true })).toBeVisible()
 })
 
-test("providers: OpenCode Go connects with its own methods, not the Console sign-in", async ({ page }) => {
+test("providers: Olive Go connects with its own methods, not the Console sign-in", async ({ page }) => {
   const attempts: string[] = []
 
   const { settings } = await open(page, {
@@ -1320,10 +1320,10 @@ test("providers: OpenCode Go connects with its own methods, not the Console sign
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   await settings
-    .locator(".settings-provider-row", { hasText: "OpenCode Go" })
+    .locator(".settings-provider-row", { hasText: "Olive Go" })
     .getByRole("button", { name: "Connect", exact: true })
     .click()
-  const dialog = page.getByRole("dialog", { name: "Connect OpenCode Go", exact: true })
+  const dialog = page.getByRole("dialog", { name: "Connect Olive Go", exact: true })
   await expect(dialog.getByPlaceholder("API key")).toBeVisible()
   expect(attempts).toEqual([])
 })
@@ -1349,7 +1349,7 @@ test("providers: the free tier upsell opens Go on its own, sized to its content"
     .getByRole("button", { name: "Subscribe", exact: true })
     .click()
 
-  const dialog = page.getByRole("dialog", { name: "Connect OpenCode Go", exact: true })
+  const dialog = page.getByRole("dialog", { name: "Connect Olive Go", exact: true })
   const container = page.locator('[data-slot="dialog-container"]')
   await expect(dialog.getByPlaceholder("API key")).toBeVisible()
   // Nothing to go back to: the upsell opened the dialog straight on Go.
@@ -1463,10 +1463,10 @@ test("providers: adding an account starts a lone method once", async ({ page, co
 
   const { settings } = await open(page, {
     integrations: [
-      ...consoleIntegrations.filter((integration) => integration.id !== "opencode-go"),
+      ...consoleIntegrations.filter((integration) => integration.id !== "olive-go"),
       {
-        id: "opencode-go",
-        name: "OpenCode Go",
+        id: "olive-go",
+        name: "Olive Go",
         methods: [{ type: "key" }],
         connections: [{ type: "credential", id: "cred_go", label: "Go key", method: "key" }],
       },
@@ -1487,7 +1487,7 @@ test("providers: adding an account starts a lone method once", async ({ page, co
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   await settings.getByRole("button", { name: "Show more providers", exact: true }).click()
   const dialog = page.getByRole("dialog")
-  await dialog.locator('[data-provider-id="opencode-go"]').click()
+  await dialog.locator('[data-provider-id="olive-go"]').click()
   await dialog.getByRole("button", { name: "Add account", exact: true }).click()
   await expect(dialog.getByPlaceholder("API key")).toBeVisible()
   expect(attempts).toEqual([])
@@ -1582,28 +1582,28 @@ test("providers: switching to a Zen API key does not wait for a Console workspac
       state.active === "cred_console"
         ? {
             all: [
-              { id: "opencode", integrationID: "opencode", name: "Anomaly / OpenCode", models: {} },
-              { id: "console-google", integrationID: "opencode", name: "Anomaly / Google", models: {} },
+              { id: "olive", integrationID: "olive", name: "Anomaly / Olive", models: {} },
+              { id: "console-google", integrationID: "olive", name: "Anomaly / Google", models: {} },
             ],
-            connected: ["opencode", "console-google"],
+            connected: ["olive", "console-google"],
             default: {},
           }
         : {
             all: [
               {
-                id: "opencode",
-                name: "OpenCode Zen",
+                id: "olive",
+                name: "Olive Zen",
                 models: { paid: { id: "paid", name: "Paid", cost: { input: 3 } } },
               },
             ],
-            connected: ["opencode"],
+            connected: ["olive"],
             default: {},
           },
     integrations: () => [
       {
-        id: "opencode",
-        name: "OpenCode Console",
-        methods: [{ id: "device", type: "oauth", label: "OpenCode Console account" }],
+        id: "olive",
+        name: "Olive Console",
+        methods: [{ id: "device", type: "oauth", label: "Olive Console account" }],
         connections: accounts.toSorted((a, b) => Number(b.id === state.active) - Number(a.id === state.active)),
       },
     ],
@@ -1613,7 +1613,7 @@ test("providers: switching to a Zen API key does not wait for a Console workspac
   })
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
-  const trigger = settings.getByRole("button", { name: "Manage OpenCode Console accounts", exact: true })
+  const trigger = settings.getByRole("button", { name: "Manage Olive Console accounts", exact: true })
   await expect(trigger).toHaveText("Anomaly")
   await trigger.click()
 
@@ -1624,7 +1624,7 @@ test("providers: switching to a Zen API key does not wait for a Console workspac
       catalogReads.push(request.url())
   })
   await page.getByRole("menuitemradio", { name: "Zen key", exact: true }).click()
-  await expect(page.getByText("OpenCode Console account switched")).toBeVisible()
+  await expect(page.getByText("Olive Console account switched")).toBeVisible()
   // One refresh after the switch; a Console workspace poll would keep reading the catalog.
   expect(catalogReads).toHaveLength(1)
 })
@@ -1637,10 +1637,10 @@ test("providers: adding a Console account keeps the Console row in place", async
 
   const workspace = {
     all: [
-      { id: "opencode", integrationID: "opencode", name: "Anomaly / OpenCode", models: {} },
-      { id: "console-google", integrationID: "opencode", name: "Anomaly / Google", models: {} },
+      { id: "olive", integrationID: "olive", name: "Anomaly / Olive", models: {} },
+      { id: "console-google", integrationID: "olive", name: "Anomaly / Google", models: {} },
     ],
-    connected: ["opencode", "console-google"],
+    connected: ["olive", "console-google"],
     default: {},
   }
 
@@ -1648,7 +1648,7 @@ test("providers: adding a Console account keeps the Console row in place", async
     if (state.pendingReads > 0) {
       state.pendingReads--
 
-      return { all: [{ id: "opencode", name: "OpenCode", models: {} }], connected: ["opencode"], default: {} }
+      return { all: [{ id: "olive", name: "Olive", models: {} }], connected: ["olive"], default: {} }
     }
 
     return workspace
@@ -1658,15 +1658,15 @@ test("providers: adding a Console account keeps the Console row in place", async
     provider: catalog,
     integrations: () => [
       {
-        id: "opencode",
-        name: "OpenCode Console",
-        methods: [{ id: "device", type: "oauth", label: "OpenCode Console account" }],
+        id: "olive",
+        name: "Olive Console",
+        methods: [{ id: "device", type: "oauth", label: "Olive Console account" }],
         connections: [
           { type: "credential", id: "cred_console", label: "Anomaly", method: "oauth" },
           ...(state.authorized ? [{ type: "credential", id: "cred_clara", label: "Clara", method: "oauth" }] : []),
         ],
       },
-      { id: "opencode-go", name: "OpenCode Go", methods: [{ type: "key" }], connections: [] },
+      { id: "olive-go", name: "Olive Go", methods: [{ type: "key" }], connections: [] },
     ],
     onIntegrationOAuth: () => ({ url: "https://auth.example.test/device?user_code=GOGO-1234" }),
     onIntegrationOAuthStatus: () => {
@@ -1681,22 +1681,22 @@ test("providers: adding a Console account keeps the Console row in place", async
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   const connected = settings.locator('[data-component="connected-providers-section"]')
-  await expect(connected.getByText("OpenCode Console", { exact: true })).toBeVisible()
+  await expect(connected.getByText("Olive Console", { exact: true })).toBeVisible()
   await connected.evaluate((element) => {
     new MutationObserver(() => {
-      if (!element.textContent?.includes("OpenCode Console")) element.dataset.flashed = ""
+      if (!element.textContent?.includes("Olive Console")) element.dataset.flashed = ""
     }).observe(element, { childList: true, subtree: true, characterData: true })
   })
 
   await settings.getByRole("button", { name: "Show more providers", exact: true }).click()
   const dialog = page.getByRole("dialog")
-  await dialog.locator('[data-provider-id="opencode"]').click()
+  await dialog.locator('[data-provider-id="olive"]').click()
   const popup = page.waitForEvent("popup")
   await dialog.getByRole("button", { name: "Add account", exact: true }).click()
   await popup
-  await expect(page.getByText("OpenCode Console connected", { exact: true })).toBeVisible()
+  await expect(page.getByText("Olive Console connected", { exact: true })).toBeVisible()
 
-  await expect(connected.getByText("OpenCode Console", { exact: true })).toBeVisible()
+  await expect(connected.getByText("Olive Console", { exact: true })).toBeVisible()
   await expect(connected).not.toHaveAttribute("data-flashed")
 })
 
@@ -1715,18 +1715,18 @@ test("providers: switching Console accounts keeps the list until the new workspa
       state.pendingReads--
 
       return {
-        all: [{ id: "opencode", name: "OpenCode", models: { free: { id: "free", name: "Free", cost: { input: 0 } } } }],
-        connected: ["opencode"],
+        all: [{ id: "olive", name: "Olive", models: { free: { id: "free", name: "Free", cost: { input: 0 } } } }],
+        connected: ["olive"],
         default: {},
       }
     }
 
     return {
       all: [
-        { id: "opencode", integrationID: "opencode", name: `${workspace()} / OpenCode`, models: {} },
-        { id: "console-google", integrationID: "opencode", name: `${workspace()} / Google`, models: {} },
+        { id: "olive", integrationID: "olive", name: `${workspace()} / Olive`, models: {} },
+        { id: "console-google", integrationID: "olive", name: `${workspace()} / Google`, models: {} },
       ],
-      connected: ["opencode", "console-google"],
+      connected: ["olive", "console-google"],
       default: {},
     }
   }
@@ -1735,9 +1735,9 @@ test("providers: switching Console accounts keeps the list until the new workspa
     provider: catalog,
     integrations: () => [
       {
-        id: "opencode",
-        name: "OpenCode Console",
-        methods: [{ id: "device", type: "oauth", label: "OpenCode Console account" }],
+        id: "olive",
+        name: "Olive Console",
+        methods: [{ id: "device", type: "oauth", label: "Olive Console account" }],
         connections: accounts.toSorted((a, b) => Number(b.id === state.active) - Number(a.id === state.active)),
       },
     ],
@@ -1749,7 +1749,7 @@ test("providers: switching Console accounts keeps the list until the new workspa
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   const connected = settings.locator('[data-component="connected-providers-section"]')
-  const trigger = connected.getByRole("button", { name: "Manage OpenCode Console accounts", exact: true })
+  const trigger = connected.getByRole("button", { name: "Manage Olive Console accounts", exact: true })
   await expect(trigger).toHaveText("Clara")
   await connected.evaluate((element) => {
     new MutationObserver(() => {
@@ -1759,7 +1759,7 @@ test("providers: switching Console accounts keeps the list until the new workspa
 
   await trigger.click()
   await page.getByRole("menuitemradio", { name: "Anomaly", exact: true }).click()
-  await expect(page.getByText("OpenCode Console account switched")).toBeVisible()
+  await expect(page.getByText("Olive Console account switched")).toBeVisible()
   await expect(trigger).toHaveText("Anomaly")
   await expect(connected).not.toHaveAttribute("data-flashed")
 })
@@ -1789,7 +1789,7 @@ test("the add server dialog keeps focus above fullscreen settings", async ({ pag
 test("the add server dialog pairs from a one-time link and explains a spent one", async ({ page }) => {
   const paired = "http://127.0.0.1:4098"
   await mockRemoteServer(page, { directory: "/remote/settings-demo" })
-  await mockOpenCodeServer(page, {
+  await mockOliveServer(page, {
     server: paired,
     directory: "/remote/paired",
     project: project({ id: "proj_paired", directory: "/remote/paired" }),
@@ -1818,7 +1818,7 @@ test("the add server dialog pairs from a one-time link and explains a spent one"
 
   const spent = await addServer()
   await expect(spent.getByRole("alert")).toHaveText(
-    "This pairing link expired or was already used. Run opencode pair to get a new one.",
+    "This pairing link expired or was already used. Run olive pair to get a new one.",
   )
 })
 
@@ -1833,7 +1833,7 @@ test("a pairing code with several addresses keeps the first one that works with 
     [first, { code: "spent-by-the-other-address", token: "session-token" }],
     [second, { code: "one-time-code", token: "session-token" }],
   ] as const) {
-    await mockOpenCodeServer(page, {
+    await mockOliveServer(page, {
       server,
       directory: "/remote/paired",
       project: project({ id: "proj_paired", directory: "/remote/paired" }),
@@ -1879,7 +1879,7 @@ for (const viewport of [
   { name: "mobile", width: 390, height: 844, bottom: true },
 ]) {
   test(`settings layout (${viewport.name}): every page scrolls inside settings with room below`, async ({ page }) => {
-    await page.route("https://api.github.com/repos/anomalyco/opencode/contributors?*", (route) =>
+    await page.route("https://api.github.com/repos/anomalyco/olive/contributors?*", (route) =>
       route.fulfill({ json: [] }),
     )
     const { settings } = await open(page)

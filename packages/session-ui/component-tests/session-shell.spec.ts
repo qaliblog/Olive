@@ -69,6 +69,6 @@ story("copies the shell command and its output separately", async ({ mount, page
   expect(await clipboard()).toBe(output)
   await shell.locator('[data-slot="bash-command"]').getByRole("button", { name: "Copy", exact: true }).click()
   expect(await clipboard()).toBe(command)
-  expect(command).toContain("opencode2 api get /openapi.json")
-  expect(output).toContain('"name":"OpenCode"')
+  expect(command).toContain("olive2 api get /openapi.json")
+  expect(output).toContain('"name":"Olive"')
 })

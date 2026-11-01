@@ -1,9 +1,9 @@
 export * as BrowserConnection from "./connection.js"
 
-import type { Context } from "@opencode/plugin/effect/plugin"
-import type { RpcRegistration } from "@opencode/plugin/effect/rpc"
-import type { Session } from "@opencode/schema/session"
-import { Tool } from "@opencode/schema/tool"
+import type { Context } from "@olive/plugin/effect/plugin"
+import type { RpcRegistration } from "@olive/plugin/effect/rpc"
+import type { Session } from "@olive/schema/session"
+import { Tool } from "@olive/schema/tool"
 import { Deferred, Effect, Schema, Stream } from "effect"
 import { Browser } from "./rpc.js"
 import { BrowserSkill } from "./skill.js"

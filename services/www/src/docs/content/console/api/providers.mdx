@@ -4,11 +4,11 @@ description: "Call the providers connected to your workspace through the Console
 ---
 
 Every [provider](/console/providers) connected to your workspace is served through the Console gateway at its own
-URL. OpenCode uses it automatically after `/connect`; call it directly to use the same providers from your own tools.
+URL. Olive uses it automatically after `/connect`; call it directly to use the same providers from your own tools.
 Console adds the provider credential before forwarding, so the provider secret never leaves the workspace.
 
 ```bash
-curl -X POST "https://opencode.ai/inference/custom/conn_.../chat/completions" \
+curl -X POST "https://olive.ai/inference/custom/conn_.../chat/completions" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -22,7 +22,7 @@ curl -X POST "https://opencode.ai/inference/custom/conn_.../chat/completions" \
 Copy the **Console API URL** from the provider's page under **Providers**.
 
 ```text
-https://opencode.ai/inference/custom/<connection_id>
+https://olive.ai/inference/custom/<connection_id>
 ```
 
 ## Authentication
@@ -55,7 +55,7 @@ Requests for models that are not enabled on the connection are rejected.
 ### Chat Completions
 
 ```bash
-curl -X POST "https://opencode.ai/inference/custom/conn_.../chat/completions" \
+curl -X POST "https://olive.ai/inference/custom/conn_.../chat/completions" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -67,7 +67,7 @@ curl -X POST "https://opencode.ai/inference/custom/conn_.../chat/completions" \
 ### Responses API
 
 ```bash
-curl -X POST "https://opencode.ai/inference/custom/conn_.../responses" \
+curl -X POST "https://olive.ai/inference/custom/conn_.../responses" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -81,7 +81,7 @@ curl -X POST "https://opencode.ai/inference/custom/conn_.../responses" \
 `max_tokens` is required.
 
 ```bash
-curl -X POST "https://opencode.ai/inference/custom/conn_.../messages" \
+curl -X POST "https://olive.ai/inference/custom/conn_.../messages" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -97,7 +97,7 @@ The model and method are part of the path. Replace `:generateContent` with `:str
 response.
 
 ```bash
-curl -X POST "https://opencode.ai/inference/custom/conn_.../models/gemini-4-argon:generateContent" \
+curl -X POST "https://olive.ai/inference/custom/conn_.../models/gemini-4-argon:generateContent" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{

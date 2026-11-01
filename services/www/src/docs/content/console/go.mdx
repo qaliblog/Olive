@@ -3,7 +3,7 @@ title: "Go"
 description: "Reliable access to open coding models with three plans, for one person or a whole team."
 ---
 
-OpenCode Go gives you reliable access to popular open coding models, with three monthly plans:
+Olive Go gives you reliable access to popular open coding models, with three monthly plans:
 
 | Plan         | Price                | Included usage                                                             |
 | ------------ | -------------------- | -------------------------------------------------------------------------- |
@@ -11,14 +11,14 @@ OpenCode Go gives you reliable access to popular open coding models, with three 
 | **Go Plus**  | **$40/month**        | Higher usage limits across the models below                                |
 | **Go Teams** | **$20/member/month** | Every member gets their own limits, $5/month higher than Go on every model |
 
-Go works like any other provider in OpenCode. You subscribe to OpenCode Go and get your API key. It's **completely optional** and you don't need it to use OpenCode.
+Go works like any other provider in Olive. You subscribe to Olive Go and get your API key. It's **completely optional** and you don't need it to use Olive.
 
 The service is designed primarily for international users and provides stable global access.
 
 ## How it works
 
-1. Sign in to the [OpenCode Console](https://opencode.ai/console), subscribe to Go, Go Plus, or Go Teams, add your billing details, and copy your API key.
-2. Run `/connect` in the TUI, select **OpenCode Go**, and paste your API key.
+1. Sign in to the [Olive Console](https://olive.ai/console), subscribe to Go, Go Plus, or Go Teams, add your billing details, and copy your API key.
+2. Run `/connect` in the TUI, select **Olive Go**, and paste your API key.
 
    ```text
    /connect
@@ -87,7 +87,7 @@ See [Privacy](#privacy) for each model's training and retention terms.
 
 ## Where can I use it?
 
-OpenCode Go is designed for [OpenCode](https://opencode.ai) and other coding agents
+Olive Go is designed for [Olive](https://olive.ai) and other coding agents
 that produce similar types of requests. Traffic is monitored for abuse that
 degrades the experience for other users.
 
@@ -96,25 +96,25 @@ Your client should:
 1. Send typical coding agent traffic
 2. Identify itself with its own user agent, such as `my-coding-agent/1.0`, rather
    than a generic SDK or HTTP-library name.
-3. Send a stable session ID in `x-opencode-session` for each conversation so we can optimize routing and
+3. Send a stable session ID in `x-olive-session` for each conversation so we can optimize routing and
    prompt caching.
 
 See [Harnesses](/console/harnesses) to set up Go in Claude Code, Codex, Hermes, Pi, and Raycast.
 
 ### Validated clients
 
-Besides OpenCode, the following clients have been validated to work properly
-with OpenCode Go, although we do not guarantee that they will continue to work in the future.
+Besides Olive, the following clients have been validated to work properly
+with Olive Go, although we do not guarantee that they will continue to work in the future.
 
 | Client            | Session support                                                                                                                                                                                                                             |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Hermes**        | Update to **v0.21.6 or later**, which sends the header on main and auxiliary OpenCode requests ([PR #101864](https://github.com/NousResearch/hermes-agent/pull/101864)).                                                                    |
+| **Hermes**        | Update to **v0.21.6 or later**, which sends the header on main and auxiliary Olive requests ([PR #101864](https://github.com/NousResearch/hermes-agent/pull/101864)).                                                                    |
 | **Claude Code**   | Go recognizes its native session header. No custom-header wrapper is needed.                                                                                                                                                                |
 | **Codex**         | Go recognizes its native session header. Some versions and proxy setups still omit it; preserve the session header when forwarding requests.                                                                                                |
-| **ZCode**         | Go recognizes its native session header. Our [request for `x-opencode-session`](https://github.com/zai-org/feedback/issues/492) remains open, but it is no longer necessary to send that specific header.                                   |
-| **Pi**            | Current builds send session information for OpenCode. Update older installations.                                                                                                                                                           |
+| **ZCode**         | Go recognizes its native session header. Our [request for `x-olive-session`](https://github.com/zai-org/feedback/issues/492) remains open, but it is no longer necessary to send that specific header.                                   |
+| **Pi**            | Current builds send session information for Olive. Update older installations.                                                                                                                                                           |
 | **jcode**         | Update to **v0.81.6 or later**, which includes the [session-header fix](https://github.com/1jehuang/jcode/issues/1167).                                                                                                                     |
-| **Kilo Code CLI** | Builds containing [PR #13752](https://github.com/Kilo-Org/kilocode/pull/13752) restore OpenCode session headers. This fix covers the CLI, not the VS Code extension. See [issue #13723](https://github.com/Kilo-Org/kilocode/issues/13723). |
+| **Kilo Code CLI** | Builds containing [PR #13752](https://github.com/Kilo-Org/kilocode/pull/13752) restore Olive session headers. This fix covers the CLI, not the VS Code extension. See [issue #13723](https://github.com/Kilo-Org/kilocode/issues/13723). |
 
 ### Known problematic clients
 
@@ -138,7 +138,7 @@ Each model has the following usage limits: 5-hour — 20% of the monthly limit;
 weekly — 50%; and monthly — 100%.
 
 Each model's monthly limit below determines how its usage counts toward those allowances. Each response reports how
-much the request counted, as [`opencode.allowance`](/console/api/inference#cost).
+much the request counted, as [`olive.allowance`](/console/api/inference#cost).
 
 Token prices are per 1M tokens.
 
@@ -430,7 +430,7 @@ The estimates use the following token counts per request; actual usage varies.
 - Hy4 preview — 830 input, 71,500 cached, 295 output tokens per request
 - Hy3 — 830 input, 71,500 cached, 295 output tokens per request
 
-You can track your current usage in the [console](https://opencode.ai/console).
+You can track your current usage in the [console](https://olive.ai/console).
 
 <Callout type="tip">If you reach the usage limit, you can continue using the free models.</Callout>
 
@@ -466,46 +466,46 @@ text model also works through the other APIs, which Console translates. See
 
 | Model                      | Model ID                   | Endpoint                                                               | AI SDK Package              |
 | -------------------------- | -------------------------- | ---------------------------------------------------------------------- | --------------------------- |
-| Grok 4.7                   | grok-4.7                   | `https://opencode.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
-| GPT 6 Luna                 | gpt-6-luna                 | `https://opencode.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
-| GPT 5.6 Luna               | gpt-5.6-luna               | `https://opencode.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
-| Claude Haiku 5.5           | claude-haiku-5-5           | `https://opencode.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
-| Gemini 4 Argon             | gemini-4-argon             | `https://opencode.ai/inference/go/google/v1beta/models/gemini-4-argon` | `@ai-sdk/google`            |
-| GLM-5.3-Flash              | glm-5.3-flash              | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| GLM-5.3                    | glm-5.3                    | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| GLM-5.2                    | glm-5.2                    | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Kimi K3.1 Pro              | kimi-k3.1-pro              | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Kimi K3                    | kimi-k3                    | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Kimi K2.7 Code             | kimi-k2.7-code             | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| LongCat-2.0                | longcat-2.0                | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| DeepSeek V4.1 Flash        | deepseek-v4.1-flash        | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| DeepSeek V4 Pro            | deepseek-v4-pro            | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiMo-V2.6-Flash            | mimo-v2.6-flash            | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiMo-V2.6-Pro              | mimo-v2.6-pro              | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiMo-V2.5                  | mimo-v2.5                  | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiMo-V2.5-Pro              | mimo-v2.5-pro              | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiniMax M3.1 Flash         | minimax-m3.1-flash         | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| MiniMax M3                 | minimax-m3                 | `https://opencode.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
-| Muse Spark 1.3 Contributor | muse-spark-1.3-contributor | `https://opencode.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
-| Muse Spark 1.2 Contributor | muse-spark-1.2-contributor | `https://opencode.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
-| Qwen3.8 Max                | qwen3.8-max                | `https://opencode.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
-| Qwen3.8 Flash              | qwen3.8-flash              | `https://opencode.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
-| Qwen3.7 Plus               | qwen3.7-plus               | `https://opencode.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
-| Hy4 preview                | hy4-preview                | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Hy3                        | hy3                        | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Step 5 Preview             | step-5-preview             | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Beam Free                  | beam-free                  | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
-| Iceman Contributor Free    | iceman-contributor-free    | `https://opencode.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Grok 4.7                   | grok-4.7                   | `https://olive.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
+| GPT 6 Luna                 | gpt-6-luna                 | `https://olive.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
+| GPT 5.6 Luna               | gpt-5.6-luna               | `https://olive.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
+| Claude Haiku 5.5           | claude-haiku-5-5           | `https://olive.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
+| Gemini 4 Argon             | gemini-4-argon             | `https://olive.ai/inference/go/google/v1beta/models/gemini-4-argon` | `@ai-sdk/google`            |
+| GLM-5.3-Flash              | glm-5.3-flash              | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| GLM-5.3                    | glm-5.3                    | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| GLM-5.2                    | glm-5.2                    | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Kimi K3.1 Pro              | kimi-k3.1-pro              | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Kimi K3                    | kimi-k3                    | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Kimi K2.7 Code             | kimi-k2.7-code             | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| LongCat-2.0                | longcat-2.0                | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| DeepSeek V4.1 Flash        | deepseek-v4.1-flash        | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| DeepSeek V4 Pro            | deepseek-v4-pro            | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiMo-V2.6-Flash            | mimo-v2.6-flash            | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiMo-V2.6-Pro              | mimo-v2.6-pro              | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiMo-V2.5                  | mimo-v2.5                  | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiMo-V2.5-Pro              | mimo-v2.5-pro              | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiniMax M3.1 Flash         | minimax-m3.1-flash         | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| MiniMax M3                 | minimax-m3                 | `https://olive.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
+| Muse Spark 1.3 Contributor | muse-spark-1.3-contributor | `https://olive.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
+| Muse Spark 1.2 Contributor | muse-spark-1.2-contributor | `https://olive.ai/inference/go/openai/v1/responses`                 | `@ai-sdk/openai`            |
+| Qwen3.8 Max                | qwen3.8-max                | `https://olive.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
+| Qwen3.8 Flash              | qwen3.8-flash              | `https://olive.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
+| Qwen3.7 Plus               | qwen3.7-plus               | `https://olive.ai/inference/go/anthropic/v1/messages`               | `@ai-sdk/anthropic`         |
+| Hy4 preview                | hy4-preview                | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Hy3                        | hy3                        | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Step 5 Preview             | step-5-preview             | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Beam Free                  | beam-free                  | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
+| Iceman Contributor Free    | iceman-contributor-free    | `https://olive.ai/inference/go/openai/v1/chat/completions`          | `@ai-sdk/openai-compatible` |
 
 </div>
 
-These AI SDK packages are for applications calling Go directly. To use Go in OpenCode, connect with `/connect` and set
-the [model](/models) using the format `opencode-go/<model-id>`:
+These AI SDK packages are for applications calling Go directly. To use Go in Olive, connect with `/connect` and set
+the [model](/models) using the format `olive-go/<model-id>`:
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
-  "model": "opencode-go/kimi-k3",
+  "$schema": "https://olive.ai/config.json",
+  "model": "olive-go/kimi-k3",
 }
 ```
 
@@ -514,7 +514,7 @@ the [model](/models) using the format `opencode-go/<model-id>`:
 Fetch the full list of available models and their metadata from the models endpoint:
 
 ```bash
-curl https://opencode.ai/inference/go/v1/models
+curl https://olive.ai/inference/go/v1/models
 ```
 
 ## Privacy
@@ -566,7 +566,7 @@ Open models have gotten really good. They now reach performance close to proprie
 
 However, getting reliable, low latency access to them can be difficult. Providers vary in quality and availability.
 
-<Callout type="tip">We tested a select group of models and providers that work well with OpenCode.</Callout>
+<Callout type="tip">We tested a select group of models and providers that work well with Olive.</Callout>
 
 To fix this, we did a couple of things:
 
@@ -579,9 +579,9 @@ Teams to cover your whole team.
 
 ## Goals
 
-We created OpenCode Go to:
+We created Olive Go to:
 
 1. Make AI coding **accessible** to more people with a low cost subscription.
 2. Provide **reliable** access to the best open coding models.
 3. Curate models that are **tested and benchmarked** for coding agent use.
-4. Have **no lock-in** by allowing you to use any other provider with OpenCode as well.
+4. Have **no lock-in** by allowing you to use any other provider with Olive as well.

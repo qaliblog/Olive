@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# publish-homebrew.sh <sign-macos dir> <build-archives dir>: updates opencode-v2 in anomalyco/homebrew-tap over SSH
+# publish-homebrew.sh <sign-macos dir> <build-archives dir>: updates olive-v2 in anomalyco/homebrew-tap over SSH
 # with its write deploy key (HOMEBREW_TAP_DEPLOY_KEY) and registers the homebrew update artifact.
 . "$(dirname "$0")/lib.sh"
 
@@ -13,5 +13,5 @@ if ! dry_run; then
 fi
 
 push_git "git@github.com:anomalyco/homebrew-tap.git" \
-  "chore: update opencode-v2 to $OPENCODE_VERSION" bash "$release_dir/render-homebrew.sh" "$1" "$2"
-publish_update cli homebrew '{"package": "anomalyco/tap/opencode-v2"}'
+  "chore: update olive-v2 to $OLIVE_VERSION" bash "$release_dir/render-homebrew.sh" "$1" "$2"
+publish_update cli homebrew '{"package": "anomalyco/tap/olive-v2"}'

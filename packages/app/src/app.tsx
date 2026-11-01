@@ -1,10 +1,10 @@
 import "@/index.css"
 import { VoiceProvider } from "@/voice/context"
 import { VoiceOverlay } from "@/voice/composer"
-import { DialogProvider } from "@opencode/ui/context/dialog"
-import { FileComponentProvider } from "@opencode/ui/context/file"
-import { Font } from "@opencode/ui/font"
-import { ThemeProvider } from "@opencode/ui/theme/context"
+import { DialogProvider } from "@olive/ui/context/dialog"
+import { FileComponentProvider } from "@olive/ui/context/file"
+import { Font } from "@olive/ui/font"
+import { ThemeProvider } from "@olive/ui/theme/context"
 import { MetaProvider, Title } from "@solidjs/meta"
 import { type BaseRouterProps, Router } from "@solidjs/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
@@ -57,7 +57,7 @@ export function AppBaseProviders(
 ) {
   return (
     <MetaProvider>
-      <Title>OpenCode</Title>
+      <Title>Olive</Title>
       <Font />
       <ThemeProvider
         onThemeApplied={(_, mode, scheme) => {

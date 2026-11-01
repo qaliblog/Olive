@@ -4,7 +4,7 @@ import type {
   SessionMessageAssistant,
   SessionMessageAssistantTool,
   SessionMessageInfo,
-} from "@opencode/client/promise"
+} from "@olive/client/promise"
 import { createStore } from "solid-js/store"
 import {
   createTimelineProjection,

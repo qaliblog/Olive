@@ -1,9 +1,9 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { expect } from "bun:test"
-import { UsageLimits } from "@opencode/core/usage-limits"
-import { Money } from "@opencode/schema/money"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { UsageLimits } from "@olive/core/usage-limits"
+import { Money } from "@olive/schema/money"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { Effect, Layer } from "effect"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
@@ -12,7 +12,7 @@ import { ServerFetch } from "../src/fetch"
 /** Requests a location's usage limits from a server whose UsageLimits answers with `get`. */
 const request = (get: UsageLimits.Interface["get"]) =>
   Effect.gen(function* () {
-    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-usage-endpoint-")))
+    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("olive-usage-endpoint-")))
     const global = path.join(tmp.path, "global")
     yield* Effect.promise(() => fs.mkdir(global))
     const handler = yield* ServerFetch.make(
@@ -34,16 +34,16 @@ const request = (get: UsageLimits.Interface["get"]) =>
         ],
       },
     )
-    const url = new URL("/api/experimental/usage/limits", "http://opencode.local")
+    const url = new URL("/api/experimental/usage/limits", "http://olive.local")
     url.searchParams.set("location[directory]", tmp.path)
     const response = yield* Effect.promise(() => handler(new Request(url)))
     return { status: response.status, body: yield* Effect.promise(() => response.json()) }
   })
 
-it.live("returns the usage limits of the OpenCode Console workspace a location is signed in to", () =>
+it.live("returns the usage limits of the Olive Console workspace a location is signed in to", () =>
   Effect.gen(function* () {
     const limits: UsageLimits.Info = {
-      workspace: { id: "wrk_anomaly", usageURL: "https://opencode.ai/console/wrk_anomaly/activity/overview" },
+      workspace: { id: "wrk_anomaly", usageURL: "https://olive.ai/console/wrk_anomaly/activity/overview" },
       budgets: [
         {
           id: "rule_monthly",
@@ -67,7 +67,7 @@ it.live("returns the usage limits of the OpenCode Console workspace a location i
   }),
 )
 
-it.live("returns null for a location that isn't signed in to OpenCode Console", () =>
+it.live("returns null for a location that isn't signed in to Olive Console", () =>
   Effect.gen(function* () {
     const result = yield* request(() => Effect.succeed(undefined))
 
@@ -79,10 +79,10 @@ it.live("returns null for a location that isn't signed in to OpenCode Console", 
 it.live("reports usage limits Console can't provide as unavailable", () =>
   Effect.gen(function* () {
     const result = yield* request(() =>
-      Effect.fail(new UsageLimits.UnavailableError({ message: "OpenCode Console budgets are unavailable" })),
+      Effect.fail(new UsageLimits.UnavailableError({ message: "Olive Console budgets are unavailable" })),
     )
 
     expect(result.status).toBe(503)
-    expect(result.body).toMatchObject({ message: "OpenCode Console budgets are unavailable", service: "opencode" })
+    expect(result.body).toMatchObject({ message: "Olive Console budgets are unavailable", service: "olive" })
   }),
 )

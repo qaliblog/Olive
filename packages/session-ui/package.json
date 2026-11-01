@@ -1,5 +1,5 @@
 {
-  "name": "@opencode/session-ui",
+  "name": "@olive/session-ui",
   "version": "2.2.5",
   "private": true,
   "type": "module",
@@ -69,10 +69,10 @@
   "dependencies": {
     "@kitlangton/solid-motion": "0.2.2",
     "@kobalte/core": "catalog:",
-    "@opencode/client": "workspace:*",
-    "@opencode/patchmark": "workspace:*",
-    "@opencode/ui": "workspace:*",
-    "@opencode/util": "workspace:*",
+    "@olive/client": "workspace:*",
+    "@olive/patchmark": "workspace:*",
+    "@olive/ui": "workspace:*",
+    "@olive/util": "workspace:*",
     "@pierre/diffs": "catalog:",
     "@pierre/highlights": "catalog:",
     "@solid-primitives/event-listener": "catalog:",

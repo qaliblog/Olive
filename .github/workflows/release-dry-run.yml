@@ -30,7 +30,7 @@ defaults:
 
 jobs:
   plan:
-    if: github.repository == 'anomalyco/opencode'
+    if: github.repository == 'anomalyco/olive'
     runs-on: ubuntu-24.04
     permissions: {}
     outputs:
@@ -66,10 +66,10 @@ jobs:
     permissions:
       contents: write
     env: &env
-      OPENCODE_VERSION: ${{ needs.plan.outputs.version }}
-      OPENCODE_CHANNEL: ${{ needs.plan.outputs.channel }}
-      OPENCODE_NPM_TAG: ${{ needs.plan.outputs.npm_tag }}
-      OPENCODE_DRY_RUN: ${{ needs.plan.outputs.dry_run }}
+      OLIVE_VERSION: ${{ needs.plan.outputs.version }}
+      OLIVE_CHANNEL: ${{ needs.plan.outputs.channel }}
+      OLIVE_NPM_TAG: ${{ needs.plan.outputs.npm_tag }}
+      OLIVE_DRY_RUN: ${{ needs.plan.outputs.dry_run }}
     outputs:
       sha: ${{ steps.tag.outputs.sha || github.sha }}
     steps:
@@ -81,7 +81,7 @@ jobs:
         if: needs.plan.outputs.channel == 'latest'
         run: bash .github/release/tag-release.sh
         env:
-          OPENCODE_RELEASE_NOTES: ${{ inputs.release_notes }}
+          OLIVE_RELEASE_NOTES: ${{ inputs.release_notes }}
 
   # ---- Build: repository code; no environment, secrets or id-token --------------------------------------------
 
@@ -131,13 +131,13 @@ jobs:
         run: bun run build && rm -rf dist/.bun
         env:
           BUN_COMPILE_RELEASE: bun-v1.4.4
-          OPENCODE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
-          OPENCODE_RELEASE_NOTES: ${{ needs.plan.outputs.channel == 'latest' && inputs.release_notes || '' }}
+          OLIVE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
+          OLIVE_RELEASE_NOTES: ${{ needs.plan.outputs.channel == 'latest' && inputs.release_notes || '' }}
           GH_TOKEN: ${{ github.token }} # read-only; raises the rate limit for Bun release downloads
       - name: Verify bundled models catalog
-        run: bun packages/cli/script/catalog-smoke.ts packages/cli/dist/cli-linux-x64/bin/opencode
+        run: bun packages/cli/script/catalog-smoke.ts packages/cli/dist/cli-linux-x64/bin/olive
         env:
-          OPENCODE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
+          OLIVE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
       - name: Upload
         uses: ./.github/release/upload
         with:
@@ -171,19 +171,19 @@ jobs:
         working-directory: packages/cli
         run: bun run build:node
         env:
-          OPENCODE_TARGET: ${{ matrix.target }}
-          OPENCODE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
+          OLIVE_TARGET: ${{ matrix.target }}
+          OLIVE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
       - name: Test
         if: matrix.target != 'windows-arm64'
         working-directory: packages/cli
         run: bun run script/service-smoke.ts --node
       - name: Verify bundled models catalog
         if: matrix.target != 'windows-arm64'
-        run: bun packages/cli/script/catalog-smoke.ts "packages/cli/dist/node/cli-node-$OPENCODE_TARGET/bin/opencode2-node$EXE"
+        run: bun packages/cli/script/catalog-smoke.ts "packages/cli/dist/node/cli-node-$OLIVE_TARGET/bin/olive2-node$EXE"
         env:
-          OPENCODE_TARGET: ${{ matrix.target }}
+          OLIVE_TARGET: ${{ matrix.target }}
           EXE: ${{ startsWith(matrix.target, 'windows') && '.exe' || '' }}
-          OPENCODE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
+          OLIVE_MODELS_SNAPSHOT: ${{ github.workspace }}/.cache/models-catalog/api.json
       - name: Upload
         uses: ./.github/release/upload
         with:
@@ -303,7 +303,7 @@ jobs:
         working-directory: packages/desktop
         run: bun run build
         env:
-          OPENCODE_TARGET: ${{ matrix.target }}
+          OLIVE_TARGET: ${{ matrix.target }}
           NODE_OPTIONS: --max-old-space-size=4096
           VITE_SENTRY_DSN: ${{ vars.WEB_SENTRY_DSN }}
           VITE_SENTRY_ENVIRONMENT: ${{ needs.plan.outputs.channel == 'latest' && 'production' || needs.plan.outputs.channel }}
@@ -314,7 +314,7 @@ jobs:
         timeout-minutes: 60
         run: bun run pack
         env:
-          OPENCODE_TARGET: ${{ matrix.target }}
+          OLIVE_TARGET: ${{ matrix.target }}
       - name: Upload
         uses: ./.github/release/upload
         with:
@@ -352,8 +352,8 @@ jobs:
         timeout-minutes: 30
         run: bun run pack
         env:
-          OPENCODE_TARGET: ${{ matrix.target }}
-          OPENCODE_DESKTOP_APP: ${{ runner.temp }}/app/app
+          OLIVE_TARGET: ${{ matrix.target }}
+          OLIVE_DESKTOP_APP: ${{ runner.temp }}/app/app
       - name: Upload
         uses: ./.github/release/upload
         with:
@@ -404,7 +404,7 @@ jobs:
         if: needs.plan.outputs.desktop == 'true'
         run: |
           bash .github/release/sign-desktop-macos.sh "$RUNNER_TEMP/out" \
-            "$RUNNER_TEMP"/in/build-desktop-darwin-*/opencode-desktop-mac-*.app.tar
+            "$RUNNER_TEMP"/in/build-desktop-darwin-*/olive-desktop-mac-*.app.tar
         env:
           APPLE_NOTARY_KEY: ${{ secrets.APPLE_NOTARY_KEY }}
           APPLE_NOTARY_KEY_ID: ${{ vars.APPLE_NOTARY_KEY_ID }}
@@ -545,7 +545,7 @@ jobs:
         with:
           subject-path: |
             ${{ runner.temp }}/in/build-npm/*.tgz
-            ${{ runner.temp }}/in/build-archives/opencode*
+            ${{ runner.temp }}/in/build-archives/olive*
 
   publish-npm:
     needs: [plan, sign-macos, sign-windows, publish-attestations]
@@ -712,7 +712,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          OPENCODE_RELEASE_NOTES: ${{ inputs.release_notes }}
+          OLIVE_RELEASE_NOTES: ${{ inputs.release_notes }}
 
   # Brings the release commit back to dev. Pushing to dev is blocked by rulesets, so it opens a PR.
   publish-version-pr:

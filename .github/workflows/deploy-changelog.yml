@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   deploy:
-    if: github.repository == 'anomalyco/opencode' && github.ref_name == 'dev'
+    if: github.repository == 'anomalyco/olive' && github.ref_name == 'dev'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     environment: dev
     steps:

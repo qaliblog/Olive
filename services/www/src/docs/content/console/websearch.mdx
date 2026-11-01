@@ -1,35 +1,35 @@
 ---
 title: "Web search"
-description: "Hosted web search for OpenCode through Console."
+description: "Hosted web search for Olive through Console."
 ---
 
-Console provides hosted web search to connected OpenCode users. A workspace owner or admin enables it once for the workspace, without giving members a separate search provider key.
+Console provides hosted web search to connected Olive users. A workspace owner or admin enables it once for the workspace, without giving members a separate search provider key.
 
 Each successful search costs **$0.01** and counts toward the workspace balance and member spending limits.
 
 ## Enable
 
-1. Sign in to the [Console](https://opencode.ai/console) as a workspace owner or admin.
+1. Sign in to the [Console](https://olive.ai/console) as a workspace owner or admin.
 2. Open **Integrations** and click **Set up** on **Hosted Web Search**.
 3. Click **Enable**.
 
-Each member then connects OpenCode to the workspace with `/connect`.
+Each member then connects Olive to the workspace with `/connect`.
 
 ```text
 /connect
 ```
 
-The workspace configuration selects **OpenCode Web Search** as the default provider. Members do not need to set `websearch.provider` or add a provider API key. A member who sets their own `websearch.provider` keeps that choice instead.
+The workspace configuration selects **Olive Web Search** as the default provider. Members do not need to set `websearch.provider` or add a provider API key. A member who sets their own `websearch.provider` keeps that choice instead.
 
 ## Search
 
-Ask OpenCode for current information in a prompt. Searches run from OpenCode rather than from an interactive page in Console.
+Ask Olive for current information in a prompt. Searches run from Olive rather than from an interactive page in Console.
 
 ```text
 Find the latest Bun release and summarize the changes with source links.
 ```
 
-The hosted provider searches the public web and returns up to eight results. OpenCode uses the results to answer the prompt and cite sources.
+The hosted provider searches the public web and returns up to eight results. Olive uses the results to answer the prompt and cite sources.
 
 See the [web search guide](/websearch) to configure permissions or disable the tool.
 

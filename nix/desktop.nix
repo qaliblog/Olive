@@ -10,7 +10,7 @@
   autoPatchelfHook,
   copyDesktopItems,
   makeDesktopItem,
-  opencode,
+  olive,
 }:
 let
   electronPin =
@@ -21,8 +21,8 @@ let
   electron = callPackage ./electron.nix { inherit electronPin; };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "opencode-desktop";
-  inherit (opencode)
+  pname = "olive-desktop";
+  inherit (olive)
     version
     src
     node_modules
@@ -51,16 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   desktopItems = lib.optional stdenv.hostPlatform.isLinux (makeDesktopItem {
-    name = "ai.opencode.desktop";
-    desktopName = "OpenCode";
-    exec = "opencode-desktop %U";
-    icon = "ai.opencode.desktop";
+    name = "ai.olive.desktop";
+    desktopName = "Olive";
+    exec = "olive-desktop %U";
+    icon = "ai.olive.desktop";
     # Electron derives X11 WM_CLASS from app.name.
-    startupWMClass = "OpenCode";
+    startupWMClass = "Olive";
     categories = [ "Development" ];
   });
 
-  env = opencode.env // {
+  env = olive.env // {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace \
         packages/desktop/src/main/windows/appearance.ts \
         packages/desktop/src/main/service/desktop-cli.ts \
-        --replace-fail "process.resourcesPath" "'$out/opt/opencode-desktop/resources'"
+        --replace-fail "process.resourcesPath" "'$out/opt/olive-desktop/resources'"
     '';
 
   preBuild = ''
@@ -95,17 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd packages/desktop
 
-    export OPENCODE_CLI_DIST="$TMPDIR/desktop-cli"
-    cli_package=$(bun -e 'import { getCurrentCli } from "./script/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
+    export OLIVE_CLI_DIST="$TMPDIR/desktop-cli"
+    cli_package=$(bun -e 'import { getCurrentCli } from "./script/utils.ts"; console.log(getCurrentCli().package.replace("@olive/", ""))')
     # copyBuiltCliToResources joins this dist with the npm package name getCurrentCli()
     # reports, not the Nix build's name. It reads only .version from the manifest and
-    # writes it as opencode-cli.version beside the binary.
-    mkdir -p "$OPENCODE_CLI_DIST/$cli_package/bin"
-    cp ${lib.getExe opencode} "$OPENCODE_CLI_DIST/$cli_package/bin/opencode"
-    # OPENCODE_VERSION is what the bundled CLI prints for --version, so the manifest
+    # writes it as olive-cli.version beside the binary.
+    mkdir -p "$OLIVE_CLI_DIST/$cli_package/bin"
+    cp ${lib.getExe olive} "$OLIVE_CLI_DIST/$cli_package/bin/olive"
+    # OLIVE_VERSION is what the bundled CLI prints for --version, so the manifest
     # and the executable cannot drift.
-    bun -e 'await Bun.write(process.argv[1], JSON.stringify({ version: process.env.OPENCODE_VERSION }) + "\n")' \
-      "$OPENCODE_CLI_DIST/$cli_package/package.json"
+    bun -e 'await Bun.write(process.argv[1], JSON.stringify({ version: process.env.OLIVE_VERSION }) + "\n")' \
+      "$OLIVE_CLI_DIST/$cli_package/package.json"
 
     bun run build
     npx electron-builder --dir \
@@ -122,27 +122,27 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv dist/mac*/*.app $out/Applications
-    makeWrapper "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
+    makeWrapper "$out/Applications/Olive.app/Contents/MacOS/Olive" $out/bin/olive-desktop
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/opt/opencode-desktop
-    cp -r dist/linux*-unpacked/{resources,LICENSE*} $out/opt/opencode-desktop
+    mkdir -p $out/opt/olive-desktop
+    cp -r dist/linux*-unpacked/{resources,LICENSE*} $out/opt/olive-desktop
     install -Dm644 resources/icons/32x32.png \
-      "$out/share/icons/hicolor/32x32/apps/ai.opencode.desktop.png"
+      "$out/share/icons/hicolor/32x32/apps/ai.olive.desktop.png"
     install -Dm644 resources/icons/64x64.png \
-      "$out/share/icons/hicolor/64x64/apps/ai.opencode.desktop.png"
+      "$out/share/icons/hicolor/64x64/apps/ai.olive.desktop.png"
     install -Dm644 resources/icons/128x128.png \
-      "$out/share/icons/hicolor/128x128/apps/ai.opencode.desktop.png"
+      "$out/share/icons/hicolor/128x128/apps/ai.olive.desktop.png"
     install -Dm644 resources/icons/128x128@2x.png \
-      "$out/share/icons/hicolor/256x256/apps/ai.opencode.desktop.png"
+      "$out/share/icons/hicolor/256x256/apps/ai.olive.desktop.png"
     install -Dm644 resources/icons/icon.png \
-      "$out/share/icons/hicolor/512x512/apps/ai.opencode.desktop.png"
-    install -Dm644 resources/ai.opencode.desktop.metainfo.xml \
-      "$out/share/metainfo/ai.opencode.desktop.metainfo.xml"
-    makeWrapper ${lib.getExe electron} $out/bin/opencode-desktop \
+      "$out/share/icons/hicolor/512x512/apps/ai.olive.desktop.png"
+    install -Dm644 resources/ai.olive.desktop.metainfo.xml \
+      "$out/share/metainfo/ai.olive.desktop.metainfo.xml"
+    makeWrapper ${lib.getExe electron} $out/bin/olive-desktop \
      --inherit-argv0 \
      --set ELECTRON_FORCE_IS_PACKAGED 1 \
-     --add-flags $out/opt/opencode-desktop/resources/app.asar \
+     --add-flags $out/opt/olive-desktop/resources/app.asar \
      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   ''
   + ''
@@ -161,8 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "OpenCode Desktop App";
-    mainProgram = "opencode-desktop";
-    inherit (opencode.meta) homepage license platforms;
+    description = "Olive Desktop App";
+    mainProgram = "olive-desktop";
+    inherit (olive.meta) homepage license platforms;
   };
 })

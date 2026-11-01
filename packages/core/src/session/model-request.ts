@@ -11,8 +11,8 @@ import {
   type Media,
   Message,
   SystemPart,
-} from "@opencode/ai/effect"
-import type { StreamOptions } from "@opencode/ai/route"
+} from "@olive/ai/effect"
+import type { StreamOptions } from "@olive/ai/route"
 import type {
   SessionCompaction,
   SessionContext,
@@ -20,13 +20,13 @@ import type {
   SessionRequest,
   SessionRequestKind,
   SessionTitle,
-} from "@opencode/plugin/effect/session"
-import type { Agent } from "@opencode/schema/agent"
-import type { Model } from "@opencode/schema/model"
-import type { Content } from "@opencode/schema/tool"
+} from "@olive/plugin/effect/session"
+import type { Agent } from "@olive/schema/agent"
+import type { Model } from "@olive/schema/model"
+import type { Content } from "@olive/schema/tool"
 import { Cause, Context, Effect, Layer, Result, Stream } from "effect"
 import { HttpClientRequest, HttpClientResponse } from "effect/http"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { App } from "../app.js"
 import { Instructions } from "../instructions/index.js"
 import { Permission } from "../permission.js"
@@ -231,7 +231,7 @@ export interface Interface {
   readonly title: (input: Input) => Effect.Effect<Prepared<SessionTitle>>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SessionModelRequest") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/SessionModelRequest") {}
 
 export const layer = Layer.effect(
   Service,
@@ -292,15 +292,15 @@ export const layer = Layer.effect(
         model: model.model,
         http: {
           headers: {
-            "x-opencode-session-id": session.id,
-            ...(session.parentID ? { "x-opencode-parent-session-id": session.parentID } : {}),
+            "x-olive-session-id": session.id,
+            ...(session.parentID ? { "x-olive-parent-session-id": session.parentID } : {}),
             "x-session-affinity": affinity,
             "X-Session-Id": affinity,
             ...(session.parentID ? { "x-parent-session-id": session.parentID } : {}),
             "User-Agent": App.useragent(app),
-            "x-opencode-project": session.projectID,
-            "x-opencode-session": affinity,
-            "x-opencode-client": app.name,
+            "x-olive-project": session.projectID,
+            "x-olive-session": affinity,
+            "x-olive-client": app.name,
           },
         },
         // TODO: Persist cache lineage so nested forks reuse the root session's cache key.

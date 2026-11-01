@@ -1,8 +1,8 @@
 import type { Component, Owner } from "solid-js"
-import type { PluginInfo } from "@opencode/client/promise"
-import type { Context, Contract, DialogHandle, Dialogs, Live, SessionRef, SessionScreen } from "@opencode/plugin/gui"
-import type { BuiltinPanelTab } from "@opencode/plugin/gui/builtin"
-import type { Bridge, BridgeMessage, EnableState, Installed } from "@opencode/plugin/gui/host"
+import type { PluginInfo } from "@olive/client/promise"
+import type { Context, Contract, DialogHandle, Dialogs, Live, SessionRef, SessionScreen } from "@olive/plugin/gui"
+import type { BuiltinPanelTab } from "@olive/plugin/gui/builtin"
+import type { Bridge, BridgeMessage, EnableState, Installed } from "@olive/plugin/gui/host"
 import { expect, sourceURL, story } from "../../stories/playwright/story"
 
 const fixture = sourceURL(new URL("./plugin-host.fixture.tsx", import.meta.url))
@@ -387,7 +387,7 @@ story("ctx.ui renders the app's own components in a plugin's contribution and di
   }, fixture)
 
   const root = page.getByTestId("ui-host")
-  await expect(root.locator('svg[data-slot="icon-svg"] > use[href="#opencode-v2-icon-branch"]')).toHaveCount(1)
+  await expect(root.locator('svg[data-slot="icon-svg"] > use[href="#olive-v2-icon-branch"]')).toHaveCount(1)
   await expect(root.locator('svg[data-component="loader-v2"]')).toHaveAttribute("width", "20")
   await expect(root.locator('[data-component="keybind-v2"]')).toHaveText("CtrlK")
   await expect(root.locator('[data-component="markdown"] h1')).toHaveText("Fixture heading")
@@ -398,7 +398,7 @@ story("ctx.ui renders the app's own components in a plugin's contribution and di
 
   const apply = root.getByRole("button", { name: "Apply" })
   await expect(apply).toHaveAttribute("data-component", "button-v2")
-  await expect(apply.locator('use[href="#opencode-v2-icon-check"]')).toHaveCount(1)
+  await expect(apply.locator('use[href="#olive-v2-icon-check"]')).toHaveCount(1)
   await apply.click()
 
   const reload = root.getByRole("button", { name: "Reload" })
@@ -1145,7 +1145,7 @@ story("Extensions › Plugins merges the own server's plugins with the desktop G
         // A plugin without a GUI lists its name only.
         listed("lint-rules", { server: true }),
         // The server's own built-ins are not listed, as on every server.
-        { ...listed("opencode-builtin", { server: true }), source: { type: "builtin" } },
+        { ...listed("olive-builtin", { server: true }), source: { type: "builtin" } },
       ],
       definitions: [
         { id: "review", windowEntry: async () => ({ default: () => {} }) },

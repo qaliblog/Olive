@@ -1,5 +1,5 @@
 import type { Locator } from "@playwright/test"
-import type { MotionKnob } from "@opencode/ui/motion-tuning"
+import type { MotionKnob } from "@olive/ui/motion-tuning"
 import { expect, sourceURL, story } from "../../stories/playwright/story"
 
 for (const variant of ["classic", "experimental"] as const) {
@@ -760,7 +760,7 @@ story.describe("with the new question UI experiment enabled", () => {
   // The dock's motion is off unless its knob is on, so these turn it on before the dock loads.
   story.describe("with the question dock's motion on", () => {
     story.beforeEach(({ page }) =>
-      page.addInitScript(() => localStorage.setItem("opencode.motion.v2", JSON.stringify({ "question.motion": 1 }))),
+      page.addInitScript(() => localStorage.setItem("olive.motion.v2", JSON.stringify({ "question.motion": 1 }))),
     )
 
     story("keeps a question on screen while switching", async ({ mount }) => {
@@ -1544,7 +1544,7 @@ story.describe("with the new question UI experiment enabled", () => {
 
   story.describe("a long list with the question dock's motion on", () => {
     story.beforeEach(({ page }) =>
-      page.addInitScript(() => localStorage.setItem("opencode.motion.v2", JSON.stringify({ "question.motion": 1 }))),
+      page.addInitScript(() => localStorage.setItem("olive.motion.v2", JSON.stringify({ "question.motion": 1 }))),
     )
 
     story("restores a long list without growing past where it rests", async ({ mount }) => {

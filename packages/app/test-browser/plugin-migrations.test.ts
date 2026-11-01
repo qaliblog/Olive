@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test"
 import { createRoot } from "solid-js"
-import { BuiltinPanel, type BuiltinStoreDeclaration } from "@opencode/plugin/gui/builtin"
+import { BuiltinPanel, type BuiltinStoreDeclaration } from "@olive/plugin/gui/builtin"
 import type { Platform } from "@/runtime/platform/platform"
 import { Persist, persisted, removePersisted } from "@/runtime/persistence/storage"
 import { legacyKeys } from "@/runtime/plugin/panel-keys"
@@ -26,8 +26,8 @@ test.each([
   {
     name: "extension.review.diff, from before the plugin rename, ahead of the store's own older homes",
     home: () =>
-      imported("review", "diff", review.stores.diff, "opencode.global.dat:plugin.review.diff", [
-        ["opencode.global.dat:extension.review.diff", renamedDiff],
+      imported("review", "diff", review.stores.diff, "olive.global.dat:plugin.review.diff", [
+        ["olive.global.dat:extension.review.diff", renamedDiff],
         ["layout", { review: { diffStyle: "split" } }],
       ]),
     expected: renamedDiff,
@@ -36,8 +36,8 @@ test.each([
     // An older home without the field holds no value, so the import reads on to the next one.
     name: "layout review.diffStyle, from the unprefixed layout when the newer one lacks it → plugin.review.diff",
     home: () =>
-      imported("review", "diff", review.stores.diff, "opencode.global.dat:plugin.review.diff", [
-        ["opencode.global.dat:layout", { fileTree: { opened: true } }],
+      imported("review", "diff", review.stores.diff, "olive.global.dat:plugin.review.diff", [
+        ["olive.global.dat:layout", { fileTree: { opened: true } }],
         ["layout", { review: { diffStyle: "unified" } }],
       ]),
     expected: { diffStyle: "unified" },
@@ -49,7 +49,7 @@ test.each([
         "updater",
         "releaseNotes",
         updater.stores.releaseNotes,
-        "opencode.global.dat:plugin.updater.releaseNotes",
+        "olive.global.dat:plugin.updater.releaseNotes",
         [["settings.v3", { general: { releaseNotes: false } }]],
       ),
     expected: { enabled: false },
@@ -57,7 +57,7 @@ test.each([
   {
     name: "Preferences mobileDiffWrap → plugin.review.mobileDiff",
     home: () =>
-      imported("review", "mobileDiff", review.stores.mobileDiff, "opencode.global.dat:plugin.review.mobileDiff", [
+      imported("review", "mobileDiff", review.stores.mobileDiff, "olive.global.dat:plugin.review.mobileDiff", [
         ["settings.v3", { general: { mobileDiffWrap: false } }],
       ]),
     expected: { wrap: false },
@@ -65,7 +65,7 @@ test.each([
   {
     name: "What's New highlights.v1 → plugin.updater.seen",
     home: () =>
-      imported("updater", "seen", updater.stores.seen, "opencode.global.dat:plugin.updater.seen", [
+      imported("updater", "seen", updater.stores.seen, "olive.global.dat:plugin.updater.seen", [
         ["highlights.v1", { version: "2.0.20" }],
       ]),
     expected: { version: "2.0.20" },
@@ -90,11 +90,11 @@ test.each([
 })
 
 test("the import from before the plugin rename leaves the old key for builds that still read it", () => {
-  imported("review", "diff", review.stores.diff, "opencode.global.dat:plugin.review.diff", [
-    ["opencode.global.dat:extension.review.diff", renamedDiff],
+  imported("review", "diff", review.stores.diff, "olive.global.dat:plugin.review.diff", [
+    ["olive.global.dat:extension.review.diff", renamedDiff],
   ])
 
-  expect(JSON.parse(localStorage.getItem("opencode.global.dat:extension.review.diff") ?? "null")).toEqual(renamedDiff)
+  expect(JSON.parse(localStorage.getItem("olive.global.dat:extension.review.diff") ?? "null")).toEqual(renamedDiff)
 })
 
 /** Opens a declared global store over storage holding only `seed`, and reads the key it now lives under. */

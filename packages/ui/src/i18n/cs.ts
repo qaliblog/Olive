@@ -71,7 +71,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Přidejte kredity",
   "dialog.usageExceeded.freeTier.title": "Dosažen limit zdarma",
   "dialog.usageExceeded.freeTier.description":
-    "Předplaťte si OpenCode Go za 10 USD měsíčně a získejte spolehlivý přístup k nejlepším modelům s otevřeným zdrojovým kódem.",
+    "Předplaťte si Olive Go za 10 USD měsíčně a získejte spolehlivý přístup k nejlepším modelům s otevřeným zdrojovým kódem.",
   "dialog.usageExceeded.freeTier.actionLabel": "Přihlásit se k odběru",
   "ui.sessionTurn.status.delegating": "Delegování práce",
   "ui.sessionTurn.status.planning": "Plánování dalších kroků",

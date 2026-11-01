@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { Predicate } from "effect"
-import type { SessionMessageAssistant, SessionMessageAssistantTool, SessionMessageInfo } from "@opencode/client/promise"
+import type { SessionMessageAssistant, SessionMessageAssistantTool, SessionMessageInfo } from "@olive/client/promise"
 import { storyDocument, storyTool } from "../storybook/current-session-scenarios"
 import { timelinePresets } from "./detail"
 import { createTimelineProjection, Timeline, TimelineRow } from "./projection"
@@ -1512,7 +1512,7 @@ describe("current session timeline rows", () => {
         id: "msg_idle",
         type: "idle",
         outcome: "failed",
-        error: { type: "provider.no-route", message: "Model unavailable: opencode/gpt-5.2" },
+        error: { type: "provider.no-route", message: "Model unavailable: olive/gpt-5.2" },
         time: { created: 2 },
       },
       {
@@ -1526,7 +1526,7 @@ describe("current session timeline rows", () => {
     const preStepRows = Timeline.constructSessionMessageRows(preStep, true, { type: "idle" }).rows
     expect(preStepRows.map((row) => row._tag)).toEqual(["UserMessage", "Error", "Notice"])
     expect(preStepRows[1]).toEqual(
-      new TimelineRow.Error({ userMessageID: "msg_user", text: "Model unavailable: opencode/gpt-5.2" }),
+      new TimelineRow.Error({ userMessageID: "msg_user", text: "Model unavailable: olive/gpt-5.2" }),
     )
 
     const betweenSteps = [
@@ -1617,7 +1617,7 @@ describe("current session timeline rows", () => {
       id: "msg_assistant",
       type: "assistant",
       agent: "build",
-      model: { id: "big-pickle", providerID: "opencode" },
+      model: { id: "big-pickle", providerID: "olive" },
       content: [],
       finish: "error",
       error,
@@ -1689,7 +1689,7 @@ describe("current session timeline rows", () => {
             id: "msg_assistant",
             type: "assistant",
             agent: "build",
-            model: { id: "claude-opus-5", providerID: "opencode" },
+            model: { id: "claude-opus-5", providerID: "olive" },
             content: [],
             finish: "error",
             error: { type, message: "Budget reached.", status: 429, ...(body ? { response: { body } } : {}) },
@@ -1717,7 +1717,7 @@ describe("current session timeline rows", () => {
     expect(
       refused(
         "provider.budget-limit",
-        '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","message":"Budget reached.","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"BudgetLimitError","domain":"opencode.ai","metadata":{"coverage":"all","resetsAt":"2026-11-01T00:00:00.000Z"}}]}}',
+        '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","message":"Budget reached.","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"BudgetLimitError","domain":"olive.ai","metadata":{"coverage":"all","resetsAt":"2026-11-01T00:00:00.000Z"}}]}}',
       ),
     ).toMatchObject({ kind: "budget-limit", resetAt: Date.UTC(2026, 10, 1) })
     expect(refused("provider.budget-limit")).toEqual(

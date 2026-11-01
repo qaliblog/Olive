@@ -1,6 +1,6 @@
-import { PersistentPty } from "@opencode/schema/persistent-pty"
+import { PersistentPty } from "@olive/schema/persistent-pty"
 import { Schema } from "effect"
-import type { ExperimentalPersistentPtyConnectTokenInput, OpenCodeClient } from "../promise"
+import type { ExperimentalPersistentPtyConnectTokenInput, OliveClient } from "../promise"
 
 // Declares only the fields clients read, so servers can add or drop the rest without a client silently ignoring a
 // message it depends on.
@@ -59,12 +59,12 @@ export type PersistentPtyConnectInput = {
   readonly takeover?: boolean
 }
 
-export function createPersistentPtyClient(api: OpenCodeClient, options: PtyClientOptions) {
+export function createPersistentPtyClient(api: OliveClient, options: PtyClientOptions) {
   return {
     async connect(input: PersistentPtyConnectInput) {
       const token = await api.experimental.persistentPty.connectToken({
         ptyID: input.ptyID,
-        "x-opencode-ticket": "1",
+        "x-olive-ticket": "1",
       })
       const baseUrl = new URL(options.url)
       if (!baseUrl.pathname.endsWith("/")) baseUrl.pathname += "/"

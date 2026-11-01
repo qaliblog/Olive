@@ -1,5 +1,5 @@
 import { Schema } from "effect"
-import { Ipc } from "@opencode/plugin/gui"
+import { Ipc } from "@olive/plugin/gui"
 
 /**
  * Captures memory for debugging leaks. Heap snapshots of the main process and every app window can only be taken
@@ -26,8 +26,8 @@ export const HeapSnapshots = Ipc.define({
 
 /**
  * Memory diagnostics, offered only in debug builds (the dev server and Beta) and off until turned on: a JSONL memory
- * log in the desktop logs, and SIGUSR2 heap snapshots when `OPENCODE_DESKTOP_HEAP_DIRECTORY` names an absolute folder.
- * The debug bar's toggle turns them on and remembers it; `OPENCODE_DESKTOP_MEMORY_LOG=<seconds>` turns them on for one
+ * log in the desktop logs, and SIGUSR2 heap snapshots when `OLIVE_DESKTOP_HEAP_DIRECTORY` names an absolute folder.
+ * The debug bar's toggle turns them on and remembers it; `OLIVE_DESKTOP_MEMORY_LOG=<seconds>` turns them on for one
  * launch, and the toggle cannot turn that off.
  */
 export const MemoryDiagnostics = Ipc.define({

@@ -1,5 +1,5 @@
-import { Icon } from "@opencode/ui/icon"
-import { Loader } from "@opencode/ui/loader"
+import { Icon } from "@olive/ui/icon"
+import { Loader } from "@olive/ui/loader"
 import { useLanguage } from "@/runtime/i18n/language"
 import { Show } from "solid-js"
 import type { ServerHealth } from "@/runtime/server/health"

@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron"
-import { builtins } from "@opencode/gui-plugins/main"
+import { builtins } from "@olive/gui-plugins/main"
 import {
   pluginIdAvailable,
   runsOn,
@@ -7,7 +7,7 @@ import {
   type BridgeLayout,
   type BridgeMenubarItem,
   type Entry,
-} from "@opencode/plugin/gui/host"
+} from "@olive/plugin/gui/host"
 import {
   MenubarItem,
   type Plugin,
@@ -31,9 +31,9 @@ import {
   type ServerEndpoint,
   type ServerEndpoints,
   type Windows,
-} from "@opencode/plugin/gui/main"
-import type { BuiltinCatalog, BuiltinMainContext, Lifecycle } from "@opencode/plugin/gui/builtin"
-import type { OpenCodeClient, PluginGuiBundle } from "@opencode/client"
+} from "@olive/plugin/gui/main"
+import type { BuiltinCatalog, BuiltinMainContext, Lifecycle } from "@olive/plugin/gui/builtin"
+import type { OliveClient, PluginGuiBundle } from "@olive/client"
 import { Exit, Match, Predicate, Schema } from "effect"
 import type { PluginEndpoint, PluginInstalled } from "../../shared/ipc-rpc/plugins"
 import {
@@ -72,10 +72,10 @@ export type PluginHost = ReturnType<typeof createHost>
 type Loaded = {
   readonly setup: Plugin.MainSetup
   readonly i18n?: BuiltinCatalog
-  /** A plugin's options from `opencode.json`; built-ins have none. */
+  /** A plugin's options from `olive.json`; built-ins have none. */
   readonly options?: PluginOptions
   /** The client of the server that runs a plugin, read each time; built-ins have none. */
-  readonly client?: () => OpenCodeClient | undefined
+  readonly client?: () => OliveClient | undefined
 }
 
 /**
@@ -109,15 +109,15 @@ type Inventory = {
   stop?: () => void
 }
 
-const loadClient = () => import("@opencode/client")
+const loadClient = () => import("@olive/client")
 
 /** The client of the app's own server, made once the client module loaded and again when the endpoint changes. */
 type SidecarClient = {
   module?: Awaited<ReturnType<typeof loadClient>>
   key?: string
-  client?: OpenCodeClient
+  client?: OliveClient
   /** The client plugins read while the server is unreachable. */
-  unavailable?: OpenCodeClient
+  unavailable?: OliveClient
 }
 
 /** An Ipc method with its spec erased: Ipcs of every spec share one table, and `call` runs the spec's codecs. */
@@ -310,7 +310,7 @@ export function createHost(input: {
     if (!endpoint) return undefined
 
     const authorization = endpoint.password
-      ? `Basic ${Buffer.from(`opencode:${endpoint.password}`).toString("base64")}`
+      ? `Basic ${Buffer.from(`olive:${endpoint.password}`).toString("base64")}`
       : SidecarCredentials.authorization(sidecar, endpoint.url)
 
     return {
@@ -323,7 +323,7 @@ export function createHost(input: {
   }
 
   const about = {
-    name: "opencode",
+    name: "olive",
     version: VERSION,
     channel: CHANNEL,
     platform: "desktop",
@@ -377,7 +377,7 @@ export function createHost(input: {
   const unavailableClient = () => {
     if (!sidecar.module) throw new Error("The app's own server is unavailable")
 
-    return (sidecar.unavailable ??= sidecar.module.OpenCode.make({
+    return (sidecar.unavailable ??= sidecar.module.Olive.make({
       baseUrl: "http://unavailable.invalid/",
       fetch: () => Promise.reject(new Error("The app's own server is unavailable")),
     }))
@@ -392,7 +392,7 @@ export function createHost(input: {
     if (sidecar.key !== key)
       Object.assign(sidecar, {
         key,
-        client: sidecar.module.OpenCode.make({ baseUrl: endpoint.url, headers: { ...endpoint.headers } }),
+        client: sidecar.module.Olive.make({ baseUrl: endpoint.url, headers: { ...endpoint.headers } }),
       })
 
     return sidecar.client
@@ -414,7 +414,7 @@ export function createHost(input: {
   const follow = () =>
     void watchPlugins().catch((cause: unknown) => input.log("plugin watch failed", { cause: String(cause) }))
 
-  const followPlugins = async (client: OpenCodeClient, signal: AbortSignal) => {
+  const followPlugins = async (client: OliveClient, signal: AbortSignal) => {
     while (!signal.aborted) {
       await readEvents(client, signal).catch(() => undefined)
 
@@ -424,7 +424,7 @@ export function createHost(input: {
     }
   }
 
-  const readEvents = async (client: OpenCodeClient, signal: AbortSignal) => {
+  const readEvents = async (client: OliveClient, signal: AbortSignal) => {
     for await (const event of client.event.subscribe({ signal }))
       if (event.type === "plugin.updated" || event.type === "server.connected") relistPlugins()
   }
@@ -466,7 +466,7 @@ export function createHost(input: {
   // main runs, or lists a new plugin with the failure until the next change; a plugin limited to other systems is left
   // out.
   const readPlugin = async (
-    client: OpenCodeClient,
+    client: OliveClient,
     id: string,
     parts: { readonly unsupported: Set<string>; readonly unreadable: Map<string, string> },
   ) => {

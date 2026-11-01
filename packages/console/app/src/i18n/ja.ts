@@ -9,13 +9,13 @@ export const dict = {
   "nav.github": "GitHub",
   "nav.docs": "ドキュメント",
   "nav.enterprise": "エンタープライズ",
-  "nav.zen": "OpenCode Models",
+  "nav.zen": "Olive Models",
   "nav.login": "ログイン",
   "nav.free": "ダウンロード",
   "nav.home": "ホーム",
   "nav.openMenu": "メニューを開く",
   "nav.getStartedFree": "無料ではじめる",
-  "nav.logoAlt": "OpenCode",
+  "nav.logoAlt": "Olive",
 
   "nav.context.copyLogo": "ロゴをSVGでコピー",
   "nav.context.copyWordmark": "ワードマークをSVGでコピー",
@@ -42,14 +42,14 @@ export const dict = {
   "email.success": "ほぼ完了です。受信トレイを確認してメールアドレスを認証してください",
   "email.error": "登録できませんでした。もう一度お試しください。",
 
-  "notFound.title": "見つかりません | OpenCode",
+  "notFound.title": "見つかりません | Olive",
   "notFound.heading": "404 - ページが見つかりません",
   "notFound.home": "ホーム",
   "notFound.docs": "ドキュメント",
   "notFound.github": "GitHub",
   "notFound.discord": "Discord",
-  "notFound.logoLightAlt": "opencodeのロゴ（ライト）",
-  "notFound.logoDarkAlt": "opencodeのロゴ（ダーク）",
+  "notFound.logoLightAlt": "oliveのロゴ（ライト）",
+  "notFound.logoDarkAlt": "oliveのロゴ（ダーク）",
 
   "common.cancel": "キャンセル",
   "common.contactUs": "お問い合わせ",
@@ -59,9 +59,9 @@ export const dict = {
   "common.faq": "FAQ",
   "common.learnMore": "詳しく見る",
 
-  "app.meta.description": "OpenCode - オープンソースのコーディングエージェント。",
+  "app.meta.description": "Olive - オープンソースのコーディングエージェント。",
 
-  "home.title": "OpenCode | オープンソースのAIコーディングエージェント",
+  "home.title": "Olive | オープンソースのAIコーディングエージェント",
 
   "home.banner.badge": "新着",
 
@@ -71,9 +71,9 @@ export const dict = {
 
   "home.install.ariaLabel": "インストールオプション",
 
-  "home.what.title": "OpenCodeとは？",
+  "home.what.title": "Oliveとは？",
   "home.what.body":
-    "OpenCodeは、ターミナル、IDE、またはデスクトップでのコード作成を支援するオープンソースのエージェントです。",
+    "Oliveは、ターミナル、IDE、またはデスクトップでのコード作成を支援するオープンソースのエージェントです。",
   "home.what.multiSession.title": "マルチセッション",
   "home.what.multiSession.body": "同じプロジェクトで複数のエージェントを並行実行できます",
   "home.what.copilot.title": "GitHub Copilot",
@@ -95,40 +95,40 @@ export const dict = {
 
   "home.privacy.title": "プライバシーを最優先に設計",
   "home.privacy.body":
-    "OpenCodeはコードやコンテキストデータを一切保存しないため、プライバシーが重視される環境でも利用できます。",
+    "Oliveはコードやコンテキストデータを一切保存しないため、プライバシーが重視される環境でも利用できます。",
   "home.privacy.learnMore": "詳しくは",
   "home.privacy.link": "プライバシー",
 
-  "home.faq.q1": "OpenCodeとは？",
+  "home.faq.q1": "Oliveとは？",
   "home.faq.a1":
-    "OpenCodeは、任意のAIモデルでコードの作成・実行を支援するオープンソースのエージェントです。ターミナルベースのインターフェース、デスクトップアプリ、IDE拡張として利用できます。",
-  "home.faq.q2": "OpenCodeの使い方は？",
+    "Oliveは、任意のAIモデルでコードの作成・実行を支援するオープンソースのエージェントです。ターミナルベースのインターフェース、デスクトップアプリ、IDE拡張として利用できます。",
+  "home.faq.q2": "Oliveの使い方は？",
   "home.faq.a2.before": "最も簡単な始め方は",
   "home.faq.a2.link": "イントロを読む",
-  "home.faq.q3": "OpenCodeには追加のAIサブスクリプションが必要ですか？",
-  "home.faq.a3.p1": "必ずしも必要ではありません。OpenCodeには、アカウント不要で使える無料モデルが含まれています。",
+  "home.faq.q3": "Oliveには追加のAIサブスクリプションが必要ですか？",
+  "home.faq.a3.p1": "必ずしも必要ではありません。Oliveには、アカウント不要で使える無料モデルが含まれています。",
   "home.faq.a3.p2.beforeZen": "これらに加えて、",
   "home.faq.a3.p2.afterZen": " アカウントを作成することで、人気のコーディングモデルを利用できます。",
   "home.faq.a3.p3":
-    "OpenCode Modelsの利用を推奨していますが、OpenCodeはOpenAI、Anthropic、xAIなどの主要プロバイダーにも対応しています。",
+    "Olive Modelsの利用を推奨していますが、OliveはOpenAI、Anthropic、xAIなどの主要プロバイダーにも対応しています。",
   "home.faq.a3.p4.beforeLocal": "さらに、",
   "home.faq.a3.p4.localLink": "ローカルモデル",
-  "home.faq.q4": "既存のAIサブスクリプションをOpenCodeで使えますか？",
+  "home.faq.q4": "既存のAIサブスクリプションをOliveで使えますか？",
   "home.faq.a4.p1": "はい、ChatGPT Plus/ProまたはGitHub Copilotのサブスクリプションを利用できます。",
   "home.faq.q5": "ターミナルだけで使えますか？",
-  "home.faq.a5.beforeDesktop": "もう違います！OpenCodeは今は",
+  "home.faq.a5.beforeDesktop": "もう違います！Oliveは今は",
   "home.faq.a5.desktop": "デスクトップ",
   "home.faq.a5.and": "と",
   "home.faq.a5.web": "ウェブ",
-  "home.faq.q6": "OpenCodeの価格は？",
+  "home.faq.q6": "Oliveの価格は？",
   "home.faq.a6":
-    "OpenCodeは100%無料で使えます。無料モデルも含まれています。他のプロバイダーに接続する場合は追加費用が発生することがあります。",
+    "Oliveは100%無料で使えます。無料モデルも含まれています。他のプロバイダーに接続する場合は追加費用が発生することがあります。",
   "home.faq.q7": "データとプライバシーは？",
   "home.faq.a7.p1": "無料モデルを使う場合にのみ、データが保存されます。",
   "home.faq.a7.p2.beforeModels": "詳しくは",
   "home.faq.a7.p2.modelsLink": "モデルのプライバシー",
-  "home.faq.q8": "OpenCodeはオープンソースですか？",
-  "home.faq.a8.p1": "はい、OpenCodeは完全にオープンソースです。ソースコードは",
+  "home.faq.q8": "Oliveはオープンソースですか？",
+  "home.faq.a8.p1": "はい、Oliveは完全にオープンソースです。ソースコードは",
   "home.faq.a8.p2": "の",
   "home.faq.a8.mitLicense": "MITライセンス",
   "home.faq.a8.p3":
@@ -136,75 +136,75 @@ export const dict = {
 
   "home.zenCta.title": "コーディングエージェント向けの信頼できる最適化モデル",
   "home.zenCta.body":
-    "OpenCode Modelsは、OpenCodeがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
-  "home.zenCta.link": "OpenCode Modelsについて知る",
+    "Olive Modelsは、Oliveがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
+  "home.zenCta.link": "Olive Modelsについて知る",
 
-  "zen.title": "OpenCode Models | コーディングエージェント向けの信頼できる最適化モデル",
+  "zen.title": "Olive Models | コーディングエージェント向けの信頼できる最適化モデル",
   "zen.hero.title": "コーディングエージェント向けの信頼できる最適化モデル",
   "zen.hero.body":
-    "OpenCode Modelsは、OpenCodeがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
+    "Olive Modelsは、Oliveがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
 
-  "zen.faq.q1": "OpenCode Modelsとは？",
+  "zen.faq.q1": "Olive Modelsとは？",
   "zen.faq.a1":
-    "OpenCode Modelsは、OpenCodeのチームが作成した、コーディングエージェント向けにテスト・ベンチマークされたAIモデルの厳選セットです。",
-  "zen.faq.q2": "OpenCode Modelsはなぜ精度が高いのですか？",
+    "Olive Modelsは、Oliveのチームが作成した、コーディングエージェント向けにテスト・ベンチマークされたAIモデルの厳選セットです。",
+  "zen.faq.q2": "Olive Modelsはなぜ精度が高いのですか？",
   "zen.faq.a2":
-    "OpenCode Modelsはコーディングエージェント向けにテスト・ベンチマークされたモデルだけを提供します。ステーキを切るのにバターナイフを使わないように、コーディングには品質の低いモデルを使わないでください。",
-  "zen.faq.q3": "OpenCode Modelsは安いですか？",
+    "Olive Modelsはコーディングエージェント向けにテスト・ベンチマークされたモデルだけを提供します。ステーキを切るのにバターナイフを使わないように、コーディングには品質の低いモデルを使わないでください。",
+  "zen.faq.q3": "Olive Modelsは安いですか？",
   "zen.faq.a3":
-    "OpenCode Modelsは営利目的ではありません。OpenCode Modelsはモデル提供元のコストをそのままあなたに渡します。OpenCode Modelsの利用が増えるほど、OpenCodeはより良いレートを交渉し、その分をあなたに還元できます。",
-  "zen.faq.q4": "OpenCode Modelsの料金は？",
-  "zen.faq.a4.p1.beforePricing": "OpenCodeは",
+    "Olive Modelsは営利目的ではありません。Olive Modelsはモデル提供元のコストをそのままあなたに渡します。Olive Modelsの利用が増えるほど、Oliveはより良いレートを交渉し、その分をあなたに還元できます。",
+  "zen.faq.q4": "Olive Modelsの料金は？",
+  "zen.faq.a4.p1.beforePricing": "Oliveは",
   "zen.faq.a4.p1.pricingLink": "リクエスト単位で課金",
   "zen.faq.a4.p1.afterPricing": "し、マークアップはありません。つまり、モデル提供元の請求額をそのまま支払います。",
   "zen.faq.a4.p2.beforeAccount": "総コストは利用量に依存し、月次の支出上限を",
   "zen.faq.a4.p2.accountLink": "アカウント",
-  "zen.faq.a4.p3": "コストを賄うために、OpenCodeは$20の残高チャージあたり$1.23の小さな決済手数料のみを追加します。",
+  "zen.faq.a4.p3": "コストを賄うために、Oliveは$20の残高チャージあたり$1.23の小さな決済手数料のみを追加します。",
   "zen.faq.q5": "データとプライバシーは？",
   "zen.faq.a5.beforeExceptions":
-    "OpenCode Modelsのモデルはすべて米国とEUでホストされています。プロバイダーはゼロ保持ポリシーを守り、データをモデル学習に使用しません（",
+    "Olive Modelsのモデルはすべて米国とEUでホストされています。プロバイダーはゼロ保持ポリシーを守り、データをモデル学習に使用しません（",
   "zen.faq.a5.exceptionsLink": "以下の例外",
   "zen.faq.q6": "支出上限を設定できますか？",
   "zen.faq.a6": "はい、アカウントで月次の支出上限を設定できます。",
   "zen.faq.q7": "キャンセルできますか？",
   "zen.faq.a7": "はい、いつでも請求を無効化し、残りの残高を利用できます。",
-  "zen.faq.q8": "他のコーディングエージェントでもOpenCode Modelsを使えますか？",
+  "zen.faq.q8": "他のコーディングエージェントでもOlive Modelsを使えますか？",
   "zen.faq.a8":
-    "OpenCode ModelsはOpenCodeとの相性が良いですが、どのエージェントでもOpenCode Modelsを利用できます。お使いのコーディングエージェントのセットアップ手順に従ってください。",
+    "Olive ModelsはOliveとの相性が良いですが、どのエージェントでもOlive Modelsを利用できます。お使いのコーディングエージェントのセットアップ手順に従ってください。",
   "zen.faq.q9": "返金を受けられますか？",
   "zen.faq.a9":
     "請求から14日以内で、その購入分のクレジットを一切使用していない場合、返金の対象となる可能性があります。返金を希望する場合は、{{contact}}ください。",
 
-  "zen.cta.start": "OpenCode Modelsをはじめる",
+  "zen.cta.start": "Olive Modelsをはじめる",
   "zen.pricing.title": "$20の従量課金制残高を追加",
   "zen.pricing.fee": "(+$1.23 カード処理手数料)",
   "zen.pricing.body":
     "任意のエージェントと一緒に使用できます。毎月の支出制限を設定できます。いつでもキャンセルできます。",
-  "zen.problem.title": "OpenCode Modelsはどのような問題を解決していますか？",
+  "zen.problem.title": "Olive Modelsはどのような問題を解決していますか？",
   "zen.problem.body":
     "利用可能なモデルは非常に多くありますが、コーディングエージェントで適切に機能するモデルはほんのわずかです。ほとんどのプロバイダーは、それらを異なる設定で提供し、結果も異なります。",
-  "zen.problem.subtitle": "OpenCodeユーザーだけでなく、すべての人を対象にこの問題を修正しています。",
+  "zen.problem.subtitle": "Oliveユーザーだけでなく、すべての人を対象にこの問題を修正しています。",
   "zen.problem.item1": "選択したモデルをテストし、チームに相談する",
   "zen.problem.item2": "プロバイダーと連携して適切に提供されるようにする",
   "zen.problem.item3": "私たちが推奨するすべてのモデルとプロバイダーの組み合わせをベンチマークする",
-  "zen.how.title": "OpenCode Modelsの仕組み",
+  "zen.how.title": "Olive Modelsの仕組み",
   "zen.how.body":
-    "OpenCode ModelsをOpenCodeとともに使用することをお勧めしますが、OpenCode Modelsはどのエージェントでも使用できます。",
+    "Olive ModelsをOliveとともに使用することをお勧めしますが、Olive Modelsはどのエージェントでも使用できます。",
   "zen.how.step1.title": "サインアップして$20の残高を追加",
   "zen.how.step1.beforeLink": "",
   "zen.how.step1.link": "セットアップ手順",
-  "zen.how.step2.title": "透明性のある価格設定でOpenCode Modelsを使用する",
+  "zen.how.step2.title": "透明性のある価格設定でOlive Modelsを使用する",
   "zen.how.step2.link": "リクエストごとに支払う",
   "zen.how.step2.afterLink": "（マークアップなし）",
   "zen.how.step3.title": "自動チャージ",
   "zen.how.step3.body": "任意で自動チャージを有効にし、残高のしきい値とチャージ額を設定できます",
   "zen.privacy.title": "あなたのプライバシーは私たちにとって重要です",
   "zen.privacy.beforeExceptions":
-    "OpenCode Modelsのモデルはすべて米国とEUでホストされています。プロバイダーはゼロ保持ポリシーに従い、モデルのトレーニングにデータを使用しません（",
+    "Olive Modelsのモデルはすべて米国とEUでホストされています。プロバイダーはゼロ保持ポリシーに従い、モデルのトレーニングにデータを使用しません（",
   "zen.privacy.exceptionsLink": "以下の例外",
 
   "go.promo.kimiK31Pro": "Kimi K3.1 Pro を Go で提供開始しました。",
-  "go.title": "OpenCode Go | すべての人のための低価格なコーディングモデル",
+  "go.title": "Olive Go | すべての人のための低価格なコーディングモデル",
   "go.meta.description":
     "Goは月額$10で、主要なコーディングモデルへのゆとりある利用上限と安定したアクセスを提供します。",
   "go.hero.title": "すべての人のための低価格なコーディングモデル",
@@ -251,13 +251,13 @@ export const dict = {
 
   "go.problem.title": "Goはどのような問題を解決していますか？",
   "go.problem.body":
-    "私たちはOpenCodeの体験をできるだけ多くの人に届けることに注力しています。OpenCode Goは月額$10の低価格なサブスクリプションです。ゆとりある上限と、最も高性能なオープンソースモデルへの信頼できるアクセスを提供します。",
+    "私たちはOliveの体験をできるだけ多くの人に届けることに注力しています。Olive Goは月額$10の低価格なサブスクリプションです。ゆとりある上限と、最も高性能なオープンソースモデルへの信頼できるアクセスを提供します。",
   "go.problem.item1": "低価格なサブスクリプション料金",
   "go.problem.item2": "十分な制限と安定したアクセス",
   "go.problem.item3": "できるだけ多くのプログラマーのために構築",
   "go.problem.item4": "エージェント型コーディング向けにテストされた厳選モデルラインナップ",
   "go.how.title": "Goの仕組み",
-  "go.how.body": "Goは月額$10です。OpenCodeまたは任意のエージェントで使えます。",
+  "go.how.body": "Goは月額$10です。Oliveまたは任意のエージェントで使えます。",
   "go.how.step1.title": "アカウントを作成",
   "go.how.step1.beforeLink": "",
   "go.how.step1.link": "セットアップ手順はこちら",
@@ -266,14 +266,14 @@ export const dict = {
   "go.how.step2.afterLink": "ゆとりある上限付き",
   "go.how.step3.title": "コーディングを開始",
   "go.how.step3.body": "オープンソースモデルへの安定したアクセスで",
-  "go.faq.q1": "OpenCode Goとは？",
+  "go.faq.q1": "Olive Goとは？",
   "go.faq.a1":
     "Goは、エージェント型コーディングのための有能なオープンソースモデルへの安定したアクセスを提供する低価格なサブスクリプションです。",
   "go.faq.q2": "Goにはどのモデルが含まれますか？",
   "go.faq.a2": "Go には、十分な利用上限と安定したアクセスを備えた、以下のモデルが含まれます。",
-  "go.faq.q3": "GoはOpenCode Modelsと同じですか？",
+  "go.faq.q3": "GoはOlive Modelsと同じですか？",
   "go.faq.a3":
-    "いいえ。OpenCode Modelsは従量課金制ですが、Goは月額$10で、厳選されたモデルラインナップへのゆとりある上限と安定したアクセスを提供します。",
+    "いいえ。Olive Modelsは従量課金制ですが、Goは月額$10で、厳選されたモデルラインナップへのゆとりある上限と安定したアクセスを提供します。",
   "go.faq.q4": "Goの料金は？",
   "go.faq.a4.p1.beforePricing": "Goは",
   "go.faq.a4.p1.pricingLink": "月額$10",
@@ -312,12 +312,12 @@ export const dict = {
   "go.faq.a10":
     "請求から14日以内で、その請求期間中にGoの利用枠を一切使用していない場合、返金の対象となる可能性があります。返金を希望する場合は、{{contact}}ください。",
 
-  "download.title": "OpenCode | ダウンロード",
-  "download.meta.description": "OpenCode を macOS、Windows、Linux 向けにダウンロード",
-  "download.section.terminal": "OpenCode Terminal",
-  "download.section.desktop": "OpenCode Desktop",
-  "download.section.extensions": "OpenCode Extensions",
-  "download.section.integrations": "OpenCode Integrations",
+  "download.title": "Olive | ダウンロード",
+  "download.meta.description": "Olive を macOS、Windows、Linux 向けにダウンロード",
+  "download.section.terminal": "Olive Terminal",
+  "download.section.desktop": "Olive Desktop",
+  "download.section.extensions": "Olive Extensions",
+  "download.section.integrations": "Olive Integrations",
   "download.action.download": "ダウンロード",
   "download.action.install": "インストール",
 
@@ -329,22 +329,22 @@ export const dict = {
   "download.platform.linuxRpm": "Linux (.rpm)",
 
   "download.faq.a3.beforeLocal":
-    "必ずしもそうではありませんが、おそらく必要です。OpenCodeを有料プロバイダーに接続したい場合はAIサブスクリプションが必要ですが、",
+    "必ずしもそうではありませんが、おそらく必要です。Oliveを有料プロバイダーに接続したい場合はAIサブスクリプションが必要ですが、",
   "download.faq.a3.localLink": "ローカルモデル",
   "download.faq.a3.afterLocal.beforeZen": "であれば無料で利用できます。ユーザーには",
   "download.faq.a3.afterZen":
-    "の利用をお勧めしていますが、OpenCodeはOpenAI、Anthropic、xAIなどの主要なプロバイダーに対応しています。",
+    "の利用をお勧めしていますが、OliveはOpenAI、Anthropic、xAIなどの主要なプロバイダーに対応しています。",
 
-  "download.faq.a5.p1": "OpenCodeは100%無料で利用できます。",
+  "download.faq.a5.p1": "Oliveは100%無料で利用できます。",
   "download.faq.a5.p2.beforeZen":
-    "追加コストはモデルプロバイダーのサブスクリプションから発生します。OpenCodeはどのモデルプロバイダーでも利用できますが、",
+    "追加コストはモデルプロバイダーのサブスクリプションから発生します。Oliveはどのモデルプロバイダーでも利用できますが、",
   "download.faq.a5.p2.afterZen": "の利用をおすすめします。",
 
-  "enterprise.title": "OpenCode | 組織向けエンタープライズソリューション",
-  "enterprise.meta.description": "エンタープライズソリューションについてOpenCodeに問い合わせる",
+  "enterprise.title": "Olive | 組織向けエンタープライズソリューション",
+  "enterprise.meta.description": "エンタープライズソリューションについてOliveに問い合わせる",
   "enterprise.hero.title": "あなたのコードはあなたのもの",
   "enterprise.hero.body1":
-    "OpenCodeは、データやコンテキストを一切保存せず、ライセンス制限や所有権の主張もなく、組織内で安全に動作します。チームでのトライアルから始め、SSOや社内AIゲートウェイと統合して組織全体に展開できます。",
+    "Oliveは、データやコンテキストを一切保存せず、ライセンス制限や所有権の主張もなく、組織内で安全に動作します。チームでのトライアルから始め、SSOや社内AIゲートウェイと統合して組織全体に展開できます。",
   "enterprise.hero.body2": "どのような支援ができるか、お聞かせください。",
   "enterprise.form.name.label": "氏名",
   "enterprise.form.name.placeholder": "ジェフ・ベゾス",
@@ -376,29 +376,29 @@ export const dict = {
   "enterprise.form.error.internalServer": "内部サーバーエラー。",
   "enterprise.form.error.captcha": "CAPTCHA認証に失敗しました。もう一度お試しください。",
   "enterprise.faq.title": "FAQ",
-  "enterprise.faq.q1": "OpenCode Enterpriseとは？",
+  "enterprise.faq.q1": "Olive Enterpriseとは？",
   "enterprise.faq.a1":
-    "OpenCode Enterpriseは、コードとデータが決してインフラの外に出ないことを保証したい組織向けです。SSOや社内AIゲートウェイと統合する集中設定を使用することでこれを実現します。",
-  "enterprise.faq.q2": "OpenCode Enterpriseを始めるには？",
+    "Olive Enterpriseは、コードとデータが決してインフラの外に出ないことを保証したい組織向けです。SSOや社内AIゲートウェイと統合する集中設定を使用することでこれを実現します。",
+  "enterprise.faq.q2": "Olive Enterpriseを始めるには？",
   "enterprise.faq.a2":
-    "まずはチームでの社内トライアルから始めてください。OpenCodeはデフォルトでコードやコンテキストデータを保存しないため、簡単に始められます。その後、価格や導入オプションについてお問い合わせください。",
+    "まずはチームでの社内トライアルから始めてください。Oliveはデフォルトでコードやコンテキストデータを保存しないため、簡単に始められます。その後、価格や導入オプションについてお問い合わせください。",
   "enterprise.faq.q3": "エンタープライズ価格の仕組みは？",
   "enterprise.faq.a3":
     "独自のLLMゲートウェイをお持ちの場合、使用トークンに対する課金はありません。詳細は、組織の要件に基づいた見積もりのためにお問い合わせください。",
-  "enterprise.faq.q4": "OpenCode Enterpriseでデータは安全ですか？",
+  "enterprise.faq.q4": "Olive Enterpriseでデータは安全ですか？",
   "enterprise.faq.a4":
-    "はい。OpenCodeはコードやコンテキストデータを保存しません。すべての処理はローカル、またはAIプロバイダーへの直接API呼び出しを通じて行われます。集中設定とSSO統合により、データは組織のインフラ内で安全に保たれます。",
+    "はい。Oliveはコードやコンテキストデータを保存しません。すべての処理はローカル、またはAIプロバイダーへの直接API呼び出しを通じて行われます。集中設定とSSO統合により、データは組織のインフラ内で安全に保たれます。",
 
-  "brand.title": "OpenCode | ブランド",
-  "brand.meta.description": "OpenCode ブランドガイドライン",
+  "brand.title": "Olive | ブランド",
+  "brand.meta.description": "Olive ブランドガイドライン",
   "brand.heading": "ブランドガイドライン",
-  "brand.subtitle": "OpenCodeブランドを扱うためのリソースと素材です。",
+  "brand.subtitle": "Oliveブランドを扱うためのリソースと素材です。",
   "brand.downloadAll": "すべての素材をダウンロード",
 
-  "changelog.title": "OpenCode | 変更履歴",
-  "changelog.meta.description": "OpenCode リリースノートと変更履歴",
+  "changelog.title": "Olive | 変更履歴",
+  "changelog.meta.description": "Olive リリースノートと変更履歴",
   "changelog.hero.title": "変更履歴",
-  "changelog.hero.subtitle": "OpenCodeの新しいアップデートと改善",
+  "changelog.hero.subtitle": "Oliveの新しいアップデートと改善",
   "changelog.empty": "変更履歴が見つかりませんでした。",
   "changelog.viewJson": "JSONを表示",
 } satisfies Dict

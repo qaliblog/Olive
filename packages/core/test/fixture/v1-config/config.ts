@@ -1,18 +1,18 @@
 export * as ConfigV1 from "./config"
 
 import { Schema } from "effect"
-import { ConfigReference } from "@opencode/schema/config/reference"
-import { NonNegativeInt, PositiveInt } from "@opencode/core/schema"
-import { ConfigAgentV1 } from "@opencode/core/v1/config/agent"
+import { ConfigReference } from "@olive/schema/config/reference"
+import { NonNegativeInt, PositiveInt } from "@olive/core/schema"
+import { ConfigAgentV1 } from "@olive/core/v1/config/agent"
 import { ConfigAttachmentV1 } from "./attachment"
-import { ConfigCommandV1 } from "@opencode/core/v1/config/command"
+import { ConfigCommandV1 } from "@olive/core/v1/config/command"
 import { ConfigFormatterV1 } from "./formatter"
 import { ConfigLayoutV1 } from "./layout"
 import { ConfigLSPV1 } from "./lsp"
-import { ConfigMCPV1 } from "@opencode/core/v1/config/mcp"
-import { ConfigPermissionV1 } from "@opencode/core/v1/config/permission"
-import { ConfigPluginV1 } from "@opencode/core/v1/config/plugin"
-import { ConfigProviderV1 } from "@opencode/core/v1/config/provider"
+import { ConfigMCPV1 } from "@olive/core/v1/config/mcp"
+import { ConfigPermissionV1 } from "@olive/core/v1/config/permission"
+import { ConfigPluginV1 } from "@olive/core/v1/config/plugin"
+import { ConfigProviderV1 } from "@olive/core/v1/config/provider"
 import { ConfigServerV1 } from "./server"
 import { ConfigSkillsV1 } from "./skills"
 
@@ -28,10 +28,10 @@ export const Info = Schema.Struct({
   shell: Schema.optional(Schema.String).annotate({ description: "Default shell to use for terminal and bash tool" }),
   logLevel: Schema.optional(LogLevelRef).annotate({ description: "Log level" }),
   server: Schema.optional(ConfigServerV1.Server).annotate({
-    description: "Server configuration for opencode serve and web commands",
+    description: "Server configuration for olive serve and web commands",
   }),
   command: Schema.optional(Schema.Record(Schema.String, ConfigCommandV1.Info)).annotate({
-    description: "Command configuration, see https://opencode.ai/docs/commands",
+    description: "Command configuration, see https://olive.ai/docs/commands",
   }),
   skills: Schema.optional(ConfigSkillsV1.Info).annotate({ description: "Additional skill folder paths" }),
   references: Schema.optional(ConfigReference.Info).annotate({
@@ -98,7 +98,7 @@ export const Info = Schema.Struct({
       }),
       [Schema.Record(Schema.String, ConfigAgentV1.Info)],
     ),
-  ).annotate({ description: "Agent configuration, see https://opencode.ai/docs/agents" }),
+  ).annotate({ description: "Agent configuration, see https://olive.ai/docs/agents" }),
   provider: Schema.optional(Schema.Record(Schema.String, ConfigProviderV1.Info)).annotate({
     description: "Custom provider configurations and model overrides",
   }),

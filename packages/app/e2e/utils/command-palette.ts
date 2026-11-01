@@ -1,12 +1,12 @@
 import { expect, type Page } from "@playwright/test"
 import { NO_PROVIDER, project, sessionHref } from "./app"
-import { mockOpenCodeServer } from "./mock-server"
+import { mockOliveServer } from "./mock-server"
 import { APP_READY_TIMEOUT } from "./waits"
 
 export const paletteSession = {
   id: "ses_command_palette",
   projectID: "proj_command_palette",
-  directory: "C:/OpenCode/CommandPalette",
+  directory: "C:/Olive/CommandPalette",
   title: "Palette fixture session",
   time: { created: 1700000000000, updated: 1700000000000 },
 }
@@ -37,7 +37,7 @@ export async function openCommandPalette(page: Page, home = false) {
 }
 
 export async function openPaletteWorkspace(page: Page, home = false, sessions = [paletteSession]) {
-  const mock = await mockOpenCodeServer(page, {
+  const mock = await mockOliveServer(page, {
     directory: paletteSession.directory,
     project: project({ id: paletteSession.projectID, directory: paletteSession.directory, name: "command-palette" }),
     provider: NO_PROVIDER,

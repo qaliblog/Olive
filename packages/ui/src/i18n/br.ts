@@ -118,7 +118,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Limite gratuito atingido",
   "dialog.usageExceeded.freeTier.description":
-    "Assine o OpenCode Go por $10/mês para ter acesso confiável aos melhores modelos de código aberto.",
+    "Assine o Olive Go por $10/mês para ter acesso confiável aos melhores modelos de código aberto.",
   "dialog.usageExceeded.freeTier.actionLabel": "Assinar",
 
   "ui.sessionTurn.status.delegating": "Delegando trabalho",

@@ -11,8 +11,8 @@ import {
   type Signal,
 } from "solid-js"
 import { createStore, produce } from "solid-js/store"
-import { Icon } from "@opencode/ui/icon"
-import { encodeFilePath, getFilename } from "@opencode/util/path"
+import { Icon } from "@olive/ui/icon"
+import { encodeFilePath, getFilename } from "@olive/util/path"
 import {
   Command,
   createKeyed,
@@ -30,9 +30,9 @@ import {
   type SessionScreen,
   type ServerRef,
   type Plugin,
-} from "@opencode/plugin/gui"
-import { artifactKind } from "@opencode/util/artifact"
-import { uuid } from "@opencode/util/uuid"
+} from "@olive/plugin/gui"
+import { artifactKind } from "@olive/util/artifact"
+import { uuid } from "@olive/util/uuid"
 import { resolveArtifactPath } from "./artifact"
 import { FileContext, type FileShared } from "./context"
 import type { OpenApp } from "./apps"
@@ -42,14 +42,14 @@ import {
   type FileListProps,
   type FileTreeProps,
   type OpenInAppProps,
-} from "@opencode/plugin/gui/file"
+} from "@olive/plugin/gui/file"
 import type File from "./index"
 import { FileVisual } from "./label"
 import { fileTabId, fileTabPath, isFileTab, workspaceFileUrl } from "./path"
 import tabStyles from "./tabs.css?inline"
-import { onIdle, BuiltinPanel, BuiltinSlot, type BuiltinPanelTab } from "@opencode/plugin/gui/builtin"
-import { Browser } from "@opencode/plugin/gui/browser"
-import { Changes } from "@opencode/plugin/gui/review"
+import { onIdle, BuiltinPanel, BuiltinSlot, type BuiltinPanelTab } from "@olive/plugin/gui/builtin"
+import { Browser } from "@olive/plugin/gui/browser"
+import { Changes } from "@olive/plugin/gui/review"
 
 const OPEN = "open"
 

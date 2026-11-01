@@ -1,5 +1,5 @@
 import { Component } from "solid-js"
-import { Switch } from "@opencode/ui/switch"
+import { Switch } from "@olive/ui/switch"
 import { useLanguage } from "@/runtime/i18n/language"
 import { SettingsList } from "@/settings/list"
 import { useSettings } from "@/settings/model"

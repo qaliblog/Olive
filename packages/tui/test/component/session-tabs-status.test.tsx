@@ -280,7 +280,7 @@ test.each([SESSION_SIDEBAR_WIDTH, 18])(
       close() {},
       move() {},
       add() {},
-      detail: () => "opencode",
+      detail: () => "olive",
       status: (sessionID: string) =>
         sessionID === "second" ? { ...EMPTY_SESSION_TAB_STATUS, busy: busy() } : EMPTY_SESSION_TAB_STATUS,
     } satisfies SessionTabsController

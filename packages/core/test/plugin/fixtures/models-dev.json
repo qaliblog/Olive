@@ -42,9 +42,9 @@
     "env": [],
     "models": {}
   },
-  "opencode": {
-    "id": "opencode",
-    "name": "OpenCode",
+  "olive": {
+    "id": "olive",
+    "name": "Olive",
     "env": [],
     "models": {
       "gpt-5.5": {
@@ -72,7 +72,7 @@
         },
         "api": {
           "responses": {
-            "base_url": "https://console.opencode.ai/inference/openai/v1",
+            "base_url": "https://console.olive.ai/inference/openai/v1",
             "sdk": {
               "aisdk": "@ai-sdk/openai"
             }

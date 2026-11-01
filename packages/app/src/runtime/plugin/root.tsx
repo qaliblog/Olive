@@ -1,5 +1,5 @@
 import { batch, createMemo, createSignal, lazy, onCleanup, Show, Suspense, type ParentProps } from "solid-js"
-import { pluginEnabled, runsOn, type Bridge, type Entry } from "@opencode/plugin/gui/host"
+import { pluginEnabled, runsOn, type Bridge, type Entry } from "@olive/plugin/gui/host"
 import { builtins } from "./builtins"
 import { createInstalled } from "./installed"
 import { PluginGuiLoader, type PluginGui } from "./plugins"

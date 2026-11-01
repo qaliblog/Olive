@@ -4,12 +4,12 @@ import { randomUUID } from "crypto"
 import fs from "fs/promises"
 import os from "os"
 import path from "path"
-import { define } from "@opencode/plugin/effect/plugin"
+import { define } from "@olive/plugin/effect/plugin"
 import { Effect } from "effect"
 import { ChildProcess } from "effect/process"
-import { FileDiff } from "@opencode/schema/file-diff"
-import { Base, BranchList, FileStatus, Info, Mode } from "@opencode/schema/vcs"
-import { AppProcess } from "@opencode/util/process"
+import { FileDiff } from "@olive/schema/file-diff"
+import { Base, BranchList, FileStatus, Info, Mode } from "@olive/schema/vcs"
+import { AppProcess } from "@olive/util/process"
 import { Location } from "../../location.js"
 import type { Adapter, BranchOptions, DiffOptions, Untracked } from "../../vcs.js"
 import { DiffError } from "../../vcs.js"
@@ -25,7 +25,7 @@ import {
 import type { Patch } from "../../vcs/patch.js"
 
 export const Plugin = define({
-  id: "opencode.vcs.git",
+  id: "olive.vcs.git",
   effect: Effect.fn("VcsGitPlugin")(function* (ctx) {
     const location = yield* Location.Service
     // Markerless locations need this definition to initialize their first repository.
@@ -577,7 +577,7 @@ const untrackedBatch = Effect.fnUntraced(function* (
 
   return yield* Effect.acquireUseRelease(
     Effect.promise(async () => {
-      const base = path.join(os.tmpdir(), `opencode-untracked-${randomUUID()}`)
+      const base = path.join(os.tmpdir(), `olive-untracked-${randomUUID()}`)
       await fs.writeFile(`${base}.list`, eligible.map((file) => `${file}\0`).join(""))
       return base
     }),

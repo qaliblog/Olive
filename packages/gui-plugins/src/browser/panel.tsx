@@ -1,19 +1,19 @@
 import { Popover } from "@kobalte/core/popover"
-import { Button } from "@opencode/ui/button"
-import { Icon, newIcons } from "@opencode/ui/icon"
-import type { IconName } from "@opencode/ui/icons/catalog"
-import { IconButton } from "@opencode/ui/icon-button"
-import { LineCommentEditor } from "@opencode/ui/line-comment"
-import { Loader } from "@opencode/ui/loader"
-import { Keybind } from "@opencode/ui/keybind"
-import { Menu } from "@opencode/ui/menu"
-import { showToast } from "@opencode/ui/toast"
-import { Tooltip } from "@opencode/ui/tooltip"
+import { Button } from "@olive/ui/button"
+import { Icon, newIcons } from "@olive/ui/icon"
+import type { IconName } from "@olive/ui/icons/catalog"
+import { IconButton } from "@olive/ui/icon-button"
+import { LineCommentEditor } from "@olive/ui/line-comment"
+import { Loader } from "@olive/ui/loader"
+import { Keybind } from "@olive/ui/keybind"
+import { Menu } from "@olive/ui/menu"
+import { showToast } from "@olive/ui/toast"
+import { Tooltip } from "@olive/ui/tooltip"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { createMemo, For, on, onCleanup, Show, type Accessor, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
-import type { Browser } from "@opencode/plugin-browser/rpc"
+import type { Browser } from "@olive/plugin-browser/rpc"
 import {
   createKeyed,
   usePlugin,
@@ -21,7 +21,7 @@ import {
   type PanelTab,
   type MountedSession,
   type SessionScreen,
-} from "@opencode/plugin/gui"
+} from "@olive/plugin/gui"
 import { addressParts, connection, loopback, resolveAddress, searches } from "./address"
 import { commentNote, pageNote } from "./comment"
 import { bare, completes, highlight, suggest, type Visit } from "./history"

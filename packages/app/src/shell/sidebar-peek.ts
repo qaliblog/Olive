@@ -1,7 +1,7 @@
 import { createEffect, createSignal, on, onCleanup, type Accessor } from "solid-js"
 import { makeEventListener } from "@solid-primitives/event-listener"
-import { frameLoop, prefersReducedMotion, Spring, type DurationOptions } from "@opencode/ui/motion"
-import { motionTimeScale } from "@opencode/ui/motion-tuning"
+import { frameLoop, prefersReducedMotion, Spring, type DurationOptions } from "@olive/ui/motion"
+import { motionTimeScale } from "@olive/ui/motion-tuning"
 import "./sidebar-peek.css"
 
 // The peek's own spring, quicker than the docked sidebar's.

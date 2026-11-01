@@ -1,15 +1,15 @@
 /** @jsxImportSource @opentui/solid */
 import { testRender } from "@opentui/solid"
 import { expect, test } from "bun:test"
-import { resolveThemeDocument } from "@opencode/theme/tui"
+import { resolveThemeDocument } from "@olive/theme/tui"
 import { ConfigProvider, useConfig, type Info } from "../../src/config"
 import { ThemeProvider, useTheme, useThemes } from "../../src/context/theme"
-import { getOpenCode2Theme, getOpenCodeTheme } from "../../src/theme"
+import { getOlive2Theme, getOliveTheme } from "../../src/theme"
 import { emptyThemeSource, tmpdir } from "../fixture/fixture"
 import { TestTuiContexts } from "../fixture/tui-environment"
 import { createTuiResolvedConfig } from "../fixture/tui-runtime"
 
-test("offers opencode2 only while the new designs experiment is enabled", async () => {
+test("offers olive2 only while the new designs experiment is enabled", async () => {
   await using temporary = await tmpdir()
   const settings: Info = {}
   let config!: ReturnType<typeof useConfig>
@@ -43,24 +43,24 @@ test("offers opencode2 only while the new designs experiment is enabled", async 
   try {
     app.renderer.start()
     await app.waitForFrame(() => themes !== undefined)
-    expect(themes.has("opencode2")).toBeFalse()
-    expect(Object.keys(themes.all())).not.toContain("opencode2")
-    expect(themes.set("opencode2")).toBeFalse()
+    expect(themes.has("olive2")).toBeFalse()
+    expect(Object.keys(themes.all())).not.toContain("olive2")
+    expect(themes.set("olive2")).toBeFalse()
 
     await config.update((draft) => {
       draft.experimental = { "new-designs": true }
     })
-    expect(themes.has("opencode2")).toBeTrue()
-    expect(themes.set("opencode2")).toBeTrue()
-    expect(theme.background.base.equals(resolveThemeDocument(getOpenCode2Theme(), "dark").background.base)).toBeTrue()
+    expect(themes.has("olive2")).toBeTrue()
+    expect(themes.set("olive2")).toBeTrue()
+    expect(theme.background.base.equals(resolveThemeDocument(getOlive2Theme(), "dark").background.base)).toBeTrue()
 
     await config.update((draft) => {
       draft.experimental = { "new-designs": false }
     })
-    expect(themes.has("opencode2")).toBeFalse()
-    expect(theme.background.base.equals(resolveThemeDocument(getOpenCodeTheme(), "dark").background.base)).toBeTrue()
-    expect(themes.selected).toBe("opencode2")
-    expect(settings.theme?.name).toBe("opencode2")
+    expect(themes.has("olive2")).toBeFalse()
+    expect(theme.background.base.equals(resolveThemeDocument(getOliveTheme(), "dark").background.base)).toBeTrue()
+    expect(themes.selected).toBe("olive2")
+    expect(settings.theme?.name).toBe("olive2")
   } finally {
     app.renderer.destroy()
   }

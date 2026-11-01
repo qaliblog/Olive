@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import { Schema } from "effect"
 import { createLegacyBlobReference } from "@/runtime/persistence/drafts"
 import { Persistence } from "@/runtime/persistence/schema"
-import { SessionMessage } from "@opencode/schema/session-message"
+import { SessionMessage } from "@olive/schema/session-message"
 import {
   CommentStore,
   ComposerStore,

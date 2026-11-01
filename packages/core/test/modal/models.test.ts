@@ -1,11 +1,11 @@
 import { expect, test } from "bun:test"
-import { ModalModels } from "@opencode/core/modal/models"
+import { ModalModels } from "@olive/core/modal/models"
 import { Effect } from "effect"
 import { FetchHttpClient, HttpClient } from "effect/http"
-import { Model } from "@opencode/core/model"
-import { Provider } from "@opencode/core/provider"
-import { ProviderPlugins } from "@opencode/core/plugin/provider"
-import { Money } from "@opencode/schema/money"
+import { Model } from "@olive/core/model"
+import { Provider } from "@olive/core/provider"
+import { ProviderPlugins } from "@olive/core/plugin/provider"
+import { Money } from "@olive/schema/money"
 
 const run = <A, E>(effect: (http: HttpClient.HttpClient) => Effect.Effect<A, E>) =>
   Effect.runPromise(HttpClient.HttpClient.pipe(Effect.flatMap(effect), Effect.provide(FetchHttpClient.layer)))
@@ -13,7 +13,7 @@ const run = <A, E>(effect: (http: HttpClient.HttpClient) => Effect.Effect<A, E>)
 const providerID = Provider.ID.make("modal")
 
 test("modal plugin is registered", () => {
-  expect(ProviderPlugins.map((item) => item.id)).toContain("opencode.provider.modal")
+  expect(ProviderPlugins.map((item) => item.id)).toContain("olive.provider.modal")
 })
 
 function template(id: string, overrides: Partial<Model.Info> = {}) {
@@ -70,7 +70,7 @@ test("maps live Modal models onto catalog templates", async () => {
     expect(model?.family).toBe(Model.Family.make("catalog-family"))
     expect(model?.providerID).toBe(providerID)
     expect(model?.modelID).toBe(Model.ID.make("live-model"))
-    expect(model?.package).toBe("@opencode/ai/providers/openai-compatible")
+    expect(model?.package).toBe("@olive/ai/providers/openai-compatible")
     expect(model?.settings).toMatchObject({ baseURL: `${server.url.origin}/v1` })
     expect(model?.compatibility).toMatchObject({ reasoningField: "reasoning_content" })
     expect(model?.capabilities).toMatchObject({ tools: true, input: ["text", "image"], output: ["text"] })

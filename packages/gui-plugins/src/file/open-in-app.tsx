@@ -1,12 +1,12 @@
 import { createMemo, createSignal, For, onCleanup, Show, type JSX, type ParentProps } from "solid-js"
 import { createStore } from "solid-js/store"
-import { AppIcon } from "@opencode/ui/app-icon"
-import { Icon } from "@opencode/ui/icon"
-import { Menu } from "@opencode/ui/menu"
-import { Loader } from "@opencode/ui/loader"
-import { SplitButton, SplitButtonAction, SplitButtonMenuTrigger } from "@opencode/ui/split-button"
-import { showToast } from "@opencode/ui/toast"
-import { Tooltip } from "@opencode/ui/tooltip"
+import { AppIcon } from "@olive/ui/app-icon"
+import { Icon } from "@olive/ui/icon"
+import { Menu } from "@olive/ui/menu"
+import { Loader } from "@olive/ui/loader"
+import { SplitButton, SplitButtonAction, SplitButtonMenuTrigger } from "@olive/ui/split-button"
+import { showToast } from "@olive/ui/toast"
+import { Tooltip } from "@olive/ui/tooltip"
 import {
   createLatest,
   usePlugin,
@@ -14,7 +14,7 @@ import {
   type OS,
   type MountedSession,
   type SessionScreen,
-} from "@opencode/plugin/gui"
+} from "@olive/plugin/gui"
 import type { OpenApp } from "./apps"
 import { useShared, type OpenRequest } from "./context"
 import { openInAppParentPath } from "./path"

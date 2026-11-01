@@ -1,31 +1,31 @@
-import { Message, SystemPart } from "@opencode/ai/effect"
+import { Message, SystemPart } from "@olive/ai/effect"
 import type { LanguageModelV3 } from "@ai-sdk/provider"
 import type { AccountInfo } from "@anthropic-ai/claude-agent-sdk"
-import { AISDK } from "@opencode/core/aisdk"
-import { Agent } from "@opencode/core/agent"
-import { Bus } from "@opencode/core/bus"
-import type { ClaudeIO } from "@opencode/core/plugin/provider/claude-agent/claude/io"
-import { ClaudeSessions } from "@opencode/core/plugin/provider/claude-agent/claude/sessions"
-import { RequestKind } from "@opencode/core/plugin/provider/claude-agent/language-model/request-kind"
-import { ClaudeSystemPrompt } from "@opencode/core/plugin/provider/claude-agent/language-model/system-prompt"
-import { ClaudeIntegration } from "@opencode/core/plugin/provider/claude-agent/integration"
-import { ClaudeProvider } from "@opencode/core/plugin/provider/claude-agent/provider"
-import { Credential } from "@opencode/core/credential"
-import { Database } from "@opencode/core/database/database"
-import { Environment, makeFiles } from "@opencode/core/environment/index"
-import { EnvironmentUnavailable } from "@opencode/core/environment/unavailable"
-import { Integration } from "@opencode/core/integration"
-import { KV } from "@opencode/core/kv"
-import { Location } from "@opencode/core/location"
-import { Model } from "@opencode/core/model"
-import { Money } from "@opencode/schema/money"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHooks } from "@opencode/core/plugin/hooks"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { ID, make } from "@opencode/core/plugin/provider/claude-agent/index"
-import { Provider } from "@opencode/core/provider"
-import { Session } from "@opencode/core/session"
-import { SessionInbox } from "@opencode/core/session/inbox"
+import { AISDK } from "@olive/core/aisdk"
+import { Agent } from "@olive/core/agent"
+import { Bus } from "@olive/core/bus"
+import type { ClaudeIO } from "@olive/core/plugin/provider/claude-agent/claude/io"
+import { ClaudeSessions } from "@olive/core/plugin/provider/claude-agent/claude/sessions"
+import { RequestKind } from "@olive/core/plugin/provider/claude-agent/language-model/request-kind"
+import { ClaudeSystemPrompt } from "@olive/core/plugin/provider/claude-agent/language-model/system-prompt"
+import { ClaudeIntegration } from "@olive/core/plugin/provider/claude-agent/integration"
+import { ClaudeProvider } from "@olive/core/plugin/provider/claude-agent/provider"
+import { Credential } from "@olive/core/credential"
+import { Database } from "@olive/core/database/database"
+import { Environment, makeFiles } from "@olive/core/environment/index"
+import { EnvironmentUnavailable } from "@olive/core/environment/unavailable"
+import { Integration } from "@olive/core/integration"
+import { KV } from "@olive/core/kv"
+import { Location } from "@olive/core/location"
+import { Model } from "@olive/core/model"
+import { Money } from "@olive/schema/money"
+import { Plugin } from "@olive/core/plugin"
+import { PluginHooks } from "@olive/core/plugin/hooks"
+import { PluginHost } from "@olive/core/plugin/host"
+import { ID, make } from "@olive/core/plugin/provider/claude-agent/index"
+import { Provider } from "@olive/core/provider"
+import { Session } from "@olive/core/session"
+import { SessionInbox } from "@olive/core/session/inbox"
 import { describe, expect } from "bun:test"
 import { Effect } from "effect"
 import { FakeClaude } from "./lib/fake-claude"
@@ -38,7 +38,7 @@ const it = testEffect(PluginTestLayer)
 const integrationID = Integration.ID.make(ClaudeProvider.ID)
 const haiku = Model.Ref.make({ providerID: ClaudeProvider.ID, id: Model.ID.make("haiku") })
 
-// The registry outlives the plugin's scope in opencode, so each test closes its own, as an exiting opencode would.
+// The registry outlives the plugin's scope in olive, so each test closes its own, as an exiting olive would.
 const addPlugin = Effect.fn(function* (io: ClaudeIO.Interface) {
   const registry = ClaudeSessions.registry()
   yield* Effect.addFinalizer(() => registry.close())
@@ -131,7 +131,7 @@ const sonnetCost = Effect.fn(function* (account: AccountInfo, env?: Record<strin
 })
 
 describe("ClaudeAgentPlugin", () => {
-  it.live("skips where opencode cannot start local processes", () =>
+  it.live("skips where olive cannot start local processes", () =>
     Effect.gen(function* () {
       const claude = FakeClaude.make([])
       yield* addPlugin(FakeIO.make({ claude })).pipe(
@@ -400,7 +400,7 @@ describe("ClaudeAgentPlugin session hooks", () => {
         undefined,
       ])
 
-      // Compaction keeps OpenCode's summary budget.
+      // Compaction keeps Olive's summary budget.
       const compaction = yield* hooks.trigger("session", "compaction", hookEvent(session.id))
       expect(compaction.options.maxTokens).toBe(32_000)
     }),
@@ -421,14 +421,14 @@ describe("ClaudeAgentPlugin session hooks", () => {
     }),
   )
 
-  it.live("passes opencode's instructions to Claude, except the date and environment Claude Code writes itself", () =>
+  it.live("passes olive's instructions to Claude, except the date and environment Claude Code writes itself", () =>
     Effect.gen(function* () {
       yield* addPlugin(FakeIO.make({ claude: FakeClaude.make([]) }))
       yield* addAgents
       const hooks = yield* PluginHooks.Service
       const event = hookEvent((yield* newSession).id)
       event.system = [
-        SystemPart.make("OPENCODE-PROMPT"),
+        SystemPart.make("OLIVE-PROMPT"),
         {
           ...SystemPart.make("JOINED-INSTRUCTIONS"),
           metadata: {
@@ -519,7 +519,7 @@ describe("ClaudeAgentPlugin provider config", () => {
       )
       expect(TestSessions.text(yield* Effect.promise(() => TestSessions.collect(result.stream)))).toBe("COPPER-OTTER")
 
-      // Model settings override the provider's, and only configured headers are sent, not opencode's own
+      // Model settings override the provider's, and only configured headers are sent, not olive's own
       const chat = claude.runs.find((run) => run.args.includes("--include-partial-messages"))!.env
       expect(chat.ANTHROPIC_BASE_URL).toBe("https://haiku-gateway.example")
       expect(chat.ANTHROPIC_AUTH_TOKEN).toBe("config-token")

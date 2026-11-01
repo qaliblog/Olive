@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test"
 import { project, provider, sessionHref } from "../utils/app"
-import { mockOpenCodeServer } from "../utils/mock-server"
+import { mockOliveServer } from "../utils/mock-server"
 import { expectAppVisible } from "../utils/waits"
 import { openSession } from "../utils/workspace"
 
-const directory = "C:/OpenCode/NewProject"
+const directory = "C:/Olive/NewProject"
 
 test("creates a session in a new project and selects its model", async ({ page }) => {
   // An empty draft must remain usable when the file viewer is unavailable.
@@ -14,7 +14,7 @@ test("creates a session in a new project and selects its model", async ({ page }
   const created = project({ id: "proj_model_selection_flow", directory, name: "NewProject" })
   // The server knows no project until the user adds this one.
   const projects: unknown[] = []
-  await mockOpenCodeServer(page, {
+  await mockOliveServer(page, {
     directory,
     project: created,
     projects: () => projects,
@@ -25,8 +25,8 @@ test("creates a session in a new project and selects its model", async ({ page }
     provider: () => ({
       all: [
         {
-          id: "opencode",
-          name: "OpenCode",
+          id: "olive",
+          name: "Olive",
           models: {
             "free-model": {
               id: "free-model",
@@ -37,8 +37,8 @@ test("creates a session in a new project and selects its model", async ({ page }
           },
         },
         {
-          id: "opencode-go",
-          name: "OpenCode Go",
+          id: "olive-go",
+          name: "Olive Go",
           models: {
             "go-model-1": {
               id: "go-model-1",
@@ -49,23 +49,23 @@ test("creates a session in a new project and selects its model", async ({ page }
           },
         },
       ],
-      connected: ["opencode", "opencode-go"],
-      default: { providerID: "opencode", modelID: "free-model" },
+      connected: ["olive", "olive-go"],
+      default: { providerID: "olive", modelID: "free-model" },
     }),
     sessions: [],
     pageMessages: () => ({ items: [] }),
     // Listings are requested by absolute path and returned relative to the stable Location.
-    fileList: (path) => (path === "C:/OpenCode" ? [{ path: "./", type: "directory", ignored: false }] : []),
+    fileList: (path) => (path === "C:/Olive" ? [{ path: "./", type: "directory", ignored: false }] : []),
   })
   await page.addInitScript(() => {
     localStorage.setItem(
-      "opencode.global.dat:model",
+      "olive.global.dat:model",
       JSON.stringify({
         user: [
-          { providerID: "opencode", modelID: "free-model", visibility: "show" },
-          { providerID: "opencode-go", modelID: "go-model-1", visibility: "show" },
+          { providerID: "olive", modelID: "free-model", visibility: "show" },
+          { providerID: "olive-go", modelID: "go-model-1", visibility: "show" },
         ],
-        recent: [{ providerID: "opencode-go", modelID: "go-model-1" }],
+        recent: [{ providerID: "olive-go", modelID: "go-model-1" }],
         variant: {},
       }),
     )
@@ -81,7 +81,7 @@ test("creates a session in a new project and selects its model", async ({ page }
   const listing = page.waitForRequest((request) => {
     const url = new URL(request.url())
 
-    return url.pathname === "/api/fs/list" && url.searchParams.get("path") === "C:/OpenCode"
+    return url.pathname === "/api/fs/list" && url.searchParams.get("path") === "C:/Olive"
   })
 
   await picker.getByRole("button", { name: "Parent", exact: true }).click()
@@ -90,7 +90,7 @@ test("creates a session in a new project and selects its model", async ({ page }
   await expect(directoryItem).toBeVisible()
   await directoryItem.click()
   await expect(directoryItem).toHaveAttribute("aria-selected", "true")
-  await expect(picker.getByText("C:\\OpenCode\\NewProject", { exact: true })).toBeVisible()
+  await expect(picker.getByText("C:\\Olive\\NewProject", { exact: true })).toBeVisible()
   const selectFolder = picker.getByRole("button", { name: "Select folder", exact: true })
   await expect(selectFolder).toBeEnabled()
   await selectFolder.click()
@@ -120,7 +120,7 @@ test("restores each existing session's model and variant when switching tabs", a
   const sessions = ["A", "B"].map((name) => ({
     id: `ses_model_${name}`,
     title: `Model ${name}`,
-    model: { id: `model-${name}`, providerID: "opencode", variant: "balanced" },
+    model: { id: `model-${name}`, providerID: "olive", variant: "balanced" },
   }))
 
   await openSession(page, {

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/solid-query"
 import { createMemo } from "solid-js"
 import type { Accessor } from "solid-js"
-import { createKeyed, type IpcClient } from "@opencode/plugin/gui"
+import { createKeyed, type IpcClient } from "@olive/plugin/gui"
 import type { Wsl, WslInstalledDistro, WslServersState } from "./contract"
 import {
   addServerProbePlan,

@@ -4,40 +4,40 @@ import os from "os"
 import path from "path"
 import { describe, expect } from "bun:test"
 import { Cause, Deferred, Duration, Effect, Exit, Fiber, Layer, Queue, Scope, Stream } from "effect"
-import { Money } from "@opencode/schema/money"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { makeGlobalNode, makeLocationNode } from "@opencode/util/effect/app-node"
-import { filesystem } from "@opencode/util/effect/app-node-platform"
-import { Database } from "@opencode/core/database/database"
-import { Bus } from "@opencode/core/bus"
-import { Config } from "@opencode/core/config"
-import { Environment } from "@opencode/core/environment/index"
-import { FSUtil } from "@opencode/util/fs-util"
-import { Global } from "@opencode/util/global"
-import { Location } from "@opencode/core/location"
-import { FileAccess } from "@opencode/core/file-access"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { Model } from "@opencode/core/model"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Agent } from "@opencode/core/agent"
-import { Job } from "@opencode/core/job"
-import { Session } from "@opencode/core/session"
-import { SessionEvent } from "@opencode/core/session/event"
-import { SessionExecution } from "@opencode/core/session/execution"
-import { SessionMessage } from "@opencode/core/session/message"
-import { SessionStore } from "@opencode/core/session/store"
-import { Permission } from "@opencode/core/permission"
-import { PermissionSaved } from "@opencode/core/permission/saved"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginSupervisor } from "@opencode/core/plugin/supervisor"
-import { Shell } from "@opencode/core/shell"
-import { ShellSelect } from "@opencode/core/shell/select"
-import { ID } from "@opencode/schema/shell"
-import { ShellTool } from "@opencode/core/tool/plugin/shell"
-import { ToolOutput } from "@opencode/core/tool-output"
-import { Tool } from "@opencode/core/tool"
+import { Money } from "@olive/schema/money"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { makeGlobalNode, makeLocationNode } from "@olive/util/effect/app-node"
+import { filesystem } from "@olive/util/effect/app-node-platform"
+import { Database } from "@olive/core/database/database"
+import { Bus } from "@olive/core/bus"
+import { Config } from "@olive/core/config"
+import { Environment } from "@olive/core/environment/index"
+import { FSUtil } from "@olive/util/fs-util"
+import { Global } from "@olive/util/global"
+import { Location } from "@olive/core/location"
+import { FileAccess } from "@olive/core/file-access"
+import { LocationServiceMap } from "@olive/core/location-service-map"
+import { Model } from "@olive/core/model"
+import { Provider } from "@olive/core/provider"
+import { AbsolutePath } from "@olive/core/schema"
+import { Agent } from "@olive/core/agent"
+import { Job } from "@olive/core/job"
+import { Session } from "@olive/core/session"
+import { SessionEvent } from "@olive/core/session/event"
+import { SessionExecution } from "@olive/core/session/execution"
+import { SessionMessage } from "@olive/core/session/message"
+import { SessionStore } from "@olive/core/session/store"
+import { Permission } from "@olive/core/permission"
+import { PermissionSaved } from "@olive/core/permission/saved"
+import { Plugin } from "@olive/core/plugin"
+import { PluginSupervisor } from "@olive/core/plugin/supervisor"
+import { Shell } from "@olive/core/shell"
+import { ShellSelect } from "@olive/core/shell/select"
+import { ID } from "@olive/schema/shell"
+import { ShellTool } from "@olive/core/tool/plugin/shell"
+import { ToolOutput } from "@olive/core/tool-output"
+import { Tool } from "@olive/core/tool"
 import { tmpdir, tmpdirScoped } from "./fixture/tmpdir"
 import { tempGlobalLayer } from "./fixture/global"
 import { offlineModels } from "./fixture/models"
@@ -895,11 +895,11 @@ describe("ShellTool", () => {
               const sessions = yield* Session.Service
               yield* sessions.environment({
                 sessionID,
-                variables: { OPENCODE_SESSION_ENV_TEST: "from-session" },
+                variables: { OLIVE_SESSION_ENV_TEST: "from-session" },
               })
               const command = isWindows
-                ? "[Console]::Out.Write($env:OPENCODE_SESSION_ENV_TEST)"
-                : 'printf %s "$OPENCODE_SESSION_ENV_TEST"'
+                ? "[Console]::Out.Write($env:OLIVE_SESSION_ENV_TEST)"
+                : 'printf %s "$OLIVE_SESSION_ENV_TEST"'
 
               const settled = yield* executeTool(registry, call({ command }))
 
@@ -925,15 +925,15 @@ describe("ShellTool", () => {
               const sessions = yield* Session.Service
               yield* sessions.environment({
                 sessionID,
-                variables: { AGENT: "0", OPENCODE: "0", AI_AGENT: "", OPENCODE_SESSION_ID: "stale" },
+                variables: { AGENT: "0", OLIVE: "0", AI_AGENT: "", OLIVE_SESSION_ID: "stale" },
               })
               const command = isWindows
-                ? '[Console]::Out.Write("$env:AGENT|$env:OPENCODE|$env:AI_AGENT|$env:OPENCODE_SESSION_ID")'
-                : 'printf %s "$AGENT|$OPENCODE|$AI_AGENT|$OPENCODE_SESSION_ID"'
+                ? '[Console]::Out.Write("$env:AGENT|$env:OLIVE|$env:AI_AGENT|$env:OLIVE_SESSION_ID")'
+                : 'printf %s "$AGENT|$OLIVE|$AI_AGENT|$OLIVE_SESSION_ID"'
               const settled = yield* executeTool(registry, call({ command }))
 
               expect(settled.status).toBe("completed")
-              expect(settled.content?.[0]).toEqual({ type: "text", text: `1|1|opencode|${sessionID}` })
+              expect(settled.content?.[0]).toEqual({ type: "text", text: `1|1|olive|${sessionID}` })
             }),
           )
         },
@@ -1213,7 +1213,7 @@ describe("ShellTool", () => {
           name: `test/shell-plugins-${channel}`,
           layer: Layer.effectDiscard(
             registerToolPlugin(ShellTool.Plugin, {
-              app: { name: "opencode", version: "test", channel },
+              app: { name: "olive", version: "test", channel },
             }),
           ),
           deps: [
@@ -1361,7 +1361,7 @@ describe("ShellTool", () => {
         return Effect.gen(function* () {
           yield* Effect.promise(() =>
             Bun.write(
-              path.join(tmp.path, "opencode.json"),
+              path.join(tmp.path, "olive.json"),
               JSON.stringify({ tool_output: { max_lines: 2, max_bytes: 1_000 } }),
             ),
           )

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import type { FileNode } from "@opencode/plugin/gui"
+import type { FileNode } from "@olive/plugin/gui"
 import { buildAllowedTreeInput, buildGitStatusMap, buildLiveTreeInput, diffGitStatusPatch } from "./tree-model"
 
 describe("buildAllowedTreeInput", () => {

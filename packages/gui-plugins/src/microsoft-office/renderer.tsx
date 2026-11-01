@@ -1,8 +1,8 @@
 import { lazy, Suspense, type Component } from "solid-js"
-import { Loader } from "@opencode/ui/loader"
-import type { ArtifactKind } from "@opencode/util/artifact"
-import { FileViewer, type FileViewerProps } from "@opencode/plugin/gui/file"
-import { bindPlugin, type Plugin } from "@opencode/plugin/gui"
+import { Loader } from "@olive/ui/loader"
+import type { ArtifactKind } from "@olive/util/artifact"
+import { FileViewer, type FileViewerProps } from "@olive/plugin/gui/file"
+import { bindPlugin, type Plugin } from "@olive/plugin/gui"
 import type MicrosoftOffice from "./index"
 
 /** Every Office Open XML file is a zip archive. */

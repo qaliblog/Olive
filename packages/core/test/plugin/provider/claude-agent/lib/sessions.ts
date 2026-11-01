@@ -1,13 +1,13 @@
 export * as TestSessions from "./sessions"
 
 import type { LanguageModelV3Prompt, LanguageModelV3StreamPart } from "@ai-sdk/provider"
-import type { SessionRequestKind } from "@opencode/plugin/effect/session"
+import type { SessionRequestKind } from "@olive/plugin/effect/session"
 import { Effect } from "effect"
-import { ClaudeSessions } from "@opencode/core/plugin/provider/claude-agent/claude/sessions"
-import { ClaudeStatus } from "@opencode/core/plugin/provider/claude-agent/claude/status"
-import { ClaudeAgentLanguageModel } from "@opencode/core/plugin/provider/claude-agent/language-model/claude-agent-language-model"
-import { RequestKind } from "@opencode/core/plugin/provider/claude-agent/language-model/request-kind"
-import type { SessionRecord } from "@opencode/core/plugin/provider/claude-agent/sync/record"
+import { ClaudeSessions } from "@olive/core/plugin/provider/claude-agent/claude/sessions"
+import { ClaudeStatus } from "@olive/core/plugin/provider/claude-agent/claude/status"
+import { ClaudeAgentLanguageModel } from "@olive/core/plugin/provider/claude-agent/language-model/claude-agent-language-model"
+import { RequestKind } from "@olive/core/plugin/provider/claude-agent/language-model/request-kind"
+import type { SessionRecord } from "@olive/core/plugin/provider/claude-agent/sync/record"
 import { FakeClaude } from "./fake-claude"
 import { FakeIO } from "./fake-io"
 
@@ -53,7 +53,7 @@ export const start = Effect.fn(function* (claude: FakeClaude.Fake, saved = stora
     io,
     status: yield* ClaudeStatus.make(io, () => Effect.succeed({})),
     storage: saved,
-    directory: "/tmp/opencode",
+    directory: "/tmp/olive",
   }
   const sessions = yield* registry.attach(input)
   return { registry, input, sessions, model: yield* model(sessions), storage: saved }

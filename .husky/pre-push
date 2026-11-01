@@ -17,4 +17,6 @@ if (process.versions.bun !== expectedBunVersion) {
   console.warn(`Warning: Bun version ${process.versions.bun} differs from expected ${expectedBunVersion}`);
 }
 '
+# Keep turbo's cache inside the checkout: some sandboxes mount the checkout's parent read-only.
+export TURBO_CACHE_DIR="${TURBO_CACHE_DIR:-$PWD/.turbo/cache}"
 bun run check

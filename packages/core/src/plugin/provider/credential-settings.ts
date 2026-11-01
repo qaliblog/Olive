@@ -1,5 +1,5 @@
 import { Effect, Stream } from "effect"
-import type { Context } from "@opencode/plugin/effect/plugin"
+import type { Context } from "@olive/plugin/effect/plugin"
 import { Bus } from "../../bus.js"
 import { Credential } from "../../credential.js"
 import type { Provider } from "../../provider.js"

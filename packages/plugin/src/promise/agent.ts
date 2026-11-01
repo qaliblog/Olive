@@ -1,5 +1,5 @@
-import type { AgentApi } from "@opencode/client/promise/api"
-import type { Agent } from "@opencode/schema/agent"
+import type { AgentApi } from "@olive/client/promise/api"
+import type { Agent } from "@olive/schema/agent"
 import type { Types } from "effect"
 import type { Transform } from "./registration.js"
 

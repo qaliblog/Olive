@@ -1,8 +1,8 @@
 import { Match, Show, Switch } from "solid-js"
-import { SessionReviewEmptyChangesV2 } from "@opencode/session-ui/v2/session-review-empty-changes-v2"
-import { SessionReviewEmptyNoGitV2 } from "@opencode/session-ui/v2/session-review-empty-no-git-v2"
-import { Select } from "@opencode/ui/select"
-import { usePlugin } from "@opencode/plugin/gui"
+import { SessionReviewEmptyChangesV2 } from "@olive/session-ui/v2/session-review-empty-changes-v2"
+import { SessionReviewEmptyNoGitV2 } from "@olive/session-ui/v2/session-review-empty-no-git-v2"
+import { Select } from "@olive/ui/select"
+import { usePlugin } from "@olive/plugin/gui"
 import type { ChangeMode, ReviewModel } from "./model"
 
 export function ReviewTitle(props: { review: ReviewModel }) {

@@ -8,7 +8,7 @@ const location = { directory, project: { id: "proj_test", directory, canonical: 
 const model = (id: string, name: string, input: number) => ({
   id,
   modelID: id,
-  providerID: "opencode",
+  providerID: "olive",
   name,
   status: "active",
   enabled: true,
@@ -27,7 +27,7 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
     location: { directory },
     title: "Usage limits",
     agent: "build",
-    model: { providerID: "opencode", id: "gpt-5.6-sol" },
+    model: { providerID: "olive", id: "gpt-5.6-sol" },
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
     time: { created: 1, updated: 1 },
@@ -35,7 +35,7 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
   const resetsAt = "2026-11-01T00:00:00.000Z"
   // One request that fills Sol's context costs $4, so the $6 left won't cover three.
   const limits = {
-    workspace: { id: "wrk_1", name: "Acme", usageURL: "https://opencode.ai/wrk_1/activity/overview" },
+    workspace: { id: "wrk_1", name: "Acme", usageURL: "https://olive.ai/wrk_1/activity/overview" },
     budgets: [
       {
         id: "picked",
@@ -45,8 +45,8 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
         per: "set",
         coverage: "models",
         models: [
-          { providerID: "opencode", modelID: "gpt-5.6-sol", name: "GPT 5.6 Sol" },
-          { providerID: "opencode", modelID: "claude-opus-5", name: "Claude Opus 5" },
+          { providerID: "olive", modelID: "gpt-5.6-sol", name: "GPT 5.6 Sol" },
+          { providerID: "olive", modelID: "claude-opus-5", name: "Claude Opus 5" },
         ],
         vendors: [],
         picked: true,
@@ -97,7 +97,7 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
       if (url.pathname === "/api/agent")
         return json({ location, data: [{ id: "build", mode: "primary", hidden: false, permissions: [] }] })
       if (url.pathname === "/api/provider")
-        return json({ location, data: [{ id: "opencode", integrationID: "opencode", name: "OpenCode" }] })
+        return json({ location, data: [{ id: "olive", integrationID: "olive", name: "Olive" }] })
       if (url.pathname === "/api/model")
         return json({
           location,
@@ -108,8 +108,8 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
           location,
           data: [
             {
-              id: "opencode",
-              name: "OpenCode Console",
+              id: "olive",
+              name: "Olive Console",
               methods: [],
               connections: [{ type: "credential", method: "oauth", id: "cred_console", label: "Acme" }],
             },
@@ -127,7 +127,7 @@ test("shows what the workspace's limits leave and why a refused turn stopped", a
     (frame) =>
       frame.includes("GPT 5.6 Sol usage limit reached") &&
       frame.includes("Switch model with") &&
-      /GPT 5\.6 Sol OpenCode +\$6 left/.test(frame) &&
+      /GPT 5\.6 Sol Olive +\$6 left/.test(frame) &&
       frame.includes("Running low on GPT 5.6 Sol"),
   )
 

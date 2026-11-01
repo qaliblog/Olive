@@ -1,5 +1,5 @@
 import { untrack } from "solid-js"
-import type { ServerRow } from "@opencode/plugin/gui"
+import type { ServerRow } from "@olive/plugin/gui"
 import { Contribution } from "@/runtime/plugin/render"
 import { usePluginServers } from "@/runtime/plugin/servers"
 import type { ServerConnection } from "@/runtime/server/registry"

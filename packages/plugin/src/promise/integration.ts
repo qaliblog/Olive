@@ -1,8 +1,8 @@
-import type { ConnectionInfo } from "@opencode/client"
-import type { IntegrationApi } from "@opencode/client/promise/api"
-import { Connection } from "@opencode/schema/connection"
-import { Credential } from "@opencode/schema/credential"
-import { Form } from "@opencode/schema/form"
+import type { ConnectionInfo } from "@olive/client"
+import type { IntegrationApi } from "@olive/client/promise/api"
+import { Connection } from "@olive/schema/connection"
+import { Credential } from "@olive/schema/credential"
+import { Form } from "@olive/schema/form"
 import type { Transform } from "./registration.js"
 
 type IntegrationRef = { id: string; name: string }

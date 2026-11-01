@@ -1,7 +1,7 @@
-import { Tool } from "@opencode/schema/tool"
-import type { Rpc } from "@opencode/schema/rpc"
-import type { OpenCodeEvent } from "@opencode/client"
-import type { RpcCallOptions, RpcEventPayload, SelectedEvent, SubscribeOptions } from "@opencode/client/promise/api"
+import { Tool } from "@olive/schema/tool"
+import type { Rpc } from "@olive/schema/rpc"
+import type { OliveEvent } from "@olive/client"
+import type { RpcCallOptions, RpcEventPayload, SelectedEvent, SubscribeOptions } from "@olive/client/promise/api"
 import { Effect, Schema, SchemaAST, Stream } from "effect"
 import type { Scope } from "effect"
 import { HttpApiEndpoint, HttpApiSchema } from "effect/http-api"
@@ -220,10 +220,10 @@ export function fromPromise(plugin: Plugin) {
     id: plugin.id,
     effect: (host) =>
       Effect.gen(function* () {
-        const [{ ClientApi }, { OpenCodeEvent }] = yield* Effect.promise(() =>
-          Promise.all([import("@opencode/protocol/client"), import("@opencode/protocol/groups/event")]),
+        const [{ ClientApi }, { OliveEvent }] = yield* Effect.promise(() =>
+          Promise.all([import("@olive/protocol/client"), import("@olive/protocol/groups/event")]),
         )
-        const encodeOpenCodeEvent = Schema.encodeUnknownEffect(OpenCodeEvent)
+        const encodeOliveEvent = Schema.encodeUnknownEffect(OliveEvent)
         const AgentEndpoints = ClientApi.groups["server.agent"].endpoints
         const CommandEndpoints = ClientApi.groups["server.command"].endpoints
         const CredentialEndpoints = ClientApi.groups["server.credential"].endpoints
@@ -329,13 +329,13 @@ export function fromPromise(plugin: Plugin) {
             activate: adaptApiMethod(CredentialEndpoints["credential.activate"], host.credential.activate),
           },
           event: {
-            subscribe: <Type extends Exclude<OpenCodeEvent["type"], "server.connected">>(
+            subscribe: <Type extends Exclude<OliveEvent["type"], "server.connected">>(
               options?: SubscribeOptions<Type>,
             ) =>
               streams(
                 host.event.subscribe({ types: options?.types }).pipe(
-                  Stream.mapEffect((event) => encodeOpenCodeEvent(event)),
-                  Stream.map((event) => event as SelectedEvent<OpenCodeEvent, Type>),
+                  Stream.mapEffect((event) => encodeOliveEvent(event)),
+                  Stream.map((event) => event as SelectedEvent<OliveEvent, Type>),
                 ),
                 options,
               ),

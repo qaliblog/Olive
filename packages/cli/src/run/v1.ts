@@ -1,4 +1,4 @@
-import type { Endpoint } from "@opencode/client/effect/service"
+import type { Endpoint } from "@olive/client/effect/service"
 import { Effect } from "effect"
 import path from "node:path"
 import { Standalone } from "../services/standalone"
@@ -80,7 +80,7 @@ function explicitEndpoint(input: V1RunCommandInput): Endpoint {
   return {
     url,
     auth: input.password
-      ? { type: "basic", username: input.username ?? "opencode", password: input.password }
+      ? { type: "basic", username: input.username ?? "olive", password: input.password }
       : undefined,
   }
 }

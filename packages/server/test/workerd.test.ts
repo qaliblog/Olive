@@ -1,7 +1,7 @@
 import { expect } from "bun:test"
 import { Effect } from "effect"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { Npm } from "@opencode/util/npm"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { Npm } from "@olive/util/npm"
 import { makeDurableObjectStorage } from "../../core/test/fixture/durable-object-storage"
 import { it } from "../../core/test/lib/effect"
 import { ServerWorkerd } from "../src/workerd"
@@ -17,13 +17,13 @@ it.live("boots the workerd profile over durable object storage", () =>
       config: { content: "{}" },
     })
 
-    const unauthorized = yield* Effect.promise(() => handler(new Request("http://opencode.local/api/info")))
+    const unauthorized = yield* Effect.promise(() => handler(new Request("http://olive.local/api/info")))
     expect(unauthorized.status).toBe(401)
 
     const status = yield* Effect.promise(() =>
       handler(
-        new Request("http://opencode.local/api/info", {
-          headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+        new Request("http://olive.local/api/info", {
+          headers: { authorization: `Basic ${btoa("olive:secret")}` },
         }),
       ),
     )

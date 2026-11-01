@@ -2,10 +2,10 @@ import { createMemo, createSignal, Index, onCleanup, onMount, Show } from "solid
 import { Portal } from "solid-js/web"
 import { createRemoteControls, type ControlDescriptor, type State, type Value } from "knobs"
 import { KnobsPanel } from "knobs/solid"
-import { Icon } from "@opencode/ui/icon"
-import { IconButton } from "@opencode/ui/icon-button"
-import { springStyle } from "@opencode/ui/motion/solid"
-import { motionPresets, motionTuning, type MotionKnob } from "@opencode/ui/motion-tuning"
+import { Icon } from "@olive/ui/icon"
+import { IconButton } from "@olive/ui/icon-button"
+import { springStyle } from "@olive/ui/motion/solid"
+import { motionPresets, motionTuning, type MotionKnob } from "@olive/ui/motion-tuning"
 import {
   activeFeaturePreset,
   applyFeaturePreset,
@@ -16,13 +16,13 @@ import {
   reset,
   resetFeature,
   type MotionFeature,
-} from "@opencode/ui/motion-tuning-features"
-import { applyMotion } from "@opencode/ui/motion-tuning-fields"
-import { usePlugin } from "@opencode/plugin/gui"
+} from "@olive/ui/motion-tuning-features"
+import { applyMotion } from "@olive/ui/motion-tuning-fields"
+import { usePlugin } from "@olive/plugin/gui"
 
 // Where the panel was dragged to, as an offset from its bottom-right home, its width, and the feature it last showed;
 // kept per device.
-const key = "opencode.motion.panel"
+const key = "olive.motion.panel"
 
 // From this width the list and the open feature sit side by side.
 const wideAt = 560
@@ -449,7 +449,7 @@ function FeatureKnobs(props: {
     applyMotion(item, value as MotionKnob["value"])
   }
 
-  const controls = createRemoteControls(`opencode-motion-${group}`, descriptors, {
+  const controls = createRemoteControls(`olive-motion-${group}`, descriptors, {
     values: values(),
     // Beta is a production build, where knobs resolves its production entry: the panel mounts only when shipped.
     ship: () => import("knobs/panel"),

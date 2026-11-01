@@ -10,7 +10,7 @@ const id = "virtual:story-index"
  */
 export function storyIndex(roots: string[]): Plugin {
   return {
-    name: "opencode:story-index",
+    name: "olive:story-index",
     resolveId: (source) => (source === id ? `\0${id}` : undefined),
     load(source) {
       if (source !== `\0${id}`) return

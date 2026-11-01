@@ -303,7 +303,7 @@ story("shows a stable GitHub mark without changing link text or other sites", as
     const { mountMarkdown } = await import(fixture)
     await mountMarkdown({
       text: [
-        "[#540](https://github.com/anomalyco/opencode/pull/540)",
+        "[#540](https://github.com/anomalyco/olive/pull/540)",
         "[GitHub](https://github.com)",
         "[other site](https://example.com/docs)",
         "[lookalike](https://github.com.evil.example/pull/540)",
@@ -315,7 +315,7 @@ story("shows a stable GitHub mark without changing link text or other sites", as
   const markdown = page.getByTestId("markdown-fixture").locator('[data-component="markdown"]')
   await expect(markdown).toHaveAttribute("data-markdown-ready", "")
   const github = markdown.getByRole("link", { name: "#540" })
-  await expect(github).toHaveAttribute("href", "https://github.com/anomalyco/opencode/pull/540")
+  await expect(github).toHaveAttribute("href", "https://github.com/anomalyco/olive/pull/540")
   await expect(github).toHaveText("#540")
   const mark = github.locator(".markdown-link-favicon[data-github]")
   expect(await mark.evaluate((icon) => getComputedStyle(icon, "::before").width)).toBe("14px")
@@ -350,7 +350,7 @@ story("keeps favicon space stable across loading and failure without fetching pr
         "[docs](https://developer.mozilla.org/docs)",
         "[missing](https://broken.example.org/docs)",
         "[private](http://localhost:8080/docs)",
-        "[GitHub](https://github.com/anomalyco/opencode)",
+        "[GitHub](https://github.com/anomalyco/olive)",
       ].join(" · "),
       cached: true,
     })
@@ -399,7 +399,7 @@ story("keeps link icons on the same line as the start of their label", async ({ 
     await mountMarkdown({
       text: [
         "Read the [MDN reference](https://developer.mozilla.org/docs) and",
-        "[#540](https://github.com/anomalyco/opencode/pull/540) then",
+        "[#540](https://github.com/anomalyco/olive/pull/540) then",
         "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/white-space/long-path",
       ].join(" "),
       cached: true,
@@ -876,7 +876,7 @@ for (const streaming of [false, true]) {
       const requests: string[] = []
       await page.route("**/api/fs/read/**", async (route) => {
         expect(route.request().headers().authorization).toBe(
-          `Basic ${Buffer.from("opencode:fixture").toString("base64")}`,
+          `Basic ${Buffer.from("olive:fixture").toString("base64")}`,
         )
         requests.push(route.request().url())
         await route.fulfill({ contentType: "image/png", body: png })
@@ -1058,7 +1058,7 @@ story("copies selected Markdown as semantic HTML without theme or highlight colo
     document.body.style.color = "rgb(237, 237, 237)"
     const { mountMarkdown } = await import(fixture)
     await mountMarkdown({
-      text: "## Answer\n\nSome **bold** and [docs](https://opencode.ai/docs).\n\n- one\n- two\n\n```ts\nconst value = 42\n```",
+      text: "## Answer\n\nSome **bold** and [docs](https://olive.ai/docs).\n\n- one\n- two\n\n```ts\nconst value = 42\n```",
     })
   }, fixture)
   const harness = page.getByTestId("markdown-fixture")
@@ -1070,7 +1070,7 @@ story("copies selected Markdown as semantic HTML without theme or highlight colo
   expect(copied.text).toContain("Some bold and docs.")
   expect(copied.text).toContain("const value = 42")
   expect(copied.html).toContain("<h2>Answer</h2>")
-  expect(copied.html).toContain('<p>Some <strong>bold</strong> and <a href="https://opencode.ai/docs">docs</a>.</p>')
+  expect(copied.html).toContain('<p>Some <strong>bold</strong> and <a href="https://olive.ai/docs">docs</a>.</p>')
   expect(copied.html).toContain("<li>one</li>")
   expect(copied.html).toMatch(/<pre><code>(<span>[^<]*<\/span>)+<\/code><\/pre>/)
   expect(copied.html).not.toMatch(/style=|class=|<button|<svg/)

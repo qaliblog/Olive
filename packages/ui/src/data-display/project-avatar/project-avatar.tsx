@@ -68,8 +68,8 @@ export type ProjectAvatarVariant = (typeof PROJECT_AVATAR_VARIANTS)[number]
 // "outline" is a neutral, muted style (e.g. recently closed projects) and is not part of the color rotation.
 export type ProjectAvatarStyle = ProjectAvatarVariant | "outline"
 
-// Project IDs hash the normalized origin remote (`git-remote:github.com/anomalyco/opencode`); V1 used the root commit.
-const OPENCODE_PROJECT_IDS = new Set([
+// Project IDs hash the normalized origin remote (`git-remote:github.com/anomalyco/olive`); V1 used the root commit.
+const OLIVE_PROJECT_IDS = new Set([
   "012780c4098d08caa4ea8c479ed0a4690489f38d",
   "476fbfe6befa9e63ddd7f9ae71655999a0104256",
   "4b0ea68d7af9a6031a7ffda7ad66e0cb83315750",
@@ -80,7 +80,7 @@ export function getProjectAvatarSource(id?: string, icon?: { color?: string; url
 
   if (icon?.color) return undefined
 
-  if (id && OPENCODE_PROJECT_IDS.has(id)) return "https://opencode.ai/favicon.svg"
+  if (id && OLIVE_PROJECT_IDS.has(id)) return "https://olive.ai/favicon.svg"
 
   return icon?.url
 }

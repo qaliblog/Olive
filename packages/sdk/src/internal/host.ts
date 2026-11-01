@@ -1,14 +1,14 @@
 export * as EmbeddedHost from "./host"
 
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import type { Plugin } from "@opencode/plugin/effect/plugin"
-import { SessionRestart } from "@opencode/core/session/execution/restart"
-import { Session } from "@opencode/core/session"
-import { Workspace } from "@opencode/core/workspace"
-import { WorkspaceDriver } from "@opencode/core/workspace/driver"
-import { createEmbeddedRoutes } from "@opencode/server/routes"
-import type { ServerOptions } from "@opencode/server/options"
-import type { LayerNode } from "@opencode/util/effect/layer-node"
+import { SdkPlugins } from "@olive/core/plugin/sdk"
+import type { Plugin } from "@olive/plugin/effect/plugin"
+import { SessionRestart } from "@olive/core/session/execution/restart"
+import { Session } from "@olive/core/session"
+import { Workspace } from "@olive/core/workspace"
+import { WorkspaceDriver } from "@olive/core/workspace/driver"
+import { createEmbeddedRoutes } from "@olive/server/routes"
+import type { ServerOptions } from "@olive/server/options"
+import type { LayerNode } from "@olive/util/effect/layer-node"
 import { Context, Effect, Layer, ManagedRuntime, Scope } from "effect"
 import { HttpEffect, HttpRouter, HttpServer, HttpServerRequest } from "effect/http"
 import { context, layer, type LogOptions } from "../logging"
@@ -22,7 +22,7 @@ export interface CreateOptions<R = never> extends Omit<ServerOptions, "hostname"
   readonly instances?: SdkInstances.Options<R>
 }
 
-/** Host hooks for embedding opencode on a non-default runtime profile. */
+/** Host hooks for embedding olive on a non-default runtime profile. */
 export interface EmbedOptions {
   readonly overrides?: LayerNode.Replacements
 }

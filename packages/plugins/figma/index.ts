@@ -1,11 +1,11 @@
-import { Plugin, Skill } from "@opencode/plugin"
+import { Plugin, Skill } from "@olive/plugin"
 import { readFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import matter from "gray-matter"
 import source from "./skills-source.json" with { type: "json" }
 
 export default Plugin.define({
-  id: "opencode.figma",
+  id: "olive.figma",
   async setup(ctx) {
     await ctx.mcp.transform((editor) => {
       if (editor.get("figma")) return

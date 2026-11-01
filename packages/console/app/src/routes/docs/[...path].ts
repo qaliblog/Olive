@@ -1,5 +1,5 @@
 import type { APIEvent } from "@solidjs/start/server"
-import { Resource } from "@opencode/console-resource"
+import { Resource } from "@olive/console-resource"
 import { docs, pageLocale, tag } from "~/lib/language"
 
 async function handler(evt: APIEvent) {
@@ -11,7 +11,7 @@ async function handler(evt: APIEvent) {
   }
 
   const locale = pageLocale(req)
-  const host = Resource.App.stage === "production" ? "docs.opencode.ai" : "docs.dev.opencode.ai"
+  const host = Resource.App.stage === "production" ? "docs.olive.ai" : "docs.dev.olive.ai"
   const targetUrl = `https://${host}${docs(locale, url.pathname)}${url.search}`
 
   const headers = new Headers(req.headers)

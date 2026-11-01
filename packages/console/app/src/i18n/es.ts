@@ -9,13 +9,13 @@ export const dict = {
   "nav.github": "GitHub",
   "nav.docs": "Documentación",
   "nav.enterprise": "Enterprise",
-  "nav.zen": "OpenCode Models",
+  "nav.zen": "Olive Models",
   "nav.login": "Iniciar sesión",
   "nav.free": "Descargar",
   "nav.home": "Inicio",
   "nav.openMenu": "Abrir menú",
   "nav.getStartedFree": "Empezar gratis",
-  "nav.logoAlt": "OpenCode",
+  "nav.logoAlt": "Olive",
 
   "nav.context.copyLogo": "Copiar logo como SVG",
   "nav.context.copyWordmark": "Copiar marca como SVG",
@@ -42,14 +42,14 @@ export const dict = {
   "email.success": "Casi listo, revisa tu bandeja de entrada y confirma tu correo",
   "email.error": "No se pudo completar la suscripción. Inténtalo de nuevo.",
 
-  "notFound.title": "No encontrado | opencode",
+  "notFound.title": "No encontrado | olive",
   "notFound.heading": "404 - Página no encontrada",
   "notFound.home": "Inicio",
   "notFound.docs": "Documentación",
   "notFound.github": "GitHub",
   "notFound.discord": "Discord",
-  "notFound.logoLightAlt": "opencode logo claro",
-  "notFound.logoDarkAlt": "opencode logo oscuro",
+  "notFound.logoLightAlt": "olive logo claro",
+  "notFound.logoDarkAlt": "olive logo oscuro",
 
   "common.cancel": "Cancelar",
   "common.contactUs": "Contáctanos",
@@ -59,9 +59,9 @@ export const dict = {
   "common.faq": "FAQ",
   "common.learnMore": "Más información",
 
-  "app.meta.description": "OpenCode - El agente de codificación de código abierto.",
+  "app.meta.description": "Olive - El agente de codificación de código abierto.",
 
-  "home.title": "OpenCode | El agente de codificación IA de código abierto",
+  "home.title": "Olive | El agente de codificación IA de código abierto",
 
   "home.banner.badge": "Nuevo",
 
@@ -71,9 +71,9 @@ export const dict = {
 
   "home.install.ariaLabel": "Opciones de instalación",
 
-  "home.what.title": "¿Qué es OpenCode?",
+  "home.what.title": "¿Qué es Olive?",
   "home.what.body":
-    "OpenCode es un agente de código abierto que te ayuda a escribir código en tu terminal, IDE o escritorio.",
+    "Olive es un agente de código abierto que te ayuda a escribir código en tu terminal, IDE o escritorio.",
   "home.what.multiSession.title": "Multi-sesión",
   "home.what.multiSession.body": "Inicia múltiples agentes en paralelo en el mismo proyecto",
   "home.what.copilot.title": "GitHub Copilot",
@@ -88,49 +88,49 @@ export const dict = {
 
   "home.growth.title": "El agente de codificación IA de código abierto",
   "home.growth.body":
-    "Con más de <strong>{{stars}}</strong> estrellas en GitHub, <strong>{{contributors}}</strong> colaboradores y más de <strong>{{commits}}</strong> commits, OpenCode es usado y confiado por más de <strong>{{monthlyUsers}}</strong> desarrolladores cada mes.",
+    "Con más de <strong>{{stars}}</strong> estrellas en GitHub, <strong>{{contributors}}</strong> colaboradores y más de <strong>{{commits}}</strong> commits, Olive es usado y confiado por más de <strong>{{monthlyUsers}}</strong> desarrolladores cada mes.",
   "home.growth.githubStars": "Estrellas en GitHub",
   "home.growth.contributors": "Colaboradores",
   "home.growth.monthlyDevs": "Desarrolladores Mensuales",
 
   "home.privacy.title": "Creado pensando en la privacidad",
   "home.privacy.body":
-    "OpenCode no almacena tu código ni datos de contexto, para que pueda operar en entornos sensibles a la privacidad.",
+    "Olive no almacena tu código ni datos de contexto, para que pueda operar en entornos sensibles a la privacidad.",
   "home.privacy.learnMore": "Más información sobre",
   "home.privacy.link": "privacidad",
 
-  "home.faq.q1": "¿Qué es OpenCode?",
+  "home.faq.q1": "¿Qué es Olive?",
   "home.faq.a1":
-    "OpenCode es un agente de código abierto que te ayuda a escribir y ejecutar código con cualquier modelo de IA. Está disponible como interfaz de terminal, aplicación de escritorio o extensión de IDE.",
-  "home.faq.q2": "¿Cómo uso OpenCode?",
+    "Olive es un agente de código abierto que te ayuda a escribir y ejecutar código con cualquier modelo de IA. Está disponible como interfaz de terminal, aplicación de escritorio o extensión de IDE.",
+  "home.faq.q2": "¿Cómo uso Olive?",
   "home.faq.a2.before": "La forma más fácil de empezar es leer la",
   "home.faq.a2.link": "introducción",
-  "home.faq.q3": "¿Necesito suscripciones extra de IA para usar OpenCode?",
+  "home.faq.q3": "¿Necesito suscripciones extra de IA para usar Olive?",
   "home.faq.a3.p1":
-    "No necesariamente, OpenCode viene con un conjunto de modelos gratuitos que puedes usar sin crear una cuenta.",
+    "No necesariamente, Olive viene con un conjunto de modelos gratuitos que puedes usar sin crear una cuenta.",
   "home.faq.a3.p2.beforeZen":
     "Aparte de estos, puedes usar cualquiera de los modelos de codificación populares creando una cuenta de",
   "home.faq.a3.p2.afterZen": ".",
   "home.faq.a3.p3":
-    "Aunque animamos a los usuarios a usar OpenCode Models, OpenCode también funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
+    "Aunque animamos a los usuarios a usar Olive Models, Olive también funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
   "home.faq.a3.p4.beforeLocal": "Incluso puedes conectar tus",
   "home.faq.a3.p4.localLink": "modelos locales",
-  "home.faq.q4": "¿Puedo usar mis suscripciones de IA existentes con OpenCode?",
+  "home.faq.q4": "¿Puedo usar mis suscripciones de IA existentes con Olive?",
   "home.faq.a4.p1": "Sí, puedes usar tus suscripciones de ChatGPT Plus/Pro o GitHub Copilot.",
-  "home.faq.q5": "¿Solo puedo usar OpenCode en la terminal?",
-  "home.faq.a5.beforeDesktop": "¡Ya no! OpenCode ahora está disponible como una aplicación para tu",
+  "home.faq.q5": "¿Solo puedo usar Olive en la terminal?",
+  "home.faq.a5.beforeDesktop": "¡Ya no! Olive ahora está disponible como una aplicación para tu",
   "home.faq.a5.desktop": "escritorio",
   "home.faq.a5.and": "y",
   "home.faq.a5.web": "web",
-  "home.faq.q6": "¿Cuánto cuesta OpenCode?",
+  "home.faq.q6": "¿Cuánto cuesta Olive?",
   "home.faq.a6":
-    "OpenCode es 100% gratuito de usar. También viene con un conjunto de modelos gratuitos. Puede haber costos adicionales si conectas cualquier otro proveedor.",
+    "Olive es 100% gratuito de usar. También viene con un conjunto de modelos gratuitos. Puede haber costos adicionales si conectas cualquier otro proveedor.",
   "home.faq.q7": "¿Qué hay sobre datos y privacidad?",
   "home.faq.a7.p1": "Tus datos e información solo se almacenan cuando usas nuestros modelos gratuitos.",
   "home.faq.a7.p2.beforeModels": "Más información sobre",
   "home.faq.a7.p2.modelsLink": "nuestros modelos",
-  "home.faq.q8": "¿Es OpenCode de código abierto?",
-  "home.faq.a8.p1": "Sí, OpenCode es totalmente de código abierto. El código fuente es público en",
+  "home.faq.q8": "¿Es Olive de código abierto?",
+  "home.faq.a8.p1": "Sí, Olive es totalmente de código abierto. El código fuente es público en",
   "home.faq.a8.p2": "bajo la",
   "home.faq.a8.mitLicense": "Licencia MIT",
   "home.faq.a8.p3":
@@ -138,76 +138,76 @@ export const dict = {
 
   "home.zenCta.title": "Accede a modelos optimizados y confiables para agentes de codificación",
   "home.zenCta.body":
-    "OpenCode Models te da acceso a un conjunto seleccionado de modelos de IA que OpenCode ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes entre proveedores, usa modelos validados que funcionan.",
-  "home.zenCta.link": "Aprende sobre OpenCode Models",
+    "Olive Models te da acceso a un conjunto seleccionado de modelos de IA que Olive ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes entre proveedores, usa modelos validados que funcionan.",
+  "home.zenCta.link": "Aprende sobre Olive Models",
 
   "zen.title":
-    "OpenCode Models | Un conjunto seleccionado de modelos optimizados y confiables para agentes de codificación",
+    "Olive Models | Un conjunto seleccionado de modelos optimizados y confiables para agentes de codificación",
   "zen.hero.title": "Modelos optimizados y confiables para agentes de codificación",
   "zen.hero.body":
-    "OpenCode Models te da acceso a un conjunto seleccionado de modelos de IA que OpenCode ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes, usa modelos validados que funcionan.",
+    "Olive Models te da acceso a un conjunto seleccionado de modelos de IA que Olive ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes, usa modelos validados que funcionan.",
 
-  "zen.faq.q1": "¿Qué es OpenCode Models?",
+  "zen.faq.q1": "¿Qué es Olive Models?",
   "zen.faq.a1":
-    "OpenCode Models es un conjunto seleccionado de modelos de IA probados y evaluados para agentes de codificación, creado por el equipo detrás de OpenCode.",
-  "zen.faq.q2": "¿Qué hace a OpenCode Models más preciso?",
+    "Olive Models es un conjunto seleccionado de modelos de IA probados y evaluados para agentes de codificación, creado por el equipo detrás de Olive.",
+  "zen.faq.q2": "¿Qué hace a Olive Models más preciso?",
   "zen.faq.a2":
-    "OpenCode Models solo proporciona modelos que han sido específicamente probados y evaluados para agentes de codificación. No usarías un cuchillo de mantequilla para cortar carne, no uses modelos pobres para codificar.",
-  "zen.faq.q3": "¿Es OpenCode Models más barato?",
+    "Olive Models solo proporciona modelos que han sido específicamente probados y evaluados para agentes de codificación. No usarías un cuchillo de mantequilla para cortar carne, no uses modelos pobres para codificar.",
+  "zen.faq.q3": "¿Es Olive Models más barato?",
   "zen.faq.a3":
-    "OpenCode Models no tiene fines de lucro. OpenCode Models te transfiere los costos de los proveedores de modelos. Cuanto mayor sea el uso de OpenCode Models, más podrá OpenCode negociar mejores tarifas y transferírtelas.",
-  "zen.faq.q4": "¿Cuánto cuesta OpenCode Models?",
-  "zen.faq.a4.p1.beforePricing": "OpenCode",
+    "Olive Models no tiene fines de lucro. Olive Models te transfiere los costos de los proveedores de modelos. Cuanto mayor sea el uso de Olive Models, más podrá Olive negociar mejores tarifas y transferírtelas.",
+  "zen.faq.q4": "¿Cuánto cuesta Olive Models?",
+  "zen.faq.a4.p1.beforePricing": "Olive",
   "zen.faq.a4.p1.pricingLink": "cobra por solicitud",
   "zen.faq.a4.p1.afterPricing": "sin recargos, así que pagas exactamente lo que cobra el proveedor del modelo.",
   "zen.faq.a4.p2.beforeAccount": "Tu costo total depende del uso, y puedes establecer límites de gasto mensuales en tu",
   "zen.faq.a4.p2.accountLink": "cuenta",
   "zen.faq.a4.p3":
-    "Para cubrir costos, OpenCode añade solo una pequeña tarifa de procesamiento de pagos de $1.23 por cada recarga de saldo de $20.",
+    "Para cubrir costos, Olive añade solo una pequeña tarifa de procesamiento de pagos de $1.23 por cada recarga de saldo de $20.",
   "zen.faq.q5": "¿Qué hay sobre datos y privacidad?",
   "zen.faq.a5.beforeExceptions":
-    "Todos los modelos de OpenCode Models están alojados en EE. UU. y la UE Los proveedores siguen una política de cero retención y no usan tus datos para entrenamiento de modelos, con las",
+    "Todos los modelos de Olive Models están alojados en EE. UU. y la UE Los proveedores siguen una política de cero retención y no usan tus datos para entrenamiento de modelos, con las",
   "zen.faq.a5.exceptionsLink": "siguientes excepciones",
   "zen.faq.q6": "¿Puedo establecer límites de gasto?",
   "zen.faq.a6": "Sí, puedes establecer límites de gasto mensuales en tu cuenta.",
   "zen.faq.q7": "¿Puedo cancelar?",
   "zen.faq.a7": "Sí, puedes deshabilitar la facturación en cualquier momento y usar tu saldo restante.",
-  "zen.faq.q8": "¿Puedo usar OpenCode Models con otros agentes de codificación?",
+  "zen.faq.q8": "¿Puedo usar Olive Models con otros agentes de codificación?",
   "zen.faq.a8":
-    "Aunque OpenCode Models funciona genial con OpenCode, puedes usar OpenCode Models con cualquier agente. Sigue las instrucciones de configuración en tu agente de codificación preferido.",
+    "Aunque Olive Models funciona genial con Olive, puedes usar Olive Models con cualquier agente. Sigue las instrucciones de configuración en tu agente de codificación preferido.",
   "zen.faq.q9": "¿Puedo obtener un reembolso?",
   "zen.faq.a9":
     "Podrías tener derecho a un reembolso si el cargo se realizó en los últimos 14 días y no has utilizado el crédito de esa compra. {{contact}} para solicitar un reembolso.",
 
-  "zen.cta.start": "Empieza con OpenCode Models",
+  "zen.cta.start": "Empieza con Olive Models",
   "zen.pricing.title": "Añade $20 de saldo prepago",
   "zen.pricing.fee": "(+$1.23 tarifa de procesamiento de tarjeta)",
   "zen.pricing.body": "Úsalo con cualquier agente. Establece límites de gasto mensual. Cancela en cualquier momento.",
-  "zen.problem.title": "¿Qué problema está resolviendo OpenCode Models?",
+  "zen.problem.title": "¿Qué problema está resolviendo Olive Models?",
   "zen.problem.body":
     "Hay muchos modelos disponibles, pero solo unos pocos funcionan bien con agentes de codificación. La mayoría de los proveedores los configuran de manera diferente con resultados variables.",
-  "zen.problem.subtitle": "Estamos arreglando esto para todos, no solo para usuarios de OpenCode.",
+  "zen.problem.subtitle": "Estamos arreglando esto para todos, no solo para usuarios de Olive.",
   "zen.problem.item1": "Probando modelos seleccionados y consultando a sus equipos",
   "zen.problem.item2": "Trabajando con proveedores para asegurar que se entreguen correctamente",
   "zen.problem.item3": "Evaluando todas las combinaciones modelo-proveedor que recomendamos",
-  "zen.how.title": "Cómo funciona OpenCode Models",
+  "zen.how.title": "Cómo funciona Olive Models",
   "zen.how.body":
-    "Aunque sugerimos usar OpenCode Models con OpenCode, puedes usar OpenCode Models con cualquier agente.",
+    "Aunque sugerimos usar Olive Models con Olive, puedes usar Olive Models con cualquier agente.",
   "zen.how.step1.title": "Regístrate y añade $20 de saldo",
   "zen.how.step1.beforeLink": "sigue las",
   "zen.how.step1.link": "instrucciones de configuración",
-  "zen.how.step2.title": "Usa OpenCode Models con precios transparentes",
+  "zen.how.step2.title": "Usa Olive Models con precios transparentes",
   "zen.how.step2.link": "paga por solicitud",
   "zen.how.step2.afterLink": "con cero recargos",
   "zen.how.step3.title": "Auto-recarga",
   "zen.how.step3.body": "activa la recarga automática opcional y elige el umbral de saldo y el importe de la recarga",
   "zen.privacy.title": "Tu privacidad es importante para nosotros",
   "zen.privacy.beforeExceptions":
-    "Todos los modelos de OpenCode Models están alojados en EE. UU. y la UE Los proveedores siguen una política de cero retención y no usan tus datos para entrenamiento de modelos, con las",
+    "Todos los modelos de Olive Models están alojados en EE. UU. y la UE Los proveedores siguen una política de cero retención y no usan tus datos para entrenamiento de modelos, con las",
   "zen.privacy.exceptionsLink": "siguientes excepciones",
 
   "go.promo.kimiK31Pro": "Kimi K3.1 Pro ya está disponible en Go.",
-  "go.title": "OpenCode Go | Modelos de programación de bajo coste para todos",
+  "go.title": "Olive Go | Modelos de programación de bajo coste para todos",
   "go.meta.description":
     "Go cuesta 10 $/mes, con límites de uso generosos y acceso fiable a modelos de programación líderes.",
   "go.hero.title": "Modelos de programación de bajo coste para todos",
@@ -254,13 +254,13 @@ export const dict = {
 
   "go.problem.title": "¿Qué problema resuelve Go?",
   "go.problem.body":
-    "Nos enfocamos en llevar la experiencia de OpenCode a tantas personas como sea posible. OpenCode Go es una suscripción de bajo coste de 10 $/mes. Proporciona límites generosos y acceso fiable a los modelos de código abierto más capaces.",
+    "Nos enfocamos en llevar la experiencia de Olive a tantas personas como sea posible. Olive Go es una suscripción de bajo coste de 10 $/mes. Proporciona límites generosos y acceso fiable a los modelos de código abierto más capaces.",
   "go.problem.item1": "Precios de suscripción de bajo coste",
   "go.problem.item2": "Límites generosos y acceso fiable",
   "go.problem.item3": "Creado para tantos programadores como sea posible",
   "go.problem.item4": "Una selección de modelos probados para programación agéntica",
   "go.how.title": "Cómo funciona Go",
-  "go.how.body": "Go cuesta 10 $/mes. Puedes usarlo con OpenCode o cualquier agente.",
+  "go.how.body": "Go cuesta 10 $/mes. Puedes usarlo con Olive o cualquier agente.",
   "go.how.step1.title": "Crear una cuenta",
   "go.how.step1.beforeLink": "sigue las",
   "go.how.step1.link": "instrucciones de configuración",
@@ -269,14 +269,14 @@ export const dict = {
   "go.how.step2.afterLink": "con límites generosos",
   "go.how.step3.title": "Empezar a programar",
   "go.how.step3.body": "con acceso fiable a modelos de código abierto",
-  "go.faq.q1": "¿Qué es OpenCode Go?",
+  "go.faq.q1": "¿Qué es Olive Go?",
   "go.faq.a1":
     "Go es una suscripción de bajo coste que te da acceso fiable a modelos de código abierto capaces para programación agéntica.",
   "go.faq.q2": "¿Qué modelos incluye Go?",
   "go.faq.a2": "Go incluye los modelos que se indican abajo, con límites generosos y acceso confiable.",
-  "go.faq.q3": "¿Es Go lo mismo que OpenCode Models?",
+  "go.faq.q3": "¿Es Go lo mismo que Olive Models?",
   "go.faq.a3":
-    "No. OpenCode Models es de pago por uso, mientras que Go cuesta 10 $/mes, con límites generosos y acceso fiable a una selección de modelos.",
+    "No. Olive Models es de pago por uso, mientras que Go cuesta 10 $/mes, con límites generosos y acceso fiable a una selección de modelos.",
   "go.faq.q4": "¿Cuánto cuesta Go?",
   "go.faq.a4.p1.beforePricing": "Go cuesta",
   "go.faq.a4.p1.pricingLink": "10 $/mes",
@@ -317,12 +317,12 @@ export const dict = {
   "go.faq.a10":
     "Podrías tener derecho a un reembolso si el cargo se realizó en los últimos 14 días y no has utilizado tu cuota de Go durante ese periodo de facturación. {{contact}} para solicitar un reembolso.",
 
-  "download.title": "OpenCode | Descargar",
-  "download.meta.description": "Descarga OpenCode para macOS, Windows y Linux",
-  "download.section.terminal": "OpenCode Terminal",
-  "download.section.desktop": "OpenCode Desktop",
-  "download.section.extensions": "Extensiones OpenCode",
-  "download.section.integrations": "Integraciones OpenCode",
+  "download.title": "Olive | Descargar",
+  "download.meta.description": "Descarga Olive para macOS, Windows y Linux",
+  "download.section.terminal": "Olive Terminal",
+  "download.section.desktop": "Olive Desktop",
+  "download.section.extensions": "Extensiones Olive",
+  "download.section.integrations": "Integraciones Olive",
   "download.action.download": "Descargar",
   "download.action.install": "Instalar",
 
@@ -334,22 +334,22 @@ export const dict = {
   "download.platform.linuxRpm": "Linux (.rpm)",
 
   "download.faq.a3.beforeLocal":
-    "No necesariamente, pero probablemente. Necesitarás una suscripción de IA si quieres conectar OpenCode a un proveedor de pago, aunque puedes trabajar con",
+    "No necesariamente, pero probablemente. Necesitarás una suscripción de IA si quieres conectar Olive a un proveedor de pago, aunque puedes trabajar con",
   "download.faq.a3.localLink": "modelos locales",
   "download.faq.a3.afterLocal.beforeZen": "gratis. Aunque animamos a los usuarios a usar",
   "download.faq.a3.afterZen":
-    ", OpenCode funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
+    ", Olive funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
 
-  "download.faq.a5.p1": "OpenCode es 100% gratuito de usar.",
+  "download.faq.a5.p1": "Olive es 100% gratuito de usar.",
   "download.faq.a5.p2.beforeZen":
-    "Cualquier costo adicional vendrá de tu suscripción a un proveedor de modelos. Aunque OpenCode funciona con cualquier proveedor de modelos, recomendamos usar",
+    "Cualquier costo adicional vendrá de tu suscripción a un proveedor de modelos. Aunque Olive funciona con cualquier proveedor de modelos, recomendamos usar",
   "download.faq.a5.p2.afterZen": ".",
 
-  "enterprise.title": "OpenCode | Soluciones empresariales para tu organización",
-  "enterprise.meta.description": "Contacta a OpenCode para soluciones empresariales",
+  "enterprise.title": "Olive | Soluciones empresariales para tu organización",
+  "enterprise.meta.description": "Contacta a Olive para soluciones empresariales",
   "enterprise.hero.title": "Tu código es tuyo",
   "enterprise.hero.body1":
-    "OpenCode opera de forma segura dentro de tu organización sin almacenar datos ni contexto, y sin restricciones de licencia ni reclamaciones de propiedad. Inicia una prueba con tu equipo, luego despliégalo en toda tu organización integrándolo con tu SSO y pasarela de IA interna.",
+    "Olive opera de forma segura dentro de tu organización sin almacenar datos ni contexto, y sin restricciones de licencia ni reclamaciones de propiedad. Inicia una prueba con tu equipo, luego despliégalo en toda tu organización integrándolo con tu SSO y pasarela de IA interna.",
   "enterprise.hero.body2": "Déjanos saber cómo podemos ayudar.",
   "enterprise.form.name.label": "Nombre completo",
   "enterprise.form.name.placeholder": "Jeff Bezos",
@@ -381,29 +381,29 @@ export const dict = {
   "enterprise.form.error.internalServer": "Error interno del servidor.",
   "enterprise.form.error.captcha": "La verificación captcha falló. Inténtalo de nuevo.",
   "enterprise.faq.title": "FAQ",
-  "enterprise.faq.q1": "¿Qué es OpenCode Enterprise?",
+  "enterprise.faq.q1": "¿Qué es Olive Enterprise?",
   "enterprise.faq.a1":
-    "OpenCode Enterprise es para organizaciones que quieren asegurar que su código y datos nunca salgan de su infraestructura. Puede hacer esto usando una configuración centralizada que se integra con tu SSO y pasarela de IA interna.",
-  "enterprise.faq.q2": "¿Cómo empiezo con OpenCode Enterprise?",
+    "Olive Enterprise es para organizaciones que quieren asegurar que su código y datos nunca salgan de su infraestructura. Puede hacer esto usando una configuración centralizada que se integra con tu SSO y pasarela de IA interna.",
+  "enterprise.faq.q2": "¿Cómo empiezo con Olive Enterprise?",
   "enterprise.faq.a2":
-    "Simplemente empieza con una prueba interna con tu equipo. OpenCode por defecto no almacena tu código ni datos de contexto, haciendo fácil empezar. Luego contáctanos para discutir precios y opciones de implementación.",
+    "Simplemente empieza con una prueba interna con tu equipo. Olive por defecto no almacena tu código ni datos de contexto, haciendo fácil empezar. Luego contáctanos para discutir precios y opciones de implementación.",
   "enterprise.faq.q3": "¿Cómo funciona el precio para empresas?",
   "enterprise.faq.a3":
     "Si tienes tu propia pasarela de LLM, no cobramos por los tokens usados. Para más detalles, contáctanos para una cotización personalizada basada en las necesidades de tu organización.",
-  "enterprise.faq.q4": "¿Están mis datos seguros con OpenCode Enterprise?",
+  "enterprise.faq.q4": "¿Están mis datos seguros con Olive Enterprise?",
   "enterprise.faq.a4":
-    "Sí. OpenCode no almacena tu código ni datos de contexto. Todo el procesamiento ocurre localmente o a través de llamadas directas a la API de tu proveedor de IA. Con configuración central y integración SSO, tus datos permanecen seguros dentro de la infraestructura de tu organización.",
+    "Sí. Olive no almacena tu código ni datos de contexto. Todo el procesamiento ocurre localmente o a través de llamadas directas a la API de tu proveedor de IA. Con configuración central y integración SSO, tus datos permanecen seguros dentro de la infraestructura de tu organización.",
 
-  "brand.title": "OpenCode | Marca",
-  "brand.meta.description": "Guías de marca de OpenCode",
+  "brand.title": "Olive | Marca",
+  "brand.meta.description": "Guías de marca de Olive",
   "brand.heading": "Guías de marca",
-  "brand.subtitle": "Recursos y activos para ayudarte a trabajar con la marca OpenCode.",
+  "brand.subtitle": "Recursos y activos para ayudarte a trabajar con la marca Olive.",
   "brand.downloadAll": "Descargar todos los activos",
 
-  "changelog.title": "OpenCode | Registro de cambios",
-  "changelog.meta.description": "Notas de versión y registro de cambios de OpenCode",
+  "changelog.title": "Olive | Registro de cambios",
+  "changelog.meta.description": "Notas de versión y registro de cambios de Olive",
   "changelog.hero.title": "Registro de cambios",
-  "changelog.hero.subtitle": "Nuevas actualizaciones y mejoras para OpenCode",
+  "changelog.hero.subtitle": "Nuevas actualizaciones y mejoras para Olive",
   "changelog.empty": "No se encontraron entradas en el registro de cambios.",
   "changelog.viewJson": "Ver JSON",
 } as const satisfies Dict

@@ -1,11 +1,11 @@
 import { useWorkspaceLocation } from "@/workspaces/location"
 import { Persist, persisted } from "@/runtime/persistence/storage"
-import type { SessionStepFailed } from "@opencode/client/promise"
+import type { SessionStepFailed } from "@olive/client/promise"
 import { onCleanup } from "solid-js"
 import { Schema } from "effect"
 import { Persistence } from "@/runtime/persistence/schema"
 import { useSessionLayout } from "./session-layout"
-import { useDialog, useI18n } from "@opencode/ui/context"
+import { useDialog, useI18n } from "@olive/ui/context"
 import { DialogUsageExceeded } from "@/providers/connect/usage-exceeded"
 import { GoUpsellHero } from "@/providers/connect/go-upsell-hero"
 import { useLocal, type ModelSelection } from "@/providers/models/selection"
@@ -16,7 +16,7 @@ const GO_UPSELL_FREE_TIER_DONT_SHOW = "go_upsell_dont_show"
 
 const GO_UPSELL_WINDOW = 86_400_000 // 24 hrs
 
-const GO_URL = "https://opencode.ai/go"
+const GO_URL = "https://olive.ai/go"
 
 const MAX_RETRY_AFTER_MS = 7 * 86_400_000
 
@@ -104,7 +104,7 @@ export function useUsageExceededDialogs(input?: {
           else {
             void import("@/providers/connect/dialog").then((x) => {
               const controller = x.useProviderConnectController()
-              controller.select("opencode-go")
+              controller.select("olive-go")
               void dialog.show(() => (
                 <x.DialogConnectProvider
                   directory={sdk().directory}

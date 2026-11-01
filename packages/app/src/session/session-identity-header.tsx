@@ -1,15 +1,15 @@
-import type { SessionInfo } from "@opencode/client/promise"
-import type { MountedSession, SessionScreen } from "@opencode/plugin/gui"
-import { Icon } from "@opencode/ui/icon"
-import { Menu } from "@opencode/ui/menu"
-import { Tooltip } from "@opencode/ui/tooltip"
+import type { SessionInfo } from "@olive/client/promise"
+import type { MountedSession, SessionScreen } from "@olive/plugin/gui"
+import { Icon } from "@olive/ui/icon"
+import { Menu } from "@olive/ui/menu"
+import { Tooltip } from "@olive/ui/tooltip"
 import {
   displayName,
   getProjectAvatarGenerated,
   getProjectAvatarSource,
   getProjectAvatarVariant,
   ProjectAvatar,
-} from "@opencode/ui/project-avatar"
+} from "@olive/ui/project-avatar"
 import { useNavigate } from "@solidjs/router"
 import {
   createContext,
@@ -23,7 +23,7 @@ import {
 } from "solid-js"
 import { createStore } from "solid-js/store"
 import { PluginSlot } from "@/runtime/plugin/render"
-import { containsDirectory, getFilename } from "@opencode/util/path"
+import { containsDirectory, getFilename } from "@olive/util/path"
 import { useServer } from "@/runtime/server/current"
 import { ServerConnection, useServers } from "@/runtime/server/registry"
 import { ServerLabel } from "@/servers/registry/label"

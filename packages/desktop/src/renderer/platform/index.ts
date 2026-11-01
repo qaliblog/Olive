@@ -1,4 +1,4 @@
-import type { Platform } from "@opencode/app/desktop"
+import type { Platform } from "@olive/app/desktop"
 import type { ElectronAPI } from "../api-types"
 import { setPinchZoomEnabled, setZoomLevel, webviewZoom, zoomLevel } from "../window/zoom"
 import { windowFullscreen } from "../window/fullscreen"

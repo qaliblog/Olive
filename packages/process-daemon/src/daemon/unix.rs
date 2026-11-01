@@ -140,7 +140,7 @@ pub(super) fn remove_stale_endpoint(
     canonical_directory: &Path,
     registration: Option<&Registration>,
 ) -> Result<()> {
-    // The abandoned daemon may have used a different OPENCODE_PTY_SOCKET_DIR, so
+    // The abandoned daemon may have used a different OLIVE_PTY_SOCKET_DIR, so
     // prefer the socket it registered over this daemon's socket root.
     let socket = match registration {
         Some(registration) => registration.socket.clone(),
@@ -166,7 +166,7 @@ fn socket_path(directory: &Path) -> Result<PathBuf> {
 // The default path stays short enough for sun_path; temp cleaners skip sockets.
 fn socket_root() -> Result<PathBuf> {
     resolve_socket_root(
-        std::env::var_os("OPENCODE_PTY_SOCKET_DIR").map(PathBuf::from),
+        std::env::var_os("OLIVE_PTY_SOCKET_DIR").map(PathBuf::from),
         nix::unistd::Uid::effective().as_raw(),
     )
 }
@@ -175,14 +175,14 @@ fn resolve_socket_root(directory: Option<PathBuf>, uid: u32) -> Result<PathBuf> 
     let base = match directory {
         None => PathBuf::from("/tmp"),
         Some(directory) if !directory.is_absolute() => {
-            bail!("OPENCODE_PTY_SOCKET_DIR must be an absolute path")
+            bail!("OLIVE_PTY_SOCKET_DIR must be an absolute path")
         }
         Some(directory)
             if directory
                 .components()
                 .any(|part| part == Component::ParentDir) =>
         {
-            bail!("OPENCODE_PTY_SOCKET_DIR must not contain '..'")
+            bail!("OLIVE_PTY_SOCKET_DIR must not contain '..'")
         }
         Some(directory) => directory,
     };

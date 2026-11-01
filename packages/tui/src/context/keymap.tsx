@@ -1,4 +1,4 @@
-import type { KeymapActive, KeymapCommand, KeymapLayer, KeymapPending } from "@opencode/plugin/tui/context"
+import type { KeymapActive, KeymapCommand, KeymapLayer, KeymapPending } from "@olive/plugin/tui/context"
 import { InputRenderable, TextareaRenderable, type KeyEvent, type Renderable } from "@opentui/core"
 import { stringifyKeyStroke, type Binding, type CommandContext } from "@opentui/keymap"
 import {
@@ -29,7 +29,7 @@ import { resolveInteractivity, useInteractivity } from "./interactivity"
 
 declare module "@opentui/keymap" {
   interface Command {
-    opencode?: KeymapCommand
+    olive?: KeymapCommand
     slash?: {
       name: string
       aliases?: string[]
@@ -38,7 +38,7 @@ declare module "@opentui/keymap" {
   }
 }
 
-const MODE = { key: "opencode.mode", base: "base" } as const
+const MODE = { key: "olive.mode", base: "base" } as const
 
 type OpenTuiKeymap = Parameters<typeof KeymapProvider>[0]["keymap"]
 type Mode = ReturnType<typeof createMode>
@@ -165,12 +165,12 @@ function Provider(props: ParentProps<{ config?: KeymapConfig }>) {
   )
 }
 
-export type { KeymapCommand, KeymapLayer } from "@opencode/plugin/tui/context"
+export type { KeymapCommand, KeymapLayer } from "@olive/plugin/tui/context"
 
 export interface Keymap {
   /** Dispatches a reachable command by ID. */
   dispatch(id: string, input?: string): void
-  /** Controls mutually exclusive OpenCode input modes. */
+  /** Controls mutually exclusive Olive input modes. */
   readonly mode: {
     /** Returns the active mode. */
     current(): string
@@ -204,7 +204,7 @@ function use(): Keymap {
 function createLayer(input: () => KeymapLayer) {
   const value = useValue()
   const enabled = useInteractivity()
-  // The keymap rebuilds a re-registered layer when a command's `opencode` object is new,
+  // The keymap rebuilds a re-registered layer when a command's `olive` object is new,
   // so each command keeps one object while its data is unchanged.
   const stable = new Map<string, KeymapCommand & { readonly id: string }>()
   useBindings(() => {
@@ -228,7 +228,7 @@ function createLayer(input: () => KeymapLayer) {
         return {
           ...definition,
           name: id,
-          opencode: kept,
+          olive: kept,
           run: (context: CommandContext<Renderable, KeyEvent>) => run(value.input(id), context.event),
           ...(description === undefined ? {} : { desc: description }),
           ...(group === undefined ? {} : { category: group }),
@@ -364,7 +364,7 @@ function useCommands(): Accessor<readonly KeymapCommand[]> {
         visibility: "reachable",
       })
       .map((entry) => {
-        const command = entry.command.opencode ?? {
+        const command = entry.command.olive ?? {
           id: entry.command.name,
           title: typeof entry.command.title === "string" ? entry.command.title : undefined,
           description: typeof entry.command.desc === "string" ? entry.command.desc : undefined,

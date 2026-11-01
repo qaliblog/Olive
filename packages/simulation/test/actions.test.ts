@@ -6,12 +6,12 @@ import { SimulationRenderer } from "../src/frontend/renderer"
 import { SimulationSemantics } from "../src/frontend/semantics"
 
 test("matches literal screen text", () => {
-  const harness = { screen: () => "OpenCode [ready].*" }
+  const harness = { screen: () => "Olive [ready].*" }
 
-  expect(matches(harness, "OpenCode")).toBe(true)
+  expect(matches(harness, "Olive")).toBe(true)
   expect(matches(harness, "[ready].*")).toBe(true)
-  expect(matches(harness, "OpenCode.*ready")).toBe(false)
-  expect(matches(harness, "opencode")).toBe(false)
+  expect(matches(harness, "Olive.*ready")).toBe(false)
+  expect(matches(harness, "olive")).toBe(false)
 })
 
 test("omits an absent focused renderable from state", () => {
@@ -265,7 +265,7 @@ test("snapshots lazy semantic hierarchy and interaction state", async () => {
         actions.add(once)
 
         expect(snapshot(createHarness(renderer))).toEqual({
-          format: "opencode-ui-snapshot-v1",
+          format: "olive-ui-snapshot-v1",
           nodes: [
             {
               id: "session.permission",

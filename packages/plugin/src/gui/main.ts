@@ -125,7 +125,7 @@ export interface ServerEndpoint {
   readonly password?: string
 }
 
-/** The opencode CLI the desktop app runs. */
+/** The olive CLI the desktop app runs. */
 export interface Cli {
   /** The CLI's version. */
   readonly version: string
@@ -241,7 +241,7 @@ export interface MainContext extends BaseContext {
    */
   readonly embeds: Embeds
   /**
-   * The opencode CLI the app runs.
+   * The olive CLI the app runs.
    *
    * @example
    * ```ts

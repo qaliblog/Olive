@@ -32,9 +32,9 @@ export const preferApplicationEnvironment = Effect.gen(function* () {
     if (!shellEnv?.XDG_STATE_HOME) delete process.env.XDG_STATE_HOME
     Object.assign(process.env, {
       ...shellEnv,
-      OPENCODE_EXPERIMENTAL_ICON_DISCOVERY: "true",
-      OPENCODE_EXPERIMENTAL_FILEWATCHER: "true",
-      OPENCODE_CLIENT: "desktop",
+      OLIVE_EXPERIMENTAL_ICON_DISCOVERY: "true",
+      OLIVE_EXPERIMENTAL_FILEWATCHER: "true",
+      OLIVE_CLIENT: "desktop",
     })
   })
 })
@@ -43,8 +43,8 @@ export const prepareDesktop = Effect.gen(function* () {
   const path = yield* Path.Path
   const paths = yield* DesktopPaths.resolve
 
-  if (app.isPackaged || process.env.OPENCODE_DESKTOP_DISABLE_PROTOCOL_REGISTRATION !== "1")
-    app.setAsDefaultProtocolClient("opencode")
+  if (app.isPackaged || process.env.OLIVE_DESKTOP_DISABLE_PROTOCOL_REGISTRATION !== "1")
+    app.setAsDefaultProtocolClient("olive")
   const runFork = Effect.runForkWith(yield* Effect.context())
   setProtocolReporter((level, message, data) =>
     runFork(scoped("protocol", level === "error" ? Effect.logError(message, data) : Effect.logWarning(message, data))),

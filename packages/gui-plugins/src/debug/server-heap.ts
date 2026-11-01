@@ -1,7 +1,7 @@
-import { ClientError, OpenCode } from "@opencode/client/promise"
+import { ClientError, Olive } from "@olive/client/promise"
 import { Predicate } from "effect"
 import path from "node:path"
-import type { ServerEndpoint } from "@opencode/plugin/gui/main"
+import type { ServerEndpoint } from "@olive/plugin/gui/main"
 
 type Memory = Readonly<Record<"rss" | "heapTotal" | "heapUsed" | "external" | "arrayBuffers", number>>
 
@@ -35,7 +35,7 @@ export async function captureServer(
 ): Promise<ServerSnapshot> {
   if (!endpoint) return { process: "server", error: "The server is not running." }
 
-  return OpenCode.make({ baseUrl: endpoint.url, headers: endpoint.headers })
+  return Olive.make({ baseUrl: endpoint.url, headers: endpoint.headers })
     .debug.heapDump({ directory }, { signal })
     .then(
       (snapshot): ServerSnapshot =>

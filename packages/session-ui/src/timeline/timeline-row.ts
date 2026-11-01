@@ -58,8 +58,8 @@ export namespace TimelineRow {
   }> {}
 
   /**
-   * `free-limit` marks OpenCode Zen's daily free allowance running out and `go-limit` an OpenCode Go subscription's
-   * usage limit. `budget-limit` marks an OpenCode Console budget
+   * `free-limit` marks Olive Zen's daily free allowance running out and `go-limit` an Olive Go subscription's
+   * usage limit. `budget-limit` marks an Olive Console budget
    * on all spend pausing paid models, and `model-budget-limit` one pausing only the models it covers. `resetAt` is when
    * the allowance or budget comes back, if known.
    */

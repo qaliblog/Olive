@@ -2,24 +2,24 @@
 title: "Config"
 ---
 
-Create `opencode.jsonc` in your project to configure OpenCode. Add the schema for editor validation, then set only the options you need.
+Create `olive.jsonc` in your project to configure Olive. Add the schema for editor validation, then set only the options you need.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "model": "anthropic/claude-sonnet-5-5",
 }
 ```
 
-You can also ask OpenCode to update this file for you.
+You can also ask Olive to update this file for you.
 
 ## Format
 
-OpenCode supports JSON and JSONC. Use JSONC when you want comments or trailing commas.
+Olive supports JSON and JSONC. Use JSONC when you want comments or trailing commas.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   // Use this model by default.
   "model": "anthropic/claude-sonnet-5-5",
 }
@@ -31,29 +31,29 @@ Put managed, machine-wide settings in the system configuration directory:
 
 | Platform | Directory                               |
 | -------- | --------------------------------------- |
-| macOS    | `/Library/Application Support/opencode` |
-| Linux    | `/etc/opencode`                         |
-| Windows  | `%ProgramData%\opencode`                |
+| macOS    | `/Library/Application Support/olive` |
+| Linux    | `/etc/olive`                         |
+| Windows  | `%ProgramData%\olive`                |
 
 The system directory works like the global directory. Besides
-`opencode.json(c)`, it loads `agents/`, `commands/`, `skills/`, and `plugins/`
+`olive.json(c)`, it loads `agents/`, `commands/`, `skills/`, and `plugins/`
 for every user on the machine:
 
 ```text
-/etc/opencode/
-├── opencode.json
+/etc/olive/
+├── olive.json
 ├── agents/review.md
 ├── commands/release.md
 └── skills/deploy/SKILL.md
 ```
 
-On macOS, OpenCode also reads managed preferences that MDM tools deploy for the
-`ai.opencode.managed` domain. A user-specific profile replaces the
+On macOS, Olive also reads managed preferences that MDM tools deploy for the
+`ai.olive.managed` domain. A user-specific profile replaces the
 machine-wide one:
 
 ```text
-/Library/Managed Preferences/<user>/ai.opencode.managed.plist
-/Library/Managed Preferences/ai.opencode.managed.plist
+/Library/Managed Preferences/<user>/ai.olive.managed.plist
+/Library/Managed Preferences/ai.olive.managed.plist
 ```
 
 Managed settings have the highest precedence, so users and projects cannot
@@ -65,42 +65,42 @@ configuration to enforce restrictions.
 Put user settings for every project in the global configuration:
 
 ```text
-~/.config/opencode/opencode.json(c)
+~/.config/olive/olive.json(c)
 ```
 
 Put project settings in either of these files:
 
 ```text
-/home/user/projects/my-app/opencode.json(c)
-/home/user/projects/my-app/.opencode/opencode.json(c)
+/home/user/projects/my-app/olive.json(c)
+/home/user/projects/my-app/.olive/olive.json(c)
 ```
 
-OpenCode searches from the current directory to the filesystem root. It first
-merges direct `opencode.json(c)` files from the farthest directory to the
-closest, then merges files inside `.opencode` directories in the same order.
-This means every discovered `.opencode` config overrides every direct config.
+Olive searches from the current directory to the filesystem root. It first
+merges direct `olive.json(c)` files from the farthest directory to the
+closest, then merges files inside `.olive` directories in the same order.
+This means every discovered `.olive` config overrides every direct config.
 Use one form throughout a directory tree unless you need that behavior.
 
-For example, start OpenCode from `/home/user/projects/acme/packages/web`:
+For example, start Olive from `/home/user/projects/acme/packages/web`:
 
 ```text
-/etc/opencode/opencode.json
-~/.config/opencode/opencode.json
+/etc/olive/olive.json
+~/.config/olive/olive.json
 
 /home/user/projects/acme/
-├── opencode.json
+├── olive.json
 └── packages/
     └── web/
-        ├── opencode.json
+        ├── olive.json
         └── src/
 ```
 
-OpenCode applies these files from lowest to highest precedence:
+Olive applies these files from lowest to highest precedence:
 
-1. `~/.config/opencode/opencode.json`
-2. `/home/user/projects/acme/opencode.json`
-3. `/home/user/projects/acme/packages/web/opencode.json`
-4. `/etc/opencode/opencode.json`
+1. `~/.config/olive/olive.json`
+2. `/home/user/projects/acme/olive.json`
+3. `/home/user/projects/acme/packages/web/olive.json`
+4. `/etc/olive/olive.json`
 
 The package config overrides matching settings from the repository config,
 which overrides the global config. The system config overrides all of them.
@@ -110,15 +110,15 @@ policies outrank all of them.
 
 ## Schema
 
-The complete OpenCode configuration schema is available at
-[opencode.ai/config.json](https://opencode.ai/config.json).
+The complete Olive configuration schema is available at
+[olive.ai/config.json](https://olive.ai/config.json).
 
 Add the `$schema` field to your configuration file to enable validation and
 autocomplete in editors that support JSON Schema:
 
-```json title="opencode.json"
+```json title="olive.json"
 {
-  "$schema": "https://opencode.ai/config.json"
+  "$schema": "https://olive.ai/config.json"
 }
 ```
 
@@ -178,7 +178,7 @@ Project-level values are ignored.
 
 ### Username
 
-Set a username. OpenCode accepts this field but does not display it in
+Set a username. Olive accepts this field but does not display it in
 conversations.
 
 ```jsonc
@@ -317,7 +317,7 @@ Set the maximum number of lines and bytes retained from a tool result.
 
 ### Search
 
-Choose how OpenCode searches the web. Use `"random"` to select an available
+Choose how Olive searches the web. Use `"random"` to select an available
 provider automatically.
 
 ```jsonc
@@ -414,7 +414,7 @@ and cost considerations.
 
 ### Skills
 
-Add directories or URLs that OpenCode should search for agent skills.
+Add directories or URLs that Olive should search for agent skills.
 
 ```jsonc
 {
@@ -422,7 +422,7 @@ Add directories or URLs that OpenCode should search for agent skills.
 }
 ```
 
-See the [skills guide](/skills) for skill structure and automatic discovery under `.opencode/skills/`.
+See the [skills guide](/skills) for skill structure and automatic discovery under `.olive/skills/`.
 
 ### Commands
 
@@ -443,7 +443,7 @@ See the [commands guide](/commands) for arguments, models, agents, and file-base
 
 ### Instructions
 
-Declare additional instruction files, globs, or HTTP(S) URLs. OpenCode loads
+Declare additional instruction files, globs, or HTTP(S) URLs. Olive loads
 them alongside discovered `AGENTS.md` files.
 
 ```jsonc
@@ -478,7 +478,7 @@ See the [references guide](/references) for shorthand, visibility, and path reso
 
 ### Worktrees
 
-Set the parent directory for new local worktrees. OpenCode appends the requested or generated worktree name.
+Set the parent directory for new local worktrees. Olive appends the requested or generated worktree name.
 
 ```jsonc
 {
@@ -518,7 +518,7 @@ accepts options.
 ```jsonc
 {
   "plugins": [
-    "opencode-example-plugin",
+    "olive-example-plugin",
     {
       "package": "./plugins/local",
       "options": {
@@ -567,10 +567,10 @@ You can use variable substitution in your config files to reference environment 
 
 Use `{env:VARIABLE_NAME}` to substitute environment variables:
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
-  "model": "{env:OPENCODE_MODEL}",
+  "$schema": "https://olive.ai/config.json",
+  "model": "{env:OLIVE_MODEL}",
   "providers": {
     "anthropic": {
       "settings": {
@@ -587,9 +587,9 @@ If the environment variable is not set, it will be replaced with an empty string
 
 Use `{file:path/to/file}` to substitute the contents of a file:
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "providers": {
     "openai": {
       "settings": {
@@ -621,9 +621,9 @@ These are useful for:
 
 All experimental settings live under the `experimental` key:
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "experimental": {
     "todo": true,
     "subagent_depth": 2,
@@ -660,7 +660,7 @@ automatic compaction doesn't pause the session. Defaults to `false`. See
 ### Image generation
 
 `image_generate` sets the default model for the [`experimental_image_generate`](/tools#image-generate) tool, as
-`providerID/modelID`, optionally with `#variant`. When that model isn't available or can't handle a request, OpenCode
+`providerID/modelID`, optionally with `#variant`. When that model isn't available or can't handle a request, Olive
 picks another image model automatically.
 
 ```jsonc
@@ -675,7 +675,7 @@ picks another image model automatically.
 
 ### Location idle timeout
 
-`location_idle_timeout` controls how long a project location can go without session activity before OpenCode unloads
+`location_idle_timeout` controls how long a project location can go without session activity before Olive unloads
 its services. It takes a duration such as `"2 hours"` and defaults to `"60 minutes"`. Running sessions and background
 jobs keep a location loaded. Set it to `false` to never unload idle locations. Project config can override the global
 value.

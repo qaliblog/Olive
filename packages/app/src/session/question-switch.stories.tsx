@@ -1,9 +1,9 @@
-import { activeQuestionRequest, questionPendingDocument } from "@opencode/session-ui/storybook"
+import { activeQuestionRequest, questionPendingDocument } from "@olive/session-ui/storybook"
 import { SessionPreview } from "./story-model"
 import { SettingsExperimental } from "@/settings/experimental/experimental"
 
 export default {
-  title: "OpenCode/Session/Question switch",
+  title: "Olive/Session/Question switch",
   id: "session-question-switch",
   component: SessionPreview,
   parameters: {
@@ -23,7 +23,7 @@ export const Experiments = {
   render: () => (
     <SessionPreview
       title="Choose a Session layout"
-      description="opencode · question UI experiments"
+      description="olive · question UI experiments"
       document={questionPendingDocument}
       request={{ type: "question", value: activeQuestionRequest }}
       side={<SettingsExperimental />}
@@ -36,7 +36,7 @@ export const QuestionSeries = {
   render: () => (
     <SessionPreview
       title="Decide what to build next"
-      description="opencode · modular-session-ui"
+      description="olive · modular-session-ui"
       document={questionPendingDocument}
       request={{
         type: "question",
@@ -108,7 +108,7 @@ export const LongList = {
   render: () => (
     <SessionPreview
       title="Polish the docs site"
-      description="opencode · docs"
+      description="olive · docs"
       document={questionPendingDocument}
       request={{
         type: "question",
@@ -233,7 +233,7 @@ const longMobileOptions = [
     value: "opt-11",
     label: "11. Offline CLI migration subcommand with progress bar",
     description:
-      "Require explicit operator confirmation via opencode db migrate and refuse automatic background writes on startup.",
+      "Require explicit operator confirmation via olive db migrate and refuse automatic background writes on startup.",
   },
   {
     value: "opt-12",
@@ -265,7 +265,7 @@ export const LongPrompt = {
   render: () => (
     <SessionPreview
       title="Plan the storage migration"
-      description="opencode · storage-rollout"
+      description="olive · storage-rollout"
       document={questionPendingDocument}
       request={{
         type: "question",

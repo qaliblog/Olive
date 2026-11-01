@@ -1,13 +1,13 @@
-import { Button } from "@opencode/ui/button"
-import { Badge } from "@opencode/ui/badge"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { Icon } from "@opencode/ui/icon"
-import { RadioGroup, RadioItem } from "@opencode/ui/radio"
-import { Checkbox } from "@opencode/ui/checkbox"
-import { Loader } from "@opencode/ui/loader"
-import { TextField } from "@opencode/ui/text-field"
-import { DialogBody, DialogHeader, DialogTitle, DialogTitleGroup, Dialog } from "@opencode/ui/dialog"
-import { TextInput } from "@opencode/ui/text-input"
+import { Button } from "@olive/ui/button"
+import { Badge } from "@olive/ui/badge"
+import { useDialog } from "@olive/ui/context/dialog"
+import { Icon } from "@olive/ui/icon"
+import { RadioGroup, RadioItem } from "@olive/ui/radio"
+import { Checkbox } from "@olive/ui/checkbox"
+import { Loader } from "@olive/ui/loader"
+import { TextField } from "@olive/ui/text-field"
+import { DialogBody, DialogHeader, DialogTitle, DialogTitleGroup, Dialog } from "@olive/ui/dialog"
+import { TextInput } from "@olive/ui/text-input"
 import { showToast } from "@/shell/notifications/toast"
 import {
   type Component,
@@ -42,7 +42,7 @@ import { useTabs } from "@/shell/tabs/tabs"
 import { Persist, persisted } from "@/runtime/persistence/storage"
 import { Persistence } from "@/runtime/persistence/schema"
 import { Schema } from "effect"
-import type { FormAnswer, FormField, FormValue, IntegrationInfo } from "@opencode/client/promise"
+import type { FormAnswer, FormField, FormValue, IntegrationInfo } from "@olive/client/promise"
 import {
   CLAUDE_AGENT_INTEGRATION,
   CONSOLE_INTEGRATION,
@@ -57,8 +57,8 @@ import { authServerName, RemoteAuthNotice } from "./remote"
 import { providerAccounts, type ProviderAccount } from "@/settings/providers/accounts"
 import { AccountNameInput } from "@/settings/providers/account-name"
 import { useProviderAccountActions } from "@/settings/providers/account-actions"
-import { IconButton } from "@opencode/ui/icon-button"
-import { Menu } from "@opencode/ui/menu"
+import { IconButton } from "@olive/ui/icon-button"
+import { Menu } from "@olive/ui/menu"
 import "@/shell/search-list.css"
 import "./models.css"
 
@@ -270,7 +270,7 @@ export const DialogConnectProvider: Component<{
 const CLAUDE_CODE_SETUP_URL = "https://code.claude.com/docs/en/setup"
 
 // The TUI's integration groups and order, with connected integrations pulled up into their own group first.
-const POPULAR = ["opencode", "opencode-go", "openai", "github-copilot", "anthropic", "google"]
+const POPULAR = ["olive", "olive-go", "openai", "github-copilot", "anthropic", "google"]
 
 function ProviderPicker(props: { directory?: string; onSelect: (provider: string) => void; onPrepare?: () => void }) {
   const integrations = useIntegrations(() => props.directory)
@@ -677,7 +677,7 @@ function ProviderConnection(props: {
     if (controller.currentMethod()?.type === "key") return active()
 
     const loaded = () =>
-      managedProviders() !== undefined || connectionProviders().some((provider) => provider.id !== "opencode")
+      managedProviders() !== undefined || connectionProviders().some((provider) => provider.id !== "olive")
 
     const deadline = Date.now() + 10_000
 
@@ -768,12 +768,12 @@ function ProviderConnection(props: {
     if (showAccounts() && !claudeAgentSetup()) return props.onTitle(provider().name)
 
     if (isConsole && controller.auth.state() === "error")
-      return props.onTitle(language.t("provider.connect.opencode.errorTitle"))
+      return props.onTitle(language.t("provider.connect.olive.errorTitle"))
 
     if (consoleSignIn())
       return props.onTitle(
         language.t(
-          props.provider === "opencode-go" ? "provider.connect.console.titleGo" : "provider.connect.console.title",
+          props.provider === "olive-go" ? "provider.connect.console.titleGo" : "provider.connect.console.title",
         ),
       )
 
@@ -782,7 +782,7 @@ function ProviderConnection(props: {
 
     props.onTitle(
       language.t("provider.connect.title", {
-        provider: props.provider === "opencode" ? language.t("provider.connect.opencode.name") : provider().name,
+        provider: props.provider === "olive" ? language.t("provider.connect.olive.name") : provider().name,
       }),
     )
   })
@@ -1685,7 +1685,7 @@ function ProviderConnection(props: {
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <Show when={!state.catalogPending}>
-            <Button onClick={() => platform.openExternal("https://opencode.ai/console")}>
+            <Button onClick={() => platform.openExternal("https://olive.ai/console")}>
               {language.t("provider.connect.console.openAgain")}
             </Button>
           </Show>

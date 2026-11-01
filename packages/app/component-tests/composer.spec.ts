@@ -1,7 +1,7 @@
 import { expect, story } from "../../stories/playwright/story"
 
 story("cycles full prompts with plain arrows without opening the picker", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--prompt-history")
+  const component = await mount("olive-composer-flow--prompt-history")
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   const options = component.getByRole("option")
   const composer = component.locator('[data-component="composer"]')
@@ -85,7 +85,7 @@ story("cycles full prompts with plain arrows without opening the picker", async 
 story(
   "previews history in the composer, accepts without sending, and cancels back to the original draft",
   async ({ mount, page }) => {
-    const component = await mount("opencode-composer-flow--prompt-history")
+    const component = await mount("olive-composer-flow--prompt-history")
     const input = component.getByRole("textbox", { name: "Prompt", exact: true })
     const search = component.getByRole("combobox", { name: "Prompt history", exact: true })
     const options = component.getByRole("option")
@@ -195,7 +195,7 @@ story(
 )
 
 story("searches history, cancels with Escape, and keeps shell history separate", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--prompt-history")
+  const component = await mount("olive-composer-flow--prompt-history")
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   const search = component.getByRole("combobox", { name: "Prompt history", exact: true })
 
@@ -262,7 +262,7 @@ story("searches history, cancels with Escape, and keeps shell history separate",
 })
 
 story("pins history search above the scrolling prompts", async ({ mount }) => {
-  const component = await mount("opencode-composer-flow--prompt-history", { args: { many: true } })
+  const component = await mount("olive-composer-flow--prompt-history", { args: { many: true } })
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   await input.press("Shift+ArrowUp")
   const menu = component.locator('[data-component="composer-suggestions"]')
@@ -304,7 +304,7 @@ story("pins history search above the scrolling prompts", async ({ mount }) => {
 for (const direction of ["ltr", "rtl"]) {
   for (const alternate of ["none", "queue", "steer"]) {
     story(`scrolls overflowing controls beside fixed ${alternate} actions in ${direction}`, async ({ mount, page }) => {
-      const component = await mount("opencode-composer-flow--toolbar-overflow", {
+      const component = await mount("olive-composer-flow--toolbar-overflow", {
         args: { alternate },
         globals: { direction },
       })
@@ -428,7 +428,7 @@ for (const direction of ["ltr", "rtl"]) {
 }
 
 story("does not mask or pad controls when they fit", async ({ mount }) => {
-  const component = await mount("opencode-composer-flow--model-and-variant")
+  const component = await mount("olive-composer-flow--model-and-variant")
   const controls = component.locator('[data-slot="composer-controls"]')
   await expect(controls).toHaveAttribute("data-overflow-start", "false")
   await expect(controls).toHaveAttribute("data-overflow-end", "false")
@@ -438,7 +438,7 @@ story("does not mask or pad controls when they fit", async ({ mount }) => {
 })
 
 story("keeps toolbar focus rings whole and keyboard-only", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--toolbar-overflow", { args: { alternate: "none" } })
+  const component = await mount("olive-composer-flow--toolbar-overflow", { args: { alternate: "none" } })
   const controls = component.locator('[data-slot="composer-controls"]')
   const agent = controls.getByRole("button", { name: "Choose agent" })
   const variant = controls.getByRole("button", { name: "Choose model variant" })
@@ -464,7 +464,7 @@ story("keeps toolbar focus rings whole and keyboard-only", async ({ mount, page 
 })
 
 story("keeps command selection on the keyboard until the pointer moves", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--slash-suggestions")
+  const component = await mount("olive-composer-flow--slash-suggestions")
 
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
 
@@ -498,7 +498,7 @@ story("keeps command selection on the keyboard until the pointer moves", async (
 })
 
 story("grows suggestions while preserving visible timeline context", async ({ mount }) => {
-  const component = await mount("opencode-composer-flow--constrained-command-suggestions")
+  const component = await mount("olive-composer-flow--constrained-command-suggestions")
   const boundary = component.locator('[data-slot="composer-suggestion-boundary-story"]')
   const suggestions = component.locator('[data-component="composer-suggestions"]')
 
@@ -531,7 +531,7 @@ story("grows suggestions while preserving visible timeline context", async ({ mo
 })
 
 story("keeps the @ menu and its last results open while the next search is pending", async ({ mount }) => {
-  const component = await mount("opencode-composer-flow--slow-file-search")
+  const component = await mount("olive-composer-flow--slow-file-search")
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   const menu = component.locator('[data-component="composer-suggestions"]')
   const row = (id: string) => menu.locator(`[data-suggestion-id="${id}"]`)
@@ -562,7 +562,7 @@ story("keeps the @ menu and its last results open while the next search is pendi
 })
 
 story("ignores a detached suggestion boundary", async ({ mount }) => {
-  const component = await mount("opencode-composer-flow--detached-command-suggestion-boundary")
+  const component = await mount("olive-composer-flow--detached-command-suggestion-boundary")
   await expect(component.locator('[data-component="composer-suggestions"]')).toHaveCSS("max-height", "304px")
 })
 
@@ -573,13 +573,13 @@ for (const [theme, background] of [
   ["dark", "rgb(36, 36, 36)"],
 ] as const) {
   story(`raises the docked composer only in dark mode (${theme})`, async ({ mount }) => {
-    const component = await mount("opencode-composer-flow--empty-draft", { globals: { theme } })
+    const component = await mount("olive-composer-flow--empty-draft", { globals: { theme } })
     await expect(component.locator('[data-component="composer"]')).toHaveCSS("background-color", background)
   })
 }
 
 story("centers add menu shortcuts in a consistent column", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--empty-draft")
+  const component = await mount("olive-composer-flow--empty-draft")
   await component.locator('[data-action="composer-attach"]').click()
 
   const shortcuts = page.locator('[role="menu"] [data-slot="menu-v2-item-shortcut"]')
@@ -599,7 +599,7 @@ story("centers add menu shortcuts in a consistent column", async ({ mount, page 
 
 for (const draft of ["empty-draft", "multiline-draft", "mixed-attachments"]) {
   story(`select all stays inside the composer with ${draft}`, async ({ mount, page }) => {
-    const component = await mount(`opencode-composer-flow--${draft}`)
+    const component = await mount(`olive-composer-flow--${draft}`)
     const input = component.getByRole("textbox", { name: "Prompt", exact: true })
     const text = await input.textContent()
 
@@ -633,7 +633,7 @@ story.describe("touch attachments", () => {
   story.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } })
 
   story("keeps attachment remove buttons visible without hover", async ({ mount, page }) => {
-    const component = await mount("opencode-composer-flow--mixed-attachments")
+    const component = await mount("olive-composer-flow--mixed-attachments")
     expect(await page.evaluate(() => matchMedia("(hover: none)").matches)).toBe(true)
 
     const remove = component.getByRole("button", { name: "Remove attachment", exact: true })
@@ -657,7 +657,7 @@ story("renders a draft once and supports editing, caret restoration, and failure
       return replace.apply(this, nodes)
     }
   })
-  const component = await mount("opencode-composer-flow--failed-submission-restoration")
+  const component = await mount("olive-composer-flow--failed-submission-restoration")
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   await expect(input).toHaveText("Preserve this draft on failure")
   await expect(input).toHaveAttribute("data-test-replacements", "1")
@@ -683,7 +683,7 @@ story("renders a draft once and supports editing, caret restoration, and failure
 })
 
 story("shows thinking on composer hover or when a non-default variant is selected", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--model-and-variant")
+  const component = await mount("olive-composer-flow--model-and-variant")
   const composer = component.locator('[data-component="composer"]')
   const input = composer.getByRole("textbox", { name: "Prompt", exact: true })
   const control = composer.getByRole("button", { name: "Choose model variant" })
@@ -728,7 +728,7 @@ story("shows thinking on composer hover or when a non-default variant is selecte
 })
 
 story("keeps default thinking accessible by keyboard without composer hover", async ({ mount, page }) => {
-  const component = await mount("opencode-composer-flow--model-and-variant")
+  const component = await mount("olive-composer-flow--model-and-variant")
   const input = component.getByRole("textbox", { name: "Prompt", exact: true })
   const control = component.getByRole("button", { name: "Choose model variant" })
 
@@ -777,7 +777,7 @@ story.describe("mobile variant drawer", () => {
   // the page dismisses it.
   for (const moment of ["before", "as"] as const) {
     story(`closes and restores focus when dismissed ${moment} it starts opening`, async ({ mount, page }) => {
-      const component = await mount("opencode-composer-flow--model-and-variant")
+      const component = await mount("olive-composer-flow--model-and-variant")
       const variant = component.getByRole("button", { name: "Choose model variant" })
       const drawer = page.getByRole("dialog", { name: "Choose model variant", exact: true })
       const high = drawer.getByRole("button", { name: "high", exact: true })

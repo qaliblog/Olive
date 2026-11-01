@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode/simulation",
+  "name": "@olive/simulation",
   "version": "2.2.5",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anomalyco/opencode.git",
+    "url": "git+https://github.com/anomalyco/olive.git",
     "directory": "packages/simulation"
   },
   "publishConfig": {
@@ -31,11 +31,11 @@
     "typecheck:tsc": "tsc -b"
   },
   "dependencies": {
-    "@opencode/core": "workspace:*",
-    "@opencode/ai": "workspace:*",
-    "@opencode/plugin": "workspace:*",
-    "@opencode/protocol": "workspace:*",
-    "@opencode/util": "workspace:*",
+    "@olive/core": "workspace:*",
+    "@olive/ai": "workspace:*",
+    "@olive/plugin": "workspace:*",
+    "@olive/protocol": "workspace:*",
+    "@olive/util": "workspace:*",
     "@opentui/core": "catalog:",
     "effect": "catalog:",
     "ws": "8.21.0"

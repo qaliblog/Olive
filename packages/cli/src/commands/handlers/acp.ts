@@ -1,7 +1,7 @@
 import { MessageTooLargeError, ndJsonStream } from "@agentclientprotocol/sdk"
-import { OpenCode } from "@opencode/client/effect"
-import { Service } from "@opencode/client/effect/service"
-import { CrossSpawnSpawner } from "@opencode/util/cross-spawn-spawner"
+import { Olive } from "@olive/client/effect"
+import { Service } from "@olive/client/effect/service"
+import { CrossSpawnSpawner } from "@olive/util/cross-spawn-spawner"
 import { Effect, Option } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/http"
 import { Writable } from "node:stream"
@@ -21,9 +21,9 @@ export default Runtime.handler(
         answer: [],
       })
     }
-    process.env.OPENCODE_CLIENT = "acp"
+    process.env.OLIVE_CLIENT = "acp"
     const endpoint = yield* Standalone.start()
-    const client = yield* OpenCode.make({ baseUrl: endpoint.url }).pipe(
+    const client = yield* Olive.make({ baseUrl: endpoint.url }).pipe(
       Effect.provideServiceEffect(
         HttpClient.HttpClient,
         HttpClient.HttpClient.pipe(
@@ -52,7 +52,7 @@ export default Runtime.handler(
     )
     // Exit directly: closing the scope would wait on the server's graceful shutdown, and its lease pipe ends it anyway.
     yield* Effect.sync(() => {
-      if (failure) process.stderr.write(`opencode acp: ${failure}\n`)
+      if (failure) process.stderr.write(`olive acp: ${failure}\n`)
       process.exit(failure ? 1 : 0)
     })
   }),

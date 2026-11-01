@@ -37,7 +37,7 @@ const officeEmitted = /^(?:docx_\w+_bg|ooxml_opc_bg|pptx_wasm_bg|xlsx_wasm_bg|re
 
 /** @type {import("vite").Plugin} */
 const dropUnloadedOfficeFiles = {
-  name: "opencode-desktop:drop-unloaded-office-files",
+  name: "olive-desktop:drop-unloaded-office-files",
   apply: "build",
   generateBundle: {
     order: "post",
@@ -59,7 +59,7 @@ const dropUnloadedOfficeFiles = {
 
 /** @type {import("rolldown").Plugin} */
 const bundleNestedWorkerDeps = {
-  name: "opencode-desktop:bundle-nested-worker-deps",
+  name: "olive-desktop:bundle-nested-worker-deps",
   resolveId(id, importer) {
     if (!importer || !importer.includes("node_modules")) return
     if (!workerDeps.some((dep) => id === dep || id.startsWith(`${dep}/`))) return
@@ -76,18 +76,18 @@ const bundleNestedWorkerDeps = {
 // itself. The lab is a development tool, so its dependencies are found when it first opens rather than at startup.
 /** @type {import("rolldown").Plugin} */
 const skipComponentsLab = {
-  name: "opencode-desktop:skip-components-lab",
+  name: "olive-desktop:skip-components-lab",
   resolveId(id) {
     if (id === "@/components-lab/lab") return { id, external: true }
   },
 }
 
 export const channel = (() => {
-  const raw = process.env.OPENCODE_CHANNEL
+  const raw = process.env.OLIVE_CHANNEL
 
   if (raw === "local" || raw === "dev" || raw === "beta" || raw === "prod") return raw
 
-  if (process.env.OPENCODE_CHANNEL === "latest") return "prod"
+  if (process.env.OLIVE_CHANNEL === "latest") return "prod"
 
   return "dev"
 })()
@@ -97,7 +97,7 @@ export const channel = (() => {
  */
 export default [
   {
-    name: "opencode-desktop:config",
+    name: "olive-desktop:config",
     config() {
       return {
         resolve: {
@@ -110,7 +110,7 @@ export default [
           },
         },
         define: {
-          "import.meta.env.VITE_OPENCODE_CHANNEL": JSON.stringify(channel),
+          "import.meta.env.VITE_OLIVE_CHANNEL": JSON.stringify(channel),
         },
         worker: {
           format: "es",
@@ -124,7 +124,7 @@ export default [
   },
   dropUnloadedOfficeFiles,
   {
-    name: "opencode-desktop:theme-preload",
+    name: "olive-desktop:theme-preload",
     transformIndexHtml: {
       order: "pre",
       handler: inlineThemePreload,

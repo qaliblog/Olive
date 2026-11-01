@@ -8,7 +8,7 @@ model, including GPT, Gemini, and open models. Console translates the request fo
 Messages.
 
 ```bash
-export ANTHROPIC_BASE_URL="https://opencode.ai/inference/anthropic"
+export ANTHROPIC_BASE_URL="https://olive.ai/inference/anthropic"
 export ANTHROPIC_AUTH_TOKEN="oc_sk_..."
 claude --model claude-sonnet-5-5
 ```
@@ -23,7 +23,7 @@ aliases to Console models so `/model` and background tasks use them.
 ```json title="~/.claude/settings.json"
 {
   "env": {
-    "ANTHROPIC_BASE_URL": "https://opencode.ai/inference/anthropic",
+    "ANTHROPIC_BASE_URL": "https://olive.ai/inference/anthropic",
     "ANTHROPIC_AUTH_TOKEN": "oc_sk_...",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-5-5",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-5-5",
@@ -47,7 +47,7 @@ Use the Go base URL and a key from a workspace with a [Go](/console/go) subscrip
 ```json title="~/.claude/settings.json"
 {
   "env": {
-    "ANTHROPIC_BASE_URL": "https://opencode.ai/inference/go/anthropic",
+    "ANTHROPIC_BASE_URL": "https://olive.ai/inference/go/anthropic",
     "ANTHROPIC_AUTH_TOKEN": "oc_sk_...",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "minimax-m3",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-5-5"
@@ -69,7 +69,7 @@ claude --model gpt-6.1-sol
 Add the [Console MCP](/console/harnesses#console-mcp) server for all your projects.
 
 ```bash
-claude mcp add --transport http --scope user opencode-console https://opencode.ai/console/mcp
+claude mcp add --transport http --scope user olive-console https://olive.ai/console/mcp
 ```
 
-Run `/mcp` in Claude Code, select `opencode-console`, and sign in from the browser.
+Run `/mcp` in Claude Code, select `olive-console`, and sign in from the browser.

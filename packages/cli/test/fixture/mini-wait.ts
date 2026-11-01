@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { ClientError, OpenCode } from "@opencode/client/promise"
+import { ClientError, Olive } from "@olive/client/promise"
 import { createMiniConnection } from "../../src/mini"
 
 const endpoint = { url: process.argv[2]! }
@@ -16,7 +16,7 @@ const timeout = (error: unknown) =>
 await Promise.all([
   connection.sdk.experimental.session.wait({ sessionID: "ses_initial" }),
   replacement.experimental.session.wait({ sessionID: "ses_reconnected" }),
-  assert.rejects(OpenCode.make({ baseUrl: endpoint.url }).experimental.session.wait({ sessionID: "ses_control" }), timeout),
+  assert.rejects(Olive.make({ baseUrl: endpoint.url }).experimental.session.wait({ sessionID: "ses_control" }), timeout),
   assert.rejects(
     connection.sdk.experimental.session.wait({ sessionID: "ses_cancelled" }, { signal: AbortSignal.timeout(100) }),
     timeout,

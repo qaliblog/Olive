@@ -1,7 +1,7 @@
 import { usePlatform } from "@/runtime/platform/platform"
 import { ServerConnection } from "@/runtime/server/registry"
 import { authTokenFromCredentials } from "./api"
-import { ClientError, isUnauthorizedError, OpenCode } from "@opencode/client"
+import { ClientError, isUnauthorizedError, Olive } from "@olive/client"
 import { Match } from "effect"
 import { Accessor, createEffect, createSignal, onCleanup } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
@@ -120,7 +120,7 @@ export async function checkServerHealth(
   }
 
   const attempt = async (count: number): Promise<ServerHealth> => {
-    const current = await OpenCode.make({
+    const current = await Olive.make({
       baseUrl: server.url,
       fetch,
       headers,

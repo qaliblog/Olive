@@ -1,6 +1,6 @@
 import { createMemo, lazy, onCleanup, Show, Suspense } from "solid-js"
-import { Icon } from "@opencode/ui/icon"
-import { Menu } from "@opencode/ui/menu"
+import { Icon } from "@olive/ui/icon"
+import { Menu } from "@olive/ui/menu"
 import {
   Command,
   createKeyed,
@@ -11,14 +11,14 @@ import {
   type PanelTab,
   type Plugin,
   type SessionRef,
-} from "@opencode/plugin/gui"
+} from "@olive/plugin/gui"
 import type Terminal from "./index"
 import { terminalToggleCommand } from "./index"
 import { createTerminalModel, type TerminalSession } from "./model"
 import { terminalTabLabel } from "./title"
 import { TerminalTabLabel } from "./label"
 import quoteStyles from "./quote.css?inline"
-import { onIdle, BuiltinCommand, BuiltinSlot } from "@opencode/plugin/gui/builtin"
+import { onIdle, BuiltinCommand, BuiltinSlot } from "@olive/plugin/gui/builtin"
 
 const setup: Plugin.Setup<typeof Terminal> = (ctx) => {
   const sessions = ctx.sessions

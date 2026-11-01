@@ -71,7 +71,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "ক্রেডিট যোগ করুন",
   "dialog.usageExceeded.freeTier.title": "বিনামূল্যের সীমা পৌঁছেছে",
   "dialog.usageExceeded.freeTier.description":
-    "সেরা ওপেন-সোর্স মডেলগুলিতে নির্ভরযোগ্য অ্যাক্সেসের জন্য $10/মাসে OpenCode Go-তে সদস্যতা নিন৷",
+    "সেরা ওপেন-সোর্স মডেলগুলিতে নির্ভরযোগ্য অ্যাক্সেসের জন্য $10/মাসে Olive Go-তে সদস্যতা নিন৷",
   "dialog.usageExceeded.freeTier.actionLabel": "সদস্যতা",
   "ui.sessionTurn.status.delegating": "কাজ অর্পণ",
   "ui.sessionTurn.status.planning": "পরবর্তী পদক্ষেপের পরিকল্পনা",

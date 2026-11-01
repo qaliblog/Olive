@@ -1,4 +1,4 @@
-import type { MountedSession } from "@opencode/plugin/gui"
+import type { MountedSession } from "@olive/plugin/gui"
 import { SessionServerPanel } from "./server-panel"
 
 export type DetailsPanelProps = {

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test"
 import { createStore, produce } from "solid-js/store"
-import { ClientError, type PersistentPtyInfo } from "@opencode/client"
-import type { Layout, ServerRef, SessionRef, Storage, ToastOptions } from "@opencode/plugin/gui"
-import { PtyFeatureUnsupportedError, ServiceUnavailableError } from "@opencode/protocol/errors"
+import { ClientError, type PersistentPtyInfo } from "@olive/client"
+import type { Layout, ServerRef, SessionRef, Storage, ToastOptions } from "@olive/plugin/gui"
+import { PtyFeatureUnsupportedError, ServiceUnavailableError } from "@olive/protocol/errors"
 import { createTerminalModel } from "./model"
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0))

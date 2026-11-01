@@ -261,7 +261,7 @@ function nativePickerPath(path: string) {
   return value
 }
 
-import { getFilename } from "@opencode/util/path"
+import { getFilename } from "@olive/util/path"
 import fuzzysort from "fuzzysort"
 import { ServerSDK } from "@/runtime/server/client"
 

@@ -4,7 +4,7 @@ import { HttpServer } from "effect/http"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { OpenCode } from "../../client/src/promise/index"
+import { Olive } from "../../client/src/promise/index"
 import { it } from "../../core/test/lib/effect"
 import { ServerProcess } from "../src/process"
 
@@ -29,7 +29,7 @@ live(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = OpenCode.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Olive.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("olive:secret")}` } })
       const location = { directory }
       const terminal = yield* Effect.acquireRelease(
         Effect.promise(() =>
@@ -47,7 +47,7 @@ live(
       )
       yield* Effect.promise(async () => {
         const open = async () => {
-          const token = await client.pty.connect.token({ location, ptyID: terminal.data.id, "x-opencode-ticket": "1" })
+          const token = await client.pty.connect.token({ location, ptyID: terminal.data.id, "x-olive-ticket": "1" })
           const url = new URL(`/api/pty/${terminal.data.id}/connect`, base)
           url.protocol = "ws:"
           url.searchParams.set("location[directory]", directory)
@@ -147,7 +147,7 @@ live(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = OpenCode.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Olive.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("olive:secret")}` } })
       const location = { directory }
       yield* Effect.promise(async () => {
         const terminal = await client.pty.create({
@@ -156,7 +156,7 @@ live(
           args: ["-c", "sleep 30"],
           cwd: directory,
         })
-        const token = await client.pty.connect.token({ location, ptyID: terminal.data.id, "x-opencode-ticket": "1" })
+        const token = await client.pty.connect.token({ location, ptyID: terminal.data.id, "x-olive-ticket": "1" })
         const url = new URL(`/api/pty/${terminal.data.id}/connect`, base)
         url.protocol = "ws:"
         url.searchParams.set("location[directory]", directory)

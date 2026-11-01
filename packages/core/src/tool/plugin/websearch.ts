@@ -1,8 +1,8 @@
 export * as WebSearchTool from "./websearch.js"
 
-import type { Context } from "@opencode/plugin/effect/plugin"
-import type { SessionHooks } from "@opencode/plugin/effect/session"
-import { ToolFailure } from "@opencode/ai/effect"
+import type { Context } from "@olive/plugin/effect/plugin"
+import type { SessionHooks } from "@olive/plugin/effect/session"
+import { ToolFailure } from "@olive/ai/effect"
 import { Effect, Schema, Semaphore } from "effect"
 import { HttpClientError } from "effect/http"
 import { Form } from "../../form.js"
@@ -30,7 +30,7 @@ const Output = Schema.Struct({
   results: Schema.Array(WebSearch.Result),
 })
 export const Plugin = {
-  id: "opencode.tool.websearch",
+  id: "olive.tool.websearch",
   effect: Effect.fn("WebSearchTool.Plugin")(function* (ctx: Context) {
     const permission = yield* Permission.Service
     const forms = yield* Form.Service
@@ -79,7 +79,7 @@ export const Plugin = {
                           fields: [
                             {
                               key: "choice",
-                              description: "Allow OpenCode to search the web for up-to-date information?",
+                              description: "Allow Olive to search the web for up-to-date information?",
                               type: "string",
                               required: true,
                               custom: false,

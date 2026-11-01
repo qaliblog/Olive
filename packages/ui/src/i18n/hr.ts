@@ -71,7 +71,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Dodaj kredite",
   "dialog.usageExceeded.freeTier.title": "Dosegnuto je besplatno ograničenje",
   "dialog.usageExceeded.freeTier.description":
-    "Pretplatite se na OpenCode Go za 10 USD mjesečno i ostvarite pouzdan pristup najboljim modelima otvorenog koda.",
+    "Pretplatite se na Olive Go za 10 USD mjesečno i ostvarite pouzdan pristup najboljim modelima otvorenog koda.",
   "dialog.usageExceeded.freeTier.actionLabel": "Pretplatite se",
   "ui.sessionTurn.status.delegating": "Delegiranje posla",
   "ui.sessionTurn.status.planning": "Planiranje sljedećih koraka",

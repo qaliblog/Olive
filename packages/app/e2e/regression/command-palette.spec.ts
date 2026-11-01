@@ -1,4 +1,4 @@
-import type { OpenCodeEvent } from "@opencode/client/promise"
+import type { OliveEvent } from "@olive/client/promise"
 import { expect, test } from "@playwright/test"
 import {
   captureConsoleWarnings,
@@ -239,7 +239,7 @@ test("titlebar search opens recent sessions in the server's order on every open"
         model: { providerID: "test", id: "test" },
         started: busy.time.updated,
       },
-    } as OpenCodeEvent,
+    } as OliveEvent,
   ])
   const home = page.getByRole("region", { name: "Recent sessions" }).getByRole("button", { name: /fixture session/ })
   await expect(home).toHaveText([/Palette fixture session/, /Fresh fixture session/])

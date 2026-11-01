@@ -11,8 +11,8 @@ import {
   type Context,
   type JSX,
 } from "solid-js"
-import { DataContext, useData } from "@opencode/session-ui/context"
-import { MarkdownContext, useMarkdown } from "@opencode/session-ui/context/markdown"
+import { DataContext, useData } from "@olive/session-ui/context"
+import { MarkdownContext, useMarkdown } from "@olive/session-ui/context/markdown"
 import { createScopedCache } from "@/runtime/server/scoped-cache"
 import { useWorkspaceLocation, WorkspaceLocationContext } from "@/workspaces/location"
 import type { TimelineSessionSource } from "./controller"

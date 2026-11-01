@@ -1,8 +1,8 @@
 import type { Page } from "@playwright/test"
-import type { OpenCodeEvent, SessionMessageInfo } from "@opencode/client/promise"
-import { Permission } from "@opencode/schema/permission"
-import { Model } from "@opencode/schema/model"
-import { Worktree } from "@opencode/schema/worktree"
+import type { OliveEvent, SessionMessageInfo } from "@olive/client/promise"
+import { Permission } from "@olive/schema/permission"
+import { Model } from "@olive/schema/model"
+import { Worktree } from "@olive/schema/worktree"
 import { Duration, Effect, Layer, Option, Predicate, Schema } from "effect"
 import { HttpRouter, HttpServer, HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
@@ -98,7 +98,7 @@ export interface MockServerConfig {
   onMessage?: (input: { sessionID: string; messageID: string }) => void
   onRevertStage?: (input: { sessionID: string; messageID: string }) => void
   onSession?: (sessionID: string) => void
-  events?: () => OpenCodeEvent[]
+  events?: () => OliveEvent[]
   eventRetry?: number
   // Idle event streams send a comment every 15 s like the real server. Set false only to test the client's stall watchdog.
   keepalive?: boolean
@@ -179,7 +179,7 @@ type MockStreamWindow = Window & {
   __mockServerStreams?: Record<string, MockStream>
 }
 
-export async function mockOpenCodeServer(page: Page, config: MockServerConfig) {
+export async function mockOliveServer(page: Page, config: MockServerConfig) {
   const server = config.server ?? SERVER
 
   mockedOrigins(page).add(server)
@@ -301,7 +301,7 @@ export async function mockOpenCodeServer(page: Page, config: MockServerConfig) {
 
   if (config.events) {
     // Batches stay queued until the page accepts them; failures other than a missing document fail the test.
-    const pending: OpenCodeEvent[] = []
+    const pending: OliveEvent[] = []
     const pump = { busy: false, pending }
 
     const timer = setInterval(() => {
@@ -351,7 +351,7 @@ export async function mockOpenCodeServer(page: Page, config: MockServerConfig) {
 
     if (
       password !== undefined &&
-      (await route.request().headerValue("authorization")) !== `Basic ${btoa(`opencode:${password}`)}`
+      (await route.request().headerValue("authorization")) !== `Basic ${btoa(`olive:${password}`)}`
     ) {
       return route.fulfill({
         status: 401,
@@ -477,7 +477,7 @@ export async function mockServers(page: Page, servers: Record<string, Omit<MockS
           keepalive: config.keepalive,
         })
 
-        const mock = await mockOpenCodeServer(page, { ...config, server: origin })
+        const mock = await mockOliveServer(page, { ...config, server: origin })
 
         return [origin, { transport, persistentPty: mock.persistentPty }] as const
       }),
@@ -743,7 +743,7 @@ function mockHandlers(
             pid: 1,
             hostname: config.hostname,
             urls: config.server ? [config.server] : [],
-            paths: { tmp: "/tmp/opencode" },
+            paths: { tmp: "/tmp/olive" },
             capabilities:
               state.persistentPty.capability === undefined
                 ? undefined
@@ -870,7 +870,7 @@ function mockHandlers(
         configShells: () => Effect.succeed(config.shells ?? []),
         configUpdate: () => noContent,
         websearchProviders: () => Effect.succeed({ location: location(config), data: [] }),
-        // No scenario signs in to an OpenCode Console workspace, so none has usage limits.
+        // No scenario signs in to an Olive Console workspace, so none has usage limits.
         usageLimits: () => Effect.succeed({ location: location(config), data: null }),
         worktreeList: () =>
           Effect.sync(() => {
@@ -1071,7 +1071,7 @@ function mockHandlers(
                 ? Effect.fail(
                     new MockPtyFeatureUnsupported({
                       feature: "rename",
-                      message: "Terminal renaming will be available after OpenCode's terminal service restarts",
+                      message: "Terminal renaming will be available after Olive's terminal service restarts",
                     }),
                   )
                 : Effect.sync(() => ({ data: state.persistentPty.update(found.id, ctx.payload) })),
@@ -1133,7 +1133,7 @@ function mockHandlers(
         },
         // The goal plugin's pill reads each routed session's goal; no scenario sets one.
         rpcCall: (ctx) =>
-          ctx.params.rpcID === "opencode.goal" && ctx.params.method === "get"
+          ctx.params.rpcID === "olive.goal" && ctx.params.method === "get"
             ? Effect.succeed({ output: null })
             : Effect.fail(
                 new MockUnsupported({

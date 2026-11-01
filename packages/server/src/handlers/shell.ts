@@ -1,8 +1,8 @@
-import { Shell } from "@opencode/core/shell"
-import { Location } from "@opencode/core/location"
+import { Shell } from "@olive/core/shell"
+import { Location } from "@olive/core/location"
 import { Effect } from "effect"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
-import { ShellNotFoundError } from "@opencode/protocol/errors"
+import { ShellNotFoundError } from "@olive/protocol/errors"
 import { Api } from "../api"
 import { response } from "../location"
 

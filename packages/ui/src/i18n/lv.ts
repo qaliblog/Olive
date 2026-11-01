@@ -70,7 +70,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Pievienot kredītus",
   "dialog.usageExceeded.freeTier.title": "Sasniegts bezmaksas limits",
   "dialog.usageExceeded.freeTier.description":
-    "Abonē OpenCode Go par $10/mēn., lai iegūtu uzticamu piekļuvi labākajiem atvērtā koda modeļiem.",
+    "Abonē Olive Go par $10/mēn., lai iegūtu uzticamu piekļuvi labākajiem atvērtā koda modeļiem.",
   "dialog.usageExceeded.freeTier.actionLabel": "Abonēt",
   "ui.sessionTurn.status.delegating": "Deleģē darbu",
   "ui.sessionTurn.status.planning": "Plāno nākamos soļus",

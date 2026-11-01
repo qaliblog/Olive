@@ -86,7 +86,7 @@ test("wraps a partial selection in its semantic ancestors", () => {
 test("keeps web links and drops local paths, scripts, and decorative icons", () => {
   const root = markdownRoot(
     [
-      '<p><a class="external-link" target="_blank" href="https://opencode.ai/docs">',
+      '<p><a class="external-link" target="_blank" href="https://olive.ai/docs">',
       '<span class="markdown-link-favicon" aria-hidden="true"><img src="https://example.com/icon.png"></span>docs</a> ',
       '<a href="javascript:alert(1)">bad</a> <a href="mailto:help@example.com">mail</a> ',
       '<a data-local-link="src/app.ts" href="src/app.ts">app</a> ',
@@ -97,7 +97,7 @@ test("keeps web links and drops local paths, scripts, and decorative icons", () 
 
   expect(markdownClipboardHtml(root, rangeOver(root))).toBe(
     [
-      '<p><a href="https://opencode.ai/docs">docs</a> ',
+      '<p><a href="https://olive.ai/docs">docs</a> ',
       '<a>bad</a> <a href="mailto:help@example.com">mail</a> ',
       "<a>app</a> ",
       '<img src="https://example.com/chart.png" alt="chart"> <img alt="local">',

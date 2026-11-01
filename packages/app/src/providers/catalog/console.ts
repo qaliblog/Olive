@@ -5,8 +5,8 @@ type Provider = {
 }
 
 export function consoleProviderGroup<T extends Provider>(providers: readonly T[]) {
-  const root = providers.find((provider) => provider.id === "opencode" && provider.integrationID === "opencode")
-  const suffix = " / OpenCode"
+  const root = providers.find((provider) => provider.id === "olive" && provider.integrationID === "olive")
+  const suffix = " / Olive"
 
   if (!root?.name.endsWith(suffix)) return
   const workspace = root.name.slice(0, -suffix.length).trim()
@@ -19,7 +19,7 @@ export function consoleProviderGroup<T extends Provider>(providers: readonly T[]
     workspace,
     prefix,
     providers: providers.filter(
-      (provider) => provider.integrationID === "opencode" && provider.name.startsWith(prefix),
+      (provider) => provider.integrationID === "olive" && provider.name.startsWith(prefix),
     ),
   }
 }

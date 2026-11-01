@@ -1,13 +1,13 @@
 import { createMemo, For, Show } from "solid-js"
 import { createStore } from "solid-js/store"
-import type { SessionMessageUser } from "@opencode/client/promise"
+import type { SessionMessageUser } from "@olive/client/promise"
 import type { SessionUserActions } from "../actions"
 import { CurrentUserMessageDisplay } from "./message-content"
 import { CurrentSessionProviders } from "../storybook/current-session-story"
 import { CURRENT_SESSION_ID, STORY_MODEL, STORY_TIME } from "../storybook/current-session-fixtures"
 
 export default {
-  title: "OpenCode/Conversation/Prompt message",
+  title: "Olive/Conversation/Prompt message",
   id: "current-prompt-message",
   parameters: { layout: "fullscreen" },
 }

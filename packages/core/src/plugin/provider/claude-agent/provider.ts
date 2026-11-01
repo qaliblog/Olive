@@ -1,7 +1,7 @@
 export * as ClaudeProvider from "./provider.js"
 
 import type { AccountInfo } from "@anthropic-ai/claude-agent-sdk"
-import type { Context } from "@opencode/plugin/effect/plugin"
+import type { Context } from "@olive/plugin/effect/plugin"
 import { Effect, Option, Schema, Stream, SubscriptionRef } from "effect"
 import { Model } from "../../../model.js"
 import { Provider } from "../../../provider.js"
@@ -11,9 +11,9 @@ import { ClaudeQueryOptions } from "./claude/query-options.js"
 import type { ClaudeStatus } from "./claude/status.js"
 
 export const ID = Provider.ID.claudeAgent
-export const PACKAGE = "@opencode/claude-agent"
+export const PACKAGE = "@olive/claude-agent"
 
-// The model list we keep between starts, so opencode can list models without running `claude`
+// The model list we keep between starts, so olive can list models without running `claude`
 const CatalogModel = Schema.Struct({
   id: Schema.String,
   name: Schema.String,
@@ -29,7 +29,7 @@ const Catalog = Schema.Struct({
 type Catalog = typeof Catalog.Type
 const CATALOG_KEY = "models"
 
-// Mantle is Bedrock serving Anthropic's API, and opencode drops most of its `anthropic.…` IDs from Bedrock's list,
+// Mantle is Bedrock serving Anthropic's API, and olive drops most of its `anthropic.…` IDs from Bedrock's list,
 // so it uses Anthropic's prices.
 const PRICE_SOURCES: Partial<Record<NonNullable<AccountInfo["apiProvider"]>, Provider.ID>> = {
   firstParty: Provider.ID.anthropic,
@@ -100,7 +100,7 @@ function fromClaude(models: readonly ClaudeProbe.Model[], saved: readonly Catalo
   for (const model of saved) known.set(model.id, model.contextWindow)
   const result: CatalogModel[] = []
   for (const model of models) {
-    // "default" follows Claude Code's own default, which can change under a running opencode session
+    // "default" follows Claude Code's own default, which can change under a running olive session
     if (model.value === "default") continue
     result.push({
       id: model.value,
@@ -130,9 +130,9 @@ function toModel(model: CatalogModel, prices: ReadonlyMap<string, Model.Info> | 
   return {
     ...defaults,
     name: model.name,
-    // The SDK reports context windows before a prompt, but not output limits. 0 means unknown in OpenCode.
+    // The SDK reports context windows before a prompt, but not output limits. 0 means unknown in Olive.
     limit: { context: model.contextWindow ?? defaults.limit.context, output: 0 },
-    // OpenCode picks the title model by family (Model.small).
+    // Olive picks the title model by family (Model.small).
     family: model.id.includes("haiku") ? Model.Family.make("claude-haiku") : undefined,
     capabilities: { tools: true, input: ["text", "image", "pdf"], output: ["text"] },
     variants: model.efforts.map((effort) => ({ id: Model.VariantID.make(effort), settings: { effort } })),

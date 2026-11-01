@@ -1,5 +1,5 @@
-import type { WebSearch } from "@opencode/schema/websearch"
-import type { WebSearchApi } from "@opencode/client/promise/api"
+import type { WebSearch } from "@olive/schema/websearch"
+import type { WebSearchApi } from "@olive/client/promise/api"
 import type { Transform } from "./registration.js"
 
 export interface WebSearchDefinition {

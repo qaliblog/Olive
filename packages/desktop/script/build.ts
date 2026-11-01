@@ -5,7 +5,7 @@ import path from "node:path"
 import { copyBuiltCliToResources, downloadCliToResources, getCurrentCli, resolveChannel } from "./utils"
 import { verifyBundles } from "./verify-bundles"
 
-// Prepares resources/ (icons, metainfo, the bundled CLI) for OPENCODE_CHANNEL and builds the app into out/.
+// Prepares resources/ (icons, metainfo, the bundled CLI) for OLIVE_CHANNEL and builds the app into out/.
 // The CLI comes from ../cli/dist when it holds the target; otherwise dev downloads the published dev CLI,
 // beta the beta CLI, and prod fails.
 const dir = path.resolve(import.meta.dir, "..")
@@ -20,7 +20,7 @@ await $`bun ./script/copy-icons.ts ${channel}`
 
 await $`bun ./script/copy-metainfo.ts ${channel}`
 
-const built = await exists(path.join(cli, getCurrentCli().package.replace("@opencode/", "")))
+const built = await exists(path.join(cli, getCurrentCli().package.replace("@olive/", "")))
 
 if (channel === "prod" && !built)
   throw new Error(`Production desktop builds bundle the CLI from ${cli}; build it first`)

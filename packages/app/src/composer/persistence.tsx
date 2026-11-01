@@ -1,5 +1,5 @@
-import { base64Encode } from "@opencode/util/encode"
-import { createSimpleContext } from "@opencode/ui/context"
+import { base64Encode } from "@olive/util/encode"
+import { createSimpleContext } from "@olive/ui/context"
 import { useParams, useSearchParams } from "@solidjs/router"
 import { createMemo, createResource, createRoot, getOwner, onCleanup } from "solid-js"
 import { requireServerKey } from "@/shell/routes/session"

@@ -1,14 +1,14 @@
 export * as RpcClientRuntime from "./rpc.js"
 
-import type { Rpc } from "@opencode/schema/rpc"
-import type { RpcError, RpcInternalError } from "@opencode/protocol/errors"
-import type { OpenCodeEvent } from "@opencode/protocol/groups/event"
+import type { Rpc } from "@olive/schema/rpc"
+import type { RpcError, RpcInternalError } from "@olive/protocol/errors"
+import type { OliveEvent } from "@olive/protocol/groups/event"
 import { Effect, Schema, Stream } from "effect"
 import type { RpcArguments, RpcCallOptions } from "../promise/rpc.js"
 import { RpcRuntime } from "../rpc-runtime.js"
 import type { RpcCallInput, RpcCallOutput } from "./api/api.js"
 
-type RpcEvent = Extract<OpenCodeEvent, { type: `rpc.${string}` }>
+type RpcEvent = Extract<OliveEvent, { type: `rpc.${string}` }>
 type DecodeError<S> = S extends Schema.Top ? Schema.SchemaError : never
 
 export type RpcClient<
@@ -37,7 +37,7 @@ export interface RpcApi<E = never, Options = RpcCallOptions, EventError = E> {
 
 export function make<CallError, EventError>(
   call: (input: RpcCallInput, options?: RpcCallOptions) => Effect.Effect<RpcCallOutput, CallError>,
-  subscribe: () => Stream.Stream<OpenCodeEvent, EventError>,
+  subscribe: () => Stream.Stream<OliveEvent, EventError>,
 ): RpcApi<Exclude<CallError, RpcError | RpcInternalError> | Rpc.SystemError, RpcCallOptions, EventError> {
   return <D extends Rpc.Definition>(definition: D) => {
     const methods = Object.fromEntries(

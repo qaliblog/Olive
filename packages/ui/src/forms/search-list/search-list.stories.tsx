@@ -1,6 +1,6 @@
 import { createMemo } from "solid-js"
 import { createStore } from "solid-js/store"
-import { Keybind } from "@opencode/ui/keybind"
+import { Keybind } from "@olive/ui/keybind"
 import { SearchHighlight, SearchList } from "./search-list"
 
 type Row = { id: string; section: string; title: string; description: string; keybind?: string[] }
@@ -20,7 +20,7 @@ function SearchListStory(props: { sections: number; rows: number; sticky: boolea
           id: `${section}-${index}`,
           section,
           title: `${words[(index + s) % words.length]} ${index + 1}`,
-          description: section === "Sessions" ? "opencode" : section,
+          description: section === "Sessions" ? "olive" : section,
           keybind: section === "Commands" && index < 3 ? ["⌥", index % 2 ? "↓" : "↑"] : undefined,
         }),
       ),

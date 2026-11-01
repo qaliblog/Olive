@@ -1,5 +1,5 @@
-import { Button } from "@opencode/ui/button"
-import { useDialog } from "@opencode/ui/context/dialog"
+import { Button } from "@olive/ui/button"
+import { useDialog } from "@olive/ui/context/dialog"
 import { onMount } from "solid-js"
 import { createStore } from "solid-js/store"
 import type { ModelSelection } from "./selection"
@@ -8,7 +8,7 @@ import { DialogSelectModel } from "./select-dialog"
 const chatgpt = {
   id: "gpt-5.6-sol",
   providerID: "openai",
-  api: { id: "gpt-5.6-sol", url: "https://api.openai.com/v1", npm: "@opencode/ai/providers/openai" },
+  api: { id: "gpt-5.6-sol", url: "https://api.openai.com/v1", npm: "@olive/ai/providers/openai" },
   name: "GPT-5.6 Sol",
   family: "gpt",
   capabilities: {

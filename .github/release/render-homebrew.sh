@@ -1,47 +1,47 @@
 #!/usr/bin/env bash
-# render-homebrew.sh <sign-macos dir> <build-archives dir> <tap dir>: writes Formula opencode-v2.rb with the
+# render-homebrew.sh <sign-macos dir> <build-archives dir> <tap dir>: writes Formula olive-v2.rb with the
 # hashes of the signed macOS and the Linux archives.
 . "$(dirname "$0")/lib.sh"
 
 macos=$1 archives=$2 tap=$3
 sum() { sha256 "$1" | cut -c1-64; }
-base="https://opencode.ai/files/bin/$OPENCODE_VERSION"
-cat > "$tap/opencode-v2.rb" <<FORMULA
+base="https://olive.ai/files/bin/$OLIVE_VERSION"
+cat > "$tap/olive-v2.rb" <<FORMULA
 # typed: false
 # frozen_string_literal: true
 
-class OpencodeV2 < Formula
-  desc "OpenCode V2 - the AI coding agent for the terminal"
-  homepage "https://github.com/anomalyco/opencode"
-  version "$OPENCODE_VERSION"
+class OliveV2 < Formula
+  desc "Olive V2 - the AI coding agent for the terminal"
+  homepage "https://github.com/anomalyco/olive"
+  version "$OLIVE_VERSION"
   license "MIT"
 
   depends_on "ripgrep"
-  conflicts_with "opencode", because: "both install an opencode binary"
+  conflicts_with "olive", because: "both install an olive binary"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "$base/opencode-darwin-arm64.zip"
-      sha256 "$(sum "$macos/opencode-darwin-arm64.zip")"
+      url "$base/olive-darwin-arm64.zip"
+      sha256 "$(sum "$macos/olive-darwin-arm64.zip")"
     else
-      url "$base/opencode-darwin-x64-baseline.zip"
-      sha256 "$(sum "$macos/opencode-darwin-x64-baseline.zip")"
+      url "$base/olive-darwin-x64-baseline.zip"
+      sha256 "$(sum "$macos/olive-darwin-x64-baseline.zip")"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "$base/opencode-linux-arm64.tar.gz"
-      sha256 "$(sum "$archives/opencode-linux-arm64.tar.gz")"
+      url "$base/olive-linux-arm64.tar.gz"
+      sha256 "$(sum "$archives/olive-linux-arm64.tar.gz")"
     else
-      url "$base/opencode-linux-x64-baseline.tar.gz"
-      sha256 "$(sum "$archives/opencode-linux-x64-baseline.tar.gz")"
+      url "$base/olive-linux-x64-baseline.tar.gz"
+      sha256 "$(sum "$archives/olive-linux-x64-baseline.tar.gz")"
     end
   end
 
   def install
-    bin.install "opencode"
+    bin.install "olive"
   end
 end
 FORMULA
-cat "$tap/opencode-v2.rb"
+cat "$tap/olive-v2.rb"

@@ -1,4 +1,4 @@
-import type { SessionMessageInfo } from "@opencode/client/promise"
+import type { SessionMessageInfo } from "@olive/client/promise"
 
 // Responses keeps tool outputs in subsequent rounds. Only conversational text
 // belongs in its history preview, never reasoning, attachments or tool output.

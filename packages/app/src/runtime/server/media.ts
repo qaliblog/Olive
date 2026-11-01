@@ -1,4 +1,4 @@
-import { mediaHashFromUri, type OpenCodeClient } from "@opencode/client/promise"
+import { mediaHashFromUri, type OliveClient } from "@olive/client/promise"
 
 export { mediaHashFromUri }
 
@@ -10,7 +10,7 @@ export type MediaCache = {
 
 // Object URLs stay valid until dispose. Rendered attachments, image previews and composer drafts keep the URL they
 // were given without releasing it, so revoking one earlier would break an image that is still on screen.
-export function createMediaCache(getApi: () => Pick<OpenCodeClient, "experimental">): MediaCache {
+export function createMediaCache(getApi: () => Pick<OliveClient, "experimental">): MediaCache {
   const urls = new Map<string, string>()
   const inflight = new Map<string, Promise<string | undefined>>()
   let disposed = false

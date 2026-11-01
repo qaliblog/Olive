@@ -1,30 +1,30 @@
-import { AISDK } from "@opencode/core/aisdk"
-import { App } from "@opencode/core/app"
-import { Agent } from "@opencode/schema/agent"
-import { Session } from "@opencode/core/session"
-import { Location } from "@opencode/core/location"
+import { AISDK } from "@olive/core/aisdk"
+import { App } from "@olive/core/app"
+import { Agent } from "@olive/schema/agent"
+import { Session } from "@olive/core/session"
+import { Location } from "@olive/core/location"
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
 import { HttpClient, HttpClientResponse } from "effect/http"
 import { TestClock } from "effect/testing"
-import { Model } from "@opencode/core/model"
-import { ModelResolver } from "@opencode/core/model-resolver"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { PluginHooks } from "@opencode/core/plugin/hooks"
+import { Model } from "@olive/core/model"
+import { ModelResolver } from "@olive/core/model-resolver"
+import { Plugin } from "@olive/core/plugin"
+import { PluginHost } from "@olive/core/plugin/host"
+import { PluginHooks } from "@olive/core/plugin/hooks"
 import {
   copilotBaseURL,
   copilotEntitlementError,
   copilotFetch,
   GithubCopilotPlugin,
   utilityTitle,
-} from "@opencode/core/plugin/provider/github-copilot"
-import { Message, SystemPart } from "@opencode/ai/effect"
-import { Provider } from "@opencode/core/provider"
-import { Integration } from "@opencode/core/integration"
-import { Credential } from "@opencode/core/credential"
+} from "@olive/core/plugin/provider/github-copilot"
+import { Message, SystemPart } from "@olive/ai/effect"
+import { Provider } from "@olive/core/provider"
+import { Integration } from "@olive/core/integration"
+import { Credential } from "@olive/core/credential"
 import { drain } from "../lib/clock"
-import type { SessionRequestKind } from "@opencode/plugin/effect/session"
+import type { SessionRequestKind } from "@olive/plugin/effect/session"
 import { fakeSelectorSdk } from "../fixture/selector"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
@@ -205,7 +205,7 @@ describe("GithubCopilotPlugin", () => {
       expect(requests[0]?.get("x-initiator")).toBe("user")
       expect(requests[0]?.get("copilot-vision-request")).toBe("true")
       expect(requests[0]?.get("x-github-api-version")).toBe("2026-08-01")
-      expect(requests[0]?.get("user-agent")).toBe("opencode/beta/1.2.3/test")
+      expect(requests[0]?.get("user-agent")).toBe("olive/beta/1.2.3/test")
     }),
   )
 

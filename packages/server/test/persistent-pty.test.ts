@@ -4,17 +4,17 @@ import os from "node:os"
 import path from "node:path"
 import { expect } from "bun:test"
 import { binaryPath } from "@opencode/pty"
-import { PersistentPty } from "@opencode/schema/persistent-pty"
-import { Session } from "@opencode/schema/session"
+import { PersistentPty } from "@olive/schema/persistent-pty"
+import { Session } from "@olive/schema/session"
 import { Effect, Exit, Schema, Scope } from "effect"
 import { HttpServer } from "effect/http"
-import { OpenCode } from "../../client/src/promise/index"
+import { Olive } from "../../client/src/promise/index"
 import { fakeDaemon } from "../../core/test/fixture/persistent-pty-daemon"
 import { it } from "../../core/test/lib/effect"
 import { ServerProcess } from "../src/process"
 
 // These tests drive Unix shell commands, so they skip Windows; the package resolves no binary on unsupported platforms.
-const binary = process.platform === "win32" ? undefined : (process.env.OPENCODE_PTY_BIN ?? binaryPath)
+const binary = process.platform === "win32" ? undefined : (process.env.OLIVE_PTY_BIN ?? binaryPath)
 const smoke = binary !== undefined && existsSync(binary) ? it.live : it.live.skip
 
 smoke(
@@ -32,14 +32,14 @@ smoke(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = OpenCode.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Olive.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("olive:secret")}` } })
       const sessionID = "ses_terminal_read"
       expect(yield* Effect.promise(() => client.experimental.persistentPty.read({ sessionID }))).toBeNull()
       expect(existsSync(fixture.directory)).toBeFalse()
       yield* Effect.promise(async () => {
         for (const lines of ["0", "-1", "1.5", "65536", "nope"]) {
           const response = await fetch(`${base}/api/experimental/session/${sessionID}/terminal/read?lines=${lines}`, {
-            headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+            headers: { authorization: `Basic ${btoa("olive:secret")}` },
           })
           expect(response.status).toBe(400)
           await response.arrayBuffer()
@@ -148,7 +148,7 @@ smoke(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = OpenCode.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Olive.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("olive:secret")}` } })
       const sessionID = Session.ID.make("ses_persistent_pty_rename")
       const terminal = yield* Effect.promise(() =>
         client.experimental.persistentPty.create({
@@ -196,7 +196,7 @@ smoke(
       const missing = yield* Effect.promise(async () => {
         const response = await fetch(new URL("/api/experimental/persistent-pty/pty_persistent_1", base), {
           method: "PUT",
-          headers: { authorization: `Basic ${btoa("opencode:secret")}`, "content-type": "application/json" },
+          headers: { authorization: `Basic ${btoa("olive:secret")}`, "content-type": "application/json" },
           body: JSON.stringify({ title: "nope" }),
         })
         await response.arrayBuffer()
@@ -234,7 +234,7 @@ it.live("reports renaming as unsupported on a daemon without the rename feature"
     const response = yield* Effect.promise(async () => {
       const response = await fetch(new URL(`/api/experimental/persistent-pty/${terminal.id}`, base), {
         method: "PUT",
-        headers: { authorization: `Basic ${btoa("opencode:secret")}`, "content-type": "application/json" },
+        headers: { authorization: `Basic ${btoa("olive:secret")}`, "content-type": "application/json" },
         body: JSON.stringify({ title: "build" }),
       })
       return { status: response.status, body: await response.json() }
@@ -245,7 +245,7 @@ it.live("reports renaming as unsupported on a daemon without the rename feature"
       body: {
         _tag: "PtyFeatureUnsupportedError",
         feature: "rename",
-        message: "Terminal renaming will be available after OpenCode's terminal service restarts",
+        message: "Terminal renaming will be available after Olive's terminal service restarts",
       },
     })
     expect(daemon.ops).not.toContain("rename")
@@ -256,7 +256,7 @@ it.live("reports renaming as unsupported on a daemon without the rename feature"
   }),
 )
 
-async function waitForTitle(client: ReturnType<typeof OpenCode.make>, ptyID: string, title: string) {
+async function waitForTitle(client: ReturnType<typeof Olive.make>, ptyID: string, title: string) {
   for (let attempt = 0; attempt < 100; attempt++) {
     if ((await client.experimental.persistentPty.get({ ptyID })).title === title) return
     await Bun.sleep(20)
@@ -264,7 +264,7 @@ async function waitForTitle(client: ReturnType<typeof OpenCode.make>, ptyID: str
   throw new Error(`Terminal ${ptyID} did not report the title ${title}`)
 }
 
-async function waitForRead(client: ReturnType<typeof OpenCode.make>, sessionID: string, ptyID: string) {
+async function waitForRead(client: ReturnType<typeof Olive.make>, sessionID: string, ptyID: string) {
   for (let attempt = 0; attempt < 100; attempt++) {
     const result = await client.experimental.persistentPty.read({ sessionID })
     if (result?.ptyID === ptyID) return result
@@ -295,7 +295,7 @@ smoke(
         const response = yield* Effect.promise(async () => {
           const response = await fetch(new URL(createPath, base), {
             method: "POST",
-            headers: { authorization: `Basic ${btoa("opencode:secret")}`, "content-type": "application/json" },
+            headers: { authorization: `Basic ${btoa("olive:secret")}`, "content-type": "application/json" },
             body: JSON.stringify({ command: "/bin/sh", args: [], cwd, title: "invalid", env: {} }),
           })
           return { status: response.status, body: await response.json() }
@@ -427,7 +427,7 @@ smoke(
         `/api/experimental/persistent-pty/${first.id}/connect-token`,
         undefined,
         {
-          "x-opencode-ticket": "1",
+          "x-olive-ticket": "1",
         },
       )
       if (!isRecord(ticket.data) || typeof ticket.data.ticket !== "string") throw new Error("Invalid connect ticket")
@@ -649,12 +649,12 @@ smoke(
 function testDirectory() {
   return Effect.acquireRelease(
     Effect.promise(async () => {
-      const environment = { binary: process.env.OPENCODE_PTY_BIN, shell: process.env.SHELL }
+      const environment = { binary: process.env.OLIVE_PTY_BIN, shell: process.env.SHELL }
       const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-pty-server-test-"))
-      process.env.OPENCODE_PTY_BIN = binary
+      process.env.OLIVE_PTY_BIN = binary
       process.env.SHELL = "/bin/sh"
       return {
-        database: path.join(root, "opencode.db"),
+        database: path.join(root, "olive.db"),
         directory: path.join(root, "runtime"),
         environment,
         root,
@@ -663,7 +663,7 @@ function testDirectory() {
     (fixture) =>
       Effect.promise(async () => {
         await fs.rm(fixture.root, { recursive: true, force: true })
-        restore("OPENCODE_PTY_BIN", fixture.environment.binary)
+        restore("OLIVE_PTY_BIN", fixture.environment.binary)
         restore("SHELL", fixture.environment.shell)
       }),
   )
@@ -690,7 +690,7 @@ function request(base: string, method: string, pathname: string, body?: unknown,
       const response = await fetch(new URL(pathname, base), {
         method,
         headers: {
-          authorization: `Basic ${btoa("opencode:secret")}`,
+          authorization: `Basic ${btoa("olive:secret")}`,
           ...headers,
           ...(body === undefined ? {} : { "content-type": "application/json" }),
         },
@@ -708,7 +708,7 @@ function request(base: string, method: string, pathname: string, body?: unknown,
 
 async function openEventStream(base: string) {
   const response = await fetch(new URL("/api/event", base), {
-    headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+    headers: { authorization: `Basic ${btoa("olive:secret")}` },
   })
   if (!response.ok || !response.body) throw new Error(`Persistent PTY event stream failed (${response.status})`)
   const reader = response.body.getReader()
@@ -775,7 +775,7 @@ function attachAndExit(base: string, ptyID: string) {
     try: async () => {
       const response = await Effect.runPromise(
         request(base, "POST", `/api/experimental/persistent-pty/${ptyID}/connect-token`, undefined, {
-          "x-opencode-ticket": "1",
+          "x-olive-ticket": "1",
         }),
       )
       if (!isRecord(response.data) || typeof response.data.ticket !== "string")
@@ -878,7 +878,7 @@ async function openTerminalSocket(
 ) {
   const response = await Effect.runPromise(
     request(base, "POST", `/api/experimental/persistent-pty/${ptyID}/connect-token`, undefined, {
-      "x-opencode-ticket": "1",
+      "x-olive-ticket": "1",
     }),
   )
   if (!isRecord(response.data) || typeof response.data.ticket !== "string")

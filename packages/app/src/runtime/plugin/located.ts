@@ -1,5 +1,5 @@
 import { batch, createEffect, createSignal, untrack } from "solid-js"
-import type { SessionRef } from "@opencode/plugin/gui"
+import type { SessionRef } from "@olive/plugin/gui"
 
 /**
  * Layout writes find a session's stored layout through its location, which is unknown until the server reports it

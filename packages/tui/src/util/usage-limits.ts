@@ -1,6 +1,6 @@
-import type { UsageLimitsBudget, UsageLimitsInfo } from "@opencode/client"
+import type { UsageLimitsBudget, UsageLimitsInfo } from "@olive/client"
 
-/** A model as the usage limits read it: its OpenCode IDs, its price and context window, and its provider. */
+/** A model as the usage limits read it: its Olive IDs, its price and context window, and its provider. */
 export type LimitedModel = {
   readonly id: string
   readonly providerID: string
@@ -32,9 +32,9 @@ export type ModelUsage = {
  */
 export type UsageLevel = "plenty" | "low" | "out" | "reached"
 
-/** OpenCode Console serves the model, so the workspace's limits can apply; OpenCode Go bills its own allowance. */
+/** Olive Console serves the model, so the workspace's limits can apply; Olive Go bills its own allowance. */
 export function servedByConsole(provider: LimitedProvider | undefined) {
-  return provider?.integrationID === "opencode" && provider.id !== "opencode-go"
+  return provider?.integrationID === "olive" && provider.id !== "olive-go"
 }
 
 /** The limits on a paid model, or nothing when none applies; free models stay usable whatever is spent. */
@@ -91,7 +91,7 @@ export function formatReset(at: number) {
   return date.getHours() === 0 && date.getMinutes() === 0 ? day : `${day}, ${time}`
 }
 
-/** When a refused request's limit resets: OpenCode Console names it `resetsAt` in every protocol's error envelope. */
+/** When a refused request's limit resets: Olive Console names it `resetsAt` in every protocol's error envelope. */
 export function refusalReset(error: { readonly response?: { readonly body: string } } | undefined) {
   const at = Date.parse(/"resetsAt"\s*:\s*"([^"]+)"/.exec(error?.response?.body ?? "")?.[1] ?? "")
   return Number.isNaN(at) ? undefined : at
@@ -105,15 +105,15 @@ export function retryReset(error: { readonly retryAfterMs?: number } | undefined
   return Number.isNaN(new Date(at).getTime()) ? undefined : at
 }
 
-/** Which Go limit refused a request (5 hour, weekly or monthly), as OpenCode Console names it in the metadata. */
+/** Which Go limit refused a request (5 hour, weekly or monthly), as Olive Console names it in the metadata. */
 export function goLimitName(error: { readonly response?: { readonly body: string } } | undefined) {
   return /"limitName"\s*:\s*"([^"]+)"/.exec(error?.response?.body ?? "")?.[1]
 }
 
-/** The OpenCode Console Go page for the workspace a Go usage limit names, where it can turn on Extra Usage. */
+/** The Olive Console Go page for the workspace a Go usage limit names, where it can turn on Extra Usage. */
 export function goLimitLink(error: { readonly response?: { readonly body: string } } | undefined) {
   const workspace = /"workspace"\s*:\s*"(wrk_\w+)"/.exec(error?.response?.body ?? "")?.[1]
-  return workspace ? `https://opencode.ai/console/${workspace}/go` : "https://opencode.ai/console"
+  return workspace ? `https://olive.ai/console/${workspace}/go` : "https://olive.ai/console"
 }
 
 /**

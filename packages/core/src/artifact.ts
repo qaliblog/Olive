@@ -14,10 +14,10 @@ import {
   Provider,
   ProviderID,
   UpdateInput,
-} from "@opencode/schema/artifact"
-import type { SessionID } from "@opencode/schema/session-id"
-import { Global } from "@opencode/util/global"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+} from "@olive/schema/artifact"
+import type { SessionID } from "@olive/schema/session-id"
+import { Global } from "@olive/util/global"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { Clock, Context, Effect, Layer, Option, Schema } from "effect"
 import { Bus } from "./bus.js"
 import { Config } from "./config.js"
@@ -177,7 +177,7 @@ export interface Interface extends State.Transformable<Editor> {
   ) => Effect.Effect<LocalFile, DisabledError | NotFoundError | FileMissingError | InvalidError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Artifact") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/Artifact") {}
 
 const StoredRecord = Schema.Struct({
   info: Info,
@@ -218,7 +218,7 @@ const layer = Layer.effect(
       name: "Local",
       capabilities: ["static"],
       prompt:
-        "Artifacts are served as HTML by this OpenCode server. Only people who can reach this server can open them.",
+        "Artifacts are served as HTML by this Olive server. Only people who can reach this server can open them.",
       create: (input) =>
         replaceDirectoryFiles(itemDir(input.id), input.files).pipe(
           Effect.as({ url: `/api/experimental/artifacts/${encodeURIComponent(input.id)}/view/` }),

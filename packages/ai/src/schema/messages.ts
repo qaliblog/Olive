@@ -1,6 +1,6 @@
 import { Option, Schema } from "effect"
-import { withStatics } from "@opencode/schema/schema"
-import { Tool } from "@opencode/schema/tool"
+import { withStatics } from "@olive/schema/schema"
+import { Tool } from "@olive/schema/tool"
 import {
   CacheHint,
   type CachePolicy,

@@ -1,8 +1,8 @@
 import { batch, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
-import { showToast } from "@opencode/ui/toast"
-import { uuid } from "@opencode/util/uuid"
-import type { MountedSession, SetupContext } from "@opencode/plugin/gui"
+import { showToast } from "@olive/ui/toast"
+import { uuid } from "@olive/util/uuid"
+import type { MountedSession, SetupContext } from "@olive/plugin/gui"
 import type Btw from "./index"
 
 const instructions = [

@@ -2,16 +2,16 @@ import { expect } from "bun:test"
 import path from "path"
 import fs from "fs/promises"
 import { Effect, Exit, Fiber, Stream, Tracer } from "effect"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Project } from "@opencode/core/project"
-import { ProjectIcon } from "@opencode/core/project/icon"
-import { ProjectSchema } from "@opencode/core/project/schema"
-import { ProjectTable } from "@opencode/core/project/sql"
-import { Database } from "@opencode/core/database/database"
-import { Bus } from "@opencode/core/bus"
-import { AbsolutePath } from "@opencode/core/schema"
-import { FSUtil } from "@opencode/util/fs-util"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Project } from "@olive/core/project"
+import { ProjectIcon } from "@olive/core/project/icon"
+import { ProjectSchema } from "@olive/core/project/schema"
+import { ProjectTable } from "@olive/core/project/sql"
+import { Database } from "@olive/core/database/database"
+import { Bus } from "@olive/core/bus"
+import { AbsolutePath } from "@olive/core/schema"
+import { FSUtil } from "@olive/util/fs-util"
 import { tmpdirScoped } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
 
@@ -87,7 +87,7 @@ for (const fixture of [
     file: "assets/AppIcon.icon/Assets/logo.svg",
     manifest: "assets/AppIcon.icon/icon.json",
   },
-  { name: "direct-child Xcode catalog", file: "OpenCode/Assets.xcassets/AppIcon.appiconset/icon128.svg" },
+  { name: "direct-child Xcode catalog", file: "Olive/Assets.xcassets/AppIcon.appiconset/icon128.svg" },
   { name: "Windows nearest usable size", file: "resources/windows/icon-96.png" },
   { name: "Scrawl oversized flat icon", file: "site/public/icon.svg" },
 ]) {

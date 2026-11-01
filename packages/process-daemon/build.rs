@@ -7,7 +7,7 @@ fn main() {
     println!("cargo:rerun-if-changed=ghostty-revision");
     println!("cargo:rerun-if-changed=src/ghostty/ffi.rs");
     println!("cargo:rerun-if-env-changed=GHOSTTY_SOURCE_DIR");
-    println!("cargo:rerun-if-env-changed=OPENCODE_ZIG_CPU");
+    println!("cargo:rerun-if-env-changed=OLIVE_ZIG_CPU");
 
     let revision = include_str!("ghostty-revision").trim();
     assert_eq!(
@@ -99,7 +99,7 @@ fn main() {
     });
     // Release builds pin a portable CPU. Unix releases use script/release-bin/zig;
     // Windows cannot run that shell wrapper, so it sets this instead.
-    if let Ok(cpu) = env::var("OPENCODE_ZIG_CPU") {
+    if let Ok(cpu) = env::var("OLIVE_ZIG_CPU") {
         build.arg(format!("-Dcpu={cpu}"));
     }
     build.arg("--prefix").arg(&install);

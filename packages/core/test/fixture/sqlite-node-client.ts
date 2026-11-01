@@ -1,7 +1,7 @@
 // Bundled for Node by sqlite-node.test.ts and run with `node <dir>`, so #sqlite
 // resolves to the node:sqlite client that the standalone Node build ships.
 import { join } from "node:path"
-import { Global } from "@opencode/util/global"
+import { Global } from "@olive/util/global"
 import { sql } from "drizzle-orm"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { Cause, Effect, Fiber, Layer, References } from "effect"
@@ -87,5 +87,5 @@ const global = Global.layerWith({
   repos: dir,
 })
 
-const database = Database.layer({ path: join(dir, "opencode.db") }).pipe(Layer.provide(global))
+const database = Database.layer({ path: join(dir, "olive.db") }).pipe(Layer.provide(global))
 console.log(JSON.stringify(await Effect.runPromise(program.pipe(Effect.provide(database)))))

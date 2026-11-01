@@ -103,7 +103,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Безкоштовний ліміт вичерпано",
   "dialog.usageExceeded.freeTier.description":
-    "Підпишіться на OpenCode Go за $10 на місяць для надійного доступу до найкращих моделей із відкритим кодом.",
+    "Підпишіться на Olive Go за $10 на місяць для надійного доступу до найкращих моделей із відкритим кодом.",
   "dialog.usageExceeded.freeTier.actionLabel": "Підписатися",
 
   "ui.sessionTurn.status.delegating": "Делегування роботи",

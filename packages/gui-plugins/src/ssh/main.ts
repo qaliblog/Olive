@@ -1,8 +1,8 @@
 import { NodeServices } from "@effect/platform-node"
 import { Effect, Exit, Fiber, Layer, ManagedRuntime, Schema, Scope, Stream } from "effect"
 import { FetchHttpClient } from "effect/http"
-import { builtinMainContext } from "@opencode/plugin/gui/builtin"
-import type { Plugin } from "@opencode/plugin/gui/main"
+import { builtinMainContext } from "@olive/plugin/gui/builtin"
+import type { Plugin } from "@olive/plugin/gui/main"
 import { SshFailure } from "./command"
 import { Ssh, SshConfig } from "./contract"
 import { createSshController } from "./controller"
@@ -31,7 +31,7 @@ const setup: Plugin.MainSetup = async (ctx) => {
     createSshController({
       version: cli.version,
       development: cli.development,
-      binary: cli.binary ?? cli.command[0] ?? "opencode",
+      binary: cli.binary ?? cli.command[0] ?? "olive",
       command: cli.command,
       configs: saved.value,
       save: (configs) => Effect.try({ try: () => saved.set(configs), catch: SshFailure.from }),

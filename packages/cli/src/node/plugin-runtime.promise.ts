@@ -9,9 +9,9 @@ import {
   Provider,
   Reference,
   Skill,
-} from "@opencode/plugin"
+} from "@olive/plugin"
 
-const key = Symbol.for("opencode.plugin.v2.promise")
+const key = Symbol.for("olive.plugin.v2.promise")
 ;(globalThis as typeof globalThis & { [key]?: unknown })[key] = {
   Agent,
   Command,

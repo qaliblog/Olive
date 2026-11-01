@@ -1,10 +1,10 @@
-import { Menu } from "@opencode/ui/menu"
-import { Icon } from "@opencode/ui/icon"
-import { showToast } from "@opencode/ui/toast"
-import { comparablePath, containsDirectory, getFilename, sameDirectory } from "@opencode/util/path"
+import { Menu } from "@olive/ui/menu"
+import { Icon } from "@olive/ui/icon"
+import { showToast } from "@olive/ui/toast"
+import { comparablePath, containsDirectory, getFilename, sameDirectory } from "@olive/util/path"
 import { createStore } from "solid-js/store"
 import { For, onCleanup, Show, type ComponentProps, type JSX } from "solid-js"
-import { createKeyed, usePlugin, type Project, type MountedSession } from "@opencode/plugin/gui"
+import { createKeyed, usePlugin, type Project, type MountedSession } from "@olive/plugin/gui"
 import { workspaceDirectories } from "./paths"
 
 export function SessionWorkspaceMenu(props: {

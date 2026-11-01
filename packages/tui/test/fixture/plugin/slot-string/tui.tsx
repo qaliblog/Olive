@@ -1,6 +1,6 @@
-import { Plugin } from "@opencode/plugin/tui"
+import { Plugin } from "@olive/plugin/tui"
 
-// A slot that returns bare text next to a well-formed one (anomalyco/opencode#58112).
+// A slot that returns bare text next to a well-formed one (anomalyco/olive#58112).
 export default Plugin.define({
   id: "fixture.slot-string",
   setup(context) {

@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test"
-import { base64Encode } from "@opencode/util/encode"
+import { base64Encode } from "@olive/util/encode"
 
 /** Opens the side panel's "Open file" launcher tab from the new tab view the strip's + opens. */
 export async function openFileLauncher(panel: Locator) {
@@ -20,7 +20,7 @@ export async function openReviewLauncher(panel: Locator) {
 /** Storage that restores the Review tab, selected, in each session's side strip, as the app writes it. */
 export function reviewTabs(directory: string, ...sessions: string[]) {
   return {
-    "opencode.global.dat:layout": {
+    "olive.global.dat:layout": {
       sessionTabs: Object.fromEntries(
         sessions.map((id) => [
           `local\u0000${base64Encode(directory)}/${id}`,

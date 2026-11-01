@@ -1,6 +1,6 @@
-import { mediaHashFromUri, type PromptAttachment } from "@opencode/client"
-import type { Prompt, PromptInput } from "@opencode/schema"
-import { Skill } from "@opencode/schema/skill"
+import { mediaHashFromUri, type PromptAttachment } from "@olive/client"
+import type { Prompt, PromptInput } from "@olive/schema"
+import { Skill } from "@olive/schema/skill"
 import type { Types } from "effect"
 
 export type EditablePromptInput = Types.DeepMutable<PromptInput.Prompt>

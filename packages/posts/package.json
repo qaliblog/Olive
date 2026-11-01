@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode/posts",
+  "name": "@olive/posts",
   "private": true,
   "type": "module",
   "scripts": {

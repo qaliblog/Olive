@@ -1,7 +1,7 @@
-import type { ProviderApi } from "@opencode/client/promise/api"
-import type { Model } from "@opencode/schema/model"
-import type { Provider } from "@opencode/schema/provider"
-import type { ConnectionInfo } from "@opencode/client"
+import type { ProviderApi } from "@olive/client/promise/api"
+import type { Model } from "@olive/schema/model"
+import type { Provider } from "@olive/schema/provider"
+import type { ConnectionInfo } from "@olive/client"
 import type { Types } from "effect"
 import type { Transform } from "./registration.js"
 

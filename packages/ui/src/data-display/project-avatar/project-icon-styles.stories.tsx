@@ -57,7 +57,7 @@ const SESSIONS = [
 
 const SIZES = [32, 20, 16]
 
-const STARS_KEY = "opencode.lab.project-icon-styles.starred"
+const STARS_KEY = "olive.lab.project-icon-styles.starred"
 
 const SURFACES = {
   dark: {

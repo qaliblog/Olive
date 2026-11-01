@@ -1,18 +1,18 @@
 import "@pierre/trees/web-components"
 import { FileTree } from "@pierre/trees"
-import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@opencode/ui/dialog"
-import { Button } from "@opencode/ui/button"
-import { Divider } from "@opencode/ui/divider"
+import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@olive/ui/dialog"
+import { Button } from "@olive/ui/button"
+import { Divider } from "@olive/ui/divider"
 import {
   displayName,
   getProjectAvatarSource,
   getProjectAvatarVariant,
   ProjectAvatar,
-} from "@opencode/ui/project-avatar"
-import { TextInput } from "@opencode/ui/text-input"
-import { Tooltip } from "@opencode/ui/tooltip"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { getFilename } from "@opencode/util/path"
+} from "@olive/ui/project-avatar"
+import { TextInput } from "@olive/ui/text-input"
+import { Tooltip } from "@olive/ui/tooltip"
+import { useDialog } from "@olive/ui/context/dialog"
+import { getFilename } from "@olive/util/path"
 import { createEffect, createMemo, createResource, For, onCleanup, onMount, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useGlobal } from "@/runtime/server/runtime"
@@ -20,7 +20,7 @@ import { inferHomeDirectory } from "@/runtime/server/global-sync/bootstrap"
 import { useLanguage } from "@/runtime/i18n/language"
 import { ServerConnection, serverName, useServers } from "@/runtime/server/registry"
 import { pathKey } from "@/workspaces/path-key"
-import type { LocationRef } from "@opencode/client/promise"
+import type { LocationRef } from "@olive/client/promise"
 import {
   absoluteTreePath,
   activeTreeNavigation,

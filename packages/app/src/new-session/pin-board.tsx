@@ -1,7 +1,7 @@
 import { createEffect, onCleanup, onMount } from "solid-js"
 import { createQuads, type Quads, type Rgba } from "./pin-quads"
 import { PinSound } from "./pin-sound"
-import { prefersReducedMotion } from "@opencode/ui/motion"
+import { prefersReducedMotion } from "@olive/ui/motion"
 
 // The wordmark as a 78×14 pin grid: 1 = counter shadow, 2 = "open", 3 = "code".
 const GRID = [

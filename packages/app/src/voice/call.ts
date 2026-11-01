@@ -1,4 +1,4 @@
-import type { SessionInfo } from "@opencode/client/promise"
+import type { SessionInfo } from "@olive/client/promise"
 import type { ServerCtx } from "@/runtime/server/runtime"
 import type { Platform } from "@/runtime/platform/platform"
 import { VoiceGates } from "./gates"

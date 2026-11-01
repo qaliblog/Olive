@@ -1,5 +1,5 @@
 // The stone-paper palette, serif reading column and quiet chrome follow the Anomaly notes (anoma.ly/notes); the header,
-// footer and mono face follow opencode.ai.
+// footer and mono face follow olive.ai.
 export const style = `
 @font-face { font-family: "IBM Plex Serif"; font-style: normal; font-weight: 400; font-display: swap; src: url("/changelog/fonts/IBMPlexSerif-Regular-Latin1.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Serif"; font-style: italic; font-weight: 400; font-display: swap; src: url("/changelog/fonts/IBMPlexSerif-Italic-Latin1.woff2") format("woff2"); }

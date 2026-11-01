@@ -7,11 +7,11 @@ Permissions control whether an agent may perform an action on a resource.
 ## Configure
 
 A common setup is to ask before running shell commands, allow routine Git
-inspection, and always block pushes. Add these ordered rules to `opencode.jsonc`:
+inspection, and always block pushes. Add these ordered rules to `olive.jsonc`:
 
 ```jsonc
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "permissions": [
     { "action": "shell", "resource": "*", "effect": "ask" },
     { "action": "shell", "resource": "git status *", "effect": "allow" },
@@ -53,7 +53,7 @@ Each rule requires three string fields:
 | `deny`  | Block the operation                 |
 | `ask`   | Wait for a decision from the client |
 
-If no rule matches, OpenCode uses `ask`.
+If no rule matches, Olive uses `ask`.
 
 ## Matching
 
@@ -84,7 +84,7 @@ A shell pattern ending in ` *` also matches the command without arguments:
 
 This matches both `git status` and `git status --short`.
 
-OpenCode combines rules in order and uses the last match. Lower-priority
+Olive combines rules in order and uses the last match. Lower-priority
 configuration is loaded first, global rules are appended next, and agent rules
 are appended last.
 
@@ -121,8 +121,8 @@ currently use these actions and resources:
 | `experimental_image_generate` | Selected image model as `providerID/modelID`, plus `#variant` when set |
 | `external_directory` | Canonical external directory boundary, normally ending in `/*`              |
 | `<server>_<tool>`    | `*` for an MCP tool; unsupported characters in both names become `_`        |
-| `opencode_list_mcp_resources` | MCP server name                                                    |
-| `opencode_read_mcp_resource`  | `<server>:<uri>`                                                   |
+| `olive_list_mcp_resources` | MCP server name                                                    |
+| `olive_read_mcp_resource`  | `<server>:<uri>`                                                   |
 | `execute`            | `*`; a deny removes Code Mode and the tools reached only through it, while nested tools enforce their rules |
 
 For example, allow one skill and deny all other skills:
@@ -147,7 +147,7 @@ unless you add a rule. To be asked before any access outside the project:
 
 ```jsonc
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "permissions": [
     { "action": "external_directory", "resource": "*", "effect": "ask" },
   ],
@@ -158,7 +158,7 @@ Narrower rules after it can allow or deny specific directories:
 
 ```jsonc
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "permissions": [
     { "action": "external_directory", "resource": "~/projects/reference/*", "effect": "allow" },
     { "action": "read", "resource": "~/projects/reference/*", "effect": "allow" },
@@ -191,11 +191,11 @@ so authorize only trusted directory boundaries.
 
 ## Scanner
 
-Shell permission checks use OpenCode's built-in shell scanner across Bash, Zsh, POSIX `sh`, and PowerShell. A command with malformed syntax or dynamic evaluation that the scanner cannot safely analyze returns a scanner error rather than executing unverified subcommands.
+Shell permission checks use Olive's built-in shell scanner across Bash, Zsh, POSIX `sh`, and PowerShell. A command with malformed syntax or dynamic evaluation that the scanner cannot safely analyze returns a scanner error rather than executing unverified subcommands.
 
 ```jsonc
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "policies": [
     {
       "permissions": [
@@ -227,7 +227,7 @@ Shipped agents append these policies:
 | Agent        | Additional policy                                                              |
 | ------------ | ------------------------------------------------------------------------------ |
 | `build`      | Allows questions                                                               |
-| `plan`       | Allows questions; denies edits except files under `~/.opencode/plan`           |
+| `plan`       | Allows questions; denies edits except files under `~/.olive/plan`           |
 | `general`    | Denies questions and launching subagents                                       |
 | `explore`    | Denies everything except shell, reads, globs, grep, web fetches, web searches, and external directories; asks for `.env` reads |
 | `title`      | Denies all actions                                                              |
@@ -247,7 +247,7 @@ Put shared rules at the top level and narrower rules under
 
 ```jsonc
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://olive.ai/config.json",
   "permissions": [
     { "action": "shell", "resource": "*", "effect": "ask" },
     { "action": "shell", "resource": "git status *", "effect": "allow" },

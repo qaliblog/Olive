@@ -69,7 +69,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Thêm số dư",
   "dialog.usageExceeded.freeTier.title": "Đã đạt đến giới hạn miễn phí",
   "dialog.usageExceeded.freeTier.description":
-    "Đăng ký OpenCode Go với giá $10/tháng để có quyền truy cập đáng tin cậy vào các mô hình nguồn mở tốt nhất.",
+    "Đăng ký Olive Go với giá $10/tháng để có quyền truy cập đáng tin cậy vào các mô hình nguồn mở tốt nhất.",
   "dialog.usageExceeded.freeTier.actionLabel": "Đăng ký",
   "ui.sessionTurn.status.delegating": "Phân công công việc",
   "ui.sessionTurn.status.planning": "Lập kế hoạch các bước tiếp theo",

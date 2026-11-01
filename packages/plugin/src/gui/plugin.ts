@@ -56,7 +56,7 @@ export type Definition<S extends Stores = Stores> = Declarations<S> & {
 
 /**
  * Defines a plugin's GUI, the default export of its `./gui-experimental` bundle, as `Plugin.define` from
- * `@opencode/plugin` and `@opencode/plugin/tui` define its server and terminal halves. It declares no id: the host
+ * `@olive/plugin` and `@olive/plugin/tui` define its server and terminal halves. It declares no id: the host
  * assigns the server plugin's (`ctx.id`). The window setup's `ctx.stores` is typed from the declared stores.
  *
  * @param plugin - The declarations and at least one setup.

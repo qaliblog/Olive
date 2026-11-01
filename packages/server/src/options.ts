@@ -1,6 +1,6 @@
-import { Database } from "@opencode/core/database/database"
-import { ModelsDev } from "@opencode/core/models-dev"
-import { PersistentPty } from "@opencode/core/persistent-pty"
+import { Database } from "@olive/core/database/database"
+import { ModelsDev } from "@olive/core/models-dev"
+import { PersistentPty } from "@olive/core/persistent-pty"
 import { Schema } from "effect"
 
 export const ServerOptions = Schema.Struct({

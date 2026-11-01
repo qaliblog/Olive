@@ -726,7 +726,7 @@ fn print_usage() {
     );
     println!("       opencode-pty --version");
     println!(
-        "  NAME selects DIR/NAME; DIR defaults to ${{XDG_STATE_HOME:-~/.local/state}}/opencode/pty"
+        "  NAME selects DIR/NAME; DIR defaults to ${{XDG_STATE_HOME:-~/.local/state}}/olive/pty"
     );
 }
 

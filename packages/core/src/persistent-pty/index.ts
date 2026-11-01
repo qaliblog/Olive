@@ -3,7 +3,7 @@ export * as PersistentPty from "./index.js"
 import { stat } from "node:fs/promises"
 import path from "node:path"
 import { Context, Effect, Layer, Schema, Stream } from "effect"
-import { makeGlobalNode } from "@opencode/util/effect/app-node"
+import { makeGlobalNode } from "@olive/util/effect/app-node"
 import {
   Added,
   Handoff,
@@ -12,12 +12,12 @@ import {
   Removed,
   Updated,
   type ReadResult,
-} from "@opencode/schema/persistent-pty"
-import { Session } from "@opencode/schema/session"
-import { SessionEvent } from "@opencode/schema/session-event"
+} from "@olive/schema/persistent-pty"
+import { Session } from "@olive/schema/session"
+import { SessionEvent } from "@olive/schema/session-event"
 import { Bus } from "../bus.js"
-import { Pty } from "@opencode/schema/pty"
-import { Global } from "@opencode/util/global"
+import { Pty } from "@olive/schema/pty"
+import { Global } from "@olive/util/global"
 import { ShellSelect } from "../shell/select.js"
 import {
   makeDaemonTransport,
@@ -30,7 +30,7 @@ import {
 import { resolveBinary } from "#persistent-pty-binary"
 
 export type { Role, StreamEvent } from "./daemon.js"
-export { Handoff } from "@opencode/schema/persistent-pty"
+export { Handoff } from "@olive/schema/persistent-pty"
 export { available } from "#persistent-pty-binary"
 
 export const Options = Schema.Struct({
@@ -137,7 +137,7 @@ export interface Interface {
   ) => Effect.Effect<Attachment, NotFoundError | UnavailableError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/PersistentPty") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/PersistentPty") {}
 
 const makeLayer = (options: Options = {}) =>
   Layer.effect(

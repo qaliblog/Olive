@@ -6,9 +6,9 @@ import {
   type Range,
   type VirtualItem,
 } from "@tanstack/solid-virtual"
-import { isScrollKeyTarget, scrollKey, scrollKeyOwner, ScrollView } from "@opencode/ui/scroll-view"
+import { isScrollKeyTarget, scrollKey, scrollKeyOwner, ScrollView } from "@olive/ui/scroll-view"
 import { Predicate } from "effect"
-import { Timeline, TimelineRow } from "@opencode/session-ui/timeline/projection"
+import { Timeline, TimelineRow } from "@olive/session-ui/timeline/projection"
 import { useLanguage } from "@/runtime/i18n/language"
 import {
   batch,
@@ -28,7 +28,7 @@ import { createMediaQuery } from "@solid-primitives/media"
 import type { createTimelineProjection } from "./projection"
 import { observeElementOffsetReconnectAware } from "./observe-element-offset"
 import { filterVirtualIndexes } from "./virtual-items"
-import { prefersReducedMotion } from "@opencode/ui/motion"
+import { prefersReducedMotion } from "@olive/ui/motion"
 import { holdLandingWidth } from "@/shell/panel-motion"
 
 const fallbackItemSize = 60

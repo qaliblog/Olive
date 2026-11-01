@@ -15,7 +15,7 @@ export function composerModelLabelKey(providerID: string, modelID: string) {
 }
 
 // Native Console models need no provider. A managed provider drops its workspace, and says it routes through
-// OpenCode only when the same provider is also connected directly.
+// Olive only when the same provider is also connected directly.
 export function composerProviderName(
   providerID: string,
   catalog: ReadonlyMap<string, Provider>,
@@ -30,20 +30,20 @@ export function composerProviderName(
   const group = consoleProviderGroup(all)
 
   const name =
-    provider.integrationID === "opencode" && group ? consoleProviderName(group, provider.name) : provider.name
+    provider.integrationID === "olive" && group ? consoleProviderName(group, provider.name) : provider.name
 
-  if (provider.integrationID !== "opencode" || !provider.canonical) return name
+  if (provider.integrationID !== "olive" || !provider.canonical) return name
   const active = connected && new Set(connected)
 
   const direct = all.some(
     (item) =>
       !native(item) &&
-      item.integrationID !== "opencode" &&
+      item.integrationID !== "olive" &&
       (!active || active.has(item.id)) &&
       (item.integrationID ?? item.id) === provider.canonical,
   )
 
-  return direct ? `OpenCode / ${name}` : name
+  return direct ? `Olive / ${name}` : name
 }
 
 export function composerModelLabels(
@@ -101,5 +101,5 @@ function sharedPrefix(ids: string[]) {
 }
 
 function native(provider: Provider) {
-  return provider.id === "opencode" && (!provider.integrationID || provider.integrationID === "opencode")
+  return provider.id === "olive" && (!provider.integrationID || provider.integrationID === "olive")
 }

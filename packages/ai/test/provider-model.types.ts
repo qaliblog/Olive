@@ -4,7 +4,7 @@ import {
   Groq,
   OpenAI,
   OpenAICompatible,
-  OpenCode,
+  Olive,
   OpenRouter,
   VercelAIGateway,
   XAI,
@@ -18,7 +18,7 @@ Google.model("gemini-2.5-flash")
 Groq.model("llama-3.3-70b-versatile")
 OpenRouter.decisionModel("openai/gpt-5")
 XAI.model("grok-4")
-OpenCode.decisionModel("decision")
+Olive.decisionModel("decision")
 
 OpenAI.model("gpt-5", { apiKey: "key" })
 Anthropic.model("claude-sonnet-4-6", { apiKey: "key" })

@@ -1,4 +1,4 @@
-import { useDialog } from "@opencode/ui/context/dialog"
+import { useDialog } from "@olive/ui/context/dialog"
 import { createMemo, onCleanup } from "solid-js"
 import { useLanguage } from "@/runtime/i18n/language"
 import { COMMAND_SEARCH_ID, commandPaletteOptions, useCommand } from "./command"

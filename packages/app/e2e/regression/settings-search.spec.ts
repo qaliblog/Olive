@@ -2,14 +2,14 @@ import { expect, test, type Page } from "@playwright/test"
 import en from "../../src/runtime/i18n/en"
 import { clientSettings } from "../../src/settings/search-catalog"
 import { NO_PROVIDER, REMOTE_SERVER, project, type SeedInput } from "../utils/app"
-import { mockOpenCodeServer } from "../utils/mock-server"
+import { mockOliveServer } from "../utils/mock-server"
 import { openSettings } from "../utils/workspace"
 
-const directory = "/projects/opencode"
+const directory = "/projects/olive"
 
 test.use({ viewport: { width: 1280, height: 900 }, serviceWorkers: "block" })
 
-// `count` replaces the single "OpenCode" project with "OpenCode 00".."OpenCode NN".
+// `count` replaces the single "Olive" project with "Olive 00".."Olive NN".
 async function open(page: Page, input: { count?: number; seed?: SeedInput } = {}) {
   const projects =
     input.count === undefined
@@ -18,14 +18,14 @@ async function open(page: Page, input: { count?: number; seed?: SeedInput } = {}
           project({
             id: `proj_search_${index}`,
             directory: `${directory}-${index}`,
-            name: `OpenCode ${String(index).padStart(2, "0")}`,
+            name: `Olive ${String(index).padStart(2, "0")}`,
           }),
         )
 
   await page.route("https://api.github.com/**", (route) => route.fulfill({ json: [] }))
 
   const { settings } = await openSettings(page, {
-    name: "OpenCode",
+    name: "Olive",
     directory,
     project: { icon: { color: "orange" } },
     provider: NO_PROVIDER,
@@ -42,7 +42,7 @@ async function open(page: Page, input: { count?: number; seed?: SeedInput } = {}
 
   // Readiness includes the server-backed project inventory, not just the settings shell.
   if (input.count === 0) return view
-  await view.search.fill("OpenCode")
+  await view.search.fill("Olive")
   // Only the selected server's projects are indexed.
   await expect(view.results.getByRole("option")).toHaveCount(input.count ?? 1)
   await view.search.clear()
@@ -151,10 +151,10 @@ test("the narrow layout floats the results in the shared search list popover", a
 })
 
 test("a category's results stay under one run of headers when its groups interleave by rank", async ({ page }) => {
-  await mockOpenCodeServer(page, {
+  await mockOliveServer(page, {
     server: REMOTE_SERVER,
-    directory: "/remote/opencode",
-    project: project({ id: "proj_search_remote", directory: "/remote/opencode", name: "Remote app" }),
+    directory: "/remote/olive",
+    project: project({ id: "proj_search_remote", directory: "/remote/olive", name: "Remote app" }),
     provider: NO_PROVIDER,
     sessions: [],
     pageMessages: () => ({ items: [] }),
@@ -319,7 +319,7 @@ for (const count of [0, 7, 8]) {
 
     await view.settings.getByRole("tab", { name: "Projects", exact: true }).click()
     const search = view.settings.getByRole("searchbox", { name: "Search projects", exact: true })
-    const projects = view.settings.getByRole("button", { name: /^OpenCode / })
+    const projects = view.settings.getByRole("button", { name: /^Olive / })
 
     if (count === 0) {
       await expect(view.settings.getByText("No projects yet", { exact: true })).toBeVisible()
@@ -342,14 +342,14 @@ for (const count of [0, 7, 8]) {
 
     await search.fill("  CODE 06  ")
     await expect(projects).toHaveCount(1)
-    await expect(projects).toHaveAccessibleName("OpenCode 06")
+    await expect(projects).toHaveAccessibleName("Olive 06")
     await search.fill("missing-project")
     await expect(projects).toHaveCount(0)
     await view.settings.getByRole("button", { name: "Clear", exact: true }).click()
     await expect(projects).toHaveCount(count)
-    await search.fill("OpenCode 06")
+    await search.fill("Olive 06")
     await projects.click()
-    await expect(view.settings.getByRole("heading", { name: "OpenCode 06", exact: true })).toBeVisible()
+    await expect(view.settings.getByRole("heading", { name: "Olive 06", exact: true })).toBeVisible()
   })
 }
 
@@ -368,25 +368,25 @@ test("all indexed client controls resolve to visible production controls", async
 
 test("project results keep the query, selection, and scroll position on return", async ({ page }) => {
   const view = await open(page, { count: 30 })
-  await view.search.fill("OpenCode 25 name")
+  await view.search.fill("Olive 25 name")
   const name = view.results.getByRole("option")
   await expect(name).toHaveText("Project nameGeneral")
   await name.click()
   await expect(view.search).toHaveCount(0)
-  await expect(view.settings.getByRole("textbox", { name: "Project name", exact: true })).toHaveValue("OpenCode 25")
+  await expect(view.settings.getByRole("textbox", { name: "Project name", exact: true })).toHaveValue("Olive 25")
   await page.keyboard.press("Escape")
   await expect(view.search).toBeFocused()
-  await expect(view.search).toHaveValue("OpenCode 25 name")
+  await expect(view.search).toHaveValue("Olive 25 name")
   await expect(name).toHaveAttribute("aria-selected", "true")
 
-  await view.search.fill("OpenCode")
+  await view.search.fill("Olive")
   await expect(view.results.getByRole("option")).toHaveCount(30)
-  const target = view.results.getByRole("option", { name: /^OpenCode 25,/ })
+  const target = view.results.getByRole("option", { name: /^Olive 25,/ })
   await target.scrollIntoViewIfNeeded()
   await expect.poll(() => view.viewport.evaluate((list) => list.scrollTop)).toBeGreaterThan(0)
   const scroll = await view.viewport.evaluate((list) => list.scrollTop)
   await target.click()
-  await expect(view.settings.getByRole("heading", { name: "OpenCode 25", exact: true })).toBeVisible()
+  await expect(view.settings.getByRole("heading", { name: "Olive 25", exact: true })).toBeVisible()
   await view.settings.getByRole("button", { name: "Back to settings", exact: true }).click()
   await expect(view.search).toBeFocused()
   await expect(target).toHaveAttribute("aria-selected", "true")
@@ -404,10 +404,10 @@ test("IME confirmation does not activate a search result", async ({ page }) => {
 })
 
 test("multi-server results follow the selected server and keep the query on return", async ({ page }) => {
-  await mockOpenCodeServer(page, {
+  await mockOliveServer(page, {
     server: REMOTE_SERVER,
-    directory: "/remote/opencode",
-    project: project({ id: "proj_search_remote", directory: "/remote/opencode", name: "Remote app" }),
+    directory: "/remote/olive",
+    project: project({ id: "proj_search_remote", directory: "/remote/olive", name: "Remote app" }),
     provider: NO_PROVIDER,
     sessions: [],
     pageMessages: () => ({ items: [] }),

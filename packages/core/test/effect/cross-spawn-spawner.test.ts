@@ -5,9 +5,9 @@ import path from "node:path"
 import { inspect } from "node:util"
 import { Cause, Deferred, Effect, Exit, PlatformError, Redacted, Stream } from "effect"
 import { ChildProcess, ChildProcessSpawner } from "effect/process"
-import { CrossSpawnSpawner } from "@opencode/util/cross-spawn-spawner"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Teardown } from "@opencode/util/teardown"
+import { CrossSpawnSpawner } from "@olive/util/cross-spawn-spawner"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Teardown } from "@olive/util/teardown"
 import { testEffect } from "../lib/effect"
 
 const live = LayerNode.compile(CrossSpawnSpawner.node)
@@ -31,7 +31,7 @@ function alive(pid: number) {
 }
 
 async function tmpdir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-core-test-"))
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "olive-core-test-"))
   return {
     path: dir,
     async [Symbol.asyncDispose]() {
@@ -541,14 +541,14 @@ describe("cross-spawn spawner", () => {
 
         const out = yield* ChildProcessSpawner.ChildProcessSpawner.use((svc) =>
           svc.string(
-            ChildProcess.make("set", ["OPENCODE_TEST_SHELL"], {
+            ChildProcess.make("set", ["OLIVE_TEST_SHELL"], {
               shell: true,
               extendEnv: true,
-              env: { OPENCODE_TEST_SHELL: "ok" },
+              env: { OLIVE_TEST_SHELL: "ok" },
             }),
           ),
         )
-        expect(out).toContain("OPENCODE_TEST_SHELL=ok")
+        expect(out).toContain("OLIVE_TEST_SHELL=ok")
       }),
     )
 

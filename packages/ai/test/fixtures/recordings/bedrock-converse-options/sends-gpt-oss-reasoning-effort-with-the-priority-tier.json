@@ -19,7 +19,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "body": "{\"modelId\":\"openai.gpt-oss-120b-1:0\",\"messages\":[{\"role\":\"user\",\"content\":[{\"text\":\"What is 17*23? Reply with the number only.\"}]}],\"inferenceConfig\":{\"maxTokens\":1000},\"additionalModelRequestFields\":{\"reasoning_effort\":\"low\"},\"serviceTier\":{\"type\":\"priority\"},\"requestMetadata\":{\"suite\":\"opencode-ai\"}}"
+        "body": "{\"modelId\":\"openai.gpt-oss-120b-1:0\",\"messages\":[{\"role\":\"user\",\"content\":[{\"text\":\"What is 17*23? Reply with the number only.\"}]}],\"inferenceConfig\":{\"maxTokens\":1000},\"additionalModelRequestFields\":{\"reasoning_effort\":\"low\"},\"serviceTier\":{\"type\":\"priority\"},\"requestMetadata\":{\"suite\":\"olive-ai\"}}"
       },
       "response": {
         "status": 200,

@@ -15,8 +15,8 @@ import {
 import { createStore } from "solid-js/store"
 import { createMediaQuery } from "@solid-primitives/media"
 import { useData } from "../context"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { useI18n } from "@opencode/ui/context/i18n"
+import { useDialog } from "@olive/ui/context/dialog"
+import { useI18n } from "@olive/ui/context/i18n"
 import { Markdown } from "../components/markdown"
 import { linkSegments } from "../components/link-segments"
 import { sessionReferenceText, setupSessionLinks } from "../components/markdown-session-links"
@@ -24,22 +24,22 @@ import { useMarkdown } from "../context/markdown"
 import { useSources } from "../context/sources"
 import { SourcesChip } from "../sources/sources-chip"
 import type { TurnSources } from "../sources/sources"
-import { ImagePreview } from "@opencode/ui/image-preview"
-import { getFilename } from "@opencode/util/path"
+import { ImagePreview } from "@olive/ui/image-preview"
+import { getFilename } from "@olive/util/path"
 import { AttachmentCard } from "./attachment-card"
 import { CommentCard, commentCardTarget, quoteTooltip } from "./comment-card"
 import { TimelineSeparator } from "../components/timeline-separator"
-import { Tooltip } from "@opencode/ui/tooltip"
-import { IconButton } from "@opencode/ui/icon-button"
-import { Menu } from "@opencode/ui/menu"
-import { Icon } from "@opencode/ui/icon"
-import { Button } from "@opencode/ui/button"
-import { TextReveal } from "@opencode/ui/text-reveal"
-import { TextShimmer } from "@opencode/ui/text-shimmer"
+import { Tooltip } from "@olive/ui/tooltip"
+import { IconButton } from "@olive/ui/icon-button"
+import { Menu } from "@olive/ui/menu"
+import { Icon } from "@olive/ui/icon"
+import { Button } from "@olive/ui/button"
+import { TextReveal } from "@olive/ui/text-reveal"
+import { TextShimmer } from "@olive/ui/text-shimmer"
 import { BasicTool } from "../components/basic-tool"
 import { reasoningHeading } from "../timeline/projection"
-import { Card } from "@opencode/ui/card"
-import { springStyle } from "@opencode/ui/motion/solid"
+import { Card } from "@olive/ui/card"
+import { springStyle } from "@olive/ui/motion/solid"
 import { userRunSpring, type UserRun } from "../timeline/user-runs"
 import type {
   PromptAgentAttachment,
@@ -48,7 +48,7 @@ import type {
   SessionMessageAssistantReasoning,
   SessionMessageCompaction,
   SessionMessageUser,
-} from "@opencode/client/promise"
+} from "@olive/client/promise"
 import type { SessionUserActions, SessionUserAttachmentReference, SessionUserComment } from "../actions"
 import { agentLabel } from "./agent-label"
 import { attached, imageAttachmentPlaceholderStyle, typeLabel } from "../components/message-file"
@@ -758,7 +758,7 @@ export function CurrentUserMessageDisplay(props: {
   )
 }
 
-// The OpenCode iOS app's fold (UserBubbleFold): a message past 12 lines shows its first 8, so a fold always hides at
+// The Olive iOS app's fold (UserBubbleFold): a message past 12 lines shows its first 8, so a fold always hides at
 // least 5 lines and a message just past the limit never folds away a line or two.
 const USER_MESSAGE_FOLD = { over: 12, show: 8 }
 

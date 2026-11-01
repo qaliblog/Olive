@@ -1,14 +1,14 @@
 import { batch, createMemo, createSignal, onCleanup, onMount, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { makeEventListener } from "@solid-primitives/event-listener"
-import { Icon } from "@opencode/ui/icon"
-import { IconButton } from "@opencode/ui/icon-button"
-import { Tooltip } from "@opencode/ui/tooltip"
-import { createKeyed, usePlugin } from "@opencode/plugin/gui"
-import { motionGlobals, motionTuning } from "@opencode/ui/motion-tuning"
-import { duration } from "@opencode/util/duration"
-import { SessionTurn } from "@opencode/util/session-turn"
-import { builtinContext } from "@opencode/plugin/gui/builtin"
+import { Icon } from "@olive/ui/icon"
+import { IconButton } from "@olive/ui/icon-button"
+import { Tooltip } from "@olive/ui/tooltip"
+import { createKeyed, usePlugin } from "@olive/plugin/gui"
+import { motionGlobals, motionTuning } from "@olive/ui/motion-tuning"
+import { duration } from "@olive/util/duration"
+import { SessionTurn } from "@olive/util/session-turn"
+import { builtinContext } from "@olive/plugin/gui/builtin"
 
 type Mem = Performance & {
   memory?: {
@@ -738,7 +738,7 @@ export default function DebugBar(props: {
         <Show when={props.motion}>
           <div class="ms-auto flex items-center gap-[9px]">
             {/* The lab's route exists only on the dev server and in Beta. */}
-            {(import.meta.env.DEV || import.meta.env.VITE_OPENCODE_CHANNEL === "beta") && (
+            {(import.meta.env.DEV || import.meta.env.VITE_OLIVE_CHANNEL === "beta") && (
               <Tooltip appearance="compact" value={ctx.t("components.tip")} placement="top">
                 <a
                   href="/components"

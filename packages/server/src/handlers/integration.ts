@@ -1,5 +1,5 @@
-import { Integration } from "@opencode/core/integration"
-import { Plugin } from "@opencode/core/plugin"
+import { Integration } from "@olive/core/integration"
+import { Plugin } from "@olive/core/plugin"
 import { Effect } from "effect"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
 import { Api } from "../api"
@@ -8,11 +8,11 @@ import {
   IntegrationMethodNotFoundError,
   IntegrationNotFoundError,
   InvalidRequestError,
-} from "@opencode/protocol/errors"
+} from "@olive/protocol/errors"
 import { response } from "../location"
-import { WellKnown } from "@opencode/core/wellknown"
-import { Config } from "@opencode/core/config"
-import { ManagedPolicy } from "@opencode/core/managed-policy"
+import { WellKnown } from "@olive/core/wellknown"
+import { Config } from "@olive/core/config"
+import { ManagedPolicy } from "@olive/core/managed-policy"
 
 const statements = Effect.fnUntraced(function* () {
   const config = yield* Config.Service

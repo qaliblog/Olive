@@ -1,5 +1,5 @@
-import type { McpApi } from "@opencode/client/promise/api"
-import type { Mcp } from "@opencode/schema/mcp"
+import type { McpApi } from "@olive/client/promise/api"
+import type { Mcp } from "@olive/schema/mcp"
 import type { Types } from "effect"
 import type { Transform } from "./registration.js"
 

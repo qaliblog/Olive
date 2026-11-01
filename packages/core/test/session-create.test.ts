@@ -4,38 +4,38 @@ import fs from "fs/promises"
 import path from "path"
 import { DateTime, Effect, Layer, Stream } from "effect"
 import { TestClock } from "effect/testing"
-import { Money } from "@opencode/schema/money"
-import { Shell } from "@opencode/schema/shell"
-import { Skill } from "@opencode/schema/skill"
-import { Agent } from "@opencode/core/agent"
+import { Money } from "@olive/schema/money"
+import { Shell } from "@olive/schema/shell"
+import { Skill } from "@olive/schema/skill"
+import { Agent } from "@olive/core/agent"
 import { and, asc, eq } from "drizzle-orm"
-import { Database } from "@opencode/core/database/database"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Hash } from "@opencode/util/hash"
-import { Bus } from "@opencode/core/bus"
-import { EventTable } from "@opencode/core/event/sql"
-import { Instructions } from "@opencode/core/instructions/index"
-import { Location } from "@opencode/core/location"
-import { Model } from "@opencode/core/model"
-import { Project } from "@opencode/core/project"
-import { ProjectTable } from "@opencode/core/project/sql"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath, RelativePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { SessionMessage } from "@opencode/core/session/message"
-import { SessionProjector } from "@opencode/core/session/projector"
-import { SessionExecution } from "@opencode/core/session/execution"
-import { SessionInbox } from "@opencode/core/session/inbox"
-import { InstructionEntry } from "@opencode/core/session/instruction-entry"
-import { SessionEvent } from "@opencode/core/session/event"
-import { SessionTable } from "@opencode/core/session/sql"
-import { SessionStore } from "@opencode/core/session/store"
-import { SessionTransfer } from "@opencode/core/session/transfer"
-import { Workspace } from "@opencode/core/workspace"
+import { Database } from "@olive/core/database/database"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Hash } from "@olive/util/hash"
+import { Bus } from "@olive/core/bus"
+import { EventTable } from "@olive/core/event/sql"
+import { Instructions } from "@olive/core/instructions/index"
+import { Location } from "@olive/core/location"
+import { Model } from "@olive/core/model"
+import { Project } from "@olive/core/project"
+import { ProjectTable } from "@olive/core/project/sql"
+import { Provider } from "@olive/core/provider"
+import { AbsolutePath, RelativePath } from "@olive/core/schema"
+import { Session } from "@olive/core/session"
+import { SessionMessage } from "@olive/core/session/message"
+import { SessionProjector } from "@olive/core/session/projector"
+import { SessionExecution } from "@olive/core/session/execution"
+import { SessionInbox } from "@olive/core/session/inbox"
+import { InstructionEntry } from "@olive/core/session/instruction-entry"
+import { SessionEvent } from "@olive/core/session/event"
+import { SessionTable } from "@olive/core/session/sql"
+import { SessionStore } from "@olive/core/session/store"
+import { SessionTransfer } from "@olive/core/session/transfer"
+import { Workspace } from "@olive/core/workspace"
 import { Expected } from "./lib/session-message"
 import { testEffect } from "./lib/effect"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
+import { LocationServiceMap } from "@olive/core/location-service-map"
 import { initGit } from "./fixture/git"
 import { countingSpawner } from "./fixture/spawn"
 import { offlineModels } from "./fixture/models"
@@ -112,7 +112,7 @@ describe("Session.create", () => {
         const clone = AbsolutePath.make(path.join(directory, "other-clone"))
         yield* Effect.promise(async () => {
           await $`git init -q ${main}`.cwd(directory)
-          await $`git -c user.name=Test -c user.email=test@opencode.test -c commit.gpgsign=false commit --allow-empty -qm root`
+          await $`git -c user.name=Test -c user.email=test@olive.test -c commit.gpgsign=false commit --allow-empty -qm root`
             .cwd(main)
             .quiet()
           await $`git remote add origin git@github.com:owner/repo.git`.cwd(main)
@@ -1128,12 +1128,12 @@ describe("Session.create", () => {
         const created = yield* session.create({
           location: Location.Ref.make({ directory: AbsolutePath.make(directory) }),
         })
-        yield* session.environment({ sessionID: created.id, variables: { OPENCODE_SESSION_ENV_TEST: "attached" } })
+        yield* session.environment({ sessionID: created.id, variables: { OLIVE_SESSION_ENV_TEST: "attached" } })
 
         const command =
           process.platform === "win32"
-            ? "[Console]::Out.Write($env:OPENCODE_SESSION_ENV_TEST)"
-            : 'printf %s "$OPENCODE_SESSION_ENV_TEST"'
+            ? "[Console]::Out.Write($env:OLIVE_SESSION_ENV_TEST)"
+            : 'printf %s "$OLIVE_SESSION_ENV_TEST"'
         yield* session.shell({ sessionID: created.id, command })
 
         const messages = yield* session.messages({ sessionID: created.id, order: "asc" })

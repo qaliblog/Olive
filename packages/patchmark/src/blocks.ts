@@ -1,5 +1,5 @@
 // CommonMark 0.31.2 block parser: a line-by-line port of commonmark.js `blocks.js`, extended with GFM tables and
-// OpenCode's `$$`/`$` display-math blocks. The parser is persistent: complete lines are incorporated once, and the
+// Olive's `$$`/`$` display-math blocks. The parser is persistent: complete lines are incorporated once, and the
 // streaming tail is produced by forking only the open spine (the open last-child chain) of the tree.
 import { unescapeString } from "./entities"
 import { CLOSETAG, OPENTAG, parseReference, type RefMap } from "./inline"
@@ -771,7 +771,7 @@ export class BlockParser {
         return 0
       }
       case 9: {
-        // OpenCode display math: `$$` or `$` alone on a line, closed by the same delimiter alone on a line
+        // Olive display math: `$$` or `$` alone on a line, closed by the same delimiter alone on a line
         if (!this.options.math || this.indent !== 0 || this.tip.type === "paragraph" || container.type === "paragraph") {
           return 0
         }

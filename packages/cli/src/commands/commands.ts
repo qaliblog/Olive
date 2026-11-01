@@ -2,7 +2,6 @@ import { Argument, Flag, GlobalFlag } from "effect/cli"
 import { Schema } from "effect"
 import { CliFlag } from "../framework/flag"
 import { Spec } from "../framework/spec"
-import { Updater } from "../services/updater"
 
 export const PrintLogs = GlobalFlag.Setting("print-logs")({
   flag: Flag.Boolean("print-logs").pipe(
@@ -27,7 +26,7 @@ export const Server = GlobalFlag.Setting("server")({
 
 const ServerFlags = [Standalone, Server] as const
 
-declare const OPENCODE_CLI_NAME: string | undefined
+declare const OLIVE_CLI_NAME: string | undefined
 
 const ServerParams = {
   standalone: Standalone.flag,
@@ -46,13 +45,13 @@ const PermissionParams = {
   ),
 }
 
-const Root = Spec.make(typeof OPENCODE_CLI_NAME === "string" ? OPENCODE_CLI_NAME : "opencode", {
-  description: "OpenCode command line interface",
+const Root = Spec.make(typeof OLIVE_CLI_NAME === "string" ? OLIVE_CLI_NAME : "olive", {
+  description: "Olive command line interface",
   params: {
     ...ServerParams,
     ...PermissionParams,
     directory: Argument.String("directory").pipe(
-      Argument.withDescription("Directory to start OpenCode in"),
+      Argument.withDescription("Directory to start Olive in"),
       Argument.optional,
     ),
     continue: Flag.Boolean("continue").pipe(
@@ -68,23 +67,8 @@ const Root = Spec.make(typeof OPENCODE_CLI_NAME === "string" ? OPENCODE_CLI_NAME
     prompt: Flag.String("prompt").pipe(Flag.withDescription("Prompt to use"), Flag.optional),
   },
   commands: [
-    Spec.make("upgrade", {
-      description: "Upgrade OpenCode to the latest or a specific version",
-      aliases: ["update"],
-      params: {
-        target: Argument.String("target").pipe(
-          Argument.withDescription("Version to upgrade to (with or without a leading v)"),
-          Argument.optional,
-        ),
-        method: Flag.Literals("method", Updater.methods).pipe(
-          Flag.withAlias("m"),
-          Flag.withDescription("Installation method to use"),
-          Flag.optional,
-        ),
-      },
-    }),
     Spec.make("uninstall", {
-      description: "Uninstall OpenCode, keeping session data, configuration, and state",
+      description: "Uninstall Olive, keeping session data, configuration, and state",
       params: {
         dryRun: Flag.Boolean("dry-run").pipe(
           Flag.withDescription("Show what would be removed without removing"),
@@ -398,7 +382,7 @@ const Root = Spec.make(typeof OPENCODE_CLI_NAME === "string" ? OPENCODE_CLI_NAME
       },
     }),
     Spec.make("run", {
-      description: "Run OpenCode with a message",
+      description: "Run Olive with a message",
       globalFlags: ServerFlags,
       params: {
         message: Argument.String("message").pipe(

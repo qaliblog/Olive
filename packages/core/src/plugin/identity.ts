@@ -1,9 +1,9 @@
 export * as IdentityPlugin from "./identity.js"
 
-import { SystemPart } from "@opencode/ai/effect"
-import { define } from "@opencode/plugin/effect/plugin"
-import type { SessionHooks } from "@opencode/plugin/effect/session"
-import { Model } from "@opencode/schema/model"
+import { SystemPart } from "@olive/ai/effect"
+import { define } from "@olive/plugin/effect/plugin"
+import type { SessionHooks } from "@olive/plugin/effect/session"
+import { Model } from "@olive/schema/model"
 import { Effect } from "effect"
 import { OptimizePlugin } from "./optimize.js"
 
@@ -17,7 +17,7 @@ export function identity(model: { readonly name: string; readonly ref: Model.Ref
 }
 
 export const Plugin = define({
-  id: "opencode.prompt.identity",
+  id: "olive.prompt.identity",
   effect: Effect.fn("IdentityPlugin")(function* (ctx) {
     const hook = (event: SessionHooks["context"]) =>
       Effect.gen(function* () {

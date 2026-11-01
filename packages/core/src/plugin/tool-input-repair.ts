@@ -1,7 +1,7 @@
 export * as ToolInputRepairPlugin from "./tool-input-repair.js"
 
-import { ToolFailure } from "@opencode/ai/effect"
-import { define } from "@opencode/plugin/effect/plugin"
+import { ToolFailure } from "@olive/ai/effect"
+import { define } from "@olive/plugin/effect/plugin"
 import { Effect, JsonSchema, Option, Predicate, Schema } from "effect"
 import { definition, normalizeContent } from "../tool/runtime.js"
 
@@ -24,7 +24,7 @@ const maxDepth = 6
 const aliases = new Map([["bash", "shell"]])
 
 export const Plugin = define({
-  id: "opencode.tool.input.repair",
+  id: "olive.tool.input.repair",
   effect: (ctx) =>
     Effect.gen(function* () {
       const aliased = new Map<string, string>()

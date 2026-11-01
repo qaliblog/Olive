@@ -1,20 +1,20 @@
 import path from "node:path"
 import { describe, expect } from "bun:test"
 import { Effect, Layer, Stream } from "effect"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { Artifact } from "@opencode/core/artifact"
-import { Config } from "@opencode/core/config"
-import { Image } from "@opencode/core/image"
-import { Location } from "@opencode/core/location"
-import { Permission } from "@opencode/core/permission"
-import { Session } from "@opencode/core/session"
-import { Tool } from "@opencode/core/tool"
-import { ArtifactTools } from "@opencode/core/tool/plugin/artifact"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
-import { Document, Info } from "@opencode/schema/config"
-import { ConfigExperimental } from "@opencode/schema/config/experimental"
-import { AbsolutePath } from "@opencode/schema/schema"
+import { AppNodeBuilder } from "@olive/core/effect/app-node-builder"
+import { Artifact } from "@olive/core/artifact"
+import { Config } from "@olive/core/config"
+import { Image } from "@olive/core/image"
+import { Location } from "@olive/core/location"
+import { Permission } from "@olive/core/permission"
+import { Session } from "@olive/core/session"
+import { Tool } from "@olive/core/tool"
+import { ArtifactTools } from "@olive/core/tool/plugin/artifact"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Global } from "@olive/util/global"
+import { Document, Info } from "@olive/schema/config"
+import { ConfigExperimental } from "@olive/schema/config/experimental"
+import { AbsolutePath } from "@olive/schema/schema"
 import { tmpdirScoped } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
 import { imagePassthrough } from "./lib/image"
@@ -22,10 +22,10 @@ import { permissionLayer } from "./lib/permission"
 import { codeModeListings, executeTool, registerToolPlugin, toolIdentity } from "./lib/tool"
 
 const toolPaths = [
-  "opencode.artifact_create",
-  "opencode.artifact_read",
-  "opencode.artifact_update",
-  "opencode.artifact_delete",
+  "olive.artifact_create",
+  "olive.artifact_read",
+  "olive.artifact_update",
+  "olive.artifact_delete",
 ]
 
 const buildLayer = (artifactsEnabled: boolean, dir: string) => {
@@ -60,7 +60,7 @@ const callCodeMode = (registry: Tool.Interface, sessionID: Session.ID, name: str
       type: "tool-call",
       id: `call-${name}`,
       name: "execute",
-      input: { code: `return await tools.opencode.${name}(${JSON.stringify(input)})` },
+      input: { code: `return await tools.olive.${name}(${JSON.stringify(input)})` },
     },
   }).pipe(
     Effect.map((result) => {
@@ -76,7 +76,7 @@ const it = testEffect(Layer.empty)
 describe("experimental.artifacts service and tools", () => {
   it.live("stays disabled and hides artifact tools when experimental.artifacts is unset", () =>
     Effect.gen(function* () {
-      const dir = (yield* tmpdirScoped("opencode-artifact-off-")).path
+      const dir = (yield* tmpdirScoped("olive-artifact-off-")).path
       yield* Effect.gen(function* () {
         const artifacts = yield* Artifact.Service
         const registry = yield* Tool.Service
@@ -101,7 +101,7 @@ describe("experimental.artifacts service and tools", () => {
 
   it.live("registers custom providers, routes overrides, and runs the 4 CRUD tools", () =>
     Effect.gen(function* () {
-      const dir = (yield* tmpdirScoped("opencode-artifact-on-")).path
+      const dir = (yield* tmpdirScoped("olive-artifact-on-")).path
 
       yield* Effect.gen(function* () {
         const artifacts = yield* Artifact.Service
@@ -144,7 +144,7 @@ describe("experimental.artifacts service and tools", () => {
         const listings = snap.codeModeCatalog ? codeModeListings(snap.codeModeCatalog) : []
         expect(listings.map((item) => item.path)).toEqual(expect.arrayContaining(toolPaths))
         const rawTools = yield* registry.list()
-        const createTool = rawTools.find((item) => item.id === "opencode_artifact_create")
+        const createTool = rawTools.find((item) => item.id === "olive_artifact_create")
         expect(createTool?.description).toContain(
           "Default provider (cloudflare [static, server-code, sqlite, durable-objects]): Artifacts deploy to Cloudflare with SQLite and Durable Objects.",
         )

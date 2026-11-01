@@ -13,11 +13,11 @@ import {
   type ToolEntry,
   UnknownProviderError,
   type Usage,
-} from "@opencode/ai/effect"
-import type { StreamOptions } from "@opencode/ai/route"
-import type { SessionCompactionResult } from "@opencode/plugin/effect/session"
-import type { SessionError } from "@opencode/schema/session-error"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+} from "@olive/ai/effect"
+import type { StreamOptions } from "@olive/ai/route"
+import type { SessionCompactionResult } from "@olive/plugin/effect/session"
+import type { SessionError } from "@olive/schema/session-error"
+import { makeLocationNode } from "@olive/util/effect/app-node"
 import { Context, Effect, Exit, Fiber, Layer, Result, Scope, Stream } from "effect"
 import { Agent } from "../agent.js"
 import { Bus } from "../bus.js"
@@ -80,7 +80,7 @@ export interface Interface extends State.Transformable<Editor> {
   ) => Effect.Effect<void, E>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SessionCompaction") {}
+export class Service extends Context.Service<Service, Interface>()("@olive/SessionCompaction") {}
 
 /**
  * A summary fills `text`, and references the messages it keeps verbatim with `metadata.keepID`; history

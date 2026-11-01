@@ -1,5 +1,5 @@
-import { UsageLimits } from "@opencode/core/usage-limits"
-import { ServiceUnavailableError } from "@opencode/protocol/errors"
+import { UsageLimits } from "@olive/core/usage-limits"
+import { ServiceUnavailableError } from "@olive/protocol/errors"
 import { Effect } from "effect"
 import { HttpApiBuilder } from "effect/http-api"
 import { Api } from "../api"
@@ -10,13 +10,13 @@ export const UsageHandler = HttpApiBuilder.group(Api, "server.usage", (handlers)
     return handlers.handle(
       "usage.limits",
       Effect.fn("server.usage.limits")(function* () {
-        // The OpenCode Console plugin registers the sign-in method that refreshes an expired credential.
+        // The Olive Console plugin registers the sign-in method that refreshes an expired credential.
         yield* awaitPlugins
         const limits = yield* UsageLimits.Service
         return yield* response(
           limits.get().pipe(
             Effect.map((info) => info ?? null),
-            Effect.mapError((error) => new ServiceUnavailableError({ message: error.message, service: "opencode" })),
+            Effect.mapError((error) => new ServiceUnavailableError({ message: error.message, service: "olive" })),
           ),
         )
       }),

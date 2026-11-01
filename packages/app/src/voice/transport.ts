@@ -1,5 +1,5 @@
-import type { OpenCodeClient } from "@opencode/client/promise"
-import { uuid } from "@opencode/util/uuid"
+import type { OliveClient } from "@olive/client/promise"
+import { uuid } from "@olive/util/uuid"
 import { decodeEvent, type VoiceEvent } from "./protocol"
 import { delegatorInstructions, liveInstructions, tools } from "./spec"
 
@@ -34,7 +34,7 @@ export class VoiceTransport {
 
   constructor(
     private readonly inputOptions: {
-      api: OpenCodeClient
+      api: OliveClient
       event: (event: VoiceEvent) => void
       levels: (input: number, output: number) => void
       dropped: () => void

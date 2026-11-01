@@ -1,7 +1,7 @@
 import { Effect } from "effect"
 import { isArrayNonEmpty } from "effect/Array"
-import { define } from "@opencode/plugin/effect/plugin"
-import { Form } from "@opencode/schema/form"
+import { define } from "@olive/plugin/effect/plugin"
+import { Form } from "@olive/schema/form"
 import { Provider } from "../../provider.js"
 import { configuredSettings } from "./configured.js"
 import { credentialSettings, metadataSettings } from "./credential-settings.js"
@@ -25,7 +25,7 @@ const gatewayIdField = Form.StringField.make({
 })
 
 export const CloudflareAIGatewayPlugin = define({
-  id: "opencode.provider.cloudflare.ai.gateway",
+  id: "olive.provider.cloudflare.ai.gateway",
   effect: Effect.fn(function* (ctx) {
     const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
     const gatewayId = process.env.CLOUDFLARE_GATEWAY_ID

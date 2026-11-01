@@ -1,4 +1,4 @@
-import { define } from "@opencode/plugin/effect/plugin"
+import { define } from "@olive/plugin/effect/plugin"
 import { Effect, Option, Stream } from "effect"
 import { ClaudeIO } from "./claude/io.js"
 import { ClaudeSessions } from "./claude/sessions.js"
@@ -13,15 +13,15 @@ import { EnvironmentUnavailable } from "../../../environment/unavailable.js"
 import { Location } from "../../../location.js"
 import type { PluginInternal } from "../../internal.js"
 
-export const ID = "opencode.provider.claude-agent"
+export const ID = "olive.provider.claude-agent"
 
 // Tests pass a fake ClaudeIO here. The registry lives outside setup's scope, so a reload can adopt its processes.
-// Restart tests pass their own and close it, as an exiting opencode would.
+// Restart tests pass their own and close it, as an exiting olive would.
 export const make = (io: ClaudeIO.Interface, registry = ClaudeSessions.registry()) =>
   define({
     id: ID,
     effect: Effect.fn("ClaudeAgent.Plugin")(function* (ctx) {
-      // Claude Agent runs the local `claude` binary, so skip it where opencode cannot start local processes.
+      // Claude Agent runs the local `claude` binary, so skip it where olive cannot start local processes.
       const environment = yield* Effect.serviceOption(Environment.Service)
       const location = yield* Effect.serviceOption(Location.Service)
       if (Option.isSome(location) && location.value.workspaceID !== undefined) return

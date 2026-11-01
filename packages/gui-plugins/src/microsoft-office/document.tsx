@@ -1,7 +1,7 @@
 import { createSignal, For, onCleanup, Show, type Accessor } from "solid-js"
 import { createStore } from "solid-js/store"
-import { Loader } from "@opencode/ui/loader"
-import { createKeyed, createLatest, usePlugin } from "@opencode/plugin/gui"
+import { Loader } from "@olive/ui/loader"
+import { createKeyed, createLatest, usePlugin } from "@olive/plugin/gui"
 import { OfficePages, type PaintPage, type ScrollToPage } from "./pages"
 import {
   layerFont,
@@ -12,7 +12,7 @@ import {
   type WordSpan,
 } from "./word-protocol"
 import { createWorkerClient, movableBuffer } from "./worker-rpc"
-import type { FileViewerProps } from "@opencode/plugin/gui/file"
+import type { FileViewerProps } from "@olive/plugin/gui/file"
 
 type Opened = {
   readonly pages: Accessor<readonly WordPageSize[]>

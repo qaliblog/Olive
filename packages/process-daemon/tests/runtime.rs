@@ -6,8 +6,8 @@ mod terminal_fixture;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use opencode_pty::protocol::AttachmentRole;
-use opencode_pty::service::{
+use olive_pty::protocol::AttachmentRole;
+use olive_pty::service::{
     StreamEvent, TerminalId, TerminalLifecycle, TerminalService, TerminalSnapshot,
 };
 use terminal_fixture::{Command, Deadline, Fixture, TempDir};

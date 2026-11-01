@@ -4,19 +4,19 @@ import fs from "fs/promises"
 import path from "path"
 import { Cause, Context, Deferred, Effect, Exit, Fiber, Layer, Option, Schema, Scope, Stream } from "effect"
 import { TestClock } from "effect/testing"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { AppProcess } from "@opencode/util/process"
-import { FSUtil } from "@opencode/util/fs-util"
-import { Git } from "@opencode/core/git"
-import { Bus } from "@opencode/core/bus"
-import { Location } from "@opencode/core/location"
-import { AbsolutePath } from "@opencode/core/schema"
-import { State } from "@opencode/core/state"
-import { Vcs } from "@opencode/core/vcs"
-import { VcsGitPlugin } from "@opencode/core/plugin/vcs/git"
-import type { VcsDefinition, VcsDiffInput } from "@opencode/plugin/effect/vcs"
-import { FileSystem } from "@opencode/schema/filesystem"
-import { VcsEvent } from "@opencode/schema/vcs-event"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { AppProcess } from "@olive/util/process"
+import { FSUtil } from "@olive/util/fs-util"
+import { Git } from "@olive/core/git"
+import { Bus } from "@olive/core/bus"
+import { Location } from "@olive/core/location"
+import { AbsolutePath } from "@olive/core/schema"
+import { State } from "@olive/core/state"
+import { Vcs } from "@olive/core/vcs"
+import { VcsGitPlugin } from "@olive/core/plugin/vcs/git"
+import type { VcsDefinition, VcsDiffInput } from "@olive/plugin/effect/vcs"
+import { FileSystem } from "@olive/schema/filesystem"
+import { VcsEvent } from "@olive/schema/vcs-event"
 import { initGit } from "./fixture/git"
 import { location } from "./fixture/location"
 import { tmpdir } from "./fixture/tmpdir"
@@ -1039,7 +1039,7 @@ describe("Vcs", () => {
           await fs.writeFile(path.join(directory, "feature.txt"), "feature\n")
           await commitAll(directory, "feature")
           await $`git branch --set-upstream-to=release feature`.cwd(directory).quiet()
-          await $`git config branch.feature.opencode-merge-base refs/heads/release`.cwd(directory).quiet()
+          await $`git config branch.feature.olive-merge-base refs/heads/release`.cwd(directory).quiet()
         })
         const vcs = yield* Vcs.Service
         expect(yield* vcs.base().pipe(Effect.flip)).toMatchObject({ message: "Choose a review base" })
@@ -1173,7 +1173,7 @@ describe("Vcs", () => {
           await commitAll(directory, "v2")
           await $`git update-ref refs/remotes/origin/v2 HEAD`.cwd(directory).quiet()
           await $`git checkout -b feature origin/v2`.cwd(directory).quiet()
-          await $`git config branch.feature.opencode-merge-base refs/remotes/origin/dev`.cwd(directory).quiet()
+          await $`git config branch.feature.olive-merge-base refs/remotes/origin/dev`.cwd(directory).quiet()
           await fs.writeFile(path.join(directory, "feature.txt"), "feature\n")
           await commitAll(directory, "feature")
           await fs.writeFile(path.join(directory, "second.txt"), "second\n")
@@ -1205,9 +1205,9 @@ describe("Vcs", () => {
         ])
         expect(yield* Effect.promise(() => fs.readFile(path.join(directory, ".git/config"), "utf8"))).toBe(config)
         expect(
-          yield* Effect.promise(() => Bun.file(path.join(directory, ".git/opencode-review.json")).exists()),
+          yield* Effect.promise(() => Bun.file(path.join(directory, ".git/olive-review.json")).exists()),
         ).toBeFalse()
-        yield* Effect.promise(() => $`git config branch.feature.opencode-merge-base missing`.cwd(directory).quiet())
+        yield* Effect.promise(() => $`git config branch.feature.olive-merge-base missing`.cwd(directory).quiet())
         expect(yield* vcs.base()).toEqual({ name: "v2", ref: "refs/remotes/origin/v2", source: "reflog" })
         yield* Effect.promise(() => $`git checkout -b uncertain HEAD`.cwd(directory).quiet())
         expect(yield* vcs.base().pipe(Effect.flip)).toMatchObject({ message: "Choose a review base" })
@@ -1278,7 +1278,7 @@ describe("Vcs", () => {
         })
         expect(yield* git.history.branch(linked)).toBeUndefined()
         expect(
-          yield* Effect.promise(() => Bun.file(path.join(linked.gitDirectory, "opencode-review.json")).exists()),
+          yield* Effect.promise(() => Bun.file(path.join(linked.gitDirectory, "olive-review.json")).exists()),
         ).toBeFalse()
         yield* Effect.gen(function* () {
           const vcs = yield* Vcs.Service
@@ -1296,21 +1296,21 @@ describe("Vcs", () => {
           expect(yield* vcs.base()).toEqual({ name: "v2", ref: "refs/remotes/origin/v2", source: "reflog" })
         }).pipe(provide(linked.worktree, { git: true }))
         expect(
-          yield* Effect.promise(() => Bun.file(path.join(linked.gitDirectory, "opencode-review.json")).exists()),
+          yield* Effect.promise(() => Bun.file(path.join(linked.gitDirectory, "olive-review.json")).exists()),
         ).toBeFalse()
         const fromHead = yield* git.worktree.create({
           repository,
           directory: AbsolutePath.make(path.join(directory, "from-head")),
         })
         expect(
-          yield* Effect.promise(() => Bun.file(path.join(fromHead.gitDirectory, "opencode-review.json")).exists()),
+          yield* Effect.promise(() => Bun.file(path.join(fromHead.gitDirectory, "olive-review.json")).exists()),
         ).toBeFalse()
         const detached = yield* git.worktree.create({
           repository: fromHead,
           directory: AbsolutePath.make(path.join(directory, "detached-source")),
         })
         expect(
-          yield* Effect.promise(() => Bun.file(path.join(detached.gitDirectory, "opencode-review.json")).exists()),
+          yield* Effect.promise(() => Bun.file(path.join(detached.gitDirectory, "olive-review.json")).exists()),
         ).toBeFalse()
       }),
     ),

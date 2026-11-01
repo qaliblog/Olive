@@ -1,14 +1,14 @@
 import { execFile } from "node:child_process"
 import { powerSaveBlocker } from "electron"
 import { Schema } from "effect"
-import { builtinMainContext } from "@opencode/plugin/gui/builtin"
-import type { Plugin } from "@opencode/plugin/gui/main"
+import { builtinMainContext } from "@olive/plugin/gui/builtin"
+import type { Plugin } from "@olive/plugin/gui/main"
 import { Pairing } from "./contract"
 
 /** The display sleep blocker this instance holds, if any. */
 type Blocker = { id?: number }
 
-/** The last `opencode service` command; the next one starts after it settles. */
+/** The last `olive service` command; the next one starts after it settles. */
 type Queue = { tail: Promise<unknown> }
 
 const setup: Plugin.MainSetup = (ctx) => {
@@ -16,7 +16,7 @@ const setup: Plugin.MainSetup = (ctx) => {
   const stored = builtinMainContext(ctx).storage.store("keepScreenActive", {
     schema: Schema.Boolean,
     initial: false,
-    from: { state: ["opencode.settings", "keepScreenActive"] },
+    from: { state: ["olive.settings", "keepScreenActive"] },
   })
 
   const cli = ctx.cli
@@ -38,13 +38,13 @@ const setup: Plugin.MainSetup = (ctx) => {
   }
 
   // Remote access is a setting of the background service, so it changes through the CLI the app runs, as with
-  // `opencode pair --remote`. A change restarts the service, so commands run one at a time.
+  // `olive pair --remote`. A change restarts the service, so commands run one at a time.
   const service = (args: readonly string[], signal: AbortSignal) => {
     const run = queue.tail.then(
       () =>
         new Promise<string>((resolve, reject) => {
           execFile(
-            cli.command[0] ?? "opencode",
+            cli.command[0] ?? "olive",
             [...cli.command.slice(1), "service", ...args],
             { signal, windowsHide: true },
             (error, stdout, stderr) => {

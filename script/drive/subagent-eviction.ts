@@ -1,17 +1,17 @@
 import { Deferred, Effect, Stream } from "effect"
-import { Llm, OpenCodeDriver } from "opencode-drive"
+import { Llm, OliveDriver } from "olive-drive"
 import { AbsolutePath } from "../../packages/schema/src/schema"
 import { Database } from "bun:sqlite"
 
 const label = process.env.DEMO_LABEL ?? "AFTER"
 const evict = process.env.DEMO_EVICT !== "false"
 
-// Run with OPENCODE_DRIVE_DB=proof.sqlite. Only model output and fixture_hold are
+// Run with OLIVE_DRIVE_DB=proof.sqlite. Only model output and fixture_hold are
 // simulated. The debug endpoint closes the real graph without waiting an hour.
-// Dynamic tools avoid the static adapter issue: anomalyco/opencode-drive#116.
-export default OpenCodeDriver.use(
+// Dynamic tools avoid the static adapter issue: anomalyco/olive-drive#116.
+export default OliveDriver.use(
   {
-    opencode: { dev: process.env.OPENCODE_DEV ?? process.cwd() },
+    olive: { dev: process.env.OLIVE_DEV ?? process.cwd() },
     keepArtifacts: true,
     tui: { recording: true, viewport: { cols: 100, rows: 30 } },
     config: {
@@ -19,10 +19,10 @@ export default OpenCodeDriver.use(
       username: "Demo",
       agents: { reviewer: { mode: "subagent", description: "Review the fixture" } },
     },
-    tuiConfig: { theme: { name: "opencode", mode: "dark" }, animations: false, tabs: { mode: "off" } },
+    tuiConfig: { theme: { name: "olive", mode: "dark" }, animations: false, tabs: { mode: "off" } },
     project: { git: true, files: { "README.md": "# Parent fixture\n", "child/README.md": "# Child fixture\n" } },
   },
-  ({ ui, llm, tui, opencode, artifacts, tools }) =>
+  ({ ui, llm, tui, olive, artifacts, tools }) =>
     Effect.gen(function* () {
       const release = yield* Deferred.make<void>()
       const held = yield* Deferred.make<void>()
@@ -76,32 +76,32 @@ export default OpenCodeDriver.use(
       yield* ui.waitFor("Simulated Model", { timeout: 30000 })
       yield* ui.submit("Run the fixture review in the background.")
       yield* ui.waitFor("Review is running in the background.", { timeout: 30000 })
-      const parent = (yield* opencode.session.list({ limit: 20 })).data.find((session) => !session.parentID)
+      const parent = (yield* olive.session.list({ limit: 20 })).data.find((session) => !session.parentID)
       if (!parent) return yield* Effect.fail(new Error("Parent missing"))
-      const child = (yield* opencode.session.list({ parentID: parent.id })).data[0]
+      const child = (yield* olive.session.list({ parentID: parent.id })).data[0]
       if (!child) return yield* Effect.fail(new Error("Child missing"))
       const hold = yield* tools.take("call_hold")
-      yield* opencode.session.move({ sessionID: child.id, directory: AbsolutePath.make(`${artifacts}/files/child`) })
+      yield* olive.session.move({ sessionID: child.id, directory: AbsolutePath.make(`${artifacts}/files/child`) })
       yield* hold.finish({ structured: {}, content: [{ type: "text", text: "Fixture ready" }] })
       yield* Deferred.await(held).pipe(Effect.timeout("30 seconds"))
-      const moved = yield* opencode.session.get({ sessionID: child.id })
+      const moved = yield* olive.session.get({ sessionID: child.id })
       if (moved.location.directory !== `${artifacts}/files/child`)
         return yield* Effect.fail(new Error("Child did not move"))
-      yield* opencode.session.wait({ sessionID: parent.id })
+      yield* olive.session.wait({ sessionID: parent.id })
       if (evict) {
-        yield* opencode.debug.location.evict({ location: { directory: parent.location.directory } })
-        yield* opencode.location.get({ location: { directory: parent.location.directory } })
+        yield* olive.debug.location.evict({ location: { directory: parent.location.directory } })
+        yield* olive.location.get({ location: { directory: parent.location.directory } })
       }
       if (tui.recording)
         yield* tui.recording.mark(`${label}: parent idle${evict ? ", original location evicted" : " (control)"}`)
       yield* Deferred.succeed(release, undefined)
-      yield* opencode.session.wait({ sessionID: child.id })
+      yield* olive.session.wait({ sessionID: child.id })
       const resumed = yield* ui.waitFor("Review received. All checks passed.", { timeout: 5000 }).pipe(
         Effect.as(true),
         Effect.catchTag("UiWaitTimeoutError", () => Effect.succeed(false)),
       )
-      const messages = yield* opencode.message.list({ sessionID: parent.id })
-      const childMessages = yield* opencode.message.list({ sessionID: child.id })
+      const messages = yield* olive.message.list({ sessionID: parent.id })
+      const childMessages = yield* olive.message.list({ sessionID: child.id })
       const completed = childMessages.data.some(
         (message) =>
           message.type === "assistant" &&
@@ -112,7 +112,7 @@ export default OpenCodeDriver.use(
         (message) => message.type === "synthetic" && message.metadata?.source === "subagent",
       ).length
       const marker = yield* Effect.acquireUseRelease(
-        Effect.sync(() => new Database(`${artifacts}/logs/opencode/proof.sqlite`, { readonly: true })),
+        Effect.sync(() => new Database(`${artifacts}/logs/olive/proof.sqlite`, { readonly: true })),
         (database) =>
           Effect.sync(() =>
             database
@@ -134,9 +134,9 @@ export default OpenCodeDriver.use(
       )
         return yield* Effect.fail(new Error("Inconsistent completion evidence"))
       if (evict) {
-        yield* opencode.debug.location.evict({ location: { directory: parent.location.directory } })
-        yield* opencode.location.get({ location: { directory: parent.location.directory } })
-        const rebuilt = yield* opencode.message.list({ sessionID: parent.id })
+        yield* olive.debug.location.evict({ location: { directory: parent.location.directory } })
+        yield* olive.location.get({ location: { directory: parent.location.directory } })
+        const rebuilt = yield* olive.message.list({ sessionID: parent.id })
         if (rebuilt.data.filter((message) => message.type === "synthetic").length !== notifications)
           return yield* Effect.fail(new Error("Location rebuild duplicated notification"))
       }

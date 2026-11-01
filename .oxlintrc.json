@@ -102,7 +102,7 @@
             ],
             "patterns": [
               {
-                "regex": "^@opencode/(app|desktop)(/|$)",
+                "regex": "^@olive/(app|desktop)(/|$)",
                 "message": "GUI plugins never import the app or desktop packages. Use the SDK."
               },
               {
@@ -130,11 +130,11 @@
           {
             "patterns": [
               {
-                "regex": "^@opencode/(app|desktop)(/|$)",
+                "regex": "^@olive/(app|desktop)(/|$)",
                 "message": "The GUI SDK never imports the app or desktop packages; the hosts implement it."
               },
               {
-                "regex": "^@opencode/gui-plugins(/|$)",
+                "regex": "^@olive/gui-plugins(/|$)",
                 "message": "The GUI SDK never imports the built-in plugins; they import the SDK."
               },
               {
@@ -189,7 +189,7 @@
     ".continue/**",
     ".cursor/**",
     ".gemini/**",
-    ".opencode/**",
+    ".olive/**",
     ".pi/**",
     ".roo/**",
     ".windsurf/**",

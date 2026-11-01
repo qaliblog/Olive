@@ -1,4 +1,4 @@
-// Ported from the OpenCode iOS app's `VoiceSessionSearch` and `VoiceDelegatorWorkspace.matching`: spoken
+// Ported from the Olive iOS app's `VoiceSessionSearch` and `VoiceDelegatorWorkspace.matching`: spoken
 // names arrive with filler, in any order and sometimes misheard.
 const filler = new Set([
   "a",

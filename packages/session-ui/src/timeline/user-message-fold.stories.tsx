@@ -1,11 +1,11 @@
-import type { SessionMessageAssistant, SessionMessageInfo, SessionMessageUser } from "@opencode/client/promise"
+import type { SessionMessageAssistant, SessionMessageInfo, SessionMessageUser } from "@olive/client/promise"
 import type { SessionDocument } from "../document"
 import { SessionTimeline, type SessionUserPresentation } from "./session-timeline"
 import { CurrentSessionProviders } from "../storybook/current-session-story"
 import { CURRENT_SESSION_ID, STORY_MODEL, STORY_TIME } from "../storybook/current-session-fixtures"
 
 export default {
-  title: "OpenCode/Conversation/Long user messages",
+  title: "Olive/Conversation/Long user messages",
   id: "user-message-fold",
   parameters: { layout: "fullscreen" },
   render: () => <LongUserMessages />,
@@ -60,7 +60,7 @@ const threeLines = [
 const pastedPrompt = [
   "The desktop app crashes when I restore a window with a lot of tabs. Here's what I see in the log:",
   "",
-  "[14:02:11.204] INFO  window.restore start tabs=38 workspace=opencode",
+  "[14:02:11.204] INFO  window.restore start tabs=38 workspace=olive",
   "[14:02:11.209] INFO  session.hydrate ses_7f1c count=38",
   "[14:02:11.311] WARN  timeline.cache miss key=ses_7f1c:0 rows=0",
   "[14:02:11.312] WARN  timeline.cache miss key=ses_7f1c:1 rows=0",
@@ -90,7 +90,7 @@ const pastedPrompt = [
   "- It only happens when the restored session is the one that was streaming when I quit.",
   "- Turning off the new virtualizer flag makes it go away, but scrolling is janky without it.",
   "",
-  "My machine: M3 Max, 64 GB, macOS 26.1, OpenCode Beta 2.4.0-beta.18.",
+  "My machine: M3 Max, 64 GB, macOS 26.1, Olive Beta 2.4.0-beta.18.",
   "",
   "I think the measure batches keep re-entering pinAnchor while the cold bottom is still settling, and each pass",
   "schedules another one. But I'm not sure why only the streaming session triggers it.",

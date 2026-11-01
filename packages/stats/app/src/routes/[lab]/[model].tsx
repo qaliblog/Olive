@@ -1,9 +1,9 @@
 import { Meta, Title } from "@solidjs/meta"
-import { ProviderIcon } from "@opencode/ui/provider-icon"
+import { ProviderIcon } from "@olive/ui/provider-icon"
 import { scaleSqrt } from "d3-scale"
 import countryCodesSource from "i18n-iso-countries/codes.json?raw"
-import { type CountryEntry, type ModelUsagePoint } from "@opencode/stats-core/domain/home"
-import { statModel } from "@opencode/stats-core/domain/model-normalization"
+import { type CountryEntry, type ModelUsagePoint } from "@olive/stats-core/domain/home"
+import { statModel } from "@olive/stats-core/domain/model-normalization"
 import { createAsync, query, useParams } from "@solidjs/router"
 import { createMemo, createSignal, createUniqueId, For, onMount, Show, type JSX } from "solid-js"
 import { getRequestEvent } from "solid-js/web"
@@ -145,7 +145,7 @@ export default function StatsModel() {
           <FormatLinks path={modelPath()} />
           <LastModified value={stats()?.updatedAt} />
           <Meta property="og:type" content="website" />
-          <Meta property="og:site_name" content="OpenCode" />
+          <Meta property="og:site_name" content="Olive" />
           <Meta property="og:title" content={modelTitle()} />
           <Meta property="og:description" content={modelDescription()} />
           <Meta property="og:url" content={modelUrl()} />
@@ -391,7 +391,7 @@ function ModelHero(props: {
               <ModelHeroSparkline data={data()} />
             </span>
             <span>across last week's</span>
-            <span data-slot="model-hero-pill">OpenCode</span>
+            <span data-slot="model-hero-pill">Olive</span>
             <span>usage with</span>
             <span data-slot="model-hero-pill">{formatPercent(data().tokenShare)}</span>
             <span>of observed</span>

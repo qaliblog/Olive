@@ -1,6 +1,6 @@
 import type { HttpServerRequest } from "effect/http"
 
-const CAPABILITIES_HEADER = "x-opencode-capabilities"
+const CAPABILITIES_HEADER = "x-olive-capabilities"
 const MEDIA_URI_CAPABILITY = "experimental-media-uri"
 
 /**

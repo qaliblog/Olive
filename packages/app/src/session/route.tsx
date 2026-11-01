@@ -3,10 +3,10 @@ import { Title } from "@solidjs/meta"
 import { useParams } from "@solidjs/router"
 import { createStore } from "solid-js/store"
 import { makeEventListener } from "@solid-primitives/event-listener"
-import { DataProvider } from "@opencode/session-ui/context"
-import { SessionUserMessage } from "@opencode/session-ui/message"
-import { TextShimmer } from "@opencode/ui/text-shimmer"
-import { isFallbackTitle } from "@opencode/util/session-title-fallback"
+import { DataProvider } from "@olive/session-ui/context"
+import { SessionUserMessage } from "@olive/session-ui/message"
+import { TextShimmer } from "@olive/ui/text-shimmer"
+import { isFallbackTitle } from "@olive/util/session-title-fallback"
 import { CommentsProvider } from "@/composer/comments"
 import { readPromptPresentation } from "@/composer/comment-note"
 import { FileProvider } from "@/workspaces/files/model"
@@ -248,7 +248,7 @@ function SessionDocumentTitle(props: { sessionID: () => string }) {
   // Keyed: <Title> reads its text inside a meta effect, which would hit a stale Show accessor once the session is deleted.
   return (
     <Show when={title()} keyed>
-      {(value) => <Title>{`${value} · OpenCode`}</Title>}
+      {(value) => <Title>{`${value} · Olive`}</Title>}
     </Show>
   )
 }

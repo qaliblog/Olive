@@ -1,4 +1,4 @@
-import { Resource } from "@opencode/console-resource"
+import { Resource } from "@olive/console-resource"
 import { AwsClient } from "aws4fetch"
 
 let client: AwsClient | undefined
@@ -16,7 +16,7 @@ export async function sendEmail(input: { to: string; subject: string; body: stri
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      FromEmailAddress: `OpenCode <contact@anoma.ly>`,
+      FromEmailAddress: `Olive <contact@anoma.ly>`,
       Destination: {
         ToAddresses: [input.to],
       },

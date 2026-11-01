@@ -1,11 +1,11 @@
 import { Predicate } from "effect"
 import { Component, For, Show, createEffect, createMemo, createResource, type JSX } from "solid-js"
-import { useDialog } from "@opencode/ui/context/dialog"
-import { Icon } from "@opencode/ui/icon"
-import { Button } from "@opencode/ui/button"
-import { Switch } from "@opencode/ui/switch"
-import { Tabs } from "@opencode/ui/tabs"
-import { TruncatedText } from "@opencode/ui/truncated-text"
+import { useDialog } from "@olive/ui/context/dialog"
+import { Icon } from "@olive/ui/icon"
+import { Button } from "@olive/ui/button"
+import { Switch } from "@olive/ui/switch"
+import { Tabs } from "@olive/ui/tabs"
+import { TruncatedText } from "@olive/ui/truncated-text"
 import { useLanguage } from "@/runtime/i18n/language"
 import { useData } from "@/runtime/server/current"
 import { useServerSDK } from "@/runtime/server/client"
@@ -213,7 +213,7 @@ export const SettingsExtensions: Component<{
                 <span class="settings-extension-heading text-13-medium">
                   {language.t("settings.extensions.availableAll")}
                 </span>
-                <ExternalLink class="settings-extension-link text-13-regular" href="https://opencode.ai/v2/docs/skills">
+                <ExternalLink class="settings-extension-link text-13-regular" href="https://olive.ai/v2/docs/skills">
                   {language.t("settings.extensions.addSkills")}
                 </ExternalLink>
               </div>

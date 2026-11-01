@@ -1,4 +1,4 @@
-import { Plugin } from "@opencode/plugin"
+import { Plugin } from "@olive/plugin"
 
 export default Plugin.define({
   id: "greeting",

@@ -49,7 +49,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "무료 한도에 도달했습니다",
   "dialog.usageExceeded.freeTier.description":
-    "월 $10로 OpenCode Go를 구독하여 최고의 오픈 소스 모델에 안정적으로 액세스하세요.",
+    "월 $10로 Olive Go를 구독하여 최고의 오픈 소스 모델에 안정적으로 액세스하세요.",
   "dialog.usageExceeded.freeTier.actionLabel": "구독",
 
   "ui.sessionTurn.status.delegating": "작업 위임 중",

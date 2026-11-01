@@ -1,9 +1,9 @@
 import "@pierre/trees/web-components"
 import { FileTree, type FileTreeDirectoryHandle, type FileTreeItemHandle } from "@pierre/trees"
-import { getIcon } from "@opencode/ui/icons/catalog"
+import { getIcon } from "@olive/ui/icons/catalog"
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js"
-import type { ChangeKind } from "@opencode/plugin/gui/review"
-import { createKeyed, usePlugin, type FileNode, type MountedSession, type SessionScreen } from "@opencode/plugin/gui"
+import type { ChangeKind } from "@olive/plugin/gui/review"
+import { createKeyed, usePlugin, type FileNode, type MountedSession, type SessionScreen } from "@olive/plugin/gui"
 import { startFileDrag } from "./drag"
 import { OpenInAppContextMenuV2, useOpenInApp } from "./open-in-app"
 import { resolveOpenInAppPath } from "./path"
@@ -332,7 +332,7 @@ export default function PierreFileTree(props: {
 
     if (!isLive && initialAllowed) applyAllowedCollapsed(initialAllowed)
     tree.render({ containerWrapper: wrapper })
-    tree.getFileTreeContainer()?.classList.add("opencode-pierre-file-tree")
+    tree.getFileTreeContainer()?.classList.add("olive-pierre-file-tree")
     widthHost = tree.getFileTreeContainer()
     const list = widthHost?.shadowRoot?.querySelector<HTMLElement>("[data-file-tree-virtualized-list]")
     const scroller = list?.closest<HTMLElement>("[data-file-tree-virtualized-scroll]")

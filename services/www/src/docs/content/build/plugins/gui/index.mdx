@@ -1,10 +1,10 @@
 ---
 title: "GUI"
-description: "Build the GUI part of an OpenCode plugin for OpenCode Desktop with @opencode/plugin/gui."
+description: "Build the GUI part of an Olive plugin for Olive Desktop with @olive/plugin/gui."
 ---
 
-A GUI plugin adds panels, commands, settings pages, and native integrations to OpenCode Desktop with the GUI plugin SDK,
-`@opencode/plugin/gui`. It is the `./gui-experimental` part of a [plugin package](/build/plugins), alone or beside a
+A GUI plugin adds panels, commands, settings pages, and native integrations to Olive Desktop with the GUI plugin SDK,
+`@olive/plugin/gui`. It is the `./gui-experimental` part of a [plugin package](/build/plugins), alone or beside a
 [server part](/build/plugins/server) and a [TUI part](/build/plugins/cli).
 
 <Callout type="note">
@@ -15,7 +15,7 @@ A GUI plugin adds panels, commands, settings pages, and native integrations to O
 The `./gui-experimental` file default-exports `Plugin.define`, like the server and TUI parts:
 
 ```tsx title="src/gui.tsx"
-import { Command, Plugin } from "@opencode/plugin/gui"
+import { Command, Plugin } from "@olive/plugin/gui"
 import { Acme } from "./rpc"
 
 export default Plugin.define({
@@ -43,11 +43,11 @@ A GUI plugin can run in two processes:
 ## Package
 
 A plugin package can ship server, TUI, and GUI code from one npm package. Add one `./gui-experimental` export beside
-`./tui`, and OpenCode Desktop loads it for each plugin on its own background server.
+`./tui`, and Olive Desktop loads it for each plugin on its own background server.
 
 ```json title="package.json"
 {
-  "name": "opencode-acme-plugin",
+  "name": "olive-acme-plugin",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -55,7 +55,7 @@ A plugin package can ship server, TUI, and GUI code from one npm package. Add on
     "./gui-experimental": "./dist/gui-experimental.cjs"
   },
   "dependencies": {
-    "@opencode/plugin": "latest"
+    "@olive/plugin": "latest"
   },
   "devDependencies": {
     "solid-js": "^1.9.0",
@@ -67,9 +67,9 @@ A plugin package can ship server, TUI, and GUI code from one npm package. Add on
 
 Users install it like any other plugin; there is no separate GUI install step.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "plugins": ["opencode-acme-plugin"],
+  "plugins": ["olive-acme-plugin"],
 }
 ```
 
@@ -83,7 +83,7 @@ desktop app's main process runs `main`.
 
 ```tsx title="src/gui.tsx"
 import { shell } from "electron"
-import { Plugin } from "@opencode/plugin/gui"
+import { Plugin } from "@olive/plugin/gui"
 
 export default Plugin.define({
   setup(ctx) {
@@ -106,17 +106,17 @@ bundler's hoisted `require` calls. Keep each process's code inside its own setup
 gets placeholders instead of working values.
 
 `Plugin.define` and the contract helpers come from one SDK in both processes. In the main process,
-`@opencode/plugin/gui` resolves to the main SDK, which exports the same `Plugin`, `Store`, `Ipc`, `Contract`, and
+`@olive/plugin/gui` resolves to the main SDK, which exports the same `Plugin`, `Store`, `Ipc`, `Contract`, and
 `Registry`. One definition serves both processes. Its window-only exports, such as `Command`, `bindPlugin`, and
 `createKeyed`, are `undefined` in the main process, so use them only inside `setup`.
 
 ## Build the bundle
 
-`./gui-experimental` must be one prebuilt CommonJS file. Build it with the Vite preset from `@opencode/plugin/gui/vite`:
+`./gui-experimental` must be one prebuilt CommonJS file. Build it with the Vite preset from `@olive/plugin/gui/vite`:
 
 ```ts title="vite.config.ts"
 import { defineConfig } from "vite"
-import { gui } from "@opencode/plugin/gui/vite"
+import { gui } from "@olive/plugin/gui/vite"
 
 export default defineConfig({ plugins: [gui()] })
 ```
@@ -131,11 +131,11 @@ The preset does the following:
 - Emits one CommonJS file and inlines every dynamic `import()`, because the app cannot load a second chunk.
 - Keeps the app's [shared modules](#shared-modules), Electron, and Node built-ins external, and bundles every other
   dependency.
-- Fails the build on any other `effect/*`, `solid-js/*`, or `@opencode/*` module. The app does not provide it, and a
+- Fails the build on any other `effect/*`, `solid-js/*`, or `@olive/*` module. The app does not provide it, and a
   bundled copy would not share the app's instance.
 
 ```text
-effect/Schema is not a module the OpenCode app provides to plugin GUIs: effect, @opencode/plugin/gui, …
+effect/Schema is not a module the Olive app provides to plugin GUIs: effect, @olive/plugin/gui, …
 ```
 
 Import from the shared entry instead, for example `import { Schema } from "effect"`.
@@ -164,8 +164,8 @@ interface GuiOptions {
 
 ### Dependencies
 
-Add the build tools as devDependencies. The app provides `@opencode/plugin/gui` at runtime, so the bundle only needs its
-types from the `@opencode/plugin` dependency.
+Add the build tools as devDependencies. The app provides `@olive/plugin/gui` at runtime, so the bundle only needs its
+types from the `@olive/plugin` dependency.
 
 ```bash
 bun add -d vite vite-plugin-solid solid-js
@@ -188,21 +188,21 @@ import { createSignal } from "solid-js" // Windows; an inert placeholder in the 
 import { readFile } from "node:fs/promises" // The main process; an inert placeholder in windows
 ```
 
-- **Both processes:** `effect`, `@opencode/plugin/gui`, `@opencode/plugin/gui/main`, `@opencode/plugin/rpc`,
-  `@opencode/schema/rpc`, `@opencode/client`, and `@opencode/client/effect`.
-- **Windows only:** `solid-js`, `solid-js/web`, `solid-js/store`, `@opencode/client/solid`, and
-  `@opencode/plugin/gui/{file,review,browser}`. The main process gets inert placeholders.
+- **Both processes:** `effect`, `@olive/plugin/gui`, `@olive/plugin/gui/main`, `@olive/plugin/rpc`,
+  `@olive/schema/rpc`, `@olive/client`, and `@olive/client/effect`.
+- **Windows only:** `solid-js`, `solid-js/web`, `solid-js/store`, `@olive/client/solid`, and
+  `@olive/plugin/gui/{file,review,browser}`. The main process gets inert placeholders.
 - **Main process only:** `electron` and Node built-ins such as `node:fs`. Windows get inert placeholders.
 
 ## Where GUI entries load
 
-OpenCode Desktop loads GUI entries from its own background server, which already loads the plugins from your config, so
-they never add a new source of code. Configure the plugin in the global `opencode.json(c)` to make its GUI available in
+Olive Desktop loads GUI entries from its own background server, which already loads the plugins from your config, so
+they never add a new source of code. Configure the plugin in the global `olive.json(c)` to make its GUI available in
 every window.
 
 <Callout type="note">
-  The TUI reads its plugins from `cli.json`, but the desktop app reads only `opencode.json(c)`. A package that shipped
-  only a TUI part, and that users list in `cli.json`, must also be listed in `opencode.json(c)` once it adds
+  The TUI reads its plugins from `cli.json`, but the desktop app reads only `olive.json(c)`. A package that shipped
+  only a TUI part, and that users list in `cli.json`, must also be listed in `olive.json(c)` once it adds
   `./gui-experimental`.
 </Callout>
 
@@ -224,14 +224,14 @@ vite build --watch
   ignored.
 - Each rebuild reloads the plugin's GUI in every window and in the main process. The server entry does not restart.
 - An installed package's GUI changes only with its version.
-- Changing the plugin's `options` in `opencode.json(c)` reloads the plugin.
-- `opencode plugin update` replaces a package's GUI once the update finishes.
+- Changing the plugin's `options` in `olive.json(c)` reloads the plugin.
+- `olive plugin update` replaces a package's GUI once the update finishes.
 - [**Settings > Extensions > Plugins**](/plugins#desktop) lists the plugin with a switch that turns its GUI off. To
-  remove it, remove it from `opencode.json(c)` or run `opencode plugin remove <package>`.
+  remove it, remove it from `olive.json(c)` or run `olive plugin remove <package>`.
 
 <Callout type="note">
   The app's own plugins reserve their ids. If your plugin's id is one of them, nests under one with a `.`, has one
-  nested under it, or is in the `opencode` namespace, its GUI does not load, and **Settings > Extensions > Plugins**
+  nested under it, or is in the `olive` namespace, its GUI does not load, and **Settings > Extensions > Plugins**
   lists it as not loaded.
 </Callout>
 
@@ -242,7 +242,7 @@ declarations before either setup runs.
 
 ```ts title="src/gui/definition.ts"
 import { Schema } from "effect"
-import { Plugin, Store } from "@opencode/plugin/gui"
+import { Plugin, Store } from "@olive/plugin/gui"
 
 export const definition = Plugin.define({
   os: ["macos", "linux"],
@@ -296,7 +296,7 @@ A small GUI plugin fits in `src/gui.tsx`. For a larger one, declare the plugin i
 
 ```text
 src/
-├── index.ts            Server part: Plugin.define from @opencode/plugin
+├── index.ts            Server part: Plugin.define from @olive/plugin
 ├── rpc.ts              RPC contract between the server part and its clients
 ├── gui.tsx             ./gui-experimental entry: export default Plugin.define({ ...definition, setup, main })
 └── gui/
@@ -315,7 +315,7 @@ For a larger plugin, declare the plugin first, type each setup from the declarat
 
 ```ts title="src/gui/definition.ts"
 import { Schema } from "effect"
-import { Plugin, Store } from "@opencode/plugin/gui"
+import { Plugin, Store } from "@olive/plugin/gui"
 
 export const definition = Plugin.define({
   stores: { notes: Store.global(Schema.Struct({ count: Schema.Number }), { count: 0 }) },
@@ -323,7 +323,7 @@ export const definition = Plugin.define({
 ```
 
 ```tsx title="src/gui/window.tsx"
-import type { Plugin } from "@opencode/plugin/gui"
+import type { Plugin } from "@olive/plugin/gui"
 import { Notes } from "./contract"
 import type { definition } from "./definition"
 
@@ -333,7 +333,7 @@ export const setup: Plugin.Setup<typeof definition> = (ctx) => {
 ```
 
 ```ts title="src/gui/main.ts"
-import type { Plugin } from "@opencode/plugin/gui"
+import type { Plugin } from "@olive/plugin/gui"
 
 export const main: Plugin.MainSetup = (ctx) => {
   ctx.log.write("info", "acme started")
@@ -341,7 +341,7 @@ export const main: Plugin.MainSetup = (ctx) => {
 ```
 
 ```tsx title="src/gui.tsx"
-import { Plugin } from "@opencode/plugin/gui"
+import { Plugin } from "@olive/plugin/gui"
 import { definition } from "./gui/definition"
 import { main } from "./gui/main"
 import { setup } from "./gui/window"
@@ -353,21 +353,21 @@ export default Plugin.define({ ...definition, setup, main })
 - `Plugin.MainSetup` is the type of a main setup, and `Plugin.Cleanup` the type of the cleanup function either setup
   may return.
 - Import registries, tokens, and helpers such as `Command`, `SettingsPage`, `Panel`, `Slot`, `Contract`, `Ipc`,
-  `Registry`, `Store`, `createKeyed`, `usePlugin`, and `bindPlugin` from `@opencode/plugin/gui`.
-- Import main-only registries such as `MenubarItem` from `@opencode/plugin/gui/main`.
+  `Registry`, `Store`, `createKeyed`, `usePlugin`, and `bindPlugin` from `@olive/plugin/gui`.
+- Import main-only registries such as `MenubarItem` from `@olive/plugin/gui/main`.
 
 ## Shared context
 
-Both setups receive the plugin's options, a client for the OpenCode server, and app metadata, like the server and TUI
+Both setups receive the plugin's options, a client for the Olive server, and app metadata, like the server and TUI
 parts.
 
 ### Options
 
-`ctx.options` holds the `options` from the plugin's `opencode.json(c)` entry: the same values the server part gets.
+`ctx.options` holds the `options` from the plugin's `olive.json(c)` entry: the same values the server part gets.
 
-```jsonc title="opencode.jsonc"
+```jsonc title="olive.jsonc"
 {
-  "plugins": [{ "package": "opencode-acme-plugin", "options": { "team": "core" } }],
+  "plugins": [{ "package": "olive-acme-plugin", "options": { "team": "core" } }],
 }
 ```
 
@@ -381,11 +381,11 @@ setup(ctx) {
 
 ### Server client
 
-`ctx.client` is the OpenCode client of the server that runs the plugin: the desktop app's own server. Use it to call
+`ctx.client` is the Olive client of the server that runs the plugin: the desktop app's own server. Use it to call
 your server part through its [RPC](/build/plugins/rpc).
 
 ```ts
-import { Command } from "@opencode/plugin/gui"
+import { Command } from "@olive/plugin/gui"
 import { Acme } from "./rpc"
 
 ctx.add(Command, () => ({
@@ -409,7 +409,7 @@ ctx.add(Command, () => ({
 if (!ctx.app.packaged) console.log(`Acme on ${ctx.app.name} ${ctx.app.version} (${ctx.app.channel})`)
 ```
 
-- `name` is `"opencode"`, as in a server plugin's `ctx.app.name`.
+- `name` is `"olive"`, as in a server plugin's `ctx.app.name`.
 - `platform` is `"desktop"` in the Electron app and in `main`, and `"web"` in a browser tab.
 - `packaged` is `true` when the desktop app runs packaged. It is always `false` on the web.
 - Server plugins get `name`, `version`, and `channel`; TUI plugins get `version` and `channel`.
@@ -454,7 +454,7 @@ setups.
 
 ```ts title="src/gui/contract.ts"
 import type { JSX } from "solid-js"
-import { Contract } from "@opencode/plugin/gui"
+import { Contract } from "@olive/plugin/gui"
 
 export interface AcmeBadge {
   Badge(props: { readonly label: string }): JSX.Element
@@ -468,7 +468,7 @@ Provide it from the window setup with `ctx.provide`. When the contract holds a c
 during setup. Then `usePlugin()` inside it reads the provider's context, not the consumer's.
 
 ```tsx title="src/gui.tsx"
-import { bindPlugin, Plugin } from "@opencode/plugin/gui"
+import { bindPlugin, Plugin } from "@olive/plugin/gui"
 import { AcmeBadge } from "./gui/contract"
 
 export default Plugin.define({
@@ -499,8 +499,8 @@ plugin follows the contract with `ctx.use(token)`. The accessor's value changes 
 restarts, so read it where you use it.
 
 ```tsx title="src/gui.tsx"
-import { Plugin, Slot } from "@opencode/plugin/gui"
-import { AcmeBadge } from "opencode-acme-plugin/contract"
+import { Plugin, Slot } from "@olive/plugin/gui"
+import { AcmeBadge } from "olive-acme-plugin/contract"
 
 export default Plugin.define({
   setup(ctx) {
@@ -528,7 +528,7 @@ with `ctx.provide`, and the window calls it through `ctx.main`.
 
 ```ts title="src/gui/contract.ts"
 import { Schema } from "effect"
-import { Ipc } from "@opencode/plugin/gui"
+import { Ipc } from "@olive/plugin/gui"
 
 export const KeepAwake = Ipc.define({
   id: "acme.awake",
@@ -554,7 +554,7 @@ Use `Registry.define` for a list your plugin owns. Other plugins contribute item
 them with `ctx.list`.
 
 ```ts title="src/gui/contract.ts"
-import { Registry } from "@opencode/plugin/gui"
+import { Registry } from "@olive/plugin/gui"
 
 export interface Exporter {
   readonly id: string
@@ -575,12 +575,12 @@ const exporters = () => ctx.list(Exporter)
 
 ## The window
 
-A plugin's `setup` runs in every desktop app window. Pass it to `Plugin.define` from `@opencode/plugin/gui` in the
+A plugin's `setup` runs in every desktop app window. Pass it to `Plugin.define` from `@olive/plugin/gui` in the
 plugin's [`./gui-experimental` file](#define-the-gui-plugin). `setup` is synchronous and may return a
 cleanup function; see [Lifetimes and cleanup](#lifetimes-and-cleanup).
 
 ```tsx title="src/gui.tsx"
-import { Command, Plugin } from "@opencode/plugin/gui"
+import { Command, Plugin } from "@olive/plugin/gui"
 
 export default Plugin.define({
   i18n: { en: { open: "Open Acme" } },
@@ -601,7 +601,7 @@ it from the declarations in their own file ([split across files](#split-across-f
 component and the definition do not import each other.
 
 ```tsx title="src/gui/window.tsx"
-import { Slot, usePlugin, type Plugin } from "@opencode/plugin/gui"
+import { Slot, usePlugin, type Plugin } from "@olive/plugin/gui"
 import type { definition } from "./definition"
 
 function StatusLabel() {
@@ -643,7 +643,7 @@ ctx.add(Command, () => ({ id: "open", title: ctx.t("command.open"), run: () => o
 host publishes the command as `<plugin id>.<command id>`.
 
 ```ts
-import { Command } from "@opencode/plugin/gui"
+import { Command } from "@olive/plugin/gui"
 
 ctx.add(
   Command,
@@ -732,7 +732,7 @@ interface Command {
 the timeline.
 
 ```tsx
-import { Panel, type PanelTab } from "@opencode/plugin/gui"
+import { Panel, type PanelTab } from "@olive/plugin/gui"
 
 const mainTab: PanelTab = {
   id: "main",
@@ -903,7 +903,7 @@ interface ClosedPanelTab {
 rows in the host's General section (`page: "general", section: "general"`).
 
 ```tsx
-import { SettingsPage } from "@opencode/plugin/gui"
+import { SettingsPage } from "@olive/plugin/gui"
 import { AcmeSettings } from "./settings"
 
 ctx.add(SettingsPage, {
@@ -953,7 +953,7 @@ interface SettingEntry {
 `Slot` renders UI into one of four window slots.
 
 ```tsx
-import { Slot } from "@opencode/plugin/gui"
+import { Slot } from "@olive/plugin/gui"
 
 ctx.add(Slot, {
   at: "session.header",
@@ -1000,7 +1000,7 @@ interface SlotMap {
 or each server's row menu in Settings (`"server.row"`).
 
 ```ts
-import { MenuItem } from "@opencode/plugin/gui"
+import { MenuItem } from "@olive/plugin/gui"
 
 ctx.add(MenuItem, (): MenuItem => {
   const session = ctx.sessions.current()
@@ -1078,7 +1078,7 @@ interface ServerRowMenuItem {
 `TitlebarItem` renders a pill button in the window titlebar or tabs footer. Its label shows on hover.
 
 ```ts
-import { TitlebarItem } from "@opencode/plugin/gui"
+import { TitlebarItem } from "@olive/plugin/gui"
 
 ctx.add(TitlebarItem, (): TitlebarItem | undefined =>
   syncing() ? { id: "sync", label: ctx.t("syncing"), icon: "server", busy: true, run: () => sync() } : undefined,
@@ -1116,7 +1116,7 @@ through its server part's [RPC](/build/plugins/rpc), and shows them as one pill:
 
 ```tsx
 import { createStore } from "solid-js/store"
-import { ComposerPill, createKeyed } from "@opencode/plugin/gui"
+import { ComposerPill, createKeyed } from "@olive/plugin/gui"
 import { GitHub, type Pull } from "./rpc"
 
 const [pulls, setPulls] = createStore<Record<string, readonly Pull[]>>({})
@@ -1205,7 +1205,7 @@ type ComposerPillTone = "success" | "warning" | "danger"
 highest `priority` whose `match` returns true opens the link.
 
 ```ts
-import { LinkHandler } from "@opencode/plugin/gui"
+import { LinkHandler } from "@olive/plugin/gui"
 
 ctx.add(LinkHandler, {
   priority: 10,
@@ -1247,7 +1247,7 @@ interface Link {
 `Server` contributes a list of server connections, such as servers your plugin starts on other machines.
 
 ```ts
-import { Server } from "@opencode/plugin/gui"
+import { Server } from "@olive/plugin/gui"
 
 ctx.add(
   Server,
@@ -1321,7 +1321,7 @@ interface ServerHealth {
 `Style` injects a CSS string into the document while the contribution is active.
 
 ```ts
-import { Style } from "@opencode/plugin/gui"
+import { Style } from "@olive/plugin/gui"
 import css from "./panel.css?inline"
 
 ctx.add(Style, css)
@@ -1360,7 +1360,7 @@ interface SetupContext<D> extends Context {
 interface Context {
   id: string
   options: PluginOptions
-  client: OpenCodeClient
+  client: OliveClient
   app: App
   signal: AbortSignal
   add<T>(registry: Registry<T>, item: () => T | undefined): Cleanup
@@ -1756,7 +1756,7 @@ interface ComposerModel {
 
 ```ts
 import { onCleanup } from "solid-js"
-import { createKeyed } from "@opencode/plugin/gui"
+import { createKeyed } from "@olive/plugin/gui"
 
 createKeyed(
   () => ctx.servers.get("sidecar")?.data,
@@ -1788,7 +1788,7 @@ interface ServerRef {
   name: string
   url: string
   password?: string
-  client: OpenCodeClient
+  client: OliveClient
   data: Data
   local: boolean
   builtin: boolean
@@ -1904,12 +1904,12 @@ interface SelectOptions<T> {
 
 ### App components
 
-A plugin bundle cannot import `@opencode/ui`, so `ctx.ui` gives it the app's own components. They render in the
+A plugin bundle cannot import `@olive/ui`, so `ctx.ui` gives it the app's own components. They render in the
 user's theme, fonts, and language, so your plugin's UI looks and behaves like the app's.
 
 ```tsx
 import { Show } from "solid-js"
-import { createLatest, Panel } from "@opencode/plugin/gui"
+import { createLatest, Panel } from "@olive/plugin/gui"
 
 const ui = ctx.ui
 const summary = createLatest(
@@ -2239,7 +2239,7 @@ the front when its run finishes:
 
 ```ts
 import { onCleanup } from "solid-js"
-import { createKeyed } from "@opencode/plugin/gui"
+import { createKeyed } from "@olive/plugin/gui"
 
 createKeyed(
   () => ctx.servers.get("sidecar")?.data,
@@ -2484,7 +2484,7 @@ directory, or session.
 
 ```tsx
 import { Schema } from "effect"
-import { usePlugin, type MountedSession } from "@opencode/plugin/gui"
+import { usePlugin, type MountedSession } from "@olive/plugin/gui"
 import type { definition } from "./definition"
 
 function DraftView(props: { readonly session: MountedSession }) {
@@ -2538,8 +2538,8 @@ and its dependencies' restarts, which hand-written effects tend to get wrong.
 
 ```tsx
 import { onCleanup } from "solid-js"
-import { createKeyed, usePlugin, type SessionScreen } from "@opencode/plugin/gui"
-import { Changes } from "@opencode/plugin/gui/review"
+import { createKeyed, usePlugin, type SessionScreen } from "@olive/plugin/gui"
+import { Changes } from "@olive/plugin/gui/review"
 
 function ChangedFiles(props: { readonly screen: SessionScreen }) {
   const ctx = usePlugin()
@@ -2663,11 +2663,11 @@ The app provides these contracts to every plugin. Follow one with `ctx.use(token
 
 ### Files
 
-`@opencode/plugin/gui/file` exports the app's file tree and **Open in** button, and the `FileViewer` registry.
+`@olive/plugin/gui/file` exports the app's file tree and **Open in** button, and the `FileViewer` registry.
 
 ```tsx
-import { bindPlugin } from "@opencode/plugin/gui"
-import { FileViewer, type FileViewerProps } from "@opencode/plugin/gui/file"
+import { bindPlugin } from "@olive/plugin/gui"
+import { FileViewer, type FileViewerProps } from "@olive/plugin/gui/file"
 
 // A viewer for a kind of file the file view does not render itself.
 ctx.add(FileViewer, {
@@ -2730,11 +2730,11 @@ interface FileViewerProps {
 
 ### Review changes
 
-`@opencode/plugin/gui/review` exports `Changes`, the app's view of a session's changes, and `ChangeKind`
+`@olive/plugin/gui/review` exports `Changes`, the app's view of a session's changes, and `ChangeKind`
 (`"add"`, `"del"`, or `"mix"`).
 
 ```ts
-import { Changes } from "@opencode/plugin/gui/review"
+import { Changes } from "@olive/plugin/gui/review"
 
 const changes = ctx.use(Changes)
 
@@ -2777,10 +2777,10 @@ type ChangeKind = "add" | "del" | "mix"
 
 ### Browser
 
-`@opencode/plugin/gui/browser` exports `Browser`, the desktop browser pane of a session.
+`@olive/plugin/gui/browser` exports `Browser`, the desktop browser pane of a session.
 
 ```ts
-import { Browser } from "@opencode/plugin/gui/browser"
+import { Browser } from "@olive/plugin/gui/browser"
 
 const session = ctx.sessions.current()
 const live = ctx.use(Browser)()
@@ -2807,14 +2807,14 @@ interface Browser {
 
 ## The main process
 
-On OpenCode Desktop, a plugin's `main` setup runs once in the Electron main process as an app-wide singleton. It has
+On Olive Desktop, a plugin's `main` setup runs once in the Electron main process as an app-wide singleton. It has
 full access to Node.js built-ins, `electron`, and the main host APIs. Pass it to `Plugin.define` in the plugin's
 [`./gui-experimental` file](#define-the-gui-plugin), beside the window `setup` or on its own.
 
 ```tsx title="src/gui.tsx"
 import { Schema } from "effect"
 import { powerSaveBlocker } from "electron"
-import { Plugin } from "@opencode/plugin/gui"
+import { Plugin } from "@olive/plugin/gui"
 import { KeepAwake } from "./gui/contract"
 
 export default Plugin.define({
@@ -2872,18 +2872,18 @@ main(ctx) {
 - `ctx.windows` lists the app's windows and reports when one opens or closes.
 - `ctx.embeds` places a `WebContentsView` in a window's layout; see [Embedded web views](#embedded-web-views).
 - `ctx.serverEndpoints.get(id)` returns a server's URL and credentials. The desktop app's own server is `"sidecar"`.
-- `ctx.cli` describes the OpenCode CLI the desktop app runs.
+- `ctx.cli` describes the Olive CLI the desktop app runs.
 - `ctx.log.write` writes to the desktop log file.
 
 #### Reference
 
-`@opencode/plugin/gui/main` exports `MainStorage` and `MainEmbeds` below as `Storage` and `Embeds`.
+`@olive/plugin/gui/main` exports `MainStorage` and `MainEmbeds` below as `Storage` and `Embeds`.
 
 ```ts
 interface MainContext {
   id: string
   options: PluginOptions
-  client: OpenCodeClient
+  client: OliveClient
   app: App
   signal: AbortSignal
   onCleanup(fn: Cleanup): void
@@ -2929,7 +2929,7 @@ encodes every value that crosses the bridge.
 
 ```ts title="src/gui/contract.ts"
 import { Schema } from "effect"
-import { Ipc } from "@opencode/plugin/gui"
+import { Ipc } from "@olive/plugin/gui"
 
 export const Counter = Ipc.define({
   id: "acme.counter",
@@ -2969,7 +2969,7 @@ Each method receives the decoded input and a `Caller` (`{ window, signal }`). Ca
 event.
 
 ```ts title="src/gui/main.ts"
-import type { Plugin } from "@opencode/plugin/gui"
+import type { Plugin } from "@olive/plugin/gui"
 import { Counter } from "./contract"
 
 export const main: Plugin.MainSetup = (ctx) => {
@@ -3026,7 +3026,7 @@ In a window, `ctx.main(Counter)` returns the client of the `Ipc` your `main` pro
 schema takes only optional `{ signal }` call options. Do not pass `undefined` as its first argument.
 
 ```tsx title="src/gui/window.tsx"
-import { Command, type Plugin } from "@opencode/plugin/gui"
+import { Command, type Plugin } from "@olive/plugin/gui"
 import { Counter } from "./contract"
 import type { definition } from "./definition"
 
@@ -3095,10 +3095,10 @@ const count = () => {
 ## Native app menu
 
 `main` adds items to the native menus (the macOS app menu, File, Edit, View, Go, Window, and Help) and to the in-app
-menu on Windows and Linux with `MenubarItem` from `@opencode/plugin/gui/main`:
+menu on Windows and Linux with `MenubarItem` from `@olive/plugin/gui/main`:
 
 ```ts
-import { MenubarItem } from "@opencode/plugin/gui/main"
+import { MenubarItem } from "@olive/plugin/gui/main"
 
 ctx.add(
   MenubarItem,
@@ -3141,7 +3141,7 @@ To embed an isolated `WebContentsView` in a panel, create it in `main` and rende
 
 ```ts title="src/gui/main.ts"
 import { type BrowserWindow, WebContentsView } from "electron"
-import type { Plugin } from "@opencode/plugin/gui"
+import type { Plugin } from "@olive/plugin/gui"
 
 export const main: Plugin.MainSetup = (ctx) => {
   const attach = (window: BrowserWindow) => {
@@ -3216,7 +3216,7 @@ plugin keeps running while that provider is off, so handle the states that are n
 and no spinner should run forever.
 
 ```ts
-import { Browser } from "@opencode/plugin/gui/browser"
+import { Browser } from "@olive/plugin/gui/browser"
 
 const browser = ctx.use(Browser)
 
@@ -3276,8 +3276,8 @@ For other resources, such as timers or sockets, return a cleanup function from t
 Window `setup` must be synchronous. Start asynchronous work inside `createKeyed` or `createLatest`.
 
 ```tsx title="src/gui.tsx"
-import { Command, createKeyed, Plugin } from "@opencode/plugin/gui"
-import { Changes } from "@opencode/plugin/gui/review"
+import { Command, createKeyed, Plugin } from "@olive/plugin/gui"
+import { Changes } from "@olive/plugin/gui/review"
 
 export default Plugin.define({
   i18n: { en: { changes: "Show changes" } },

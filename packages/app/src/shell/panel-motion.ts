@@ -1,6 +1,6 @@
 import { createEffect, createSignal, on, onCleanup, type Accessor } from "solid-js"
-import { ease, frameLoop, prefersReducedMotion, Spring, type DurationOptions } from "@opencode/ui/motion"
-import { motionTimeScale } from "@opencode/ui/motion-tuning"
+import { ease, frameLoop, prefersReducedMotion, Spring, type DurationOptions } from "@olive/ui/motion"
+import { motionTimeScale } from "@olive/ui/motion-tuning"
 
 // Panels in flight, across the app. Native views, which no DOM box clips, stay hidden while any panel moves.
 const [flights, setFlights] = createSignal(0)

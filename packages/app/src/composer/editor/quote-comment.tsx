@@ -3,9 +3,9 @@ import { createStore } from "solid-js/store"
 import { Portal } from "solid-js/web"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
-import { LineCommentEditor } from "@opencode/ui/line-comment"
+import { LineCommentEditor } from "@olive/ui/line-comment"
 import { useLanguage } from "@/runtime/i18n/language"
-import type { ComposerQuoteAnchor } from "@opencode/plugin/gui"
+import type { ComposerQuoteAnchor } from "@olive/plugin/gui"
 import type { ComposerDelivery } from "../adapter"
 
 const IS_MAC = /(Mac|iPod|iPhone|iPad)/.test(navigator.platform)

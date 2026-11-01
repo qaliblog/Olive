@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 import { fileDiff, openSession } from "../utils/workspace"
 import { openReviewLauncher } from "../utils/side-panel"
-import { base64Encode } from "@opencode/util/encode"
+import { base64Encode } from "@olive/util/encode"
 
 test("review content stays aligned with the side region in both directions", async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 })
@@ -35,7 +35,7 @@ test("review content stays aligned with the side region in both directions", asy
 
 test("new tab selection and closing stay in the focused pane", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
-  const directory = "C:/OpenCode/PaneNewTabs"
+  const directory = "C:/Olive/PaneNewTabs"
   const key = `local\u0000${base64Encode(directory)}/ses_panenewtabs`
 
   await openSession(page, {
@@ -45,7 +45,7 @@ test("new tab selection and closing stay in the focused pane", async ({ page }) 
     seed: {
       panes: { ses_panenewtabs: { review: true } },
       storage: {
-        "opencode.global.dat:layout": {
+        "olive.global.dat:layout": {
           sessionTabs: {
             [key]: {
               all: ["file://README.md", "file://notes.md"],
@@ -122,7 +122,7 @@ test("tabs in a narrow side strip shrink to keep their close buttons, and a tab'
   page,
 }) => {
   await page.setViewportSize({ width: 1000, height: 700 })
-  const directory = "C:/OpenCode/NarrowStrip"
+  const directory = "C:/Olive/NarrowStrip"
   const key = `local\u0000${base64Encode(directory)}/ses_narrowstrip`
   const files = ["a.md", "a-file-name-long-enough-to-overflow-the-side-strip-by-itself.md", "b.md"]
 
@@ -133,7 +133,7 @@ test("tabs in a narrow side strip shrink to keep their close buttons, and a tab'
     seed: {
       panes: { ses_narrowstrip: { review: true, sessionWidth: 640 } },
       storage: {
-        "opencode.global.dat:layout": {
+        "olive.global.dat:layout": {
           sessionTabs: { [key]: { all: files.map((file) => `file://${file}`), active: `file://${files[1]}` } },
         },
       },
@@ -187,7 +187,7 @@ test("the new tab view lists recently closed tabs, expands to the rest, and keep
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
-  const directory = "C:/OpenCode/RecentlyClosed"
+  const directory = "C:/Olive/RecentlyClosed"
   const key = `local\u0000${base64Encode(directory)}/ses_recentlyclosed`
 
   // Twelve files closed earlier, newest first, as the app stores them beside the strip.
@@ -204,7 +204,7 @@ test("the new tab view lists recently closed tabs, expands to the rest, and keep
     seed: {
       panes: { ses_recentlyclosed: { review: true } },
       storage: {
-        "opencode.global.dat:layout": {
+        "olive.global.dat:layout": {
           sessionTabs: { [key]: { all: ["file://README.md"], active: "file://README.md" } },
           sessionView: { [key]: { scroll: {}, closed } },
         },

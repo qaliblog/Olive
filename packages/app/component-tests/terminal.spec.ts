@@ -25,7 +25,7 @@ async function serveTerminal(page: Page, input: { ptyID: string; output?: string
     userTitle: null,
     command: "bash",
     args: [],
-    cwd: "C:/OpenCode/Terminal",
+    cwd: "C:/Olive/Terminal",
     status: "running",
     pid: 1,
     sessionID: "ses_terminal",
@@ -123,7 +123,7 @@ story("tells the user a server that predates the input protocol is too old", asy
   const root = await mountTerminal(page, mount, "pty_old")
 
   await expect(
-    root.getByText("This server is too old for terminals; update OpenCode on it", { exact: true }),
+    root.getByText("This server is too old for terminals; update Olive on it", { exact: true }),
   ).toBeVisible()
   await expect(root.locator("[data-failures]")).toHaveAttribute("data-failures", "1")
 })

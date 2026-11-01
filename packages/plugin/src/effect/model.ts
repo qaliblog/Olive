@@ -1,5 +1,5 @@
-import type { ModelApi } from "@opencode/client/effect/api"
-import type { Model } from "@opencode/schema/model"
+import type { ModelApi } from "@olive/client/effect/api"
+import type { Model } from "@olive/schema/model"
 import type { Effect, Types } from "effect"
 import type { ProviderRecord } from "./provider.js"
 import type { Transform } from "./registration.js"

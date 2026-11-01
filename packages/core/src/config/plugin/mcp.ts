@@ -1,14 +1,14 @@
 export * as ConfigMcpPlugin from "./mcp.js"
 
-import { define } from "@opencode/plugin/effect/plugin"
-import { Document, type Entry } from "@opencode/schema/config"
-import type { ServerConfig } from "@opencode/schema/mcp"
+import { define } from "@olive/plugin/effect/plugin"
+import { Document, type Entry } from "@olive/schema/config"
+import type { ServerConfig } from "@olive/schema/mcp"
 import { Effect, Stream } from "effect"
 import { Config } from "../../config.js"
 import { Mcp } from "../../mcp/index.js"
 
 export const Plugin = define({
-  id: "opencode.config.mcp",
+  id: "olive.config.mcp",
   effect: Effect.fn(function* (ctx) {
     yield* register(ctx.event.subscribe({ types: ["config.updated"] }))
   }),

@@ -16,7 +16,7 @@ it.live("lists no forms for a Session whose Location is not live, and pending fo
     const request = (path: string, body?: unknown) =>
       Effect.promise(async () => {
         const response = await handler(
-          new Request(`http://opencode.local${path}`, {
+          new Request(`http://olive.local${path}`, {
             method: body === undefined ? "GET" : "POST",
             headers: { "content-type": "application/json" },
             body: body === undefined ? undefined : JSON.stringify(body),

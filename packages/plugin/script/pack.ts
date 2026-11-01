@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import path from "node:path"
-import { pack } from "@opencode/script/pack"
+import { pack } from "@olive/script/pack"
 
 // The app's and desktop's internal protocol, the API only the built-in plugins use, and the app's own updater contract
 // stay in the workspace.

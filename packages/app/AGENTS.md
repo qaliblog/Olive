@@ -9,7 +9,7 @@
 
 ## Local Dev
 
-- `opencode dev web` proxies `https://app.opencode.ai`, so local UI/CSS changes will not show there.
+- `olive dev web` proxies `https://app.olive.ai`, so local UI/CSS changes will not show there.
 - For local UI changes, run the backend and app dev servers separately.
 - Backend (from the repository root): `bun dev serve --port 4096`
 - App (from `packages/app`): `bun dev -- --port 4444`
@@ -19,7 +19,7 @@
 
 The Web UI is served over plain HTTP on non-localhost LAN and Tailscale origins (`isSecureContext === false`). This rule applies across `app`, `ui`, `session-ui` and `gui-plugins` window code.
 
-- Never call `crypto.randomUUID()` directly in renderer or browser code; it is `[SecureContext]`-only and throws `TypeError: crypto.randomUUID is not a function` on plain HTTP origins. Always use `uuid()` from `@opencode/util/uuid`.
+- Never call `crypto.randomUUID()` directly in renderer or browser code; it is `[SecureContext]`-only and throws `TypeError: crypto.randomUUID is not a function` on plain HTTP origins. Always use `uuid()` from `@olive/util/uuid`.
 - Guard any other `[SecureContext]`-only Web API (`crypto.subtle`, `navigator.clipboard`, `navigator.serviceWorker`) with a non-secure fallback.
 
 ## SolidJS
@@ -70,8 +70,8 @@ Users choose three fonts in Settings > Appearance. Every surface uses one of the
 
 This section is the single source for loading indicators across `app`, `ui`, `session-ui`, `gui-plugins` and `desktop`.
 
-- The dot-matrix `Spinner` (`@opencode/ui/spinner`, and `SessionProgressIndicatorV2` and `ActivityRing`, which render it) means the AI is working: a running session, turn, subagent or tool call. Use it only for those states.
-- Every other loading state uses `Loader` (`@opencode/ui/loader`): page, pane and file loads, browser reload, search, connecting, authenticating, sending, installing. Use a purpose-built indicator only when the state has one, such as the titlebar update ring.
+- The dot-matrix `Spinner` (`@olive/ui/spinner`, and `SessionProgressIndicatorV2` and `ActivityRing`, which render it) means the AI is working: a running session, turn, subagent or tool call. Use it only for those states.
+- Every other loading state uses `Loader` (`@olive/ui/loader`): page, pane and file loads, browser reload, search, connecting, authenticating, sending, installing. Use a purpose-built indicator only when the state has one, such as the titlebar update ring.
 - Choose the indicator at each call site. Never restyle a shared indicator (`Loader`, `ActivityRing`, `Spinner`) to look like another one; that silently changes every caller.
 
 ## Scrolling
@@ -83,7 +83,7 @@ This section is the single source for scroll containers across `app`, `ui`, `ses
 - Use one element when it both sizes and scrolls. Add an outer wrapper only for something that must stay put while the content scrolls, such as `::before` and `::after` edge fades: the wrapper is `relative flex flex-col min-h-0` and owns the fades, and the inner element is `min-h-0 flex-1 overflow-y-auto`.
 - A native scrollbar takes 8px from layout while the content overflows. Where text would visibly rewrap at that moment (the composer, settings search), add `scrollbar-gutter: stable` and subtract `var(--scrollbar-size, 0px)` from the end padding.
 - A ref runs before the element's children render and before it is in the document. Restore a scroll position from `onMount` or a frame later, not in the ref.
-- `ScrollView` (`@opencode/ui/scroll-view`) is only for the session timeline and Home, which draw the thumb in an external track (`thumbContainer`) and, in the timeline, correct it for virtualized rows. Use it again only for one of those needs.
+- `ScrollView` (`@olive/ui/scroll-view`) is only for the session timeline and Home, which draw the thumb in an external track (`thumbContainer`) and, in the timeline, correct it for virtualized rows. Use it again only for one of those needs.
 - Never set `scrollbar-width: thin`, `scrollbar-width: auto` or `scrollbar-color`. Chromium then ignores the shared style and draws the native Windows scrollbar. Hide a scrollbar only with `no-scrollbar` or `scrollbar-width: none`.
 
 ## Localization

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
 import os from "os"
 import path from "path"
-import { ShellParse } from "@opencode/core/shell/parse"
+import { ShellParse } from "@olive/core/shell/parse"
 
 describe("ShellParse", () => {
   test("splits bash commands and derives reusable prefixes", async () => {
@@ -168,7 +168,7 @@ describe("ShellParse", () => {
 
       const tildeForms = await Effect.runPromise(
         ShellParse.scan(
-          "cd ~+/../outside && cd ~- && cd ~+1 && cd ~0 && cd ~__opencode_nonexistent_user__",
+          "cd ~+/../outside && cd ~- && cd ~+1 && cd ~0 && cd ~__olive_nonexistent_user__",
           "/bin/bash",
           "/workspace",
         ),
@@ -178,7 +178,7 @@ describe("ShellParse", () => {
         { resource: "cd ~-", save: "cd *" },
         { resource: "cd ~+1", save: "cd *" },
         { resource: "cd ~0", save: "cd *" },
-        { resource: "cd ~__opencode_nonexistent_user__", save: "cd *" },
+        { resource: "cd ~__olive_nonexistent_user__", save: "cd *" },
       ])
 
       const dynamicCd = await Effect.runPromise(

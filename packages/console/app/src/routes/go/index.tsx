@@ -107,7 +107,7 @@ const plans = [
 ] as const
 
 export default function Home() {
-  const subscribeUrl = "https://opencode.ai/console/go"
+  const subscribeUrl = "https://olive.ai/console/go"
   const i18n = useI18n()
   const [searchParams, setSearchParams] = useSearchParams()
   const audience = () => (searchParams.for === "teams" ? "teams" : "individuals")

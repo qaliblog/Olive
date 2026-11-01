@@ -5,7 +5,7 @@ import { which } from "../../../../util/which.js"
 import { ClaudeFork } from "./fork.js"
 import { ClaudeSDK } from "./sdk.js"
 
-// Everything that reaches outside opencode. Tests swap it for a fake `claude`.
+// Everything that reaches outside olive. Tests swap it for a fake `claude`.
 export interface Interface {
   // Undefined uses the SDK's own spawn
   readonly spawn?: Options["spawnClaudeCodeProcess"]
@@ -18,7 +18,7 @@ export interface Interface {
 }
 
 export const real: Interface = {
-  which: () => process.env.OPENCODE_CLAUDE_PATH || which("claude") || undefined,
+  which: () => process.env.OLIVE_CLAUDE_PATH || which("claude") || undefined,
   env: () => process.env,
   sessionExists: async (sessionID) => {
     const { getSessionInfo } = await ClaudeSDK.load()

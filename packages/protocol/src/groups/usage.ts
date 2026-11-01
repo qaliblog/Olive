@@ -1,5 +1,5 @@
-import { Location } from "@opencode/schema/location"
-import { UsageLimits } from "@opencode/schema/usage-limits"
+import { Location } from "@olive/schema/location"
+import { UsageLimits } from "@olive/schema/usage-limits"
 import { Schema } from "effect"
 import { HttpApiEndpoint, HttpApiGroup, OpenApi } from "effect/http-api"
 import { ServiceUnavailableError } from "../errors.js"
@@ -18,7 +18,7 @@ export const UsageGroup = HttpApiGroup.make("server.usage")
           identifier: "experimental.usage.limits",
           summary: "Get usage limits",
           description:
-            "Return the OpenCode Go allowance and Console budgets of the OpenCode Console workspace the location is signed in to, or null when it isn't signed in.",
+            "Return the Olive Go allowance and Console budgets of the Olive Console workspace the location is signed in to, or null when it isn't signed in.",
         }),
       ),
   )

@@ -4,7 +4,7 @@ import type {
   SessionMessageAssistant,
   SessionMessageInfo,
   ShellInfo,
-} from "@opencode/client/promise"
+} from "@olive/client/promise"
 import { Option, Schema } from "effect"
 import { createMemo } from "solid-js"
 

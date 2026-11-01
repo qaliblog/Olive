@@ -1,9 +1,9 @@
 export * as ScheduleCheck from "./check.js"
 
-import { CodeMode } from "@opencode/codemode"
-import { isRecord } from "@opencode/util/record"
-import { collectStream } from "@opencode/util/process"
-import type { Schedule as ScheduleSchema } from "@opencode/schema/schedule"
+import { CodeMode } from "@olive/codemode"
+import { isRecord } from "@olive/util/record"
+import { collectStream } from "@olive/util/process"
+import type { Schedule as ScheduleSchema } from "@olive/schema/schedule"
 import { Array, Duration, Effect, Option, Result, Schema } from "effect"
 import { ChildProcess } from "effect/process"
 import { Agent } from "../agent.js"
@@ -29,14 +29,14 @@ const CODE_LIMITS: CodeMode.ExecutionLimits = {
 }
 
 const FORBIDDEN_CODE_TOOLS = new Set([
-  "opencode.schedule_create",
-  "opencode.schedule_pause",
-  "opencode.schedule_resume",
-  "opencode.schedule_delete",
-  "opencode.session_move",
-  "opencode.session_rename",
-  "opencode.worktree_create",
-  "opencode.worktree_remove",
+  "olive.schedule_create",
+  "olive.schedule_pause",
+  "olive.schedule_resume",
+  "olive.schedule_delete",
+  "olive.session_move",
+  "olive.session_rename",
+  "olive.worktree_create",
+  "olive.worktree_remove",
 ])
 
 const decodeCodeObjectResult = Schema.decodeUnknownResult(

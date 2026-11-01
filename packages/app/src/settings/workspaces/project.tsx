@@ -1,13 +1,13 @@
-import { Icon } from "@opencode/ui/icon"
+import { Icon } from "@olive/ui/icon"
 import {
   displayName,
   getProjectAvatarVariant,
   ProjectAvatar,
   PROJECT_AVATAR_VARIANTS,
-} from "@opencode/ui/project-avatar"
-import { Select } from "@opencode/ui/select"
-import { Textarea } from "@opencode/ui/textarea"
-import { TextInput } from "@opencode/ui/text-input"
+} from "@olive/ui/project-avatar"
+import { Select } from "@olive/ui/select"
+import { Textarea } from "@olive/ui/textarea"
+import { TextInput } from "@olive/ui/text-input"
 import { For, Show, createMemo, type Component } from "solid-js"
 import { useLanguage } from "@/runtime/i18n/language"
 import type { LocalProject } from "@/shell/state/layout"

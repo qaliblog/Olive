@@ -1,6 +1,6 @@
 export * as ClaudeIntegration from "./integration.js"
 
-import type { Context } from "@opencode/plugin/effect/plugin"
+import type { Context } from "@olive/plugin/effect/plugin"
 import { Effect, Stream, SubscriptionRef } from "effect"
 import { Bus } from "../../../bus.js"
 import { Credential } from "../../../credential.js"
@@ -44,7 +44,7 @@ export const register = Effect.fn("ClaudeIntegration.register")(function* (
     Effect.forkScoped,
   )
 
-  // Check again when the user connects. opencode keeps a problem per connection, so a new connection starts with
+  // Check again when the user connects. olive keeps a problem per connection, so a new connection starts with
   // none, and the user may have just run `claude auth login`.
   const bus = yield* Bus.Service
   yield* bus.subscribe(Credential.Event.Switched).pipe(

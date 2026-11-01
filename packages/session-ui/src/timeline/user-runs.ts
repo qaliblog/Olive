@@ -1,4 +1,4 @@
-import type { SessionMessageAssistant, SessionMessageInfo } from "@opencode/client/promise"
+import type { SessionMessageAssistant, SessionMessageInfo } from "@olive/client/promise"
 import { Predicate } from "effect"
 import type { TimelineRow } from "./timeline-row"
 

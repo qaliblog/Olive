@@ -1,6 +1,6 @@
 import { Schema } from "effect"
-import { NonNegativeInt } from "@opencode/schema"
-import { Tool } from "@opencode/schema/tool"
+import { NonNegativeInt } from "@olive/schema"
+import { Tool } from "@olive/schema/tool"
 import { ProviderID, RouteID } from "./ids.js"
 import type { LLMResponse } from "./events.js"
 

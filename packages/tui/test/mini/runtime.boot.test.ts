@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
-import { OpenCode } from "@opencode/client/promise"
+import { Olive } from "@olive/client/promise"
 import { resolveMiniSettings, resolveModelInfo, resolveRunTuiConfig } from "../../src/mini/runtime.boot"
 import { catalogModel, catalogProvider } from "./fixture/catalog"
 import { createTuiResolvedConfig } from "../fixture/tui-runtime"
@@ -74,7 +74,7 @@ describe("run runtime boot", () => {
   })
 
   test("loads v2 providers and models for model selector data", async () => {
-    const sdk = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const sdk = Olive.make({ baseUrl: "https://olive.test" })
     const location = { directory: "/workspace", project: { id: "proj_1", directory: "/workspace" } }
     const providerList = spyOn(sdk.provider, "list").mockResolvedValue({
       location,

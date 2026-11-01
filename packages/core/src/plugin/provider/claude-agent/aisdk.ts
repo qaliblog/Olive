@@ -1,6 +1,6 @@
 export * as ClaudeAISDK from "./aisdk.js"
 
-import type { Context } from "@opencode/plugin/effect/plugin"
+import type { Context } from "@olive/plugin/effect/plugin"
 import { Effect } from "effect"
 import { ClaudeQueryOptions } from "./claude/query-options.js"
 import type { ClaudeSessions } from "./claude/sessions.js"
@@ -18,7 +18,7 @@ export const register = Effect.fn("ClaudeAISDK.register")(function* (ctx: Contex
     (evt) =>
       Effect.sync(() => {
         if (evt.package !== ClaudeProvider.PACKAGE) return
-        // opencode spreads the model's settings into options, next to the configured headers and body
+        // olive spreads the model's settings into options, next to the configured headers and body
         const connection = ClaudeQueryOptions.connectionEnv({
           settings: evt.options,
           headers: evt.options.headers,

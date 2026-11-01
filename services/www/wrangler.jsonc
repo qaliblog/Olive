@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "opencode-www",
+  "name": "olive-www",
   "compatibility_date": "2026-07-25",
   "workers_dev": false,
   "preview_urls": false,
@@ -15,20 +15,20 @@
   },
   "env": {
     "dev": {
-      "name": "opencode-www-dev",
+      "name": "olive-www-dev",
       "routes": [
         {
-          "pattern": "dev.opencode.ai/v2*",
-          "zone_name": "opencode.ai",
+          "pattern": "dev.olive.ai/v2*",
+          "zone_name": "olive.ai",
         },
       ],
     },
     "production": {
-      "name": "opencode-www-production",
+      "name": "olive-www-production",
       "routes": [
         {
-          "pattern": "opencode.ai/v2*",
-          "zone_name": "opencode.ai",
+          "pattern": "olive.ai/v2*",
+          "zone_name": "olive.ai",
         },
       ],
     },

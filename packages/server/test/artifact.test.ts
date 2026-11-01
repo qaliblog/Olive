@@ -1,15 +1,15 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { expect } from "bun:test"
-import { OpenCode } from "@opencode/client"
+import { Olive } from "@olive/client"
 import { Effect } from "effect"
 import { tmpdirScoped } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
 import { ServerFetch } from "../src/fetch"
 
 const client = (handler: (request: Request) => Promise<Response>) =>
-  OpenCode.make({
-    baseUrl: "http://opencode.local",
+  Olive.make({
+    baseUrl: "http://olive.local",
     fetch: Object.assign((input: string | URL | Request, init?: RequestInit) => handler(new Request(input, init)), {
       preconnect: fetch.preconnect,
     }),
@@ -17,7 +17,7 @@ const client = (handler: (request: Request) => Promise<Response>) =>
 
 it.live("manages local and plugin-backed artifacts through /api/experimental/artifacts when enabled", () =>
   Effect.gen(function* () {
-    const dir = (yield* tmpdirScoped("opencode-artifact-api-")).path
+    const dir = (yield* tmpdirScoped("olive-artifact-api-")).path
     const global = path.join(dir, "global")
     const enabled = path.join(dir, "enabled")
     const enabledOther = path.join(dir, "enabled-other")
@@ -67,14 +67,14 @@ export default {
 `,
       )
       await fs.writeFile(
-        path.join(enabled, "opencode.json"),
+        path.join(enabled, "olive.json"),
         JSON.stringify({
           plugins: [{ package: pluginDir }],
           experimental: { artifacts: true },
         }),
       )
       await fs.writeFile(
-        path.join(enabledOther, "opencode.json"),
+        path.join(enabledOther, "olive.json"),
         JSON.stringify({
           experimental: { artifacts: true },
         }),
@@ -83,7 +83,7 @@ export default {
 
     const handler = yield* ServerFetch.make({
       app: { version: "test" },
-      database: { path: path.join(dir, "opencode.db") },
+      database: { path: path.join(dir, "olive.db") },
       config: { directory: global, project: true, claude: false },
       models: { fetch: false },
       fs: { filewatcher: false },
@@ -125,14 +125,14 @@ export default {
 
       // Redirects /view -> /view/ with 308 so relative "./assets/*" resolves
       const redirect = await handler(
-        new Request(`http://opencode.local/api/experimental/artifacts/${created.data.id}/view`),
+        new Request(`http://olive.local/api/experimental/artifacts/${created.data.id}/view`),
       )
       expect(redirect.status).toBe(308)
       expect(redirect.headers.get("location")).toBe(`/api/experimental/artifacts/${created.data.id}/view/`)
 
       // Serves entry HTML and relative JS in a sandboxed opaque origin without requiring location query
       const v1Html = await handler(
-        new Request(`http://opencode.local/api/experimental/artifacts/${created.data.id}/view/`),
+        new Request(`http://olive.local/api/experimental/artifacts/${created.data.id}/view/`),
       )
       expect(v1Html.status).toBe(200)
       expect(v1Html.headers.get("content-type")).toContain("text/html")
@@ -146,7 +146,7 @@ export default {
         files: { "index.html": "<h1>no-session</h1>" },
       })
       const sessionlessHtml = await handler(
-        new Request(`http://opencode.local${sessionless.data.url}`),
+        new Request(`http://olive.local${sessionless.data.url}`),
       )
       expect(sessionlessHtml.status).toBe(200)
       expect(await sessionlessHtml.text()).toContain("<h1>no-session</h1>")
@@ -162,7 +162,7 @@ export default {
       ).rejects.toMatchObject({ _tag: "ArtifactNotFoundError" })
 
       const v1Js = await handler(
-        new Request(`http://opencode.local/api/experimental/artifacts/${created.data.id}/view/assets/app.js`),
+        new Request(`http://olive.local/api/experimental/artifacts/${created.data.id}/view/assets/app.js`),
       )
       expect(v1Js.status).toBe(200)
       expect(await v1Js.text()).toBe("window.VERSION = 1")
@@ -177,7 +177,7 @@ export default {
       expect(updated.data.url).toBe(created.data.url)
 
       const latestHtml = await handler(
-        new Request(`http://opencode.local/api/experimental/artifacts/${created.data.id}/view/`),
+        new Request(`http://olive.local/api/experimental/artifacts/${created.data.id}/view/`),
       )
       expect(await latestHtml.text()).toContain("<h1>v2</h1>")
 

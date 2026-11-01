@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import path from "node:path"
-import { OpenCode, type LocationGetOutput, type ModelRef, type SessionInfo } from "@opencode/client/promise"
+import { Olive, type LocationGetOutput, type ModelRef, type SessionInfo } from "@olive/client/promise"
 import { createWorktreeLocation, resolveSessionTarget, SessionTargetMutationError } from "../src/session-target"
 
 function location(directory: string): LocationGetOutput {
@@ -29,7 +29,7 @@ afterEach(() => mock.restore())
 
 describe("session target resolver", () => {
   test("adopts an explicit Session location and model", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     const selected = session("ses_resume", "/session", { providerID: "openai", id: "gpt-5" })
     spyOn(client.session, "get").mockResolvedValue(selected)
     spyOn(client.location, "get").mockResolvedValue(location("/session"))
@@ -44,7 +44,7 @@ describe("session target resolver", () => {
   })
 
   test("creates a missing explicit Session with its ID", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.session, "get").mockRejectedValue({ _tag: "SessionNotFoundError" })
     spyOn(client.location, "get").mockResolvedValue(location("/project"))
     const create = spyOn(client.session, "create").mockResolvedValue(session("ses_chosen", "/project"))
@@ -55,7 +55,7 @@ describe("session target resolver", () => {
   })
 
   test("does not create a missing explicit Session to fork", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.session, "get").mockRejectedValue({ _tag: "SessionNotFoundError" })
     const create = spyOn(client.session, "create")
 
@@ -66,7 +66,7 @@ describe("session target resolver", () => {
   })
 
   test("paginates to continue the exact directory", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.location, "get").mockResolvedValue(location("/project"))
     const explicit = Array.from({ length: 50 }, (_, index) => session(`ses_${index}`, `/other/${index}`))
     const list = spyOn(client.session, "list")
@@ -79,7 +79,7 @@ describe("session target resolver", () => {
   })
 
   test("attaches the terminal environment to the resolved local Session", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     const selected = session("ses_resume", "/session")
     spyOn(client.session, "get").mockResolvedValue(selected)
     spyOn(client.location, "get").mockResolvedValue(location("/session"))
@@ -99,7 +99,7 @@ describe("session target resolver", () => {
   })
 
   test("prepares a fresh Session at the server Location before creation", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     const order: string[] = []
     spyOn(client.location, "get").mockResolvedValue(location("/server"))
     const create = spyOn(client.session, "create").mockImplementation(async (input) => {
@@ -122,7 +122,7 @@ describe("session target resolver", () => {
   })
 
   test("uses the agent resolved by the server for a fresh Session", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.location, "get").mockResolvedValue(location("/project"))
     spyOn(client.session, "create").mockResolvedValue({ ...session("ses_fresh", "/project"), agent: "review" })
 
@@ -131,14 +131,14 @@ describe("session target resolver", () => {
   })
 
   test("does not retry an ambiguous Session creation", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.location, "get").mockResolvedValue(location("/project"))
     spyOn(client.session, "create").mockRejectedValue(new Error("connection closed after create"))
     await expect(resolveSessionTarget({ client, prepare })).rejects.toBeInstanceOf(SessionTargetMutationError)
   })
 
   test("creates a worktree from the caller's checkout", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     spyOn(client.location, "get").mockResolvedValue(location("/project"))
     const create = spyOn(client.worktree, "create").mockResolvedValue({ directory: "/worktrees/pr-12" })
 
@@ -148,7 +148,7 @@ describe("session target resolver", () => {
   })
 
   test("keeps the caller's subfolder in the new worktree", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     const project = path.resolve("/project")
     const worktree = path.resolve("/worktrees/pr-12")
     spyOn(client.location, "get").mockImplementation(async (input) => ({
@@ -165,7 +165,7 @@ describe("session target resolver", () => {
   })
 
   test("uses the worktree root when the subfolder is not in the worktree", async () => {
-    const client = OpenCode.make({ baseUrl: "https://opencode.test" })
+    const client = Olive.make({ baseUrl: "https://olive.test" })
     const project = path.resolve("/project")
     const worktree = path.resolve("/worktrees/pr-12")
     spyOn(client.location, "get").mockImplementation(async (input) => {

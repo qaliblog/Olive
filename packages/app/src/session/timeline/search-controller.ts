@@ -1,7 +1,7 @@
 import { useCommand } from "@/shell/commands/command"
 import { useLanguage } from "@/runtime/i18n/language"
 import { useData } from "@/runtime/server/current"
-import { Timeline } from "@opencode/session-ui/timeline/projection"
+import { Timeline } from "@olive/session-ui/timeline/projection"
 import { createEffect, createMemo, createSignal, on, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
 
@@ -232,8 +232,8 @@ export function createTimelineSearchController(input: {
     },
   ])
   const onOpenRequest = () => open()
-  document.addEventListener("opencode:timeline-search-open", onOpenRequest)
-  onCleanup(() => document.removeEventListener("opencode:timeline-search-open", onOpenRequest))
+  document.addEventListener("olive:timeline-search-open", onOpenRequest)
+  onCleanup(() => document.removeEventListener("olive:timeline-search-open", onOpenRequest))
 
   function open() {
     setState("visible", true)

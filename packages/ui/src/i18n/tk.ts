@@ -69,7 +69,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Karz goşuň",
   "dialog.usageExceeded.freeTier.title": "Mugt çäk ýetdi",
   "dialog.usageExceeded.freeTier.description":
-    "Iň oňat açyk çeşme modellerine ygtybarly girmek üçin aýda 10 $ töläp, OpenCode Go-a ýazylyň.",
+    "Iň oňat açyk çeşme modellerine ygtybarly girmek üçin aýda 10 $ töläp, Olive Go-a ýazylyň.",
   "dialog.usageExceeded.freeTier.actionLabel": "Abuna ýazylyň",
   "ui.sessionTurn.status.delegating": "Iş tabşyrmak",
   "ui.sessionTurn.status.planning": "Indiki ädimleri meýilleşdirmek",

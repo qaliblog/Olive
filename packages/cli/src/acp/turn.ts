@@ -1,6 +1,6 @@
 import type { CancelNotification, PromptRequest, PromptResponse, RequestError } from "@agentclientprotocol/sdk"
-import type { OpenCodeClient, OpenCodeEvent } from "@opencode/client/effect"
-import { TokenUsage } from "@opencode/schema/token-usage"
+import type { OliveClient, OliveEvent } from "@olive/client/effect"
+import { TokenUsage } from "@olive/schema/token-usage"
 import {
   Cause,
   Context,
@@ -37,13 +37,13 @@ export interface Interface {
 }
 
 /** Core acknowledges an interrupt before its cleanup settles, and its shell tool waits 3s before SIGKILL. */
-export const CancelDrainTimeout = Context.Reference<Duration.Input>("@opencode/cli/acp/Turn/CancelDrainTimeout", {
+export const CancelDrainTimeout = Context.Reference<Duration.Input>("@olive/cli/acp/Turn/CancelDrainTimeout", {
   defaultValue: () => "5 seconds",
 })
 
 type Subscription = {
   readonly scope: Scope.Closeable
-  readonly events: Queue.Dequeue<OpenCodeEvent, unknown>
+  readonly events: Queue.Dequeue<OliveEvent, unknown>
   readonly askQueue: Queue.Queue<Effect.Effect<void, ACPError.Error | RequestError>>
   readonly settled: Map<string, Deferred.Deferred<void>>
 }
@@ -57,7 +57,7 @@ type Turn = {
 }
 
 export const make = Effect.fnUntraced(function* (input: {
-  readonly client: OpenCodeClient
+  readonly client: OliveClient
   readonly connection: ACPConnection.Interface
   readonly sessions: ACPSessions.Interface
   readonly catalog: ACPCatalog.Interface

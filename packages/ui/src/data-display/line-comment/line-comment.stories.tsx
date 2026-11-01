@@ -4,7 +4,7 @@ import { LineCommentEditor, LineComment, LineCommentOverflowIcon } from "./line-
 import { Menu } from "../../navigation/menu/menu"
 
 const docs = `### Overview
-Line comment **display** and **editor** cards aligned with OpenCode line-comment specs (raised \`#FAFAFA\` surface, small \`Button\` ghost + contrast actions).
+Line comment **display** and **editor** cards aligned with Olive line-comment specs (raised \`#FAFAFA\` surface, small \`Button\` ghost + contrast actions).
 
 ### Display
 - \`LineComment\`: column stack (body + optional meta) beside optional \`actions\` (overflow). The body keeps its line breaks. \`onOpen\` makes a click anywhere on the card open it.

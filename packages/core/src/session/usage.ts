@@ -1,9 +1,9 @@
 export * as SessionUsage from "./usage.js"
 
-import type { Usage } from "@opencode/ai/effect"
-import { Money } from "@opencode/schema/money"
-import type { TokenUsage } from "@opencode/schema/token-usage"
-import type { Model } from "@opencode/schema/model"
+import type { Usage } from "@olive/ai/effect"
+import { Money } from "@olive/schema/money"
+import type { TokenUsage } from "@olive/schema/token-usage"
+import type { Model } from "@olive/schema/model"
 
 const finite = (value: number) => (Number.isFinite(value) ? value : 0)
 const safe = (value: number | undefined) => Math.max(0, finite(value ?? 0))

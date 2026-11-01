@@ -1,7 +1,7 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { expect } from "bun:test"
-import { OpenCode } from "@opencode/client"
+import { Olive } from "@olive/client"
 import { Effect } from "effect"
 import { tmpdirScoped } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
@@ -10,8 +10,8 @@ import { ServerProcess } from "../src/process"
 import { startServer } from "./fixture/server"
 
 const client = (handler: (request: Request) => Promise<Response>) =>
-  OpenCode.make({
-    baseUrl: "http://opencode.local",
+  Olive.make({
+    baseUrl: "http://olive.local",
     fetch: Object.assign((input: string | URL | Request, init?: RequestInit) => handler(new Request(input, init)), {
       preconnect: fetch.preconnect,
     }),
@@ -19,18 +19,18 @@ const client = (handler: (request: Request) => Promise<Response>) =>
 
 it.live("manages schedules through the experimental API when enabled and honors experimental.schedules: false", () =>
   Effect.gen(function* () {
-    const dir = (yield* tmpdirScoped("opencode-schedule-api-")).path
+    const dir = (yield* tmpdirScoped("olive-schedule-api-")).path
     const global = path.join(dir, "global")
     const enabled = path.join(dir, "enabled")
     const disabled = path.join(dir, "disabled")
     yield* Effect.promise(async () => {
       await Promise.all([global, enabled, disabled].map((item) => fs.mkdir(item, { recursive: true })))
-      await fs.writeFile(path.join(enabled, "opencode.json"), JSON.stringify({ experimental: { schedules: true } }))
-      await fs.writeFile(path.join(disabled, "opencode.json"), JSON.stringify({ experimental: { schedules: false } }))
+      await fs.writeFile(path.join(enabled, "olive.json"), JSON.stringify({ experimental: { schedules: true } }))
+      await fs.writeFile(path.join(disabled, "olive.json"), JSON.stringify({ experimental: { schedules: false } }))
     })
     const handler = yield* ServerFetch.make({
       app: { version: "test" },
-      database: { path: path.join(dir, "opencode.db") },
+      database: { path: path.join(dir, "olive.db") },
       config: { directory: global, project: true, claude: false },
       models: { fetch: false },
       fs: { filewatcher: false },
@@ -38,7 +38,7 @@ it.live("manages schedules through the experimental API when enabled and honors 
     const api = client(handler)
     const handlerRequest = (route: string, body: unknown) =>
       handler(
-        new Request(`http://opencode.local${route}`, {
+        new Request(`http://olive.local${route}`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(body),
@@ -112,7 +112,7 @@ it.live("manages schedules through the experimental API when enabled and honors 
       const askDir = path.join(dir, "ask")
       await fs.mkdir(askDir, { recursive: true })
       await fs.writeFile(
-        path.join(askDir, "opencode.json"),
+        path.join(askDir, "olive.json"),
         JSON.stringify({ experimental: { schedules: true }, permission: { shell: "ask" } }),
       )
       const askSession = await api.session.create({ location: { directory: askDir } })
@@ -127,7 +127,7 @@ it.live("manages schedules through the experimental API when enabled and honors 
       // Code Mode until check works end-to-end with no allow field, and { run, code } together is 400.
       const codeMatched = await api.experimental.schedule.create({
         sessionID: session.id,
-        until: { code: 'return { wake: true, message: "models=" + (await tools.opencode.models({})).total }' },
+        until: { code: 'return { wake: true, message: "models=" + (await tools.olive.models({})).total }' },
         prompt: "models checked",
       })
       expect(codeMatched).toMatchObject({
@@ -148,12 +148,12 @@ it.live("manages schedules through the experimental API when enabled and honors 
 
 it.live("ticks due schedules in standalone ServerProcess.start without lifecycle", () =>
   Effect.gen(function* () {
-    const dir = (yield* tmpdirScoped("opencode-schedule-serve-")).path
+    const dir = (yield* tmpdirScoped("olive-schedule-serve-")).path
     const server = yield* startServer(dir)
-    const api = OpenCode.make({ baseUrl: server.base, headers: server.headers })
+    const api = Olive.make({ baseUrl: server.base, headers: server.headers })
 
     yield* Effect.promise(async () => {
-      await fs.writeFile(path.join(dir, "opencode.json"), JSON.stringify({ experimental: { schedules: true }, permission: { shell: "allow" } }))
+      await fs.writeFile(path.join(dir, "olive.json"), JSON.stringify({ experimental: { schedules: true }, permission: { shell: "allow" } }))
       const session = await api.session.create({ location: { directory: dir } })
       const created = await api.experimental.schedule.create({
         sessionID: session.id,
@@ -179,11 +179,11 @@ it.live("ticks due schedules in standalone ServerProcess.start without lifecycle
 
 it.live("elects one scheduler leader when two server processes boot against a due schedule", () =>
   Effect.gen(function* () {
-    const dir = (yield* tmpdirScoped("opencode-schedule-leader-")).path
+    const dir = (yield* tmpdirScoped("olive-schedule-leader-")).path
     const dbPath = path.join(dir, "shared.db")
     const marker = path.join(dir, "runs.txt")
     yield* Effect.promise(() =>
-      fs.writeFile(path.join(dir, "opencode.json"), JSON.stringify({ experimental: { schedules: true }, permission: { shell: "allow" } })),
+      fs.writeFile(path.join(dir, "olive.json"), JSON.stringify({ experimental: { schedules: true }, permission: { shell: "allow" } })),
     )
 
     // Seed an active schedule in a short-lived scope so it falls due while no server is running.
@@ -225,9 +225,9 @@ it.live("elects one scheduler leader when two server processes boot against a du
     // Both servers start against the same already-due row at t=0; without leader election both run the check.
     const [first] = yield* Effect.all([boot(), boot()], { concurrency: 2 })
     const base = `http://127.0.0.1:${"port" in first.address ? first.address.port : 0}`
-    const api = OpenCode.make({
+    const api = Olive.make({
       baseUrl: base,
-      headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+      headers: { authorization: `Basic ${btoa("olive:secret")}` },
     })
 
     yield* Effect.promise(async () => {

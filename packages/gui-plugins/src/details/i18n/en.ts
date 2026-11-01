@@ -23,18 +23,18 @@ export default {
   configure: "Configuration file",
   copyConfigPath: "Copy configuration file path",
   configFileMissing: "No configuration file found",
-  "setup.mcp": "Add a server with OpenCode",
+  "setup.mcp": "Add a server with Olive",
   "setup.mcp.prompt":
-    "Help me add an MCP server to my global OpenCode config. Ask me which service I want to connect, then set it up and check that it connects.",
-  "setup.plugins": "Add a plugin with OpenCode",
+    "Help me add an MCP server to my global Olive config. Ask me which service I want to connect, then set it up and check that it connects.",
+  "setup.plugins": "Add a plugin with Olive",
   "setup.plugins.prompt":
-    "Help me add a plugin to my global OpenCode config. Ask me what I want it to do, suggest a plugin, then add it.",
-  "setup.skills": "New skill with OpenCode",
+    "Help me add a plugin to my global Olive config. Ask me what I want it to do, suggest a plugin, then add it.",
+  "setup.skills": "New skill with Olive",
   "setup.skills.prompt":
-    "Help me write a new OpenCode skill in my global config. Ask me what it should teach you, then write its SKILL.md.",
-  "setup.lsp": "Set up with OpenCode",
+    "Help me write a new Olive skill in my global config. Ask me what it should teach you, then write its SKILL.md.",
+  "setup.lsp": "Set up with Olive",
   "setup.lsp.prompt":
-    "Help me configure a language server in my global OpenCode config. Ask me which language I work in, then set it up.",
+    "Help me configure a language server in my global Olive config. Ask me which language I work in, then set it up.",
   loadingChanges: "Loading changes…",
   noChanges: "No changes",
   basedOn: "Based on {{branch}}",

@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { matchModels, SessionSearch } from "./search"
 
-const session = (title: string, directory = "/home/alex/code/opencode") => ({ title, location: { directory } })
+const session = (title: string, directory = "/home/alex/code/olive") => ({ title, location: { directory } })
 
 test("ranks a title that is the spoken name above titles that only mention it", () => {
   const search = new SessionSearch("hex")

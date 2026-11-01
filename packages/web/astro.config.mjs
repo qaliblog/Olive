@@ -44,7 +44,7 @@ export default defineConfig({
     configSchema(),
     solidJs(),
     starlight({
-      title: "OpenCode",
+      title: "Olive",
       defaultLocale: "root",
       locales: {
         root: {
@@ -238,12 +238,12 @@ export default defineConfig({
             "zh-TW": "使用",
           },
           items: [
-            { label: "Go", link: "https://opencode.ai/v2/docs/console/go/" },
+            { label: "Go", link: "https://olive.ai/v2/docs/console/go/" },
             "tui",
             "cli",
             "web",
             "ide",
-            { label: "Console", link: "https://opencode.ai/v2/docs/console/" },
+            { label: "Console", link: "https://olive.ai/v2/docs/console/" },
             "github",
             "gitlab",
           ],
@@ -340,7 +340,7 @@ function configSchema() {
     hooks: {
       "astro:build:done": async () => {
         execFileSync("bun", ["../schema/script/config-schema.ts", "./dist/client/config.json"], { stdio: "inherit" })
-        // The V1 TUI schema is frozen in the console app since packages/opencode lives on the v1 branch.
+        // The V1 TUI schema is frozen in the console app since packages/olive lives on the v1 branch.
         copyFileSync("../console/app/public/tui.json", "./dist/client/tui.json")
       },
     },

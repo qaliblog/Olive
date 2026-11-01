@@ -1,6 +1,6 @@
 import { createMemo, createResource, createSignal, Show, type JSX } from "solid-js"
 import { Dynamic } from "solid-js/web"
-import type { FileDiffInfo } from "@opencode/client/promise"
+import type { FileDiffInfo } from "@olive/client/promise"
 import {
   SESSION_REVIEW_V2_SIDEBAR_WIDTH_MAX,
   SESSION_REVIEW_V2_SIDEBAR_WIDTH_MIN,
@@ -8,9 +8,9 @@ import {
   SessionReviewV2Sidebar,
   SessionReviewV2SidebarToggle,
   type SessionReviewExpandMode,
-} from "@opencode/session-ui/v2/session-review-v2"
-import { SessionReviewFilePreviewV2 } from "@opencode/session-ui/v2/session-review-file-preview-v2"
-import { DiffChanges } from "@opencode/ui/diff-changes"
+} from "@olive/session-ui/v2/session-review-v2"
+import { SessionReviewFilePreviewV2 } from "@olive/session-ui/v2/session-review-file-preview-v2"
+import { DiffChanges } from "@olive/ui/diff-changes"
 import type {
   SessionReviewComment,
   SessionReviewCommentActions,
@@ -19,9 +19,9 @@ import type {
   SessionReviewDiffStyle,
   SessionReviewFocus,
   SessionReviewLineComment,
-} from "@opencode/session-ui/session-review"
-import { usePlugin, usePanel, type MountedSession, type PanelSidebar, type SessionScreen } from "@opencode/plugin/gui"
-import { FileTree, OpenInApp } from "@opencode/plugin/gui/file"
+} from "@olive/session-ui/session-review"
+import { usePlugin, usePanel, type MountedSession, type PanelSidebar, type SessionScreen } from "@olive/plugin/gui"
+import { FileTree, OpenInApp } from "@olive/plugin/gui/file"
 import type Review from "./index"
 import {
   applyFileListKeyDown,

@@ -1,17 +1,17 @@
-import { PersistentPty } from "@opencode/core/persistent-pty"
-import { PtyTicket } from "@opencode/core/pty/ticket"
+import { PersistentPty } from "@olive/core/persistent-pty"
+import { PtyTicket } from "@olive/core/pty/ticket"
 import {
   ForbiddenError,
   InvalidRequestError,
   PtyFeatureUnsupportedError,
   PtyNotFoundError,
   ServiceUnavailableError,
-} from "@opencode/protocol/errors"
+} from "@olive/protocol/errors"
 import {
   PTY_CONNECT_TICKET_QUERY,
   PTY_CONNECT_TOKEN_HEADER,
   PTY_CONNECT_TOKEN_HEADER_VALUE,
-} from "@opencode/protocol/groups/persistent-pty"
+} from "@olive/protocol/groups/persistent-pty"
 import { Effect, Queue } from "effect"
 import { HttpServerRequest, HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
@@ -117,7 +117,7 @@ export const PersistentPtyHandler = HttpApiBuilder.group(Api, "server.experiment
                 "PersistentPty.UnsupportedError": (error) =>
                   new PtyFeatureUnsupportedError({
                     feature: error.feature,
-                    message: "Terminal renaming will be available after OpenCode's terminal service restarts",
+                    message: "Terminal renaming will be available after Olive's terminal service restarts",
                   }),
                 "PersistentPty.UnavailableError": unavailable,
               }),

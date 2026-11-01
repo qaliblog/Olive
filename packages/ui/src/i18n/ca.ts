@@ -70,7 +70,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "Afegeix crèdits",
   "dialog.usageExceeded.freeTier.title": "S'ha arribat al límit gratuït",
   "dialog.usageExceeded.freeTier.description":
-    "Subscriviu-vos a OpenCode Go per 10 dòlars al mes i obteniu accés fiable als millors models de codi obert.",
+    "Subscriviu-vos a Olive Go per 10 dòlars al mes i obteniu accés fiable als millors models de codi obert.",
   "dialog.usageExceeded.freeTier.actionLabel": "Subscriu-te",
   "ui.sessionTurn.status.delegating": "Delegació de feina",
   "ui.sessionTurn.status.planning": "Planificant els propers passos",

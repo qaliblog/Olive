@@ -1,6 +1,6 @@
 import { Option, Schema } from "effect"
-import { builtinMainContext } from "@opencode/plugin/gui/builtin"
-import type { Plugin } from "@opencode/plugin/gui/main"
+import { builtinMainContext } from "@olive/plugin/gui/builtin"
+import type { Plugin } from "@olive/plugin/gui/main"
 import { Wsl } from "./contract"
 import { createWslRuntime } from "./runtime"
 import { createWslServersController, wslServerIdForDistro } from "./servers"
@@ -30,9 +30,9 @@ const setup: Plugin.MainSetup = (ctx) => {
 
   // Development builds of the desktop app can build the Linux CLI from this checkout.
   const local =
-    packaged || !process.env.OPENCODE_DESKTOP_WSL_CLI_BUILD || !process.env.OPENCODE_DESKTOP_WSL_CLI_OUTPUT
+    packaged || !process.env.OLIVE_DESKTOP_WSL_CLI_BUILD || !process.env.OLIVE_DESKTOP_WSL_CLI_OUTPUT
       ? undefined
-      : { script: process.env.OPENCODE_DESKTOP_WSL_CLI_BUILD, output: process.env.OPENCODE_DESKTOP_WSL_CLI_OUTPUT }
+      : { script: process.env.OLIVE_DESKTOP_WSL_CLI_BUILD, output: process.env.OLIVE_DESKTOP_WSL_CLI_OUTPUT }
 
   const log = <Data extends Readonly<Record<string, unknown>>>(level: "info" | "error", message: string, data: Data) =>
     desktopLog.write(level, `[wsl] ${message}`, data)
@@ -80,7 +80,7 @@ const setup: Plugin.MainSetup = (ctx) => {
     installWsl: () => controller.installWsl(),
     installDistro: (input) => controller.installDistro(input.name),
     probeAddable: (input) => controller.probeAddable(input.distros),
-    installOpencode: (input) => controller.installOpencode(input.name),
+    installOlive: (input) => controller.installOlive(input.name),
     addServer: (input) => controller.addServer(input.distro),
     removeServer: (input) => controller.removeServer(input.id),
     startServer: (input) => controller.startServer(input.id),

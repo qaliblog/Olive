@@ -1,5 +1,5 @@
-import { DataProvider, type TurnDiffInput } from "@opencode/session-ui/context"
-import { MarkdownProvider, type ReadMarkdownImage } from "@opencode/session-ui/context/markdown"
+import { DataProvider, type TurnDiffInput } from "@olive/session-ui/context"
+import { MarkdownProvider, type ReadMarkdownImage } from "@olive/session-ui/context/markdown"
 import { useNavigate, useParams } from "@solidjs/router"
 import { useQuery } from "@tanstack/solid-query"
 import { createMemo, onCleanup, untrack, type ParentProps } from "solid-js"

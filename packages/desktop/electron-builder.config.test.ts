@@ -13,28 +13,28 @@ import { CLI_BINARIES, nodePtyPackage } from "./script/utils"
 const { FileMatcher } = createRequire(import.meta.resolve("electron-builder"))("app-builder-lib/out/fileMatcher")
 
 const channels = [
-  { channel: "dev", appId: "ai.opencode.desktop.dev", feed: "dev" },
-  { channel: "beta", appId: "ai.opencode.desktop.beta", feed: "beta" },
-  { channel: "prod", appId: "ai.opencode.desktop", feed: "latest" },
+  { channel: "dev", appId: "ai.olive.desktop.dev", feed: "dev" },
+  { channel: "beta", appId: "ai.olive.desktop.beta", feed: "beta" },
+  { channel: "prod", appId: "ai.olive.desktop", feed: "latest" },
 ] as const
 
 function load(channel: string, target?: string): Configuration {
-  const previous = process.env.OPENCODE_CHANNEL
-  const previousTarget = process.env.OPENCODE_TARGET
-  process.env.OPENCODE_CHANNEL = channel
+  const previous = process.env.OLIVE_CHANNEL
+  const previousTarget = process.env.OLIVE_TARGET
+  process.env.OLIVE_CHANNEL = channel
 
-  if (target !== undefined) process.env.OPENCODE_TARGET = target
-  else delete process.env.OPENCODE_TARGET
+  if (target !== undefined) process.env.OLIVE_TARGET = target
+  else delete process.env.OLIVE_TARGET
 
   try {
     return getConfig()
   } finally {
-    delete process.env.OPENCODE_CHANNEL
-    delete process.env.OPENCODE_TARGET
+    delete process.env.OLIVE_CHANNEL
+    delete process.env.OLIVE_TARGET
 
-    if (previous !== undefined) process.env.OPENCODE_CHANNEL = previous
+    if (previous !== undefined) process.env.OLIVE_CHANNEL = previous
 
-    if (previousTarget !== undefined) process.env.OPENCODE_TARGET = previousTarget
+    if (previousTarget !== undefined) process.env.OLIVE_TARGET = previousTarget
   }
 }
 
@@ -53,13 +53,13 @@ test.each(channels)("channel identity for $channel", ({ channel, appId, feed }) 
   // Every published channel updates from its own feed on the update service.
   expect(config.publish).toEqual({
     provider: "generic",
-    url: `https://opencode.ai/update/api/${feed}/desktop/opencode/`,
+    url: `https://olive.ai/update/api/${feed}/desktop/olive/`,
     channel: "latest",
   })
   expect(config.extraMetadata?.desktopName).toBe(`${appId}.desktop`)
   // The executable must never end in `.desktop`: libappimage resolves the
   // AppImage's desktop entry by globbing `*.desktop`, and an ELF matching
-  // that glob breaks integration (anomalyco/opencode#51867).
+  // that glob breaks integration (anomalyco/olive#51867).
   expect(config.linux?.executableName).toBe(appId.replace(/\.desktop$/, ""))
   expect(config.linux?.executableName).not.toMatch(/\.desktop$/)
   // The installed `.desktop` filename still derives from `desktopName` so
@@ -70,7 +70,7 @@ test.each(channels)("channel identity for $channel", ({ channel, appId, feed }) 
   for (const fpm of [config.deb?.fpm, config.rpm?.fpm]) {
     expect(fpm).toContainEqual(expect.stringContaining(`/usr/share/metainfo/${appId}.metainfo.xml`))
     expect(
-      fpm?.some((entry) => entry.endsWith("opencode-desktop.desktop=/usr/share/applications/opencode-desktop.desktop")),
+      fpm?.some((entry) => entry.endsWith("olive-desktop.desktop=/usr/share/applications/olive-desktop.desktop")),
     ).toBe(channel === "prod")
   }
 
@@ -81,10 +81,10 @@ test.each(channels)("channel identity for $channel", ({ channel, appId, feed }) 
 })
 
 test("legacy Linux launcher stays hidden", async () => {
-  const desktop = await Bun.file(path.join(import.meta.dirname, "resources/linux/opencode-desktop.desktop")).text()
-  expect(desktop).toContain("Exec=/opt/OpenCode/ai.opencode %U")
-  expect(desktop).toContain("Icon=ai.opencode")
-  expect(desktop).toContain("StartupWMClass=ai.opencode.desktop")
+  const desktop = await Bun.file(path.join(import.meta.dirname, "resources/linux/olive-desktop.desktop")).text()
+  expect(desktop).toContain("Exec=/opt/Olive/ai.olive %U")
+  expect(desktop).toContain("Icon=ai.olive")
+  expect(desktop).toContain("StartupWMClass=ai.olive.desktop")
   expect(desktop).toContain("NoDisplay=true")
 })
 
@@ -124,9 +124,9 @@ test("shared packaging defaults", async () => {
   const include = path.join(import.meta.dirname, "resources/windows/installer.nsh")
   expect(config.nsis?.include).toBe(include)
   expect(await Bun.file(include).exists()).toBe(true)
-  expect(config.files).toContain("!resources/opencode-cli*")
+  expect(config.files).toContain("!resources/olive-cli*")
   expect(config.extraResources).toEqual([
-    { from: "resources/", to: "", filter: ["opencode-cli", "opencode-cli.exe", "opencode-cli.version"] },
+    { from: "resources/", to: "", filter: ["olive-cli", "olive-cli.exe", "olive-cli.version"] },
   ])
 })
 
@@ -160,10 +160,6 @@ test("trims external dependencies without excluding runtime files", () => {
     for (const file of [
       "@zip.js/zip.js/index.js",
       "@zip.js/zip.js/lib/z-worker-inline.js",
-      "electron-updater/out/main.js",
-      "electron-updater/out/MacUpdater.js",
-      "electron-updater/out/NsisUpdater.js",
-      "electron-updater/out/providers/GitHubProvider.js",
       "builder-util-runtime/out/httpExecutor.js",
       "ajv/dist/ajv.js",
       "ajv/dist/refs/json-schema-draft-07.json",
@@ -174,7 +170,7 @@ test("trims external dependencies without excluding runtime files", () => {
       "unrelated/dist/index.cjs",
       "unrelated/dist/data.json",
       "unrelated/src/index.ts",
-      ...["@zip.js/zip.js", "electron-updater", "builder-util-runtime", "ajv", "ajv-formats", "js-yaml"].flatMap(
+      ...["@zip.js/zip.js", "builder-util-runtime", "ajv", "ajv-formats", "js-yaml"].flatMap(
         (name) => [`${name}/package.json`, `${name}/LICENSE`],
       ),
     ]) {
@@ -199,7 +195,7 @@ test("trims external dependencies without excluding runtime files", () => {
 
 test("the trimmed Zip.js package can still export compressed logs", async () => {
   const config = load("dev")
-  const dir = await mkdtemp(path.join(os.tmpdir(), "opencode-zip-package-"))
+  const dir = await mkdtemp(path.join(os.tmpdir(), "olive-zip-package-"))
   const source = path.dirname(fileURLToPath(import.meta.resolve("@zip.js/zip.js/package.json")))
   const filter = trimFilter(dir, config)
 

@@ -7,17 +7,17 @@ import { RemoteCli } from "./remote-cli"
 // complete private discovery contract; no remote Python/Node runtime is needed.
 const registrationScript = `status=$("$cli" service status) || exit 0
 if [ "$status" = stopped ]; then exit 0; fi
-printf 'OPENCODE_SSH_STATUS=%s\\n' "$status"
-for file in "\${XDG_STATE_HOME:-$HOME/.local/state}"/opencode/service*.json; do
+printf 'OLIVE_SSH_STATUS=%s\\n' "$status"
+for file in "\${XDG_STATE_HOME:-$HOME/.local/state}"/olive/service*.json; do
   if [ ! -f "$file" ]; then continue; fi
-  printf 'OPENCODE_SSH_REGISTRATION_BEGIN\\n'
+  printf 'OLIVE_SSH_REGISTRATION_BEGIN\\n'
   cat "$file"
-  printf '\\nOPENCODE_SSH_REGISTRATION_END\\n'
+  printf '\\nOLIVE_SSH_REGISTRATION_END\\n'
 done
 `
 
 export const discoverScript = `set -eu
-${RemoteCli.discoverScript({ fromPath: true, cache: { directory: ".opencode/desktop-ssh", prefix: "0.0.0-beta-" } })}
+${RemoteCli.discoverScript({ fromPath: true, cache: { directory: ".olive/desktop-ssh", prefix: "0.0.0-beta-" } })}
 if [ -z "$cli" ]; then exit 0; fi
 ${registrationScript}`
 
@@ -40,13 +40,13 @@ const Registration = Schema.fromJsonString(
 export function parseRegistration(output: string) {
   const status = output
     .split(/\r?\n/)
-    .findLast((line) => line.startsWith("OPENCODE_SSH_STATUS="))
-    ?.slice("OPENCODE_SSH_STATUS=".length)
+    .findLast((line) => line.startsWith("OLIVE_SSH_STATUS="))
+    ?.slice("OLIVE_SSH_STATUS=".length)
 
   if (!status) return undefined
 
   for (const match of output.matchAll(
-    /OPENCODE_SSH_REGISTRATION_BEGIN\r?\n([\s\S]*?)\r?\nOPENCODE_SSH_REGISTRATION_END/g,
+    /OLIVE_SSH_REGISTRATION_BEGIN\r?\n([\s\S]*?)\r?\nOLIVE_SSH_REGISTRATION_END/g,
   )) {
     const result = Schema.decodeUnknownOption(Registration)(match[1])
 
@@ -57,7 +57,7 @@ export function parseRegistration(output: string) {
 }
 
 export function binaryPath(version: string) {
-  return `$HOME/.opencode/desktop-ssh/${RemoteCli.requireVersion(version)}/opencode`
+  return `$HOME/.olive/desktop-ssh/${RemoteCli.requireVersion(version)}/olive`
 }
 
 function connectionAddress(address: string, password: string) {
@@ -110,14 +110,14 @@ export const bootstrap = Effect.fn("Ssh.bootstrap")(function* (input: {
   const version =
     input.development && !staged ? yield* RemoteCli.latestBeta().pipe(Effect.mapError(SshFailure.from)) : input.version
 
-  const setup = { version, directory: `.opencode/desktop-ssh/${version}` }
+  const setup = { version, directory: `.olive/desktop-ssh/${version}` }
 
   if (!staged) {
     const output = yield* run(RemoteCli.probeScript).pipe(Effect.mapError(() => new SshFailure("platform")))
 
     const target = output
       .split(/\r?\n/)
-      .findLast((line) => line.startsWith("OPENCODE_REMOTE_TARGET="))
+      .findLast((line) => line.startsWith("OLIVE_REMOTE_TARGET="))
       ?.split("=")[1]
 
     const url = yield* Effect.try({ try: () => RemoteCli.archiveUrl(target ?? "", version), catch: SshFailure.from })

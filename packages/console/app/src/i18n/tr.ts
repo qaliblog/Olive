@@ -9,13 +9,13 @@ export const dict = {
   "nav.github": "GitHub",
   "nav.docs": "Dokümantasyon",
   "nav.enterprise": "Kurumsal",
-  "nav.zen": "OpenCode Models",
+  "nav.zen": "Olive Models",
   "nav.login": "Giriş",
   "nav.free": "İndir",
   "nav.home": "Ana sayfa",
   "nav.openMenu": "Menüyü aç",
   "nav.getStartedFree": "Ücretsiz başla",
-  "nav.logoAlt": "OpenCode",
+  "nav.logoAlt": "Olive",
 
   "nav.context.copyLogo": "Logoyu SVG olarak kopyala",
   "nav.context.copyWordmark": "Wordmark'ı SVG olarak kopyala",
@@ -42,14 +42,14 @@ export const dict = {
   "email.success": "Neredeyse bitti, gelen kutunuzu kontrol edin ve e-postanızı onaylayın",
   "email.error": "Abonelik başarısız oldu. Lütfen tekrar deneyin.",
 
-  "notFound.title": "Bulunamadı | opencode",
+  "notFound.title": "Bulunamadı | olive",
   "notFound.heading": "404 - Sayfa bulunamadı",
   "notFound.home": "Ana sayfa",
   "notFound.docs": "Dokümantasyon",
   "notFound.github": "GitHub",
   "notFound.discord": "Discord",
-  "notFound.logoLightAlt": "opencode açık logo",
-  "notFound.logoDarkAlt": "opencode koyu logo",
+  "notFound.logoLightAlt": "olive açık logo",
+  "notFound.logoDarkAlt": "olive koyu logo",
 
   "common.cancel": "İptal",
   "common.contactUs": "Bize ulaşın",
@@ -59,9 +59,9 @@ export const dict = {
   "common.faq": "SSS",
   "common.learnMore": "Daha fazla bilgi",
 
-  "app.meta.description": "OpenCode - Açık kaynaklı kodlama ajanı.",
+  "app.meta.description": "Olive - Açık kaynaklı kodlama ajanı.",
 
-  "home.title": "OpenCode | Açık kaynaklı yapay zeka kodlama ajanı",
+  "home.title": "Olive | Açık kaynaklı yapay zeka kodlama ajanı",
 
   "home.banner.badge": "Yeni",
 
@@ -71,9 +71,9 @@ export const dict = {
 
   "home.install.ariaLabel": "Kurulum seçenekleri",
 
-  "home.what.title": "OpenCode nedir?",
+  "home.what.title": "Olive nedir?",
   "home.what.body":
-    "OpenCode, terminalinizde, IDE'nizde veya masaüstünde kod yazmanıza yardım eden açık kaynaklı bir ajandır.",
+    "Olive, terminalinizde, IDE'nizde veya masaüstünde kod yazmanıza yardım eden açık kaynaklı bir ajandır.",
   "home.what.multiSession.title": "Çoklu oturum",
   "home.what.multiSession.body": "Aynı projede birden fazla ajanı paralel çalıştırın",
   "home.what.copilot.title": "GitHub Copilot",
@@ -88,47 +88,47 @@ export const dict = {
 
   "home.growth.title": "Açık kaynaklı yapay zeka kodlama ajanı",
   "home.growth.body":
-    "GitHub'da <strong>{{stars}}</strong>+ yıldız, <strong>{{contributors}}</strong> katılımcı ve <strong>{{commits}}</strong>+ commit ile OpenCode, her ay <strong>{{monthlyUsers}}</strong>+ geliştirici tarafından kullanılıyor ve güveniliyor.",
+    "GitHub'da <strong>{{stars}}</strong>+ yıldız, <strong>{{contributors}}</strong> katılımcı ve <strong>{{commits}}</strong>+ commit ile Olive, her ay <strong>{{monthlyUsers}}</strong>+ geliştirici tarafından kullanılıyor ve güveniliyor.",
   "home.growth.githubStars": "GitHub Yıldızları",
   "home.growth.contributors": "Katılımcılar",
   "home.growth.monthlyDevs": "Aylık Geliştiriciler",
 
   "home.privacy.title": "Gizlilik öncelikli tasarlandı",
   "home.privacy.body":
-    "OpenCode kodunuzu veya bağlam verilerinizi saklamaz; bu sayede gizliliğe duyarlı ortamlarda çalışabilir.",
+    "Olive kodunuzu veya bağlam verilerinizi saklamaz; bu sayede gizliliğe duyarlı ortamlarda çalışabilir.",
   "home.privacy.learnMore": "Hakkında daha fazla bilgi:",
   "home.privacy.link": "gizlilik",
 
-  "home.faq.q1": "OpenCode nedir?",
+  "home.faq.q1": "Olive nedir?",
   "home.faq.a1":
-    "OpenCode, herhangi bir AI modeliyle kod yazmanıza ve çalıştırmanıza yardım eden açık kaynaklı bir ajandır. Terminal arayüzü, masaüstü uygulaması veya IDE uzantısı olarak kullanılabilir.",
-  "home.faq.q2": "OpenCode'u nasıl kullanırım?",
+    "Olive, herhangi bir AI modeliyle kod yazmanıza ve çalıştırmanıza yardım eden açık kaynaklı bir ajandır. Terminal arayüzü, masaüstü uygulaması veya IDE uzantısı olarak kullanılabilir.",
+  "home.faq.q2": "Olive'u nasıl kullanırım?",
   "home.faq.a2.before": "Başlamanın en kolay yolu",
   "home.faq.a2.link": "girişi okumaktır",
-  "home.faq.q3": "OpenCode için ek AI aboneliklerine ihtiyacım var mı?",
-  "home.faq.a3.p1": "Şart değil. OpenCode, hesap açmadan kullanabileceğiniz ücretsiz modellerle gelir.",
+  "home.faq.q3": "Olive için ek AI aboneliklerine ihtiyacım var mı?",
+  "home.faq.a3.p1": "Şart değil. Olive, hesap açmadan kullanabileceğiniz ücretsiz modellerle gelir.",
   "home.faq.a3.p2.beforeZen": "Bunun dışında, popüler kodlama modellerini kullanmak için bir",
   "home.faq.a3.p2.afterZen": " hesabı oluşturabilirsiniz.",
   "home.faq.a3.p3":
-    "OpenCode Models'i öneriyoruz, ancak OpenCode OpenAI, Anthropic, xAI gibi popüler sağlayıcılarla da çalışır.",
+    "Olive Models'i öneriyoruz, ancak Olive OpenAI, Anthropic, xAI gibi popüler sağlayıcılarla da çalışır.",
   "home.faq.a3.p4.beforeLocal": "Hatta",
   "home.faq.a3.p4.localLink": "yerel modellerinizi bağlayabilirsiniz",
-  "home.faq.q4": "Mevcut AI aboneliklerimi OpenCode ile kullanabilir miyim?",
+  "home.faq.q4": "Mevcut AI aboneliklerimi Olive ile kullanabilir miyim?",
   "home.faq.a4.p1": "Evet, ChatGPT Plus/Pro veya GitHub Copilot aboneliklerinizi kullanabilirsiniz.",
-  "home.faq.q5": "OpenCode'u sadece terminalde mi kullanabilirim?",
-  "home.faq.a5.beforeDesktop": "Artık hayır! OpenCode artık sizin bu cihazlarınıza",
+  "home.faq.q5": "Olive'u sadece terminalde mi kullanabilirim?",
+  "home.faq.a5.beforeDesktop": "Artık hayır! Olive artık sizin bu cihazlarınıza",
   "home.faq.a5.desktop": "masaüstü",
   "home.faq.a5.and": "ve",
   "home.faq.a5.web": "web",
-  "home.faq.q6": "OpenCode ne kadar?",
+  "home.faq.q6": "Olive ne kadar?",
   "home.faq.a6":
-    "OpenCode %100 ücretsizdir. Ayrıca ücretsiz model setiyle gelir. Başka bir sağlayıcı bağlarsanız ek maliyetler olabilir.",
+    "Olive %100 ücretsizdir. Ayrıca ücretsiz model setiyle gelir. Başka bir sağlayıcı bağlarsanız ek maliyetler olabilir.",
   "home.faq.q7": "Veri ve gizlilik ne olacak?",
   "home.faq.a7.p1": "Verileriniz yalnızca ücretsiz modellerimizi kullandığınızda saklanır.",
   "home.faq.a7.p2.beforeModels": "Daha fazla bilgi:",
   "home.faq.a7.p2.modelsLink": "modellerimiz",
-  "home.faq.q8": "OpenCode açık kaynak mı?",
-  "home.faq.a8.p1": "Evet, OpenCode tamamen açık kaynaktır. Kaynak kodu",
+  "home.faq.q8": "Olive açık kaynak mı?",
+  "home.faq.a8.p1": "Evet, Olive tamamen açık kaynaktır. Kaynak kodu",
   "home.faq.a8.p2": "'da",
   "home.faq.a8.mitLicense": "MIT Lisansı",
   "home.faq.a8.p3":
@@ -136,78 +136,78 @@ export const dict = {
 
   "home.zenCta.title": "Kodlama ajanları için güvenilir, optimize modeller",
   "home.zenCta.body":
-    "OpenCode Models, OpenCode'un kodlama ajanları için özel olarak test edip benchmark ettiği seçilmiş AI modellerine erişim sağlar. Sağlayıcılar arasında tutarsız performans ve kalite konusunda endişelenmeyin; çalışan, doğrulanmış modelleri kullanın.",
-  "home.zenCta.link": "OpenCode Models hakkında",
+    "Olive Models, Olive'un kodlama ajanları için özel olarak test edip benchmark ettiği seçilmiş AI modellerine erişim sağlar. Sağlayıcılar arasında tutarsız performans ve kalite konusunda endişelenmeyin; çalışan, doğrulanmış modelleri kullanın.",
+  "home.zenCta.link": "Olive Models hakkında",
 
-  "zen.title": "OpenCode Models | Kodlama ajanları için güvenilir, optimize edilmiş modellerin seçilmiş seti",
+  "zen.title": "Olive Models | Kodlama ajanları için güvenilir, optimize edilmiş modellerin seçilmiş seti",
   "zen.hero.title": "Kodlama ajanları için güvenilir, optimize modeller",
   "zen.hero.body":
-    "OpenCode Models, OpenCode'un kodlama ajanları için özel olarak test edip benchmark ettiği seçilmiş AI modellerine erişim sağlar. Sağlayıcılar arasında tutarsız performans ve kalite konusunda endişelenmeyin; çalışan, doğrulanmış modelleri kullanın.",
+    "Olive Models, Olive'un kodlama ajanları için özel olarak test edip benchmark ettiği seçilmiş AI modellerine erişim sağlar. Sağlayıcılar arasında tutarsız performans ve kalite konusunda endişelenmeyin; çalışan, doğrulanmış modelleri kullanın.",
 
-  "zen.faq.q1": "OpenCode Models nedir?",
+  "zen.faq.q1": "Olive Models nedir?",
   "zen.faq.a1":
-    "OpenCode Models, OpenCode ekibi tarafından oluşturulan ve kodlama ajanları için test edilip benchmark edilen seçilmiş bir AI model setidir.",
-  "zen.faq.q2": "OpenCode Models'i daha doğru yapan nedir?",
+    "Olive Models, Olive ekibi tarafından oluşturulan ve kodlama ajanları için test edilip benchmark edilen seçilmiş bir AI model setidir.",
+  "zen.faq.q2": "Olive Models'i daha doğru yapan nedir?",
   "zen.faq.a2":
-    "OpenCode Models yalnızca kodlama ajanları için özel olarak test edilip benchmark edilmiş modelleri sunar. Biftek kesmek için tereyağı bıçağı kullanmazsın; kodlama için kötü modeller kullanma.",
-  "zen.faq.q3": "OpenCode Models daha ucuz mu?",
+    "Olive Models yalnızca kodlama ajanları için özel olarak test edilip benchmark edilmiş modelleri sunar. Biftek kesmek için tereyağı bıçağı kullanmazsın; kodlama için kötü modeller kullanma.",
+  "zen.faq.q3": "Olive Models daha ucuz mu?",
   "zen.faq.a3":
-    "OpenCode Models kâr amaçlı değildir. OpenCode Models, model sağlayıcılarının maliyetlerini size yansıtır. OpenCode Models'in kullanımı arttıkça OpenCode daha iyi fiyatlar pazarlayabilir ve bunları size yansıtabilir.",
-  "zen.faq.q4": "OpenCode Models ne kadar?",
-  "zen.faq.a4.p1.beforePricing": "OpenCode",
+    "Olive Models kâr amaçlı değildir. Olive Models, model sağlayıcılarının maliyetlerini size yansıtır. Olive Models'in kullanımı arttıkça Olive daha iyi fiyatlar pazarlayabilir ve bunları size yansıtabilir.",
+  "zen.faq.q4": "Olive Models ne kadar?",
+  "zen.faq.a4.p1.beforePricing": "Olive",
   "zen.faq.a4.p1.pricingLink": "istek başı ücret alır",
   "zen.faq.a4.p1.afterPricing":
     "ve hiçbir markup eklemez, yani model sağlayıcının ücretlendirdiği tutarı aynen ödersiniz.",
   "zen.faq.a4.p2.beforeAccount": "Toplam maliyetiniz kullanım miktarına bağlıdır ve aylık harcama limitlerini",
   "zen.faq.a4.p2.accountLink": "hesabınızda ayarlayabilirsiniz",
   "zen.faq.a4.p3":
-    "Maliyetleri karşılamak için OpenCode, $20 bakiye yüklemesi başına yalnızca $1.23 tutarında küçük bir ödeme işleme ücreti ekler.",
+    "Maliyetleri karşılamak için Olive, $20 bakiye yüklemesi başına yalnızca $1.23 tutarında küçük bir ödeme işleme ücreti ekler.",
   "zen.faq.q5": "Veri ve gizlilik ne olacak?",
   "zen.faq.a5.beforeExceptions":
-    "OpenCode Models'teki tüm modeller ABD'de ve AB'de barındırılır. Sağlayıcılar sıfır-retention politikasını uygular ve verilerinizi model eğitimi için kullanmaz; şu",
+    "Olive Models'teki tüm modeller ABD'de ve AB'de barındırılır. Sağlayıcılar sıfır-retention politikasını uygular ve verilerinizi model eğitimi için kullanmaz; şu",
   "zen.faq.a5.exceptionsLink": "istisnalarla",
   "zen.faq.q6": "Harcama limitleri ayarlayabilir miyim?",
   "zen.faq.a6": "Evet, hesabınızda aylık harcama limitleri ayarlayabilirsiniz.",
   "zen.faq.q7": "İptal edebilir miyim?",
   "zen.faq.a7":
     "Evet, istediğiniz zaman faturalandırmayı devre dışı bırakabilir ve kalan bakiyenizi kullanabilirsiniz.",
-  "zen.faq.q8": "OpenCode Models'i diğer kodlama ajanlarıyla kullanabilir miyim?",
+  "zen.faq.q8": "Olive Models'i diğer kodlama ajanlarıyla kullanabilir miyim?",
   "zen.faq.a8":
-    "OpenCode Models OpenCode ile harika çalışır, ama OpenCode Models'i herhangi bir ajan ile kullanabilirsiniz. Tercih ettiğiniz kodlama ajanında kurulum talimatlarını izleyin.",
+    "Olive Models Olive ile harika çalışır, ama Olive Models'i herhangi bir ajan ile kullanabilirsiniz. Tercih ettiğiniz kodlama ajanında kurulum talimatlarını izleyin.",
   "zen.faq.q9": "Para iadesi alabilir miyim?",
   "zen.faq.a9":
     "Ücret son 14 gün içinde tahsil edildiyse ve bu satın alımdan gelen kredilerin hiçbirini kullanmadıysanız para iadesine hak kazanabilirsiniz. {{contact}} ve para iadesi talep edin.",
 
-  "zen.cta.start": "OpenCode Models'i kullanmaya başlayın",
+  "zen.cta.start": "Olive Models'i kullanmaya başlayın",
   "zen.pricing.title": "20$ Kullandıkça öde bakiyesi ekle",
   "zen.pricing.fee": "(+1,23$ kart işlem ücreti)",
   "zen.pricing.body":
     "Herhangi bir ajan ile kullanın. Aylık harcama limitlerini belirleyin. İstediğiniz zaman iptal edin.",
-  "zen.problem.title": "OpenCode Models hangi sorunu çözüyor?",
+  "zen.problem.title": "Olive Models hangi sorunu çözüyor?",
   "zen.problem.body":
     "Pek çok model mevcut ancak yalnızca birkaçı kodlama ajanlarıyla iyi çalışıyor. Çoğu sağlayıcı, bunları değişen sonuçlarla farklı şekilde yapılandırır.",
-  "zen.problem.subtitle": "Bu sorunu yalnızca OpenCode kullanıcıları için değil, herkes için düzeltiyoruz.",
+  "zen.problem.subtitle": "Bu sorunu yalnızca Olive kullanıcıları için değil, herkes için düzeltiyoruz.",
   "zen.problem.item1": "Seçilen modelleri test etme ve ekiplerine danışmanlık yapma",
   "zen.problem.item2": "Düzgün bir şekilde teslim edildiklerinden emin olmak için sağlayıcılarla çalışmak",
   "zen.problem.item3": "Önerdiğimiz tüm model-sağlayıcı kombinasyonlarının karşılaştırılması",
-  "zen.how.title": "OpenCode Models nasıl çalışır?",
+  "zen.how.title": "Olive Models nasıl çalışır?",
   "zen.how.body":
-    "OpenCode Models'i OpenCode ile kullanmanızı önersek de, OpenCode Models'i herhangi bir ajan ile kullanabilirsiniz.",
+    "Olive Models'i Olive ile kullanmanızı önersek de, Olive Models'i herhangi bir ajan ile kullanabilirsiniz.",
   "zen.how.step1.title": "Kaydolun ve 20$ bakiye ekleyin",
   "zen.how.step1.beforeLink": "takip edin",
   "zen.how.step1.link": "kurulum talimatları",
-  "zen.how.step2.title": "Şeffaf fiyatlandırmayla OpenCode Models kullanın",
+  "zen.how.step2.title": "Şeffaf fiyatlandırmayla Olive Models kullanın",
   "zen.how.step2.link": "istek başına ödeme",
   "zen.how.step2.afterLink": "sıfır işaretlemeyle",
   "zen.how.step3.title": "Otomatik yükleme",
   "zen.how.step3.body": "isteğe bağlı otomatik yüklemeyi etkinleştirin, bakiye eşiğini ve yükleme tutarını seçin",
   "zen.privacy.title": "Gizliliğiniz bizim için önemlidir",
   "zen.privacy.beforeExceptions":
-    "OpenCode Models'teki tüm modeller ABD'de ve AB'de barındırılmaktadır. Sağlayıcılar sıfır saklama politikası izler ve verilerinizi model eğitimi için kullanmaz; şu",
+    "Olive Models'teki tüm modeller ABD'de ve AB'de barındırılmaktadır. Sağlayıcılar sıfır saklama politikası izler ve verilerinizi model eğitimi için kullanmaz; şu",
   "zen.privacy.exceptionsLink": "aşağıdaki istisnalar",
 
   "go.promo.kimiK31Pro": "Kimi K3.1 Pro artık Go'da kullanılabilir.",
-  "go.title": "OpenCode Go | Herkes için düşük maliyetli kodlama modelleri",
+  "go.title": "Olive Go | Herkes için düşük maliyetli kodlama modelleri",
   "go.meta.description":
     "Go ayda 10$'dır; cömert kullanım limitleri ve önde gelen kodlama modellerine güvenilir erişim sunar.",
   "go.hero.title": "Herkes için düşük maliyetli kodlama modelleri",
@@ -254,13 +254,13 @@ export const dict = {
 
   "go.problem.title": "Go hangi sorunu çözüyor?",
   "go.problem.body":
-    "OpenCode deneyimini mümkün olduğunca çok kişiye ulaştırmaya odaklandık. OpenCode Go, ayda 10$ olan düşük maliyetli bir aboneliktir. Cömert limitler ve en yetenekli açık kaynak modellere güvenilir erişim sağlar.",
+    "Olive deneyimini mümkün olduğunca çok kişiye ulaştırmaya odaklandık. Olive Go, ayda 10$ olan düşük maliyetli bir aboneliktir. Cömert limitler ve en yetenekli açık kaynak modellere güvenilir erişim sağlar.",
   "go.problem.item1": "Düşük maliyetli abonelik fiyatlandırması",
   "go.problem.item2": "Cömert limitler ve güvenilir erişim",
   "go.problem.item3": "Mümkün olduğunca çok programcı için geliştirildi",
   "go.problem.item4": "Ajan tabanlı kodlama için test edilmiş, özenle seçilmiş model seçenekleri",
   "go.how.title": "Go nasıl çalışır?",
-  "go.how.body": "Go ayda 10$'dır. OpenCode veya herhangi bir ajanla kullanabilirsiniz.",
+  "go.how.body": "Go ayda 10$'dır. Olive veya herhangi bir ajanla kullanabilirsiniz.",
   "go.how.step1.title": "Bir hesap oluşturun",
   "go.how.step1.beforeLink": "takip edin",
   "go.how.step1.link": "kurulum talimatları",
@@ -269,14 +269,14 @@ export const dict = {
   "go.how.step2.afterLink": "cömert limitlerle",
   "go.how.step3.title": "Kodlamaya başlayın",
   "go.how.step3.body": "açık kaynaklı modellere güvenilir erişimle",
-  "go.faq.q1": "OpenCode Go nedir?",
+  "go.faq.q1": "Olive Go nedir?",
   "go.faq.a1":
     "Go, ajan tabanlı kodlama için yetenekli açık kaynaklı modellere güvenilir erişim sağlayan düşük maliyetli bir aboneliktir.",
   "go.faq.q2": "Go hangi modelleri içerir?",
   "go.faq.a2": "Go, aşağıda listelenen modelleri cömert limitler ve güvenilir erişimle sunar.",
-  "go.faq.q3": "Go, OpenCode Models ile aynı mı?",
+  "go.faq.q3": "Go, Olive Models ile aynı mı?",
   "go.faq.a3":
-    "Hayır. OpenCode Models kullandıkça öde modelidir; Go ise ayda 10$'dır ve özenle seçilmiş model seçeneklerine cömert limitlerle güvenilir erişim sunar.",
+    "Hayır. Olive Models kullandıkça öde modelidir; Go ise ayda 10$'dır ve özenle seçilmiş model seçeneklerine cömert limitlerle güvenilir erişim sunar.",
   "go.faq.q4": "Go ne kadar?",
   "go.faq.a4.p1.beforePricing": "Go'nun maliyeti",
   "go.faq.a4.p1.pricingLink": "ayda 10$",
@@ -318,12 +318,12 @@ export const dict = {
   "go.faq.a10":
     "Ücret son 14 gün içinde tahsil edildiyse ve ilgili faturalandırma döneminde Go kullanım hakkınızı hiç kullanmadıysanız para iadesine hak kazanabilirsiniz. {{contact}} ve para iadesi talep edin.",
 
-  "download.title": "OpenCode | İndir",
-  "download.meta.description": "OpenCode'u macOS, Windows ve Linux için indirin",
-  "download.section.terminal": "OpenCode Terminal",
-  "download.section.desktop": "OpenCode Desktop",
-  "download.section.extensions": "OpenCode Eklentileri",
-  "download.section.integrations": "OpenCode Entegrasyonları",
+  "download.title": "Olive | İndir",
+  "download.meta.description": "Olive'u macOS, Windows ve Linux için indirin",
+  "download.section.terminal": "Olive Terminal",
+  "download.section.desktop": "Olive Desktop",
+  "download.section.extensions": "Olive Eklentileri",
+  "download.section.integrations": "Olive Entegrasyonları",
   "download.action.download": "İndir",
   "download.action.install": "Kur",
 
@@ -335,22 +335,22 @@ export const dict = {
   "download.platform.linuxRpm": "Linux (.rpm)",
 
   "download.faq.a3.beforeLocal":
-    "Tam olarak değil, ama muhtemelen. OpenCode'u ücretli bir sağlayıcıya bağlamak istiyorsanız bir AI aboneliği gerekir, ancak",
+    "Tam olarak değil, ama muhtemelen. Olive'u ücretli bir sağlayıcıya bağlamak istiyorsanız bir AI aboneliği gerekir, ancak",
   "download.faq.a3.localLink": "yerel modeller",
   "download.faq.a3.afterLocal.beforeZen": "ile ücretsiz çalışabilirsiniz. Kullanıcıları",
   "download.faq.a3.afterZen":
-    " kullanmaya teşvik ediyoruz, ancak OpenCode OpenAI, Anthropic, xAI vb. gibi tüm popüler sağlayıcılarla çalışır.",
+    " kullanmaya teşvik ediyoruz, ancak Olive OpenAI, Anthropic, xAI vb. gibi tüm popüler sağlayıcılarla çalışır.",
 
-  "download.faq.a5.p1": "OpenCode %100 ücretsizdir.",
+  "download.faq.a5.p1": "Olive %100 ücretsizdir.",
   "download.faq.a5.p2.beforeZen":
-    "Ek maliyetler, bir model sağlayıcısına olan aboneliğinizden gelir. OpenCode herhangi bir model sağlayıcısıyla çalışır, ancak",
+    "Ek maliyetler, bir model sağlayıcısına olan aboneliğinizden gelir. Olive herhangi bir model sağlayıcısıyla çalışır, ancak",
   "download.faq.a5.p2.afterZen": " kullanmanızı öneririz.",
 
-  "enterprise.title": "OpenCode | Kurumunuz için kurumsal çözümler",
-  "enterprise.meta.description": "Kurumsal çözümler için OpenCode ile iletişime geçin",
+  "enterprise.title": "Olive | Kurumunuz için kurumsal çözümler",
+  "enterprise.meta.description": "Kurumsal çözümler için Olive ile iletişime geçin",
   "enterprise.hero.title": "Kodunuz size aittir",
   "enterprise.hero.body1":
-    "OpenCode, hiçbir veri veya bağlam saklamadan ve lisans kısıtlamaları ya da sahiplik iddiaları olmadan kuruluşunuzun içinde güvenli şekilde çalışır. Ekibinizle bir deneme başlatın, ardından SSO'nuz ve dahili AI geçidiniz ile entegre ederek tüm kuruluşunuzda devreye alın.",
+    "Olive, hiçbir veri veya bağlam saklamadan ve lisans kısıtlamaları ya da sahiplik iddiaları olmadan kuruluşunuzun içinde güvenli şekilde çalışır. Ekibinizle bir deneme başlatın, ardından SSO'nuz ve dahili AI geçidiniz ile entegre ederek tüm kuruluşunuzda devreye alın.",
   "enterprise.hero.body2": "Nasıl yardımcı olabileceğimizi bize söyleyin.",
   "enterprise.form.name.label": "Ad soyad",
   "enterprise.form.name.placeholder": "Jeff Bezos",
@@ -382,29 +382,29 @@ export const dict = {
   "enterprise.form.error.internalServer": "İç sunucu hatası.",
   "enterprise.form.error.captcha": "Captcha doğrulaması başarısız oldu. Lütfen tekrar deneyin.",
   "enterprise.faq.title": "SSS",
-  "enterprise.faq.q1": "OpenCode Enterprise nedir?",
+  "enterprise.faq.q1": "Olive Enterprise nedir?",
   "enterprise.faq.a1":
-    "OpenCode Enterprise, kodunuzun ve verilerinizin asla altyapınızı terk etmemesini sağlamak isteyen kurumlar içindir. Bunu, SSO'nuz ve dahili AI geçidiniz ile entegre olan merkezileştirilmiş bir konfigürasyonla sağlar.",
-  "enterprise.faq.q2": "OpenCode Enterprise'a nasıl başlarım?",
+    "Olive Enterprise, kodunuzun ve verilerinizin asla altyapınızı terk etmemesini sağlamak isteyen kurumlar içindir. Bunu, SSO'nuz ve dahili AI geçidiniz ile entegre olan merkezileştirilmiş bir konfigürasyonla sağlar.",
+  "enterprise.faq.q2": "Olive Enterprise'a nasıl başlarım?",
   "enterprise.faq.a2":
-    "Ekibinizle dahili bir deneme ile başlayın. OpenCode varsayılan olarak kodunuzu veya bağlam verilerinizi saklamaz, bu da başlamayı kolaylaştırır. Ardından fiyatlandırma ve uygulama seçeneklerini görüşmek için bize ulaşın.",
+    "Ekibinizle dahili bir deneme ile başlayın. Olive varsayılan olarak kodunuzu veya bağlam verilerinizi saklamaz, bu da başlamayı kolaylaştırır. Ardından fiyatlandırma ve uygulama seçeneklerini görüşmek için bize ulaşın.",
   "enterprise.faq.q3": "Kurumsal fiyatlandırma nasıl çalışır?",
   "enterprise.faq.a3":
     "Kendi LLM geçidiniz varsa, kullanılan tokenlar için ücret almıyoruz. Daha fazla bilgi için, kurumunuzun ihtiyaçlarına göre özel bir teklif için bize ulaşın.",
-  "enterprise.faq.q4": "OpenCode Enterprise ile verilerim güvende mi?",
+  "enterprise.faq.q4": "Olive Enterprise ile verilerim güvende mi?",
   "enterprise.faq.a4":
-    "Evet. OpenCode kodunuzu veya bağlam verilerinizi saklamaz. Tüm işleme yerel olarak ya da AI sağlayıcınıza doğrudan API çağrıları ile gerçekleştirilir. Merkezileştirilmiş konfigürasyon ve SSO entegrasyonu ile verileriniz kurumunuzun altyapısı içinde güvende kalır.",
+    "Evet. Olive kodunuzu veya bağlam verilerinizi saklamaz. Tüm işleme yerel olarak ya da AI sağlayıcınıza doğrudan API çağrıları ile gerçekleştirilir. Merkezileştirilmiş konfigürasyon ve SSO entegrasyonu ile verileriniz kurumunuzun altyapısı içinde güvende kalır.",
 
-  "brand.title": "OpenCode | Marka",
-  "brand.meta.description": "OpenCode marka kılavuzu",
+  "brand.title": "Olive | Marka",
+  "brand.meta.description": "Olive marka kılavuzu",
   "brand.heading": "Marka kılavuzu",
-  "brand.subtitle": "OpenCode markası ile çalışmanıza yardımcı olacak kaynaklar ve varlıklar.",
+  "brand.subtitle": "Olive markası ile çalışmanıza yardımcı olacak kaynaklar ve varlıklar.",
   "brand.downloadAll": "Tüm varlıkları indir",
 
-  "changelog.title": "OpenCode | Değişiklik günlüğü",
-  "changelog.meta.description": "OpenCode sürüm notları ve değişiklik günlüğü",
+  "changelog.title": "Olive | Değişiklik günlüğü",
+  "changelog.meta.description": "Olive sürüm notları ve değişiklik günlüğü",
   "changelog.hero.title": "Değişiklik günlüğü",
-  "changelog.hero.subtitle": "OpenCode için yeni güncellemeler ve iyileştirmeler",
+  "changelog.hero.subtitle": "Olive için yeni güncellemeler ve iyileştirmeler",
   "changelog.empty": "Değişiklik günlüğü kaydı bulunamadı.",
   "changelog.viewJson": "JSON'u görüntüle",
 } satisfies Dict

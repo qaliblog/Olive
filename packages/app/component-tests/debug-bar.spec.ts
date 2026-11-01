@@ -55,7 +55,7 @@ story("the debug bar stays open across a remount until its close button hides it
 story("a feature page's Enabled switch turns that feature on after another feature's page", async ({ page }) => {
   const result = await page.evaluate(
     async (modules) => {
-      localStorage.setItem("opencode.motion.panel", JSON.stringify({ x: 0, y: 0, width: 680 }))
+      localStorage.setItem("olive.motion.panel", JSON.stringify({ x: 0, y: 0, width: 680 }))
       const { motionTuning } = await import(modules.tuning)
 
       const experiment = (id: string, subsection: string) =>
@@ -78,7 +78,7 @@ story("a feature page's Enabled switch turns that feature on after another featu
         document.querySelector<HTMLButtonElement>(`[data-motion-feature="Switches · ${name}"]`)
 
       const enabled = (name: string) =>
-        document.querySelector<HTMLElement>(`[data-knobs-mount="opencode-motion-Switches · ${name}"] [role="switch"]`)
+        document.querySelector<HTMLElement>(`[data-knobs-mount="olive-motion-Switches · ${name}"] [role="switch"]`)
 
       await until(() => row("First") !== null)
       row("First")?.click()
@@ -101,7 +101,7 @@ story("a feature page's Enabled switch turns that feature on after another featu
 story("a feature page's preset chips go through the feature model, modes included", async ({ page }) => {
   const result = page.evaluate(
     async (modules) => {
-      localStorage.setItem("opencode.motion.panel", JSON.stringify({ x: 0, y: 0, width: 680 }))
+      localStorage.setItem("olive.motion.panel", JSON.stringify({ x: 0, y: 0, width: 680 }))
       const { motionTuning } = await import(modules.tuning)
       const meta = { group: "Chips", subsection: "Feature" }
 
@@ -142,7 +142,7 @@ story("a feature page's preset chips go through the feature model, modes include
 
       host.release()
 
-      const mount = '[data-knobs-mount="opencode-motion-Chips · Feature"]'
+      const mount = '[data-knobs-mount="olive-motion-Chips · Feature"]'
 
       const chip = (name: string) =>
         [...document.querySelectorAll<HTMLElement>(`${mount} .knobs-preset-chip`)].find(
@@ -191,7 +191,7 @@ story("a feature page's preset chips go through the feature model, modes include
     { ...modules, tuning: sourceURL(new URL("../../ui/src/motion-tuning.ts", import.meta.url)) },
   )
 
-  const panel = page.locator('[data-knobs-mount="opencode-motion-Chips · Feature"]')
+  const panel = page.locator('[data-knobs-mount="olive-motion-Chips · Feature"]')
   const shift = panel.getByRole("slider", { name: "Shift" })
 
   await shift.and(page.locator(":focus")).waitFor()

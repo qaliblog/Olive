@@ -6,7 +6,7 @@ import {
   isPtyFeatureUnsupportedError,
   isServiceUnavailableError,
   type PersistentPtyInfo,
-} from "@opencode/client"
+} from "@olive/client"
 import {
   createKeyed,
   type Layout,
@@ -15,7 +15,7 @@ import {
   type SessionRef,
   type Storage,
   type Toasts,
-} from "@opencode/plugin/gui"
+} from "@olive/plugin/gui"
 import { defaultTitle, titleNumber } from "./title"
 
 // The keys terminals were stored under before they lived on the server. Their PTY ids no longer exist anywhere.

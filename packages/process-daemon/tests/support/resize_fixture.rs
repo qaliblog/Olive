@@ -5,9 +5,9 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use nix::sys::termios::{SetArg, cfmakeraw, tcgetattr, tcsetattr};
-use opencode_pty::service::{CreateTerminal, TerminalId, TerminalService};
+use olive_pty::service::{CreateTerminal, TerminalId, TerminalService};
 
-const CHILD: &str = "OPENCODE_PTY_RESIZE_TEST_CHILD";
+const CHILD: &str = "OLIVE_PTY_RESIZE_TEST_CHILD";
 
 pub struct ResizeFixture {
     pub service: TerminalService,

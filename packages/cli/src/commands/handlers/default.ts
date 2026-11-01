@@ -1,18 +1,17 @@
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
-import { run } from "@opencode/tui"
+import { LayerNode } from "@olive/util/effect/layer-node"
+import { Global } from "@olive/util/global"
+import { run } from "@olive/tui"
 import { Commands } from "../commands"
 import { Runtime } from "../../framework/runtime"
 import { Config } from "../../config"
-import { Context, Effect, FileSystem, Option, Queue, Schedule, Semaphore } from "effect"
+import { Context, Effect, FileSystem, Option, Queue } from "effect"
 import { ServerConnection } from "../../services/server-connection"
-import { Updater } from "../../services/updater"
 import { UpdatePreflight } from "../../services/update-preflight"
-import { Npm } from "@opencode/util/npm"
-import { OPENCODE_ARTIFACT, OPENCODE_CHANNEL, OPENCODE_HIGHLIGHTS, OPENCODE_VERSION } from "../../version"
+import { Npm } from "@olive/util/npm"
+import { OLIVE_ARTIFACT, OLIVE_CHANNEL, OLIVE_VERSION } from "../../version"
 import { Env } from "../../env"
-import { Service } from "@opencode/client/effect/service"
-import { OpenCode } from "@opencode/client/promise"
+import { Service } from "@olive/client/effect/service"
+import { Olive } from "@olive/client/promise"
 import { findSession } from "../../session-target"
 import { errorMessage } from "../../util/error"
 
@@ -47,7 +46,7 @@ export default Runtime.handler(Commands, (input) =>
       },
     }).pipe(
       Effect.tapError(() =>
-        Effect.promise(() => preflight.fail("OpenCode update could not start the new background service")),
+        Effect.promise(() => preflight.fail("Olive could not start the new background service")),
       ),
     )
     const session = Option.getOrUndefined(input.session)
@@ -56,34 +55,10 @@ export default Runtime.handler(Commands, (input) =>
       session !== undefined &&
       (yield* Effect.tryPromise({
         try: () =>
-          findSession(OpenCode.make({ baseUrl: server.endpoint.url, headers: Service.headers(server.endpoint) }), session),
+          findSession(Olive.make({ baseUrl: server.endpoint.url, headers: Service.headers(server.endpoint) }), session),
         catch: (cause) => new Error(errorMessage(cause)),
       })) !== undefined
-    const updater = yield* Updater.Service
-    let installing: string | undefined
-    let latest: Updater.RunResult | undefined
-    const installListeners = new Set<(version: string) => void>()
-    const resultListeners = new Set<(result: Updater.RunResult) => void>()
-    // Background checks, `/update` lookups, and manual installs take turns so two installs never overlap.
-    const checking = yield* Semaphore.make(1)
-    yield* updater
-      .run((version) => {
-        installing = version
-        installListeners.forEach((notify) => notify(version))
-      })
-      .pipe(
-        Effect.ensuring(Effect.sync(() => (installing = undefined))),
-        Effect.tap((result) =>
-          Effect.sync(() => {
-            if (!result || (result.type === latest?.type && result.version === latest.version)) return
-            latest = result
-            resultListeners.forEach((notify) => notify(result))
-          }),
-        ),
-        checking.withPermits(1),
-        Effect.repeat(Schedule.spaced("10 minutes")),
-        Effect.forkScoped({ startImmediately: true }),
-      )
+    // Olive never checks for application updates: no background update loop runs here.
     preflight.loading()
     const config = yield* Config.Service
     const npm = yield* Npm.Service
@@ -95,10 +70,9 @@ export default Runtime.handler(Commands, (input) =>
     const service = server.service
     yield* run({
       app: {
-        name: process.env.OPENCODE_CLIENT ?? OPENCODE_ARTIFACT,
-        version: OPENCODE_VERSION,
-        channel: process.env.OPENCODE_TUI_CHANNEL ?? OPENCODE_CHANNEL,
-        highlights: OPENCODE_HIGHLIGHTS,
+        name: process.env.OLIVE_CLIENT ?? OLIVE_ARTIFACT,
+        version: OLIVE_VERSION,
+        channel: process.env.OLIVE_TUI_CHANNEL ?? OLIVE_CHANNEL,
       },
       server: {
         endpoint: server.endpoint,
@@ -122,22 +96,6 @@ export default Runtime.handler(Commands, (input) =>
         path: config.path,
         get: () => runPromise(config.get()),
         update: (update) => runPromise(config.update(update)),
-      },
-      updater: {
-        remote: requestedServer !== undefined,
-        subscribe: (notify) => {
-          if (latest) notify(latest)
-          resultListeners.add(notify)
-          return () => resultListeners.delete(notify)
-        },
-        check: (signal, notify) => {
-          if (installing) notify(installing)
-          installListeners.add(notify)
-          return runPromise(checking.withPermits(1)(updater.check()), { signal }).finally(() =>
-            installListeners.delete(notify),
-          )
-        },
-        apply: (version) => runPromise(checking.withPermits(1)(updater.apply(version))),
       },
       packages: {
         prepare: (spec, install = true) => runPromise(install ? npm.add(spec) : npm.resolve(spec)),

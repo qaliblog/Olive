@@ -1,5 +1,5 @@
-import { Logo } from "@opencode/ui/logo"
-import { prefersReducedMotion } from "@opencode/ui/motion"
+import { Logo } from "@olive/ui/logo"
+import { prefersReducedMotion } from "@olive/ui/motion"
 import { For, onCleanup, onMount, Show } from "solid-js"
 import { PinSound } from "./pin-sound"
 import "./wordmark.css"

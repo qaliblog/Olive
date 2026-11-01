@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { pluginEnabled } from "@opencode/plugin/gui/host"
+import { pluginEnabled } from "@olive/plugin/gui/host"
 import { openDatabase } from "../storage/database"
 import { plugin } from "../storage/schema"
 import { readEnableState } from "./enable-state"

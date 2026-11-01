@@ -1,24 +1,24 @@
 import type {
   JsonValue,
-  OpenCodeEvent,
+  OliveEvent,
   SessionInfo,
   SessionMessageAssistant,
   SessionMessageInfo,
   SessionMessageUser,
   SessionStatus,
   SessionStructuredError,
-} from "@opencode/client/promise"
-import { EventManifest } from "@opencode/schema/event-manifest"
-import { SessionMessage } from "@opencode/schema/session-message"
-import type { TimelineDetail } from "@opencode/session-ui/timeline/detail"
+} from "@olive/client/promise"
+import { EventManifest } from "@olive/schema/event-manifest"
+import { SessionMessage } from "@olive/schema/session-message"
+import type { TimelineDetail } from "@olive/session-ui/timeline/detail"
 import { expect, test, type Page, type TestInfo } from "@playwright/test"
 import { Schema } from "effect"
 import { SERVER, seed, sessionHref } from "./app"
-import { mockOpenCodeServer, type MockServerConfig } from "./mock-server"
+import { mockOliveServer, type MockServerConfig } from "./mock-server"
 import { installSseTransport } from "./sse-transport"
 import { expectSessionReady } from "./waits"
 
-export const directory = "C:/OpenCode/TimelineStability"
+export const directory = "C:/Olive/TimelineStability"
 
 export const projectID = "proj_timeline_stability"
 
@@ -30,7 +30,7 @@ export const assistantID = "msg_1001_timeline_assistant"
 
 export const title = "Timeline visual stability"
 
-export const model = { providerID: "opencode", modelID: "claude-opus-4-6", variant: "max" }
+export const model = { providerID: "olive", modelID: "claude-opus-4-6", variant: "max" }
 
 const tokens = { input: 100, output: 200, reasoning: 0, cache: { read: 0, write: 0 } }
 
@@ -134,9 +134,9 @@ type TimelineServerInput = Partial<
 
 export type TimelineMessage = SessionMessageUser | SessionMessageAssistant
 
-export type TimelineEvent = OpenCodeEvent | readonly OpenCodeEvent[]
+export type TimelineEvent = OliveEvent | readonly OliveEvent[]
 
-export type EventPayload = OpenCodeEvent
+export type EventPayload = OliveEvent
 
 export type ToolStatus = ToolSeed["state"]["status"]
 
@@ -249,7 +249,7 @@ export async function setupTimeline(
     keepalive: input.keepalive,
   })
 
-  const mock = await mockOpenCodeServer(page, {
+  const mock = await mockOliveServer(page, {
     ...input,
     directory,
     project: project(),
@@ -277,7 +277,7 @@ export async function setupTimeline(
 
   if (input.locale) {
     await page.addInitScript((locale) => {
-      localStorage.setItem("opencode.global.dat:language", JSON.stringify({ locale }))
+      localStorage.setItem("olive.global.dat:language", JSON.stringify({ locale }))
     }, input.locale)
   }
 
@@ -338,7 +338,7 @@ function timelineEvents(input: TimelineEvent) {
   return (Array.isArray(input) ? input : [input]).map(validateTimelineEvent)
 }
 
-function describeEvent(event: OpenCodeEvent) {
+function describeEvent(event: OliveEvent) {
   if (event.type.startsWith("session.tool.")) {
     return [event.type, "id" in event.data ? event.data.id : undefined].filter(Boolean).join(":")
   }
@@ -348,55 +348,55 @@ function describeEvent(event: OpenCodeEvent) {
 
 export function event(
   type: "session.status",
-  data: Extract<OpenCodeEvent, { type: "session.status" }>["data"],
-): OpenCodeEvent {
+  data: Extract<OliveEvent, { type: "session.status" }>["data"],
+): OliveEvent {
   return makeEvent(type, data)
 }
 
-export function inboxEnqueued(data: Extract<OpenCodeEvent, { type: "session.inbox.enqueued" }>["data"]) {
+export function inboxEnqueued(data: Extract<OliveEvent, { type: "session.inbox.enqueued" }>["data"]) {
   return makeEvent("session.inbox.enqueued", data)
 }
 
-export function inboxDelivered(data: Extract<OpenCodeEvent, { type: "session.inbox.delivered" }>["data"]) {
+export function inboxDelivered(data: Extract<OliveEvent, { type: "session.inbox.delivered" }>["data"]) {
   return makeEvent("session.inbox.delivered", data)
 }
 
-export function compactionStarted(data: Extract<OpenCodeEvent, { type: "session.compaction.started" }>["data"]) {
+export function compactionStarted(data: Extract<OliveEvent, { type: "session.compaction.started" }>["data"]) {
   return makeEvent("session.compaction.started", data)
 }
 
-export function compactionDelta(data: Extract<OpenCodeEvent, { type: "session.compaction.delta" }>["data"]) {
+export function compactionDelta(data: Extract<OliveEvent, { type: "session.compaction.delta" }>["data"]) {
   return makeEvent("session.compaction.delta", data)
 }
 
-export function compactionEnded(data: Extract<OpenCodeEvent, { type: "session.compaction.ended" }>["data"]) {
+export function compactionEnded(data: Extract<OliveEvent, { type: "session.compaction.ended" }>["data"]) {
   return makeEvent("session.compaction.ended", data)
 }
 
-export function compactionFailed(data: Extract<OpenCodeEvent, { type: "session.compaction.failed" }>["data"]) {
+export function compactionFailed(data: Extract<OliveEvent, { type: "session.compaction.failed" }>["data"]) {
   return makeEvent("session.compaction.failed", data)
 }
 
-export function toolInputStarted(data: Extract<OpenCodeEvent, { type: "session.tool.input.started" }>["data"]) {
+export function toolInputStarted(data: Extract<OliveEvent, { type: "session.tool.input.started" }>["data"]) {
   return makeEvent("session.tool.input.started", data)
 }
 
-export function toolInputEnded(data: Extract<OpenCodeEvent, { type: "session.tool.input.ended" }>["data"]) {
+export function toolInputEnded(data: Extract<OliveEvent, { type: "session.tool.input.ended" }>["data"]) {
   return makeEvent("session.tool.input.ended", data)
 }
 
-export function toolCalled(data: Extract<OpenCodeEvent, { type: "session.tool.called" }>["data"]) {
+export function toolCalled(data: Extract<OliveEvent, { type: "session.tool.called" }>["data"]) {
   return makeEvent("session.tool.called", data)
 }
 
-export function validateTimelineEvent(input: OpenCodeEvent | JsonValue): OpenCodeEvent {
+export function validateTimelineEvent(input: OliveEvent | JsonValue): OliveEvent {
   const header = Schema.decodeUnknownSync(Schema.Struct({ type: Schema.String }))(input)
   const definition = EventManifest.ServerDefinitions.find((definition) => definition.type === header.type)
 
   if (!definition) throw new Error(`Unknown timeline event: ${header.type}`)
 
-  // SAFETY: the matching canonical event schema validates the payload; OpenCodeEvent is generated from those schemas.
-  return Schema.decodeUnknownSync(definition)(input) as OpenCodeEvent
+  // SAFETY: the matching canonical event schema validates the payload; OliveEvent is generated from those schemas.
+  return Schema.decodeUnknownSync(definition)(input) as OliveEvent
 }
 
 export function validateTimelineMessages(input: readonly TimelineMessage[]): TimelineMessage[] {
@@ -501,7 +501,7 @@ export function historyMessages(count: number): TimelineMessage[] {
   }).flat()
 }
 
-export function partUpdated(part: PartSeed<"assistant">): readonly OpenCodeEvent[] {
+export function partUpdated(part: PartSeed<"assistant">): readonly OliveEvent[] {
   const messageID = part.messageID ?? assistantID
   const startedParts = scenario().startedParts
   const started = startedParts.has(part.id)
@@ -937,13 +937,13 @@ function messageContent(
   }
 }
 
-function toolEvents(part: ToolSeed, messageID: string): readonly OpenCodeEvent[] {
+function toolEvents(part: ToolSeed, messageID: string): readonly OliveEvent[] {
   const toolStates = scenario().toolStates
   const previous = toolStates.get(part.id)
 
   if (previous === "completed" || previous === "error") return []
 
-  const events: OpenCodeEvent[] = []
+  const events: OliveEvent[] = []
 
   if (!previous) {
     events.push(
@@ -1054,10 +1054,10 @@ function partRef(id: string, messageID: string, type: PartRef["type"]): PartRef 
   return ref
 }
 
-function makeEvent<Type extends OpenCodeEvent["type"]>(
+function makeEvent<Type extends OliveEvent["type"]>(
   type: Type,
-  data: Extract<OpenCodeEvent, { type: Type }>["data"],
-): OpenCodeEvent {
+  data: Extract<OliveEvent, { type: Type }>["data"],
+): OliveEvent {
   const state = scenario()
   const sequence = ++state.eventSequence
   const id = `evt_timeline_${String(sequence).padStart(4, "0")}`
@@ -1074,8 +1074,8 @@ function makeEvent<Type extends OpenCodeEvent["type"]>(
         }
       : base
 
-  // SAFETY: the matching canonical event schema validates the payload; OpenCodeEvent is generated from those schemas.
-  return Schema.decodeUnknownSync(definition)(input) as OpenCodeEvent
+  // SAFETY: the matching canonical event schema validates the payload; OliveEvent is generated from those schemas.
+  return Schema.decodeUnknownSync(definition)(input) as OliveEvent
 }
 
 const decodeJsonRecord = Schema.decodeUnknownSync(Schema.fromJsonString(Schema.Record(Schema.String, Schema.MutableJson)))
@@ -1090,8 +1090,8 @@ function provider() {
   return {
     all: [
       {
-        id: "opencode",
-        name: "OpenCode",
+        id: "olive",
+        name: "Olive",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
       {
@@ -1113,7 +1113,7 @@ function provider() {
         },
       },
     ],
-    connected: ["opencode", "company-gateway"],
-    default: { providerID: "opencode", modelID: "claude-opus-4-6" },
+    connected: ["olive", "company-gateway"],
+    default: { providerID: "olive", modelID: "claude-opus-4-6" },
   }
 }

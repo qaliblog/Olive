@@ -1,15 +1,13 @@
-import { TextField } from "@opencode/ui/text-field"
+import { TextField } from "@olive/ui/text-field"
 import type { captureException } from "@sentry/solid"
-import { Logo } from "@opencode/ui/logo"
-import { Button } from "@opencode/ui/button"
-import { Component, createSignal, onCleanup, onMount, Show } from "solid-js"
+import { Logo } from "@olive/ui/logo"
+import { Button } from "@olive/ui/button"
+import { Component, createSignal, onMount, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Predicate } from "effect"
-import { Updater } from "@opencode/plugin/gui/updater"
 import { usePlatform } from "@/runtime/platform/platform"
 import { useLanguage } from "@/runtime/i18n/language"
-import { createIpcClients } from "@/runtime/plugin/ipc"
-import { Icon } from "@opencode/ui/icon"
+import { Icon } from "@olive/ui/icon"
 import { errorDescriptionKey, errorStatus } from "./description"
 
 type InitError = {
@@ -289,32 +287,7 @@ export const ErrorPage: Component<ErrorPageProps> = (props) => {
       .catch(() => undefined)
   })
 
-  // A crash can take the plugin root down with the app, so the page reaches the updater's
-  // main-process Ipc over the bridge itself.
-  const ipcs = createIpcClients(platform.plugins)
-  onCleanup(ipcs.dispose)
-  const updater = () => ipcs.typed(Updater)
-
-  async function checkForUpdates() {
-    const state = await updater()?.check()
-    setStore("actionError", state?.status === "error" ? state.message : undefined)
-  }
-
-  async function installUpdate() {
-    await updater()
-      ?.install()
-      .then(() => setStore("actionError", undefined))
-      .catch((err) => {
-        setStore("actionError", formatError(err, language.t))
-      })
-  }
-
-  const updateVersion = () => {
-    const state = updater()?.state()
-
-    return state?.status === "ready" || state?.status === "download-required" ? state.version : undefined
-  }
-
+  // Olive never updates itself: the error page offers no update check or install.
   async function exportDebugLogs() {
     const exportLogs = platform.exportDebugLogs
 
@@ -380,29 +353,6 @@ export const ErrorPage: Component<ErrorPageProps> = (props) => {
               )
             }}
           </Show>
-          <Show when={updater()}>
-            <Show
-              when={updateVersion()}
-              fallback={
-                <Button
-                  size="large"
-                  variant="ghost"
-                  onClick={checkForUpdates}
-                  disabled={["checking", "downloading", "installing"].includes(updater()?.state()?.status ?? "")}
-                >
-                  {updater()?.state()?.status === "checking"
-                    ? language.t("error.page.action.checking")
-                    : language.t("error.page.action.checkUpdates")}
-                </Button>
-              }
-            >
-              {(version) => (
-                <Button size="large" onClick={installUpdate}>
-                  {language.t("error.page.action.updateTo", { version: version() })}
-                </Button>
-              )}
-            </Show>
-          </Show>
         </div>
         <Show when={store.actionError}>
           {(message) => <p class="text-xs text-text-danger-base text-center max-w-2xl">{message()}</p>}
@@ -413,7 +363,7 @@ export const ErrorPage: Component<ErrorPageProps> = (props) => {
             <button
               type="button"
               class="flex items-center text-text-interactive-base gap-1"
-              onClick={() => platform.openExternal("https://opencode.ai/desktop-feedback")}
+              onClick={() => platform.openExternal("https://olive.ai/desktop-feedback")}
             >
               <div>{language.t("error.page.report.discord")}</div>
               <Icon name="discord" class="text-text-interactive-base" />

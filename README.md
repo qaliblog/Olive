@@ -101,6 +101,47 @@ Learn more about [agents](https://olive.ai/v2/docs/agents).
 
 For more info on how to configure Olive, [**head over to our docs**](https://olive.ai/v2/docs).
 
+### Development
+
+Olive needs Bun 1.4.4 (`packageManager` in `package.json`). From the repository root:
+
+```bash
+bun install
+bun dev            # run the CLI and TUI from source, in this directory
+bun dev <dir>      # or open another project
+```
+
+Other interfaces have their own root scripts:
+
+```bash
+bun dev serve --port 4096   # server only, for the web app
+bun run dev:web             # web app
+bun run dev:desktop         # Electron desktop app
+bun run dev:live <dir>      # development TUI against your installed background service
+```
+
+Build the standalone `olive` binary for the current platform:
+
+```bash
+cd packages/cli
+bun run build               # packages/cli/dist/<target>/bin/olive
+bun run build:node          # Node single executable in packages/cli/dist/node
+```
+
+`bun run pack` from the root produces the npm artifacts in `dist/npm` and `dist/archives`.
+
+Verify a change with `bun run check` (lint plus typechecks for every package). Tests run per package, never from the root:
+
+```bash
+cd packages/cli && bun test
+cd packages/core && bun test
+```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the package layout and pull request rules, and [instructions.txt](./instructions.txt) for the full build and run reference.
+
+> [!NOTE]
+> Olive does not check for, notify about, or install updates. There is no self-update path and no update server traffic; `olive --version` reports the version you built.
+
 ### Contributing
 
 If you're interested in contributing to Olive, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.

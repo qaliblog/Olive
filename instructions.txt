@@ -1,0 +1,119 @@
+Olive - build and run instructions
+==================================
+
+Olive is the open source AI coding agent: a terminal UI, a background server, a
+web app and an Electron desktop app, all built from this monorepo.
+
+Requirements
+------------
+
+- Bun 1.4.4 (the version in the root "packageManager" field). Bun 1.3 or newer
+  works for most commands.
+- Node.js 26 is only needed for the Node single-executable build (build:node).
+- git, and a C toolchain only if you build native addons.
+
+Install dependencies
+--------------------
+
+  bun install
+
+Run it once from the repository root. This also runs the postinstall step that
+prepares the pty helper.
+
+Run the app from source
+-----------------------
+
+Terminal UI and CLI:
+
+  bun dev                 # opens Olive in the current directory
+  bun dev <directory>     # opens another project
+  bun dev --version       # prints the version of this checkout
+
+Server only (for the web app, or to talk to it over HTTP):
+
+  bun dev serve --port 4096
+
+Web app (run the server in one terminal and this in another):
+
+  bun run dev:web
+
+Desktop app (Electron):
+
+  bun run dev:desktop
+
+Development TUI against your installed Olive background service and live
+sessions (uses the "dev" TUI storage channel, so tabs and other client-local
+state match your installed client):
+
+  bun run dev:live <directory>
+
+Build
+-----
+
+Standalone binary for the current platform (or every target, see the script):
+
+  cd packages/cli
+  bun run build
+
+Output lands in packages/cli/dist/<target>/bin/olive. Run it directly:
+
+  ./packages/cli/dist/<target>/bin/olive --version
+
+Node single executable:
+
+  cd packages/cli
+  bun run build:node          # packages/cli/dist/node
+
+npm artifacts and release archives:
+
+  bun run pack                # dist/npm and dist/archives
+
+Useful build flags (pass after the script name): --single builds one target,
+--baseline builds the baseline (no AVX2) variant, --skip-install and
+--skip-web-ui skip the dependency install and the embedded web UI.
+
+Checks and tests
+----------------
+
+Full lint and typecheck for every package:
+
+  bun run check
+
+During focused work, run the checks from the affected package:
+
+  cd packages/core
+  bun typecheck
+  bun test
+
+Tests never run from the repository root (the root "test" script is a guard).
+Package test scripts already pass the right timeouts and options.
+
+After changing the public Protocol or Server HttpApi, regenerate the client:
+
+  cd packages/client
+  bun run generate
+
+Configuration
+-------------
+
+Olive reads configuration from .olive/olive.jsonc (project) and
+~/.config/olive/ (user), plus OLIVE_* environment variables. Logs and state live
+under ~/.local/share/olive and ~/.local/state/olive.
+
+Updates
+-------
+
+Olive never updates itself. There is no startup or background version check, no
+update server traffic, no update notification and no self-update or upgrade
+command. "olive --version" reports the version of the build you are running;
+install a new build yourself when you want one.
+
+Troubleshooting
+---------------
+
+- "olive service status" shows the background server, "olive service stop"
+  stops it, and "olive service get password" prints its local credential.
+- If a fresh checkout fails to start, re-run "bun install" so the workspace
+  packages are linked.
+- Typecheck and lint failures on a clean tree can be a stale turbo cache; remove
+  .turbo before re-running "bun run check".

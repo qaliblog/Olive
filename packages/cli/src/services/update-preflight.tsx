@@ -187,7 +187,7 @@ const colors = {
   text: RGBA.fromHex("#eeeeee"),
 }
 
-const monogram = go.right.slice(1)
+const monogram = go.rows
 const sweepBlend = 8
 const textDim = RGBA.fromHex("#4c4c4c")
 const rampSteps = 32
@@ -223,31 +223,9 @@ const phrase = (...segments: ReadonlyArray<readonly [string, RGBA, boolean?]>): 
   ])
 
 function Monogram(props: { ink: () => RGBA }) {
-  const shadow = createMemo(() => {
-    const ink = props.ink()
-    return RGBA.fromValues(ink.r * 0.25, ink.g * 0.25, ink.b * 0.25)
-  })
   return (
     <box flexDirection="column">
-      <For each={monogram}>
-        {(line) => (
-          <box flexDirection="row">
-            <For each={Array.from(line)}>
-              {(char) =>
-                char === "_" ? (
-                  <text bg={shadow()} selectable={false}>
-                    {" "}
-                  </text>
-                ) : (
-                  <text fg={props.ink()} selectable={false}>
-                    {char}
-                  </text>
-                )
-              }
-            </For>
-          </box>
-        )}
-      </For>
+      <For each={monogram}>{(row) => <text fg={props.ink()} selectable={false}>{row.trimEnd()}</text>}</For>
     </box>
   )
 }

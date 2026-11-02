@@ -15,7 +15,7 @@ import {
 } from "@opentui/core"
 import { Locale } from "../util/locale"
 import { stringWidth } from "../util/string-width"
-import { go } from "../logo"
+import { monogram } from "../logo"
 import { monoTruncate } from "./mono"
 import type { RunSplashTheme } from "./theme"
 
@@ -36,35 +36,6 @@ type SplashWriterInput = SplashInput & {
 export type SplashMeta = {
   title: string
   session_id: string
-}
-
-type Cell = {
-  char: string
-  mark: "text" | "full" | "mix" | "top"
-}
-
-function cells(line: string): Cell[] {
-  const list: Cell[] = []
-  for (const char of line) {
-    if (char === "_") {
-      list.push({ char: " ", mark: "full" })
-      continue
-    }
-
-    if (char === "^") {
-      list.push({ char: "▀", mark: "mix" })
-      continue
-    }
-
-    if (char === "~") {
-      list.push({ char: "▀", mark: "top" })
-      continue
-    }
-
-    list.push({ char, mark: "text" })
-  }
-
-  return list
 }
 
 function title(text: string | undefined, mono = false): string {
@@ -139,6 +110,8 @@ function push(
   lines.push({ left, top, text, fg, bg, attrs })
 }
 
+// A wordmark row is one left-aligned run: the blocks are uniformly inked, so nothing inside a letter
+// needs its own style and the columns cannot drift.
 function draw(
   lines: Array<{ left: number; top: number; text: string; fg: ColorInput; bg?: ColorInput; attrs?: number }>,
   row: string,
@@ -146,27 +119,13 @@ function draw(
     left: number
     top: number
     fg: ColorInput
-    shadow: ColorInput
     attrs?: number
   },
 ) {
-  let x = input.left
-  for (const cell of cells(row)) {
-    if (cell.mark === "full" || cell.mark === "mix") {
-      push(lines, x, input.top, cell.char, input.fg, input.shadow, input.attrs)
-      x += 1
-      continue
-    }
+  const text = row.trimEnd()
+  if (!text) return
 
-    if (cell.mark === "top") {
-      push(lines, x, input.top, cell.char, input.shadow, undefined, input.attrs)
-      x += 1
-      continue
-    }
-
-    push(lines, x, input.top, cell.char, input.fg, undefined, input.attrs)
-    x += 1
-  }
+  push(lines, input.left, input.top, text, input.fg, undefined, input.attrs)
 }
 
 function buildExit(input: SplashWriterInput, ctx: ScrollbackRenderContext): ScrollbackSnapshot {
@@ -175,10 +134,9 @@ function buildExit(input: SplashWriterInput, ctx: ScrollbackRenderContext): Scro
   const lines: Array<{ left: number; top: number; text: string; fg: ColorInput; bg?: ColorInput; attrs?: number }> = []
   const left = input.theme.left
   const right = input.theme.right
-  const leftShadow = input.theme.leftShadow
-  const mark = input.mono ? ["[O]"] : go.right.slice(1)
+  const badge = input.mono ? ["[O]"] : monogram.rows
   const top = 1
-  const body_left = (mark[0]?.length ?? 0) + 2
+  const body_left = (badge[0]?.length ?? 0) + 2
   const session = "Session  "
   const label = "Continue "
   const command = `olive mini -s ${meta.session_id}`
@@ -186,12 +144,11 @@ function buildExit(input: SplashWriterInput, ctx: ScrollbackRenderContext): Scro
   const commandHeight = wide ? 1 : Math.ceil(stringWidth(command) / width)
 
   if (wide) {
-    for (let i = 0; i < mark.length; i += 1) {
-      draw(lines, mark[i] ?? "", {
+    for (let i = 0; i < badge.length; i += 1) {
+      draw(lines, badge[i] ?? "", {
         left: 0,
         top: top + i,
         fg: left,
-        shadow: leftShadow,
       })
     }
 
@@ -202,7 +159,7 @@ function buildExit(input: SplashWriterInput, ctx: ScrollbackRenderContext): Scro
     push(lines, body_left, top + 1, label, left)
   }
 
-  const height = top + (wide ? Math.max(mark.length, 2) : commandHeight)
+  const height = top + (wide ? Math.max(badge.length, 2) : commandHeight)
   const root = new BoxRenderable(ctx.renderContext, {
     position: "absolute",
     left: 0,

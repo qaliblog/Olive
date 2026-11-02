@@ -1,7 +1,6 @@
 import {
   Renderable,
   RGBA,
-  TextAttributes,
   type OptimizedBuffer,
   type RenderableOptions,
   type RenderContext,
@@ -22,41 +21,23 @@ const BREATH_SPEED = 0.0008
 const PHASE_OFFSET = 0.29
 // The frame shown when animations are off.
 const STILL = PERIOD * 0.5
-const LOGO_LEFT_WIDTH = go.left[0]?.length ?? 0
-const LOGO_LINES = go.left.map((line, index) => line + " " + go.right[index])
+const LOGO_LINES = go.rows
 const LOGO_WIDTH = LOGO_LINES[0]?.length ?? 0
 const LOGO_HEIGHT = LOGO_LINES.length
 const LOGO_REACH = Math.hypot(LOGO_WIDTH, LOGO_HEIGHT * 2) + 3
 const SPACE = 32
 const UPPER_HALF = "▀".codePointAt(0)!
 
-const enum Glyph {
-  None,
-  Shadow,
-  ShadowTop,
-  ShadowBottom,
-  Block,
-  Other,
-}
-const GLYPHS: Record<string, Glyph> = {
-  " ": Glyph.None,
-  _: Glyph.Shadow,
-  "^": Glyph.ShadowTop,
-  "~": Glyph.ShadowBottom,
-}
-
-// The logo never changes, so its glyphs and the distance of each half-cell from its centre are fixed.
-const LOGO_GLYPH = new Uint8Array(LOGO_WIDTH * LOGO_HEIGHT)
+// The logo never changes, so which cells are inked and the distance of each half-cell from its centre are fixed.
+const LOGO_INK = new Uint8Array(LOGO_WIDTH * LOGO_HEIGHT)
 const LOGO_CHAR = new Uint32Array(LOGO_WIDTH * LOGO_HEIGHT)
-const LOGO_ATTRIBUTES = new Uint32Array(LOGO_WIDTH * LOGO_HEIGHT)
 const LOGO_TOP_DIST = new Float64Array(LOGO_WIDTH * LOGO_HEIGHT)
 const LOGO_BOTTOM_DIST = new Float64Array(LOGO_WIDTH * LOGO_HEIGHT)
 LOGO_LINES.forEach((line, ly) => {
   Array.from(line).forEach((char, lx) => {
     const index = ly * LOGO_WIDTH + lx
-    LOGO_GLYPH[index] = GLYPHS[char] ?? (char === "█" ? Glyph.Block : Glyph.Other)
+    LOGO_INK[index] = char === "█" ? 1 : 0
     LOGO_CHAR[index] = char.codePointAt(0) ?? SPACE
-    LOGO_ATTRIBUTES[index] = lx > LOGO_LEFT_WIDTH ? TextAttributes.BOLD : 0
     LOGO_TOP_DIST[index] = Math.hypot(lx + 0.5 - LOGO_WIDTH / 2, ly * 2 - LOGO_HEIGHT)
     LOGO_BOTTOM_DIST[index] = Math.hypot(lx + 0.5 - LOGO_WIDTH / 2, ly * 2 + 1 - LOGO_HEIGHT)
   })
@@ -105,7 +86,6 @@ export class GoUpsellArtRenderable extends Renderable {
   private _logoBase = RGBA.fromInts(180, 180, 180)
   private anchor: Renderable | undefined
   private readonly white = RGBA.fromInts(255, 255, 255)
-  private readonly shadow = RGBA.fromInts(0, 0, 0)
   private readonly pulse = RGBA.fromInts(0, 0, 0)
   private readonly fg = RGBA.fromInts(0, 0, 0)
   private readonly bg = RGBA.fromInts(0, 0, 0)
@@ -246,7 +226,6 @@ export class GoUpsellArtRenderable extends Renderable {
     this.logoHeads[1] = logoPhase1 * LOGO_REACH
     this.logoEased[0] = ease(logoPhase0)
     this.logoEased[1] = ease(logoPhase1)
-    mix(this.shadow, this._background, this._logoBase, 0.25)
 
     buffer.withBuffers((cells) => {
       const stride = cells.width
@@ -277,38 +256,21 @@ export class GoUpsellArtRenderable extends Renderable {
           const color = cell * 4
           const lx = x - logoX
           const logo = inLogoRow && lx >= 0 && lx < LOGO_WIDTH ? ly * LOGO_WIDTH + lx : -1
-          const glyph = logo < 0 ? Glyph.None : (LOGO_GLYPH[logo]! as Glyph)
-          if (glyph === Glyph.None) {
+          if (logo < 0 || !LOGO_INK[logo]) {
             char[cell] = SPACE
             put(fg, color, this.pulse)
             put(bg, color, this.pulse)
             attributes[cell] = 0
             continue
           }
-          attributes[cell] = LOGO_ATTRIBUTES[logo]!
+          attributes[cell] = 0
           this.logoPulse(LOGO_TOP_DIST[logo]!)
           const topPeak = this.peak
           const topGlow = this.glow
           this.logoPulse(LOGO_BOTTOM_DIST[logo]!)
           const bottomPeak = this.peak
           const bottomGlow = this.glow
-          if (glyph === Glyph.Shadow) {
-            mix(this.bg, this.shadow, this.white, Math.max(topPeak, bottomPeak) * 0.18)
-            char[cell] = SPACE
-            put(fg, color, this.bg)
-            put(bg, color, this.bg)
-          } else if (glyph === Glyph.ShadowTop) {
-            this.logoTint(this.fg, this._logoBase, topGlow, topPeak)
-            mix(this.bg, this.shadow, this.white, bottomPeak * 0.18)
-            char[cell] = UPPER_HALF
-            put(fg, color, this.fg)
-            put(bg, color, this.bg)
-          } else if (glyph === Glyph.ShadowBottom) {
-            mix(this.fg, this.shadow, this.white, topPeak * 0.18)
-            char[cell] = UPPER_HALF
-            put(fg, color, this.fg)
-            put(bg, color, this.pulse)
-          } else if (glyph === Glyph.Block && rgb) {
+          if (rgb) {
             this.logoTint(this.fg, this._logoBase, topGlow, topPeak)
             this.logoTint(this.bg, this._logoBase, bottomGlow, bottomPeak)
             char[cell] = UPPER_HALF

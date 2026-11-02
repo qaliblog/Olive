@@ -43,7 +43,7 @@ test("the art stops every frame when hidden, closed, or still, and leaves nothin
     // Each frame is one direct write into the art's own buffer, never a draw call per cell.
     expect(draws).toHaveBeenCalledTimes(1)
     expect(setCell).not.toHaveBeenCalled()
-    expect(app.captureCharFrame()).toContain("█▀▀▀ █▀▀█")
+    expect(app.captureCharFrame()).toContain("████ ████")
 
     setVisible(false)
     expect(app.renderer.liveRequestCount).toBe(0)

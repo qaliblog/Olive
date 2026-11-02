@@ -89,6 +89,7 @@ Build the standalone `olive` binary for the current platform:
 ```bash
 cd packages/cli
 bun run build               # packages/cli/dist/<target>/bin/olive
+bun run build --single --skip-install --skip-web-ui   # fast host-only build, no embedded web UI
 bun run build:node          # Node single executable in packages/cli/dist/node
 ```
 

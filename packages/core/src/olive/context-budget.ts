@@ -1,0 +1,157 @@
+export * as OliveContextBudget from "./context-budget.js"
+
+/**
+ * Context is a strictly limited resource here. Every budget comes from the configured model's real capacity, never
+ * from an assumed 32K or 128K window, and the allocation is expressed in tokens after reserving generation space.
+ */
+
+export const Section = ["system", "task", "code", "conversation", "toolResults"] as const
+export type Section = (typeof Section)[number]
+
+export interface Allocation {
+  readonly system: number
+  readonly task: number
+  readonly code: number
+  readonly conversation: number
+  readonly toolResults: number
+  /** Share of the window reserved for the model's own output. */
+  readonly generation: number
+}
+
+export const DEFAULT_ALLOCATION: Allocation = {
+  system: 0.15,
+  task: 0.15,
+  code: 0.35,
+  conversation: 0.15,
+  toolResults: 0.1,
+  generation: 0.1,
+}
+
+/** Heuristic estimate used when a tokenizer is not configured; it never claims to be exact model tokenization. */
+export function estimateTokens(text: string) {
+  if (text.length === 0) return 0
+  return Math.max(1, Math.ceil(text.length / 4))
+}
+
+export interface PlanInput {
+  readonly context: number
+  readonly maxOutput: number
+  readonly allocation?: Partial<Allocation>
+}
+
+export interface Plan {
+  readonly context: number
+  readonly generation: number
+  readonly sections: Readonly<Record<Section, number>>
+  /** Tokens available to prompt sections, excluding the generation reserve. */
+  readonly prompt: number
+}
+
+export function plan(input: PlanInput): Plan {
+  if (!Number.isFinite(input.context) || input.context < 2) throw new Error("context must be at least 2 tokens")
+  if (!Number.isFinite(input.maxOutput) || input.maxOutput < 1) throw new Error("maxOutput must be at least 1 token")
+  const allocation = { ...DEFAULT_ALLOCATION, ...input.allocation }
+  const context = Math.floor(input.context)
+  const generation = Math.min(Math.floor(input.maxOutput), Math.max(1, Math.floor(context * allocation.generation)), context - 1)
+  const prompt = context - generation
+  const weights = Section.map((section) => [section, Math.max(0, allocation[section])] as const)
+  const total = weights.reduce((sum, [, weight]) => sum + weight, 0) || 1
+  const sections = weights.reduce<Record<Section, number>>(
+    (result, [section, weight]) => ({ ...result, [section]: Math.floor((prompt * weight) / total) }),
+    { system: 0, task: 0, code: 0, conversation: 0, toolResults: 0 },
+  )
+  // Flooring leaves a remainder; the code section carries it because it is the largest consumer.
+  const assigned = Section.reduce((sum, section) => sum + sections[section], 0)
+  sections.code += prompt - assigned
+  return { context, generation, sections, prompt }
+}
+
+export type ItemKind = "symbol" | "snippet" | "summary" | "file"
+
+export interface Item {
+  readonly id: string
+  readonly text: string
+  readonly kind?: ItemKind
+  /** Higher values are kept first. */
+  readonly priority?: number
+  /** File this item came from, used to prefer symbol-level context over whole files. */
+  readonly file?: string
+}
+
+const KIND_RANK: Record<ItemKind, number> = { symbol: 0, snippet: 1, summary: 2, file: 3 }
+
+/**
+ * Drops whole-file items for any file already represented by a symbol or snippet, so the same source never occupies
+ * the window twice at two levels of detail.
+ */
+export function preferSymbols(items: readonly Item[]) {
+  const detailed = new Set(
+    items.filter((item) => item.file && (item.kind === "symbol" || item.kind === "snippet")).map((item) => item.file),
+  )
+  return items.filter((item) => !(item.kind === "file" && item.file && detailed.has(item.file)))
+}
+
+export interface Fit {
+  readonly kept: readonly Item[]
+  readonly dropped: readonly Item[]
+  readonly tokens: number
+}
+
+/** Fits items into a token budget, keeping the most relevant and most precise context first. */
+export function fit(items: readonly Item[], budget: number): Fit {
+  const ranked = preferSymbols(items)
+    .map((item, index) => ({ item, index }))
+    .toSorted(
+      (left, right) =>
+        (right.item.priority ?? 0) - (left.item.priority ?? 0) ||
+        KIND_RANK[left.item.kind ?? "snippet"] - KIND_RANK[right.item.kind ?? "snippet"] ||
+        left.index - right.index,
+    )
+  const kept: Item[] = []
+  const dropped: Item[] = []
+  let tokens = 0
+  for (const { item } of ranked) {
+    const cost = estimateTokens(item.text)
+    if (tokens + cost <= budget) {
+      kept.push(item)
+      tokens += cost
+    } else dropped.push(item)
+  }
+  return { kept, dropped, tokens }
+}
+
+export interface ConversationMessage {
+  readonly role: string
+  readonly content: string
+}
+
+export interface Compacted {
+  /** Older messages replaced by one deterministic summary line. */
+  readonly summary?: string
+  readonly kept: readonly ConversationMessage[]
+  readonly tokens: number
+}
+
+/**
+ * Keeps the newest messages that fit and replaces the rest with a short summary, so a small window still carries
+ * what happened before without replaying every message.
+ */
+export function compactConversation(messages: readonly ConversationMessage[], budget: number): Compacted {
+  const kept: ConversationMessage[] = []
+  let tokens = 0
+  for (const message of [...messages].reverse()) {
+    const cost = estimateTokens(message.content)
+    if (tokens + cost > budget) break
+    kept.unshift(message)
+    tokens += cost
+  }
+  const replaced = messages.slice(0, messages.length - kept.length)
+  if (replaced.length === 0) return { kept, tokens }
+  const counts = new Map<string, number>()
+  for (const message of replaced) counts.set(message.role, (counts.get(message.role) ?? 0) + 1)
+  const summary = `Earlier conversation compacted: ${replaced.length} message(s)${Array.from(
+    counts,
+    ([role, count]) => ` ${count} ${role}`,
+  ).join(",")}.`
+  return { summary, kept, tokens: tokens + estimateTokens(summary) }
+}

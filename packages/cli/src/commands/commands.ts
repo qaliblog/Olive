@@ -314,6 +314,9 @@ const Root = Spec.make(typeof OLIVE_CLI_NAME === "string" ? OLIVE_CLI_NAME : "ol
       description: "List all available models",
       globalFlags: ServerFlags,
     }),
+    Spec.make("provider", {
+      description: "Inspect configured Olive providers",
+    }),
     Spec.make("stats", {
       description: "Show shareable usage statistics",
       globalFlags: ServerFlags,

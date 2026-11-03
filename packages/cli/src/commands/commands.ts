@@ -317,6 +317,33 @@ const Root = Spec.make(typeof OLIVE_CLI_NAME === "string" ? OLIVE_CLI_NAME : "ol
     Spec.make("provider", {
       description: "Inspect configured Olive providers",
     }),
+    Spec.make("agent", {
+      description: "Run the Olive local coding agent without a background server",
+      params: {
+        objective: Argument.String("objective").pipe(
+          Argument.withDescription("What the agent should do"),
+          Argument.variadic({ min: 0 }),
+        ),
+        directory: Flag.String("directory").pipe(
+          Flag.withDescription("Project directory (defaults to the current directory)"),
+          Flag.optional,
+        ),
+        model: Flag.String("model").pipe(
+          Flag.withDescription("Model in the format provider/model (defaults to the configured default)"),
+          Flag.optional,
+        ),
+        maxSteps: Flag.Int("max-steps").pipe(
+          Flag.withSchema(Schema.Int.check(Schema.isGreaterThan(0))),
+          Flag.withDescription("Maximum number of agent steps"),
+          Flag.optional,
+        ),
+        continue: Flag.Boolean("continue").pipe(
+          Flag.withAlias("c"),
+          Flag.withDescription("Resume the saved task state"),
+          Flag.withDefault(false),
+        ),
+      },
+    }),
     Spec.make("stats", {
       description: "Show shareable usage statistics",
       globalFlags: ServerFlags,

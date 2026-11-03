@@ -73,6 +73,7 @@ const Handlers = Runtime.handlers(Commands, {
   },
   models: () => import("./commands/handlers/models"),
   provider: () => import("./commands/handlers/provider"),
+  agent: () => import("./commands/handlers/agent"),
   stats: () => import("./commands/handlers/stats"),
   mini: () => import("./commands/handlers/mini"),
   run: () => import("./commands/handlers/run"),

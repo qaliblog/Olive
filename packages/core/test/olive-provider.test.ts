@@ -146,6 +146,32 @@ describe("olive provider registry", () => {
     })
   })
 
+  test("uses a literal key for authorization and reports a loopback provider as local", async () => {
+    const seen: { authorization: string | null } = { authorization: null }
+    const mock = server((request) => {
+      seen.authorization = request.headers.get("authorization")
+      return sse(["data: [DONE]\n\n"])
+    })
+    try {
+      const target = OliveProvider.resolveProvider(
+        {
+          id: "literal",
+          type: "openai-compatible",
+          baseURL: `http://127.0.0.1:${mock.port}/v1`,
+          apiKey: "sk-literal",
+          models: [{ id: "tiny", context: 1024, maxOutput: 128 }],
+        },
+        {},
+      )
+      expect(target.local).toBe(true)
+      expect(target.hasCredential).toBe(true)
+      await events(target, { model: target.models[0], messages: [message("hi")] })
+      expect(seen.authorization).toBe("Bearer sk-literal")
+    } finally {
+      mock.stop(true)
+    }
+  })
+
   test("rejects a baseURL that already contains the chat path", () => {
     const target = OliveProvider.resolveProvider(
       {

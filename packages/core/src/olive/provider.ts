@@ -8,7 +8,7 @@ import { Option, Schema } from "effect"
  * until a document declares a provider, and every capability the agent relies on (context size, output size, tools,
  * JSON output, streaming) is stated explicitly instead of assumed from a model family.
  */
-export const Type = Schema.Literals(["openai-compatible", "ollama", "olive-native"])
+export const Type = Schema.Literals(["openai-compatible", "ollama", "llama-cpp", "gguf", "olive-native"])
 export type Type = typeof Type.Type
 
 export const Protocol = Schema.Literals(["chat-completions", "ollama-chat", "olive-native"])
@@ -82,6 +82,8 @@ export interface LoadedProvider {
   readonly models: readonly LoadedModel[]
   /** Environment variable that holds the key, when configured through one. */
   readonly apiKeyEnv?: string
+  /** Literal key from the document. It is never rendered; prefer `apiKeyEnv` so config files hold no secrets. */
+  readonly apiKey?: string
   readonly hasCredential: boolean
 }
 
@@ -107,6 +109,8 @@ export type DiagnosticCode =
   | "context-overflow"
   | "unsupported-tools"
   | "invalid-json"
+  | "invalid-model"
+  | "unsupported-runtime"
   | "timeout"
   | "http-error"
 
@@ -195,7 +199,7 @@ export function resolveProvider(config: ProviderConfig, env: Readonly<Record<str
     headers: config.headers ?? {},
     timeoutMs: config.timeoutMs ?? 120_000,
     retries: config.retries ?? 0,
-    local: config.local ?? protocol === "ollama-chat",
+    local: config.local ?? (protocol === "ollama-chat" || isLoopback(config.endpoint ?? config.baseURL)),
     models: config.models.map((model) => ({
       id: model.id,
       model: model.model ?? model.id,
@@ -208,8 +212,15 @@ export function resolveProvider(config: ProviderConfig, env: Readonly<Record<str
       tokenizer: model.tokenizer,
     })),
     apiKeyEnv: config.apiKeyEnv,
+    ...(config.apiKey ? { apiKey: config.apiKey } : {}),
     hasCredential: Boolean(apiKey),
   } satisfies LoadedProvider
+}
+
+function isLoopback(value: string) {
+  const parsed = URL.parse(value)
+  if (!parsed) return false
+  return ["localhost", "127.0.0.1", "[::1]", "::1", "0.0.0.0"].includes(parsed.hostname)
 }
 
 export function provider(registry: Registry, id: string) {
@@ -245,7 +256,7 @@ function absoluteURL(value: string, target: LoadedProvider) {
 }
 
 export function credential(target: LoadedProvider, env: Readonly<Record<string, string | undefined>> = process.env) {
-  const value = target.apiKeyEnv ? env[target.apiKeyEnv] : undefined
+  const value = target.apiKeyEnv ? env[target.apiKeyEnv] : target.apiKey
   return value && value.length > 0 ? value : undefined
 }
 
@@ -256,9 +267,19 @@ export function redact(text: string, secrets: readonly (string | undefined)[]) {
 
 export type ChatRole = "system" | "user" | "assistant" | "tool"
 
+export interface ToolCall {
+  readonly id: string
+  readonly name: string
+  readonly arguments: string
+}
+
 export interface ChatMessage {
   readonly role: ChatRole
   readonly content: string
+  /** Set on a `tool` message so the endpoint can pair it with the assistant tool call. */
+  readonly toolCallId?: string
+  /** Set on the assistant message that requested tools. */
+  readonly toolCalls?: readonly ToolCall[]
 }
 
 export interface ToolDefinition {
@@ -432,11 +453,30 @@ function errorDetail(text: string) {
 function body(target: LoadedProvider, request: ChatRequest, extra: Record<string, unknown>) {
   return {
     model: request.model.model,
-    messages: request.messages.map((message) => ({ role: message.role, content: message.content })),
+    messages: request.messages.map((message) => wireMessage(message, target.protocol)),
     stream: request.model.streaming,
     ...(request.maxOutput ? { max_tokens: Math.min(request.maxOutput, request.model.maxOutput) } : {}),
     ...(request.temperature === undefined ? {} : { temperature: request.temperature }),
     ...extra,
+  }
+}
+
+/** Tool calls and results need their wire shape; Ollama accepts plain roles only, OpenAI-compatible needs the ids. */
+function wireMessage(message: ChatMessage, protocol: Protocol) {
+  if (protocol === "ollama-chat") return { role: message.role, content: message.content }
+  return {
+    role: message.role,
+    content: message.content,
+    ...(message.toolCallId ? { tool_call_id: message.toolCallId } : {}),
+    ...(message.toolCalls?.length
+      ? {
+          tool_calls: message.toolCalls.map((call) => ({
+            id: call.id,
+            type: "function",
+            function: { name: call.name, arguments: call.arguments },
+          })),
+        }
+      : {}),
   }
 }
 

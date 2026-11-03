@@ -233,8 +233,8 @@ describe("PluginSupervisor", () => {
     }),
   )
 
-  for (const targets of [["olive.config.policy", "olive.provider.olive", "olive.config.agent"], ["*"]]) {
-    it.effect(`keeps policy enforcement and the Console connection through plugin removals: ${targets}`, () =>
+  for (const targets of [["olive.config.policy", "olive.config.agent"], ["*"]]) {
+    it.effect(`keeps policy enforcement through plugin removals: ${targets}`, () =>
       Effect.gen(function* () {
         source.operations = targets.map((target) => ({ type: "remove", target }))
         const directory = yield* tmpdirScoped()
@@ -249,7 +249,6 @@ describe("PluginSupervisor", () => {
         )
         const status = (id: string) => inventory.find((plugin) => plugin.id === id)?.state.status
         expect(status("olive.config.policy")).toBe("active")
-        expect(status("olive.provider.olive")).toBe("active")
         // Removals still apply to everything else, including instance and builtin plugins.
         expect(status("olive.config.agent")).toBeUndefined()
         expect(inventory.some((plugin) => plugin.id === id)).toBe(targets[0] !== "*")

@@ -16,6 +16,7 @@ import { LMStudioPlugin } from "./provider/lmstudio.js"
 import { ModalPlugin } from "./provider/modal.js"
 import { NeonPlugin } from "./provider/neon.js"
 import { NvidiaPlugin } from "./provider/nvidia.js"
+import { OliveConfigPlugin } from "./provider/olive-config.js"
 import { OllamaPlugin } from "./provider/ollama.js"
 import { OpenAIPlugin } from "./provider/openai.js"
 import { OpenAIContextCapsPlugin } from "./provider/openai-context-caps.js"
@@ -61,4 +62,5 @@ export const ProviderPlugins: PluginInternal.InternalPlugin[] = [
   XAIPlugin,
   ZenmuxPlugin,
   ClaudeAgentPlugin,
+  OliveConfigPlugin,
 ]

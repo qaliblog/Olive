@@ -12,6 +12,7 @@ import { OLIVE_ARTIFACT, OLIVE_CHANNEL, OLIVE_VERSION } from "../../version"
 import { Env } from "../../env"
 import { Service } from "@olive/client/effect/service"
 import { Olive } from "@olive/client/promise"
+import { OliveProvider } from "@olive/core/olive/provider"
 import { findSession } from "../../session-target"
 import { errorMessage } from "../../util/error"
 
@@ -68,6 +69,14 @@ export default Runtime.handler(Commands, (input) =>
     const runFork = Effect.runForkWith(context)
     const runPromise = Effect.runPromiseWith(context)
     const service = server.service
+    // A configured Olive provider becomes the session default, so plain `olive` opens the chat on the local model
+    // instead of whichever inherited catalog model happens to be listed first.
+    const olive = yield* Effect.promise(() => OliveProvider.load({ directory: process.cwd() }))
+    const preferred = olive.default ??
+      olive.providers.flatMap((provider) => {
+        const model = provider.models[0]
+        return model ? [{ provider: provider.id, model: model.id }] : []
+      })[0]
     yield* run({
       app: {
         name: process.env.OLIVE_CLIENT ?? OLIVE_ARTIFACT,
@@ -91,6 +100,7 @@ export default Runtime.handler(Commands, (input) =>
         newSessionID: sessionExists ? undefined : session,
         prompt: Option.getOrUndefined(input.prompt),
         auto: input.auto || input.yolo || input.dangerouslySkipPermissions,
+        ...(preferred ? { model: `${preferred.provider}/${preferred.model}` } : {}),
       },
       config: {
         path: config.path,

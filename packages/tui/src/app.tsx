@@ -69,7 +69,6 @@ import { DialogUsage } from "./component/usage"
 import { DialogStatus } from "./component/dialog-status"
 import { DialogConfig } from "./component/dialog-config"
 import { DialogDebug } from "./component/dialog-debug"
-import { DialogPair } from "./component/dialog-pair"
 import { DialogHighlights } from "./component/dialog-highlights"
 import { claim } from "./util/highlights"
 import { DialogThemeList } from "./component/dialog-theme-list"
@@ -165,7 +164,6 @@ const appBindingCommands = [
   "olive.settings",
   "olive.status",
   "olive.update",
-  "server.pair",
   "service.restart",
   "location.reload",
   "olive.debug",
@@ -1070,15 +1068,6 @@ function App() {
             },
           ]
         : []),
-      {
-        name: "server.pair",
-        title: "Pair device",
-        slash: { name: "pair", aliases: ["web"] },
-        run: () => {
-          dialog.replace(() => <DialogPair />)
-        },
-        category: "System",
-      },
       ...(client.restart
         ? [
             {

@@ -91,7 +91,7 @@ r2_credentials() {
   AWS_SECRET_ACCESS_KEY=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | sha256 | cut -c1-64)
   export AWS_SECRET_ACCESS_KEY
   export AWS_DEFAULT_REGION=auto AWS_REQUEST_CHECKSUM_CALCULATION=when_required AWS_RESPONSE_CHECKSUM_VALIDATION=when_required
-  # Larger parts mean fewer CompleteMultipartUpload parts for the 200-350 MB desktop builds.
+  # Larger parts mean fewer CompleteMultipartUpload parts for the 200-350 MB CLI archives.
   AWS_CONFIG_FILE=$(mktemp)
   export AWS_CONFIG_FILE
   printf '[default]\ns3 =\n  multipart_threshold = 64MB\n  multipart_chunksize = 64MB\n' > "$AWS_CONFIG_FILE"

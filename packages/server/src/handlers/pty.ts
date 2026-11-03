@@ -8,7 +8,7 @@ import { HttpServerRequest, HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
 import { Socket } from "effect/socket"
 import { Api } from "../api"
-import { CorsConfig, isAllowedRequestOrigin } from "../cors"
+import { isAllowedRequestOrigin } from "../cors"
 import { ForbiddenError, PtyNotFoundError } from "@olive/protocol/errors"
 import {
   PTY_CONNECT_TICKET_QUERY,
@@ -24,7 +24,6 @@ export const PtyHandler = HttpApiBuilder.group(Api, "server.pty", (handlers) =>
   Effect.gen(function* () {
     const locations = yield* LocationServiceMap.Service
     const tickets = yield* PtyTicket.Service
-    const cors = yield* CorsConfig
 
     return handlers
       .handle(
@@ -85,7 +84,7 @@ export const PtyHandler = HttpApiBuilder.group(Api, "server.pty", (handlers) =>
           // mint tickets without passing the server's origin policy.
           if (
             request.headers[PTY_CONNECT_TOKEN_HEADER] !== PTY_CONNECT_TOKEN_HEADER_VALUE ||
-            !isAllowedRequestOrigin(request.headers.origin, request.headers.host, cors)
+            !isAllowedRequestOrigin(request.headers.origin, request.headers.host)
           )
             return yield* new ForbiddenError({ message: "Invalid PTY connect token request" })
           const pty = yield* Pty.Service
@@ -103,7 +102,7 @@ export const PtyHandler = HttpApiBuilder.group(Api, "server.pty", (handlers) =>
       .handleRaw(
         "pty.connect",
         Effect.fn("PtyHandler.connect")(function* (ctx) {
-          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host, cors))
+          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host))
             return HttpServerResponse.empty({ status: 403 })
 
           const ref = LocationServiceMap.canonical(requestRef(ctx.request))

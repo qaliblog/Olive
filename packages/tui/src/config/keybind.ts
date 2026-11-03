@@ -58,7 +58,6 @@ export const Definitions = {
   "help.show": keybind("none", "Open help dialog"),
   "docs.open": keybind("none", "Open documentation"),
   "olive.settings": keybind("none", "Open settings"),
-  "server.pair": keybind("none", "Pair device"),
   "service.restart": keybind("none", "Restart service"),
   "location.reload": keybind("none", "Reload configuration"),
   "diff.open": keybind("none", "Open diff viewer"),

@@ -1,5 +1,4 @@
 import { NodeFileSystem } from "@effect/platform-node"
-import { validateRoutes } from "@opentunnel/client/effect"
 import { Service, type Info } from "@olive/client/effect/service"
 import { Global } from "@olive/util/global"
 import { OLIVE_VERSION } from "../src/version"
@@ -62,55 +61,8 @@ test("service disabled accepts only booleans without changing configuration on i
   }
 })
 
-// Enabling remote creates a real tunnel, so only the paths that stay local are covered here.
-test("service remote accepts only booleans and persists across set and unset", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "olive-service-remote-config-"))
-  const layer = Global.layerWith({ config: path.join(root, "config"), state: path.join(root, "state") })
-  const run = <A, E>(effect: Effect.Effect<A, E, Global.Service | FileSystem.FileSystem>) =>
-    Effect.runPromise(effect.pipe(Effect.provide(layer), Effect.provide(NodeFileSystem.layer)))
-  try {
-    expect(await run(ServiceConfig.get("remote"))).toBe("false")
-    await expect(run(ServiceConfig.set("remote", "on"))).rejects.toThrow("Remote must be true or false")
-    expect(await run(ServiceConfig.read())).toEqual({})
-    await run(ServiceConfig.set("remote", "false"))
-    expect(await run(ServiceConfig.read())).toEqual({})
-    expect(await run(ServiceConfig.get("remote"))).toBe("false")
-    await run(ServiceConfig.unset("remote"))
-    expect(await run(ServiceConfig.read())).toEqual({})
-  } finally {
-    await fs.rm(root, { recursive: true, force: true })
-  }
-})
-
-test("remote access route is random, stable once created, hidden, and forgotten when remote is turned off", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "olive-service-remote-route-"))
-  const layer = Global.layerWith({ config: path.join(root, "config"), state: path.join(root, "state") })
-  const run = <A, E>(effect: Effect.Effect<A, E, Global.Service | FileSystem.FileSystem>) =>
-    Effect.runPromise(effect.pipe(Effect.provide(layer), Effect.provide(NodeFileSystem.layer)))
-  try {
-    const route = await run(ServiceConfig.remote())
-    // The SDK rejects invalid route names, which would keep the service from ever attaching.
-    expect(() => validateRoutes({ [route]: "127.0.0.1:4096" })).not.toThrow()
-    expect(route).toMatch(/^[0-9a-f]{16}$/)
-    expect(await run(ServiceConfig.read())).toEqual({ remote: { route } })
-    expect(await run(ServiceConfig.remote())).toBe(route)
-    expect(await run(ServiceConfig.get("remote"))).toBe("true")
-    expect(await run(ServiceConfig.get())).not.toContain(route)
-
-    await run(ServiceConfig.set("remote", "false"))
-    expect(await run(ServiceConfig.read())).toEqual({ remoteAccepted: true })
-    expect(await run(ServiceConfig.get("remote"))).toBe("false")
-    expect(await run(ServiceConfig.remote())).not.toBe(route)
-
-    await run(ServiceConfig.unset("remote"))
-    expect(await run(ServiceConfig.read())).toEqual({ remoteAccepted: true })
-  } finally {
-    await fs.rm(root, { recursive: true, force: true })
-  }
-})
-
-test("reading a config with remote access stored as a boolean repairs it in place and keeps other settings", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "olive-service-remote-legacy-"))
+test("reading a config with removed remote and cors keys drops them and keeps other settings", async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "olive-service-legacy-"))
   const layer = Global.layerWith({ config: path.join(root, "config"), state: path.join(root, "state") })
   const run = <A, E>(effect: Effect.Effect<A, E, Global.Service | FileSystem.FileSystem>) =>
     Effect.runPromise(effect.pipe(Effect.provide(layer), Effect.provide(NodeFileSystem.layer)))
@@ -119,21 +71,10 @@ test("reading a config with remote access stored as a boolean repairs it in plac
     await fs.mkdir(path.dirname(file), { recursive: true })
 
     await Bun.write(file, JSON.stringify({ remote: true, password: "kept", env: { A: "1" } }))
-    const enabled = await run(ServiceConfig.read())
-    const route = enabled.remote?.route ?? ""
-    expect(route).toMatch(/^[0-9a-f]{16}$/)
-    expect(enabled).toEqual({ remote: { route }, password: "kept", env: { A: "1" } })
-    expect(await Bun.file(file).json()).toEqual(enabled)
-    expect(await run(ServiceConfig.read())).toEqual(enabled)
+    expect(await run(ServiceConfig.read())).toEqual({ password: "kept", env: { A: "1" } })
 
-    await Bun.write(file, JSON.stringify({ remote: false, password: "kept" }))
-    expect(await run(ServiceConfig.read())).toEqual({ password: "kept" })
-    expect(await Bun.file(file).json()).toEqual({ password: "kept" })
-
-    const current = JSON.stringify({ remote: { route: "0123456789abcdef" }, password: "kept" })
-    await Bun.write(file, current)
-    expect(await run(ServiceConfig.read())).toEqual({ remote: { route: "0123456789abcdef" }, password: "kept" })
-    expect(await Bun.file(file).text()).toBe(current)
+    await Bun.write(file, JSON.stringify({ cors: ["https://olive.ai"], port: 4096 }))
+    expect(await run(ServiceConfig.read())).toEqual({ port: 4096 })
   } finally {
     await fs.rm(root, { recursive: true, force: true })
   }

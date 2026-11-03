@@ -3,7 +3,7 @@ import path from "node:path"
 
 const require = createRequire(import.meta.url)
 const resolve = (name: string) => {
-  const key = `@olive/ui/audio/${name}`
+  const key = `@olive/tui/audio/${name}`
   return process.env.OLIVE_NODE_ASSETS_DIR
     ? path.join(process.env.OLIVE_NODE_ASSETS_DIR, key)
     : require.resolve(key)

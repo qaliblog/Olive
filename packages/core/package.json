@@ -109,7 +109,6 @@
     "@olive/ai": "workspace:*",
     "@olive/codemode": "workspace:*",
     "@olive/plugin": "workspace:*",
-    "@olive/plugin-browser": "workspace:*",
     "@olive/schema": "workspace:*",
     "@olive/util": "workspace:*",
     "@parcel/watcher": "2.5.1",

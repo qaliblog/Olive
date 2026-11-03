@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# publish-github-release.sh <dir>...: attaches the CLI archives and desktop builds in the given artifact dirs, plus
+# publish-github-release.sh <dir>...: attaches the CLI archives in the given artifact dirs, plus
 # a SHA256SUMS, to the v<version> GitHub release with OLIVE_RELEASE_NOTES. Immutable releases lock assets once
 # published, so they go to a draft first.
 . "$(dirname "$0")/lib.sh"
 
 assets=$(mktemp -d)
 for dir in "$@"; do
-  find "$dir" -maxdepth 1 -type f \( -name 'olive-*.zip' -o -name 'olive-*.tar.gz' -o -name 'olive-desktop-*' \) \
+  find "$dir" -maxdepth 1 -type f \( -name 'olive-*.zip' -o -name 'olive-*.tar.gz' \) \
     ! -name '*.tgz' ! -name '*.app.tar' -exec cp {} "$assets/" \;
 done
 (cd "$assets" && sha256 -- * > SHA256SUMS && cat SHA256SUMS)

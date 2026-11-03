@@ -1,10 +1,9 @@
 export * as ServerFetch from "./fetch"
 
 import { Context, Effect, Layer } from "effect"
-import { HttpEffect, HttpMiddleware, HttpRouter, HttpServer } from "effect/http"
+import { HttpEffect, HttpRouter, HttpServer } from "effect/http"
 import { SessionRestart } from "@olive/core/session/execution/restart"
 import type { LayerNode } from "@olive/util/effect/layer-node"
-import { isAllowedCorsOrigin } from "./cors"
 import { withoutParentSpan } from "./request-tracing"
 import { createRoutes } from "./routes"
 import type { ServerOptions } from "./options"
@@ -49,8 +48,5 @@ export const make = Effect.fn("ServerFetch.make")(function* (options: ServerOpti
   yield* Effect.forkDetach(Context.get(context, SessionRestart.Service).resumeSuspendedSessions)
   return Context.get(context, HttpRouter.HttpRouter)
     .asHttpEffect()
-    .pipe(
-      HttpMiddleware.cors({ allowedOrigins: (origin) => isAllowedCorsOrigin(origin, options), maxAge: 86_400 }),
-      HttpEffect.toWebHandlerWith(context),
-    )
+    .pipe(HttpEffect.toWebHandlerWith(context))
 })

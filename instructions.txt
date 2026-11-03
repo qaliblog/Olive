@@ -1,8 +1,8 @@
 Olive - build and run instructions
 ==================================
 
-Olive is the open source AI coding agent: a terminal UI, a background server, a
-web app and an Electron desktop app, all built from this monorepo.
+Olive is the open source AI coding agent: a terminal UI and CLI, backed by a
+local server and agent engine, all built from this monorepo.
 
 Requirements
 ------------
@@ -29,17 +29,9 @@ Terminal UI and CLI:
   bun dev <directory>     # opens another project
   bun dev --version       # prints the version of this checkout
 
-Server only (for the web app, or to talk to it over HTTP):
+Server only (to talk to it over HTTP, for example from an SDK client):
 
   bun dev serve --port 4096
-
-Web app (run the server in one terminal and this in another):
-
-  bun run dev:web
-
-Desktop app (Electron):
-
-  bun run dev:desktop
 
 Development TUI against your installed Olive background service and live
 sessions (uses the "dev" TUI storage channel, so tabs and other client-local
@@ -72,9 +64,9 @@ Fast host-only build
 --------------------
 
 The everyday iteration build: one binary for the machine you are on, skipping
-the two slowest steps:
+the slowest step:
 
-  cd packages/cli && bun run build --single --skip-install --skip-web-ui
+  cd packages/cli && bun run build --single --skip-install
 
 What each flag does:
 
@@ -83,11 +75,6 @@ What each flag does:
 - --skip-install drops the cross-platform "bun install --os --cpu --libc" that
   fetches native packages for every target. Use it only when the workspace is
   already installed: run "bun install" from the repository root first.
-- --skip-web-ui asks buildAppArchive to skip the Vite build, so the binary
-  embeds an empty web archive. The CLI and TUI are unaffected; only the pages
-  served by "olive serve" are missing. Reach for it when you do not need the
-  browser UI, or when the web sub-build cannot finish in your environment (it
-  prints "built in ~1m" and can still hang afterwards under emulation).
 
 Even with every flag the build compiles the binary and runs verifyArtifact and
 NativeArch.verify before exiting, so a successful run means a runnable
@@ -99,10 +86,6 @@ Other knobs: --outdir=<path> moves the output (it must not be the package
 directory), and OLIVE_TARGET=<name> picks one named target without --single,
 for example OLIVE_TARGET=linux-x64. The output directory is deleted at the
 start of every run, so a finished build never mixes files from an older one.
-
-Rebuilding often: --skip-install and --skip-web-ui are what make a TUI-only
-cycle fast; drop --skip-web-ui before you ship a binary that has to serve the
-web app, and drop --skip-install after changing native dependencies.
 
 Checks and tests
 ----------------

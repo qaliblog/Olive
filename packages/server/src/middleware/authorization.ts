@@ -5,7 +5,6 @@ export { Authorization } from "@olive/protocol/middleware/authorization"
 import { PTY_CONNECT_PATH, PTY_CONNECT_TICKET_QUERY } from "@olive/protocol/groups/pty"
 import { PERSISTENT_PTY_CONNECT_PATH } from "@olive/protocol/groups/persistent-pty"
 import { MCP_CLIENT_PATH } from "@olive/protocol/groups/mcp"
-import { PAIRING_CONNECT_PATH } from "@olive/protocol/groups/server"
 import { Effect, Layer, Redacted } from "effect"
 import { Base64 } from "effect/encoding"
 import { HttpEffect, HttpRouter, HttpServerRequest, HttpServerResponse } from "effect/http"
@@ -57,18 +56,7 @@ export function unauthorizedResponse(request: HttpServerRequest.HttpServerReques
 }
 
 export function authorizedRequest(request: HttpServerRequest.HttpServerRequest, config: ServerAuth.Info) {
-  return credentialFromRequest(request).pipe(
-    Effect.map((credential) => ServerAuth.authorized(credential, config) || authorizedSessionCookie(request, config)),
-  )
-}
-
-function authorizedSessionCookie(request: HttpServerRequest.HttpServerRequest, config: ServerAuth.Info) {
-  const token = request.cookies[ServerAuth.sessionCookieName(request.headers.host)]
-  if (!token) return false
-  // Same-site pages on other ports still send this cookie, so only same-origin requests may use it.
-  const origin = request.headers.origin
-  if (origin !== undefined && URL.parse(origin)?.host !== request.headers.host) return false
-  return ServerAuth.verifySession(token, config)
+  return credentialFromRequest(request).pipe(Effect.map((credential) => ServerAuth.authorized(credential, config)))
 }
 
 export const authorizationLayer = Layer.effect(
@@ -80,16 +68,15 @@ export const authorizationLayer = Layer.effect(
       Effect.gen(function* () {
         const request = yield* HttpServerRequest.HttpServerRequest
         const route = yield* HttpRouter.RouteContext
-        // Ticketed PTY and client MCP connects (browsers cannot set headers on WebSocket upgrades) and pairing links
-        // skip credential checks here; their handlers consume and validate the ticket or code. Use the
+        // Ticketed PTY and client MCP connects (browsers cannot set headers on WebSocket upgrades)
+        // skip credential checks here; their handlers consume and validate the ticket. Use the
         // route selected by Effect so authorization and dispatch cannot disagree about the request path.
         const url = new URL(request.url, "http://localhost")
         if (
-          ((route.route.path === PTY_CONNECT_PATH ||
+          (route.route.path === PTY_CONNECT_PATH ||
             route.route.path === PERSISTENT_PTY_CONNECT_PATH ||
             route.route.path === MCP_CLIENT_PATH) &&
-            !!url.searchParams.get(PTY_CONNECT_TICKET_QUERY)) ||
-          route.route.path === PAIRING_CONNECT_PATH
+          !!url.searchParams.get(PTY_CONNECT_TICKET_QUERY)
         )
           return yield* effect
         if (yield* authorizedRequest(request, config)) return yield* effect

@@ -9,10 +9,6 @@ export type ServerInfo = {
   capabilities?: { persistentPty?: boolean | undefined } | undefined
 }
 
-export type PairingCode = { code: string; expires_in: number }
-
-export type PairingSession = { token: string }
-
 export type AbsolutePath = string
 
 export type ProjectID = string
@@ -3213,12 +3209,6 @@ export const isVcsInitNotSupportedError = (value: unknown): value is VcsInitNotS
   typeof value === "object" && value !== null && "_tag" in value && value["_tag"] === "VcsInitNotSupportedError"
 
 export type ServerInfoOutput = ServerInfo
-
-export type ServerPairOutput = PairingCode
-
-export type ServerConnectInput = { readonly code: string }
-
-export type ServerConnectOutput = PairingSession
 
 export type LocationGetInput = { readonly location?: { readonly directory?: string | undefined } | undefined }
 

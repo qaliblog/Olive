@@ -199,7 +199,6 @@ test("preserves migrated v1 keybind defaults", () => {
 
 test("accepts every v2-only named command ID", () => {
   const commands = [
-    "server.pair",
     "session.toggle.exploration_grouping",
     "composer.subagent.up",
     "composer.subagent.down",

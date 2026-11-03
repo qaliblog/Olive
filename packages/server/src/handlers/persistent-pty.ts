@@ -17,7 +17,7 @@ import { HttpServerRequest, HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
 import { Socket } from "effect/socket"
 import { Api } from "../api"
-import { CorsConfig, isAllowedRequestOrigin } from "../cors"
+import { isAllowedRequestOrigin } from "../cors"
 import { makeArtifact } from "./artifact"
 import { makeMediaGet } from "./media"
 import { type Outbound, runPtySocket } from "./pty-socket"
@@ -26,7 +26,6 @@ import { makeSchedule } from "./schedule"
 export const PersistentPtyHandler = HttpApiBuilder.group(Api, "server.experimental", (handlers) =>
   Effect.gen(function* () {
     const tickets = yield* PtyTicket.Service
-    const cors = yield* CorsConfig
     const pty = yield* PersistentPty.Service
     const artifact = yield* makeArtifact
     const mediaGet = yield* makeMediaGet
@@ -144,7 +143,7 @@ export const PersistentPtyHandler = HttpApiBuilder.group(Api, "server.experiment
           const request = yield* HttpServerRequest.HttpServerRequest
           if (
             request.headers[PTY_CONNECT_TOKEN_HEADER] !== PTY_CONNECT_TOKEN_HEADER_VALUE ||
-            !isAllowedRequestOrigin(request.headers.origin, request.headers.host, cors)
+            !isAllowedRequestOrigin(request.headers.origin, request.headers.host)
           )
             return yield* new ForbiddenError({ message: "Invalid persistent PTY connect token request" })
           yield* pty.get(ctx.params.ptyID).pipe(mapTerminalError)
@@ -154,7 +153,7 @@ export const PersistentPtyHandler = HttpApiBuilder.group(Api, "server.experiment
       .handleRaw(
         "persistentPty.connect",
         Effect.fn("PersistentPtyHandler.connect")(function* (ctx) {
-          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host, cors))
+          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host))
             return HttpServerResponse.empty({ status: 403 })
 
           const url = new URL(ctx.request.url, "http://localhost")

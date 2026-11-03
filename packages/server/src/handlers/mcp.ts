@@ -9,7 +9,7 @@ import { HttpServerResponse } from "effect/http"
 import { HttpApiBuilder, HttpApiSchema } from "effect/http-api"
 import { Socket } from "effect/socket"
 import { Api } from "../api"
-import { CorsConfig, isAllowedRequestOrigin } from "../cors"
+import { isAllowedRequestOrigin } from "../cors"
 import { locationErrors, requestRef, response } from "../location"
 import { holdLocation, type Outbound, runPtySocket } from "./pty-socket"
 
@@ -19,7 +19,6 @@ const notFound = <A, R>(effect: Effect.Effect<A, Mcp.NotFoundError, R>) =>
 export const McpHandler = HttpApiBuilder.group(Api, "server.mcp", (handlers) =>
   Effect.gen(function* () {
     const locations = yield* LocationServiceMap.Service
-    const cors = yield* CorsConfig
     const tickets = yield* PtyTicket.Service
 
     return handlers
@@ -75,7 +74,7 @@ export const McpHandler = HttpApiBuilder.group(Api, "server.mcp", (handlers) =>
           // The custom header forces a CORS preflight, so cross-origin pages cannot mint tickets.
           if (
             ctx.headers[PTY_CONNECT_TOKEN_HEADER] !== PTY_CONNECT_TOKEN_HEADER_VALUE ||
-            !isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host, cors)
+            !isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host)
           )
             return yield* new ForbiddenError({ message: "Invalid client MCP connect token request" })
           const location = yield* Location.Service
@@ -91,7 +90,7 @@ export const McpHandler = HttpApiBuilder.group(Api, "server.mcp", (handlers) =>
       .handleRaw(
         "mcp.client",
         Effect.fn("McpHandler.client")(function* (ctx) {
-          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host, cors))
+          if (!isAllowedRequestOrigin(ctx.request.headers.origin, ctx.request.headers.host))
             return HttpServerResponse.empty({ status: 403 })
 
           const name = ctx.query.name

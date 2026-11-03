@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# render-winget.sh <sign-windows dir> <sign-desktop-windows-installer dir> <out dir>: writes the WinGet manifests for
-# Anomaly.Olive and Anomaly.Olive.Desktop. Submission to microsoft/winget-pkgs is paused until the packages
-# are accepted, so the workflow only uploads them.
+# render-winget.sh <sign-windows dir> <out dir>: writes the WinGet manifest for Anomaly.Olive. Submission to
+# microsoft/winget-pkgs is paused until the package is accepted, so the workflow only uploads it.
 . "$(dirname "$0")/lib.sh"
 
-cli=$1 desktop=$2 out=$3
+cli=$1 out=$2
 sum() { sha256 "$1" | cut -c1-64 | tr a-f A-F; }
 base="https://olive.ai/files/bin/$OLIVE_VERSION"
 date=$(date -u +%F)
@@ -36,10 +35,4 @@ manifests Anomaly.Olive "Olive CLI" "The open source AI coding agent for the ter
   "- Architecture: x64" "  InstallerUrl: $base/olive-windows-x64-baseline.zip" "  InstallerSha256: $(sum "$cli/olive-windows-x64-baseline.zip")" \
   "- Architecture: arm64" "  InstallerUrl: $base/olive-windows-arm64.zip" "  InstallerSha256: $(sum "$cli/olive-windows-arm64.zip")"
 
-# The display name and uninstall key match what the NSIS installer registers for ai.olive.desktop.
-manifests Anomaly.Olive.Desktop "Olive" "The open source AI coding agent as a desktop app." olive-desktop \
-  "InstallerType: nullsoft" "Scope: user" "UpgradeBehavior: install" "ProductCode: d074f30d-5f88-5885-b075-be1348cc7676" \
-  "Protocols:" "- olive" "Installers:" \
-  "- Architecture: x64" "  InstallerUrl: $base/olive-desktop-win-x64.exe" "  InstallerSha256: $(sum "$desktop/olive-desktop-win-x64.exe")" \
-  "- Architecture: arm64" "  InstallerUrl: $base/olive-desktop-win-arm64.exe" "  InstallerSha256: $(sum "$desktop/olive-desktop-win-arm64.exe")"
 tail -n +1 "$out"/*/*

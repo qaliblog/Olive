@@ -26,22 +26,6 @@ nix run github:anomalyco/olive  # Nix
 > [!TIP]
 > Remove versions older than 0.1.x before installing.
 
-### Desktop App (BETA)
-
-Olive is also available as a desktop application. Download it from [olive.ai/download](https://olive.ai/download).
-
-| Platform              | Download                           |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `olive-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `olive-desktop-mac-x64.dmg`     |
-| Windows               | `olive-desktop-win-x64.exe`     |
-| Linux                 | `.deb`, `.rpm`, or `.AppImage`     |
-
-```bash
-# macOS (Homebrew)
-brew install --cask olive-desktop
-```
-
 #### Installation Directory
 
 The install script installs Olive to `$HOME/.olive/bin`.
@@ -75,12 +59,10 @@ bun dev            # run the CLI and TUI from source, in this directory
 bun dev <dir>      # or open another project
 ```
 
-Other interfaces have their own root scripts:
+Other root scripts:
 
 ```bash
-bun dev serve --port 4096   # server only, for the web app
-bun run dev:web             # web app
-bun run dev:desktop         # Electron desktop app
+bun dev serve --port 4096   # server only, for HTTP clients
 bun run dev:live <dir>      # development TUI against your installed background service
 ```
 
@@ -89,7 +71,7 @@ Build the standalone `olive` binary for the current platform:
 ```bash
 cd packages/cli
 bun run build               # packages/cli/dist/<target>/bin/olive
-bun run build --single --skip-install --skip-web-ui   # fast host-only build, no embedded web UI
+bun run build --single --skip-install   # fast host-only build
 bun run build:node          # Node single executable in packages/cli/dist/node
 ```
 

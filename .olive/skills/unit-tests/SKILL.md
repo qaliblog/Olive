@@ -10,10 +10,9 @@ CI runs `bun turbo test --affected --concurrency=3` on 4-vCPU Linux and Windows 
 Read these first; this skill does not repeat them:
 
 - Root `AGENTS.md`: the Testing and Style Guide sections.
-- `packages/app/AGENTS.md` Tests (`packages/desktop` and `packages/gui-plugins` follow it): one owner per contract, and no production seams for tests.
 - `packages/ai/AGENTS.md`: cassettes. The `effect` skill: `it.effect` and `it.live`.
 
-Sibling skills: `tui-tests` (OpenTUI renderer tests in tui and cli), `app-e2e-tests` (Playwright in `packages/app/e2e`), `component-tests` (Playwright on stories, `packages/stories`). This skill owns cli subprocess and service tests.
+Sibling skill: `tui-tests` (OpenTUI renderer tests in tui and cli). This skill owns cli subprocess and service tests.
 
 ## Know the budget
 
@@ -40,7 +39,7 @@ Sibling skills: `tui-tests` (OpenTUI renderer tests in tui and cli), `app-e2e-te
 - **Product Effect code must stay on the caller's clock**, which is what makes both patterns above possible. Read time through `Clock`, wait with `Effect.sleep` or `Schedule`, and run nested effects with the caller's context.
   - A bare `Effect.runPromise` runs on the default real clock. McpStdio does this (`packages/core/src/mcp/stdio.ts:66`, `:82`, `:109`), so `packages/core/test/mcp.test.ts:832` waits the real 2s `CLOSE_GRACE` on every OS.
   - Capture `yield* Effect.context()` and use `Effect.runPromiseWith(context)`, as `packages/cli/src/acp/agent.ts:27` does.
-- **Code outside Effect** (app, desktop, ui, session-ui): `jest.useFakeTimers()` and `setSystemTime` from `bun:test`, restored in `afterEach` (`packages/desktop/src/main/plugin/lifecycle.test.ts:27-32`, `packages/desktop/src/main/storage/drafts.test.ts:15-17`).
+- **Code outside Effect** (tui): `jest.useFakeTimers()` and `setSystemTime` from `bun:test`, restored in `afterEach`.
 - **Advance fake timers to the next timer** (`jest.advanceTimersToNextTimer()`, `jest.runOnlyPendingTimers()`), not in small fixed steps. The 10ms-step `advance` at `lifecycle.test.ts:37` turns the 1,000-seed fuzz test (`:607`) into about 430k event-loop turns: 2.8-3.8s on Windows, 0.56s on Linux.
 
 ## Real-time waits: deadlines, not attempt counts
@@ -65,7 +64,6 @@ To avoid adding more:
   - For a spawned process the value must reach the child, as `timeoutMs` does through the worker payload at `packages/core/test/util/flock.test.ts:50-58`.
   - server-process.ts has no override today, so its 15s tests cannot be shortened from the test side.
   - app, desktop and gui-plugins forbid such seams (their AGENTS.md Tests sections); core, cli, util, client and tui have no such ban.
-- Retry timing belongs in core under TestClock. `packages/server/test/fetch.test.ts:363-408` spends about 5.8s of server's 16s in real 200ms bind retries (`packages/core/src/plugin/provider/openai.ts:21`). The fixed ports 1455/1457 are the contract there; new server tests cover routing and error mapping only. Elsewhere bind port 0 (`packages/app/src/runtime/server/global-sync/bootstrap.test.ts:81`).
 
 ## Do not assert wall-clock speed
 
@@ -81,7 +79,6 @@ To avoid adding more:
   - Do not write per-file `git init` plus `git config` copies. server still has two (`packages/server/test/vcs.test.ts:215-218`, `packages/server/test/worktree.test.ts:131-133`); server already imports core fixtures such as `tmpdir`.
   - Use `-c user.name=… -c user.email=…` only for commits the test makes itself (`npm.test.ts:53`). Repos where production code commits later (snapshot, worktree, vcs) need repo-local identity.
   - Keep identity repo-local. The unit job's "Configure git identity" step sets a global identity, but core's `script/test.ts` and cli's `isolatedEnv` replace HOME, so it is invisible there and visible to server and tui. That HOME isolation keeps core's missing-identity coverage: do not depend on CI's identity, and do not add a global gitconfig in core.
-- **Independent children** start together (`Promise.all`, `packages/ai/test/exports.test.ts:63`). `packages/app/test-browser/playwright-config.test.ts` runs sequential `Bun.spawnSync` (3.5s on Windows, 1.4s on Linux); `packages/desktop/script/windows-installer.test.ts` makes 6 sequential cold `pwsh` starts for ACL reads, which one `pwsh` call could batch.
 - **Size contention and thresholds to the claim.** `flock.test.ts:46` starts 16 bun workers; use only as many as still exceed the 4 CI vCPUs. A hard-coded threshold forces huge fixtures: `packages/core/test/git.test.ts:354` writes 2,100 files to cross `looseObjectLimit = 2048` (`packages/core/src/git.ts:50`), 2.7s locally and slower on Windows. Make the threshold an option with the production default, cross a small value in the test, and assert the default once.
 
 ## Windows-only failures
@@ -90,7 +87,6 @@ To avoid adding more:
 - SIGTERM cannot be caught: `process.kill` ends the target at once with exit code 1, so a shutdown handler runs only on POSIX. Assert per platform with `catchesSigterm`, `stopSignal` and `stoppedExitCode` (`packages/client/test/fixture/service-fixture.ts:7-11`).
 - Do not prove a stopped server released its port by binding it again. Windows hands out ephemeral ports from 49152 up, and any process, including suites running alongside, may take the port for an outgoing connection; a re-bind failed there with "Failed to start server. Is port 65518 in use?". Assert that nothing accepts connections (`expectNotListening`, `service-fixture.ts:108-117`).
 - `os.tmpdir()` reads `TEMP` on Windows and `TMPDIR` on POSIX; set both for a child (`packages/util/test/global.test.ts:22-24`). Compare canonical paths with `fs.realpathSync.native`, which expands 8.3 short names such as `RUNNER~1` (`:84-86`).
-- Reset a test socket once the request has arrived (`data`), not on `open`. Resetting on accept races the client's write, and on Windows the lost race is a write or connect error instead of a reset: `packages/util/src/retry.test.ts:25-30` recorded 2 of its 3 expected failures there. `packages/app/src/runtime/server/global-sync/bootstrap.test.ts:83-88` still resets on `open` and failed 3 of about 19 loaded local runs with `write EPIPE`, which `transientMessages` in `packages/util/src/retry.ts` does not list.
 
 ## Temp dirs, files, process state
 
@@ -109,7 +105,6 @@ To avoid adding more:
 - Never add `--isolate` or bare `--parallel` (which implies `--isolate`) to a test script: ai went from 7.6s to 26.3s with `--parallel=2`.
   - `--parallel=N --no-isolate` keeps the shared registry and measured 0.47-0.68x serial wall time at about the same CPU in core. It also exposed load-sensitive tests (browser-idle and integration's `eventually`, both since fixed).
   - Adopting it is a runner decision for maintainers once CI passes on both OSes, not a fix for one slow test.
-- Runtime imports run in every file that loads the module. `packages/desktop/src/main/storage/store.ts:3` imports `electron` only for `getStore`, so `src/main/plugin/storage.test.ts` and `src/main/storage/store.test.ts` download the ~100MB Electron binary on a fresh install. On a first local run, storage.test.ts took 5.3s of file time for 0.1s of test bodies. Use `import type` for types (`packages/desktop/src/main/ipc-transport.test.ts:4`).
 
 ## Turbo test tasks
 

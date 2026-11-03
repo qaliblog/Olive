@@ -10,14 +10,11 @@ import { randomBytes, randomUUID } from "node:crypto"
 import { Effect, Option, Redacted, Schema } from "effect"
 import { PersistentPty } from "@olive/schema/persistent-pty"
 import { HttpServer } from "effect/http"
-import { NetAddress } from "effect/net"
 import { Env } from "./env"
 import { PortOwner } from "./services/port-owner"
 import { ServiceConfig } from "./services/service-config"
 import { RetainedImage } from "./services/retained-image"
 import { ServiceRegistration } from "./services/service-registration"
-import { RemoteTunnel } from "./services/remote-tunnel"
-import { WebUi } from "./services/web-ui"
 import { databasePath } from "./database-path"
 
 export type Mode = "default" | "service" | "stdio"
@@ -26,7 +23,6 @@ export type Options = {
   readonly mode: Mode
   readonly hostname?: string
   readonly port?: number
-  readonly cors?: readonly string[]
 }
 
 // The process effect lives until server shutdown; tracing it would parent every request to one process-lifetime trace.
@@ -96,8 +92,6 @@ const processEffect = Effect.fnUntraced(function* (options: Options) {
             : randomBytes(32).toString("base64url")
       if (!password) return yield* Effect.fail(new Error("Missing server password"))
       const instanceID = randomUUID()
-      const transform = yield* WebUi.handler()
-      const remote = { urls: [] as ReadonlyArray<string> }
       const launch = start(
         {
           app: {
@@ -107,7 +101,6 @@ const processEffect = Effect.fnUntraced(function* (options: Options) {
           },
           hostname,
           port,
-          cors: options.cors ?? config.cors,
           password,
           pty: { handoff },
           simulation: truthy(process.env.OLIVE_SIMULATE),
@@ -158,9 +151,7 @@ const processEffect = Effect.fnUntraced(function* (options: Options) {
                   })
                 }),
             },
-        transform,
-        () => remote.urls,
-      )
+        )
       const server = yield* launch.pipe(
         Effect.catch((error) => {
           if (findIncumbent === undefined || !addressInUse(error)) return Effect.fail(error)
@@ -187,23 +178,6 @@ const processEffect = Effect.fnUntraced(function* (options: Options) {
         }),
       )
       if (server === undefined) return
-      if (serviceOptions !== undefined && config.remote !== undefined && NetAddress.isInetAddress(server.address)) {
-        const bound = NetAddress.formatIp(server.address.address)
-        // A wildcard bind also listens on loopback, which is all the tunnel needs to reach.
-        const target =
-          bound === "0.0.0.0" || bound === "::"
-            ? `127.0.0.1:${server.address.port}`
-            : NetAddress.formatInet(server.address)
-        yield* Effect.forkScoped(
-          RemoteTunnel.run({
-            route: config.remote.route,
-            target,
-            onURL: (url) => {
-              remote.urls = url === undefined ? [] : [url]
-            },
-          }),
-        )
-      }
       const url = HttpServer.formatAddress(server.address)
       console.log(options.mode === "stdio" ? JSON.stringify({ url }) : `server listening on ${url}`)
       if (foreground && !environmentPassword) console.log(`server password ${password}`)

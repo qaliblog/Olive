@@ -10,7 +10,6 @@ import { createSolidTransformPlugin } from "@opentui/solid/bun-plugin"
 import type { BunPlugin } from "bun"
 import pkg from "../package.json"
 import { discoverPluginRuntimeSpecifiers, pluginRuntimeLoaderCode } from "@olive/plugin/runtime-modules"
-import { buildAppArchive } from "./app-assets"
 import { verifyArtifact, verifySimulationGraph } from "./verify-artifact"
 import { resolveOlivePty } from "./opencode-pty"
 import { NativeArch } from "../../../script/native-arch"
@@ -31,7 +30,6 @@ const singleFlag = process.argv.includes("--single")
 const baselineFlag = process.argv.includes("--baseline")
 const requestedTarget = process.env.OLIVE_TARGET
 const skipInstall = process.argv.includes("--skip-install")
-const skipWebUi = process.argv.includes("--skip-web-ui")
 const solidPlugin = createSolidTransformPlugin()
 const highlights = Script.preview ? undefined : embed(process.env.OLIVE_RELEASE_NOTES)
 const releaseAssets = new Map<string, Promise<Map<string, string>>>()
@@ -72,24 +70,6 @@ if (!targets.length) throw new Error(`Unknown build target: ${requestedTarget}`)
 // Bun 1.4.4 skips native packages for the other libc by default, but the musl targets need them.
 if (!skipInstall)
   await $`bun install --os="*" --cpu="*" --libc="*" @opentui/core@${pkg.dependencies["@opentui/core"]} @opencode/pty@${pkg.dependencies["@opencode/pty"]}`
-const appArchive = path.join(dir, ".cache", "bun-app-archive.bin")
-await Bun.write(appArchive, await buildAppArchive(Script.channel, { skipBuild: skipWebUi }))
-const appAssetsPlugin: BunPlugin = {
-  name: "olive-app-assets",
-  setup(build) {
-    build.onResolve({ filter: /^virtual:olive-app-assets$/ }, () => ({
-      path: "olive-app-assets",
-      namespace: "olive",
-    }))
-    build.onLoad({ filter: /^olive-app-assets$/, namespace: "olive" }, () => ({
-      loader: "js",
-      // Embedded as a file, not a string: its bytes go into the executable once and unencoded.
-      contents: `import { readFileSync } from "node:fs"
-import archive from ${JSON.stringify(appArchive.replaceAll("\\", "/"))} with { type: "file" }
-export default () => readFileSync(archive)`,
-    }))
-  },
-}
 const pluginRuntimeEntries = discoverPluginRuntimeSpecifiers()
 const pluginRuntimeModulesSource = [
   "export const resolveHostPackageRoots = () => []",
@@ -161,7 +141,6 @@ export default { path: file, version: ${JSON.stringify(olivePty.version)}, sha25
     entrypoints: ["./src/index.ts", "./src/photon-worker.ts"],
     tsconfig: "./tsconfig.json",
     plugins: [
-      appAssetsPlugin,
       solidPlugin,
       parcelWatcherPlugin,
       olivePtyPlugin,

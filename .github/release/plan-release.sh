@@ -2,9 +2,9 @@
 # plan-release.sh: decides version, channel and npm dist-tag from the event, ref and dispatch inputs
 # (INPUT_BUMP, INPUT_VERSION) only, and writes them to $GITHUB_OUTPUT. Nothing here reads repository files.
 #
-#   push or dispatch on dev           -> dev      0.0.0-dev-<run>     npm tag dev, desktop
+#   push or dispatch on dev           -> dev      0.0.0-dev-<run>     npm tag dev
 #   dispatch on dev with bump/version -> latest   x.y.z               npm tag latest, releasers only, notes required
-#   push or dispatch on beta          -> beta     0.0.0-beta-<run>    desktop only
+#   push or dispatch on beta          -> beta     0.0.0-beta-<run>    CLI artifacts only
 #   pull_request                      -> pr       0.0.0-pr-<run>      everything, dry run
 #
 # Releasers are actors with the admin or maintain role on the repository (the releasers team has maintain).
@@ -61,10 +61,10 @@ fi
 
 # What each channel builds and publishes.
 case "$channel" in
-  latest) npm_tag=latest cli=true desktop=true node=false release=true ;;
-  dev) npm_tag=dev cli=true desktop=true node=true release=false ;;
-  beta) npm_tag="" cli=false desktop=true node=false release=false ;;
-  pr) npm_tag=pr cli=true desktop=true node=true release=true ;;
+  latest) npm_tag=latest cli=true node=false release=true ;;
+  dev) npm_tag=dev cli=true node=true release=false ;;
+  beta) npm_tag="" cli=true node=false release=false ;;
+  pr) npm_tag=pr cli=true node=true release=true ;;
 esac
 dry_run=false
 if [ "$channel" = pr ]; then dry_run=true; fi
@@ -75,7 +75,6 @@ if [ "$channel" = pr ]; then dry_run=true; fi
   echo "npm_tag=$npm_tag"
   echo "dry_run=$dry_run"
   echo "cli=$cli"
-  echo "desktop=$desktop"
   echo "node=$node"
   echo "release=$release"
 } | tee -a "$GITHUB_OUTPUT"

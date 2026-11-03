@@ -8,14 +8,12 @@ import { InstallationEvent } from "@olive/schema/installation-event"
 import { hasPtyConnectTicketURL } from "@olive/protocol/groups/pty"
 import { hasPersistentPtyConnectTicketURL } from "@olive/protocol/groups/persistent-pty"
 import { hasMcpClientTicketURL } from "@olive/protocol/groups/mcp"
-import { isPairingConnectURL } from "@olive/protocol/groups/server"
 import { Global } from "@olive/util/global"
 import { Cause, Context, Effect, Exit, Latch, Layer, Option, Ref, Scope } from "effect"
 import { HttpMiddleware, HttpRouter, HttpServerRequest, HttpServerResponse } from "effect/http"
 import { NetAddress } from "effect/net"
 import { createServer } from "node:http"
 import { ServerAuth } from "./auth"
-import { isAllowedCorsOrigin } from "./cors"
 import { authorizedRequest, unauthorizedResponse } from "./middleware/authorization"
 import { withoutParentSpan } from "./request-tracing"
 import { createRoutes } from "./routes"
@@ -36,8 +34,6 @@ type App = Effect.Effect<
   HttpServerRequest.HttpServerRequest | Scope.Scope
 >
 
-export type Transform = (app: App) => App
-
 const errorResponseLogger = HttpMiddleware.make((app) =>
   HttpMiddleware.logger(
     Effect.tap(app, (response) =>
@@ -49,8 +45,6 @@ const errorResponseLogger = HttpMiddleware.make((app) =>
 export const start = Effect.fn("ServerProcess.start")(function* <E, R>(
   options: ServerOptions,
   lifecycle?: Lifecycle<E, R>,
-  transform?: Transform,
-  remoteURLs?: () => ReadonlyArray<string>,
 ) {
   const password = options.password
   if (!password) return yield* Effect.fail(new Error("Missing server password"))
@@ -65,18 +59,12 @@ export const start = Effect.fn("ServerProcess.start")(function* <E, R>(
     const host = address.family === "IPv6" ? `[${address.address}]` : address.address
     return ServerInfo.connectionURLs(`http://${host}:${address.port}`, hostname)
   }
-  const urls = () => [...localURLs(), ...(remoteURLs?.() ?? [])]
+  const urls = localURLs
   const application = yield* Ref.make(Option.none<App>())
   const app = dispatch(password, status, application, options.app?.version ?? "unknown", urls, Global.Path.tmp)
   // Request fibers may continue inbound trace context, but must not inherit the server startup parent.
   yield* bound.http
-    .serve(
-      (transform ? transform(app) : app).pipe(
-        HttpMiddleware.compression(),
-        HttpMiddleware.cors({ allowedOrigins: (origin) => isAllowedCorsOrigin(origin, options), maxAge: 86_400 }),
-      ),
-      errorResponseLogger,
-    )
+    .serve(app.pipe(HttpMiddleware.compression()), errorResponseLogger)
     .pipe(Effect.provide(NodeHttpServer.layerHttpServices), withoutParentSpan)
   if (lifecycle)
     yield* lifecycle.onListen(bound.http.address, shutdown.open.pipe(Effect.asVoid)).pipe(
@@ -197,7 +185,6 @@ function dispatch(
       return yield* infoResponse(status, version, urls, tmp)
     }
     if (
-      !isPairingConnectURL(url) &&
       (!ready ||
         (!hasPtyConnectTicketURL(url) && !hasPersistentPtyConnectTicketURL(url) && !hasMcpClientTicketURL(url))) &&
       !(yield* authorizedRequest(request, auth))

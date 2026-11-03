@@ -12,6 +12,7 @@
   },
   "exports": {
     ".": "./src/index.tsx",
+    "./audio/*": "./src/assets/audio/*",
     "./config": "./src/config/index.tsx",
     "./config/keybind": "./src/config/keybind.ts",
     "./config/v1": "./src/config/v1/index.tsx",
@@ -56,9 +57,7 @@
     "@olive/plugin": "workspace:*",
     "@olive/schema": "workspace:*",
     "@olive/simulation": "workspace:*",
-    "@olive/theme": "workspace:*",
-    "@olive/ui": "workspace:*",
-    "@olive/util": "workspace:*",
+    "@olive/theme": "workspace:*",    "@olive/util": "workspace:*",
     "@opentui/core": "catalog:",
     "@opentui/keymap": "catalog:",
     "@opentui/solid": "catalog:",

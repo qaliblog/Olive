@@ -38,10 +38,6 @@
     "@olive/tui#typecheck:tsc": {
       "dependsOn": ["transit", "@olive/core#typecheck:tsc"]
     },
-    "test:components": {
-      "outputs": [],
-      "cache": false
-    },
     "build": {
       "dependsOn": ["transit"],
       "outputs": ["dist/**"]
@@ -56,10 +52,6 @@
     "test": {
       "dependsOn": ["transit"],
       "outputs": []
-    },
-    "@olive/desktop#test": {
-      "outputs": [],
-      "cache": false
     },
     "@olive/sdk#verify:package": {
       "outputs": []

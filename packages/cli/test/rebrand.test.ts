@@ -95,7 +95,7 @@ describe("rebrand", () => {
   test("nothing checks for, notifies about, or installs updates", async () => {
     expect(await Bun.file(path.join(root, "services/update")).exists()).toBe(false)
 
-    for (const manifest of ["packages/cli", "packages/desktop", "packages/gui-plugins"]) {
+    for (const manifest of ["packages/cli"]) {
       const pkg = await Bun.file(path.join(root, manifest, "package.json")).json()
       const dependencies = Object.keys({
         ...pkg.dependencies,
@@ -106,7 +106,7 @@ describe("rebrand", () => {
     }
 
     const checks = await Promise.all(
-      ["packages/cli/src", "packages/gui-plugins/src", "packages/app/src"].map(async (directory) =>
+      ["packages/cli/src", "packages/tui/src"].map(async (directory) =>
         Promise.all(
           (await textFiles(path.join(root, directory))).map(async (file) => ({
             file: path.relative(root, file),

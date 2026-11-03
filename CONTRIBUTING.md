@@ -9,7 +9,7 @@ The changes most likely to be accepted are:
 - Missing standard behavior
 - Documentation improvements
 
-UI and core product features require design review before implementation. If you are unsure whether a change fits, ask a maintainer or choose an issue labeled [`help wanted`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelp-wanted), [`good first issue`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22), [`bug`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug), or [`perf`](https://github.com/anomalyco/olive/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22perf%22).
+Core product features require design review before implementation. If you are unsure whether a change fits, ask a maintainer or choose an issue labeled [`help wanted`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelp-wanted), [`good first issue`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22), [`bug`](https://github.com/anomalyco/olive/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22bug%22), or [`perf`](https://github.com/anomalyco/olive/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22perf%22).
 
 Want to take on an issue? Leave a comment and a maintainer may assign it unless it is already being worked on.
 
@@ -29,21 +29,12 @@ bun install
 bun dev [directory]
 ```
 
-`bun dev` runs the V2 CLI and TUI. Pass a directory to open another project, or `.` to open this repository.
+`bun dev` runs the CLI and TUI. Pass a directory to open another project, or `.` to open this repository.
 
-To test a development TUI against your installed Olive V2 background service and live sessions:
+To test a development TUI against your installed Olive background service and live sessions:
 
 ```bash
 bun run dev:live [directory]
-```
-
-For web development, run the backend and app in separate terminals. Other interfaces have root scripts:
-
-```bash
-bun dev serve --port 4096
-bun run dev:web
-bun run dev:desktop
-bun run dev:www
 ```
 
 ### Packages
@@ -55,8 +46,6 @@ bun run dev:www
 - `packages/client`: generated TypeScript clients
 - `packages/cli`: command-line entrypoint and service lifecycle
 - `packages/tui`: terminal interface
-- `packages/app`: shared web interface
-- `packages/desktop`: Electron desktop application
 - `packages/plugin`: plugin API
 
 ### Verification
@@ -88,7 +77,7 @@ Base branches on `dev` and complete the provided pull request template.
 - Keep PRs small and focused.
 - Explain the problem and why the change fixes it.
 - Check whether the functionality already exists.
-- For UI changes, include before-and-after screenshots or video.
+- For terminal UI changes, include before-and-after screenshots or video.
 - For logic changes, explain what you tested and how a reviewer can verify it.
 
 ### Keep It Brief
@@ -103,7 +92,7 @@ Examples:
 
 - `docs: update contributing guide`
 - `fix(tui): restore scroll position`
-- `feat(app): add workspace search`
+- `feat(cli): add workspace search`
 
 ## Issues
 

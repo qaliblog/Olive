@@ -41,7 +41,7 @@ export async function collectNodeAssets(target: NodeTarget) {
     },
     ...attentionSoundAssets.map((key) => ({
       key,
-      source: path.resolve(dir, "../ui/src/assets/audio", path.basename(key)),
+      source: path.resolve(dir, "../tui/src/assets/audio", path.basename(key)),
     })),
     ...(olivePty && target.olivePtyAsset ? [{ key: target.olivePtyAsset, source: olivePty.source }] : []),
     ...(await collectFiles(ptyRoot))

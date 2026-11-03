@@ -41,9 +41,6 @@
             olive = final.callPackage ./nix/olive.nix {
               inherit node_modules;
             };
-            olive-desktop = final.callPackage ./nix/desktop.nix {
-              inherit olive;
-            };
           };
       };
 
@@ -58,9 +55,6 @@
           default = olive;
           olive = pkgs.callPackage ./nix/olive.nix {
             inherit node_modules;
-          };
-          olive-desktop = pkgs.callPackage ./nix/desktop.nix {
-            inherit olive;
           };
           # Updater derivation with fakeHash - build fails and reveals correct hash
           node_modules_updater = node_modules.override {

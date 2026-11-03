@@ -6,9 +6,6 @@ import { HttpApiClient } from "effect/http-api"
 import { ClientApi } from "../../contract"
 import type {
   ServerInfoOutput,
-  ServerPairOutput,
-  ServerConnectInput,
-  ServerConnectOutput,
   LocationGetInput,
   LocationGetOutput,
   LocationReloadOutput,
@@ -348,19 +345,7 @@ const preserveStream =
 const EndpointServerInfo = (raw: RawClient["server.server"]) => () =>
   preserveEffect<ServerInfoOutput>()(raw["server.info"]({}).pipe(Effect.mapError(mapClientError)))
 
-const EndpointServerPair = (raw: RawClient["server.server"]) => () =>
-  preserveEffect<ServerPairOutput>()(raw["server.pair"]({}).pipe(Effect.mapError(mapClientError)))
-
-const EndpointServerConnect = (raw: RawClient["server.server"]) => (input: ServerConnectInput) =>
-  preserveEffect<ServerConnectOutput>()(
-    raw["server.connect"]({ params: { code: input["code"] } }).pipe(Effect.mapError(mapClientError)),
-  )
-
-const adaptGroupServer = (raw: RawClient["server.server"]) => ({
-  info: EndpointServerInfo(raw),
-  pair: EndpointServerPair(raw),
-  connect: EndpointServerConnect(raw),
-})
+const adaptGroupServer = (raw: RawClient["server.server"]) => ({ info: EndpointServerInfo(raw) })
 
 const EndpointLocationGet = (raw: RawClient["server.location"]) => (input?: LocationGetInput) =>
   preserveEffect<LocationGetOutput>()(

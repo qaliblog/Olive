@@ -7,9 +7,10 @@
  *
  *   node olivellm/scripts/eval-cases.js [--limit 24]
  */
+import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { countBy, readJsonl, sha1, writeJson } from "./lib/json.js"
+import { countBy, readJsonl, sha1, writeJson, writeJsonl } from "./lib/json.js"
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(here, "..")
@@ -39,7 +40,9 @@ for (const suite of suites) {
     })
 }
 
-const heldout = await Bun.file(path.join(evaluation, "heldout/ids.json")).text()
+const heldout = await readFile(path.join(evaluation, "heldout/ids.json"), "utf8")
+
+await writeJsonl(path.join(evaluation, "colab/cases.jsonl"), cases)
 
 await writeJson(output, {
   version: "1.0.0",

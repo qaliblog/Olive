@@ -1,0 +1,184 @@
+{
+  "status": "measured",
+  "suite": "tool_calling",
+  "cases": 24,
+  "valid_call_rate": 0,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 0,
+  "argument_types_rate": 0,
+  "response_kind_accuracy": 0,
+  "tool_call_cases": 24,
+  "failures": [
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0001",
+      "language": "en",
+      "expected": "install_dependencies",
+      "parsed": null,
+      "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no actionable steps are available. The system lacks a tool to execute the plan's requirements (e.g., analyzing requireme"
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "language": "en",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "Task completed. All steps executed successfully.<|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0008",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "The task requires a detailed implementation plan, but the provided code snippet is incomplete and lacks the necessary context. To proceed, I need the actual implementation plan text. Could you share the plan details?<|im"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0010",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no code yet. The relevant code is empty, and the tool results show no tool calls executed. To proceed, the plan must inc"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0012",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no code yet. The relevant code is empty, and the tool results show no tool calls executed. To proceed, the plan must inc"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0009",
+      "language": "mixed",
+      "expected": "run_shell",
+      "parsed": null,
+      "text": "Task completed successfully. All steps executed without errors. The project structure is intact, and the required files (src/users.js) are present. Pending tasks (analyze requirements, write implementation plan) are mark"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0011",
+      "language": "mixed",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The edit failed because the old text does not exist. I must read the file first. متن قديم درس شما نیست.<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0013",
+      "language": "mixed",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "The next action is: run_tests<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0006",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task requires a detailed plan and implementation steps, but the provided code and results indicate no actual code or test execution has occurred. The system lacks the necessary tools to execute the plan (e.g., writin"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0008",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task requires a detailed plan and implementation steps, but the provided code and results indicate no code yet. The relevant code is empty, and the tool results show no tool calls. To proceed, the plan must include s"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0010",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task requires a detailed plan with specific steps, but the provided code and results indicate no actionable plan exists. The system lacks a clear plan with actionable steps, and the code itself is incomplete. To proc"
+    },
+    {
+      "id": "olive.file_editing.css_logical_properties.en.0016",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "Next action: Run diagnostics on the project to verify the fix.<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.css_rtl_nav.en.0015",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "Next action: Run diagnostics on the project to ensure all changes are applied correctly.<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.html_rtl_nav.en.0014",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "Next action: list_directory to show project structure<|im_end|>"
+    },
+    {
+      "id": "olive.file_reading.python_cli.en.0011",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task requires a detailed plan and execution steps, but the provided code snippet is incomplete and lacks the necessary context. To proceed, I need the actual content of the `csvtool` project (e.g., `requirements.txt`"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0015",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task requires a series of actions to complete, but none of the provided tools can execute these steps. The available tools only support file inspection, text search, command execution, test runs, dependency installat"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0017",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task requires a series of actions to implement the project, but none of the provided tools can perform these steps. The available tools only support file operations, diagnostics, and testing, but none handle project "
+    },
+    {
+      "id": "olive.project_structure.node_api.en.0001",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task requires a structured approach to map the task-api project, but none of the provided tools can execute this task. The available tools are limited to file inspection, search, diagnostics, and testing, but none su"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0021",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task requires implementing a new route for a reports page in the dashboard project. However, based on the provided code and tool results, there are no files or directories to work with. The relevant code is empty, an"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0023",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task requires a comprehensive implementation plan for a dashboard project with specific requirements. However, based on the provided code snippet and tool results, **no code or documentation is available** to fulfill"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0025",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task requires a detailed implementation plan for a dashboard project, including analysis of requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining fi"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0027",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task requires a detailed implementation plan for a dashboard project, including requirements, design, code, and testing. However, based on the provided code snippet and the tool results, **no code or documentation is"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0018",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "The task requires building a debug APK with Gradle, but the provided code is incomplete and lacks the necessary files and directories. Here's a concise solution:\n\n**Next Action:**  \nCreate a `build.gradle` file with Grad"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0020",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "The task requires a detailed plan to resolve a Capacitor sync failure in the field-app project. However, based on the provided code and results, **no code changes are needed**. The system has already executed all steps i"
+    }
+  ]
+}

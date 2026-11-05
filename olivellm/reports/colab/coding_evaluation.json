@@ -1,0 +1,77 @@
+{
+  "status": "measured",
+  "suite": "coding",
+  "cases": 11,
+  "produced_file_rate": 0,
+  "syntax_valid_rate": 0,
+  "syntax_results": {
+    "missing": 11
+  },
+  "checks": [
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0006",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0007",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0008",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0009",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0010",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0011",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.css_logical_properties.en.0016",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.css_responsive_grid.en.0017",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.css_rtl_nav.en.0015",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.html_form_a11y.en.0018",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.html_rtl_nav.en.0014",
+      "produced_file": false,
+      "syntax": "missing"
+    }
+  ],
+  "note": "JavaScript is checked with `node --check`; CSS and HTML are checked for balanced braces and tags. A case that produced no file cannot pass a syntax check.",
+  "valid_call_rate": 0,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 0,
+  "argument_types_rate": 0,
+  "response_kind_accuracy": 0,
+  "tool_call_cases": 11
+}

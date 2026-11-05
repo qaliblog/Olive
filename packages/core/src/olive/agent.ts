@@ -141,49 +141,73 @@ export async function run(options: Options): Promise<Outcome> {
           next: "resolve the provider error before continuing",
         }),
       )
-      await options.state.write(task)
       options.onEvent?.({ type: "error", message: asked.message })
       return { task, steps: step, text: "", failures, completed: false, error: asked.message }
     }
     if (asked instanceof Error) throw asked
     options.onEvent?.({ type: "step", step, tokens: asked.tokens })
     if (asked.text.length > 0) options.onEvent?.({ type: "text", text: asked.text })
-    history.push({
-      role: "assistant",
-      content: asked.text,
-      ...(asked.calls.length > 0 ? { toolCalls: asked.calls } : {}),
-    })
 
-    // A small model gets a couple of calls per step at most; more becomes noise it cannot track.
+    // A small model gets a couple of calls per step at most; more becomes noise it cannot track. Only the calls that
+    // actually run are recorded, so the conversation never claims an operation that never happened.
     const calls = asked.calls.slice(0, 2)
+    history.push({ role: "assistant", content: asked.text, ...(calls.length > 0 ? { toolCalls: calls } : {}) })
     if (calls.length === 0) {
       task = await options.state.write(advance(task, { next: "report the result" }))
-      await options.state.write(task)
-      const completed = failures.length === 0
+      const completed = failures.length === 0 && operations.operations.some((operation) => operation.ok)
       options.onEvent?.({ type: "done", text: asked.text, completed })
-      return { task, steps: step, text: asked.text, failures, completed }
+      return {
+        task,
+        steps: step,
+        text: asked.text,
+        failures,
+        completed,
+        ...(completed || failures.length > 0
+          ? {}
+          : { error: "the model stopped before it performed any tool operation" }),
+      }
     }
 
     for (const call of calls) {
-      const input = Option.getOrUndefined(decodeArguments(call.arguments)) ?? call.arguments
-      const result = operations.record(await OliveTools.execute(call.name, input, context))
+      const result = await perform(operations, call, context)
       options.onEvent?.({ type: "tool", result })
       if (!result.ok) failures.push(result)
-      toolResults.push(
-        result.ok
-          ? `${result.tool} ok\n${result.output}`
-          : `${result.tool} failed (${result.error.code})\n${result.error.message}`,
-      )
+      const output = result.ok
+        ? `${result.tool} ok\n${result.output}`
+        : `${result.tool} failed (${result.error.code})\n${result.error.message}`
+      toolResults.push(output)
+      // OpenAI-compatible endpoints pair every requested call with a result message, so the conversation keeps the
+      // wire shape even though the same text is also summarized in the next step prompt.
+      history.push({ role: "tool", content: output, toolCallId: call.id })
       task = await options.state.write(progress(task, result))
     }
   }
   task = await options.state.write(
     advance(task, { errors: [...task.errors.slice(-9), `step limit reached after ${maxSteps} steps`], next: "review the remaining work" }),
   )
-  await options.state.write(task)
   const message = `step limit reached after ${maxSteps} steps; the task state is saved and can be resumed`
   options.onEvent?.({ type: "error", message })
   return { task, steps: maxSteps, text: "", failures, completed: false, error: message }
+}
+
+/** Runs one requested call, turning unparseable arguments into a failure the model can correct. */
+async function perform(
+  operations: ReturnType<typeof OliveTools.tracker>,
+  call: OliveProvider.ToolCall,
+  context: OliveTools.Context,
+) {
+  const tool = OliveTools.find(call.name)
+  if (!tool) return operations.record(await OliveTools.execute(call.name, {}, context))
+  // Ollama sends `{}` for a call without arguments; some models send an empty string instead.
+  const raw = call.arguments.trim() || "{}"
+  const input = Option.getOrUndefined(decodeArguments(raw))
+  if (input === undefined)
+    return operations.record({
+      ok: false,
+      tool: tool.name,
+      error: { code: "invalid-arguments", message: `${tool.name} arguments are not valid JSON: ${raw.slice(0, 200)}` },
+    })
+  return operations.record(await OliveTools.execute(tool.name, input, context))
 }
 
 function initialize(state: OliveTaskState.TaskState | undefined, objective: string) {
@@ -221,17 +245,25 @@ function progress(task: OliveTaskState.TaskState, result: OliveTools.Result) {
       completed: [...task.completed, "write initial files"],
       next: "implement remaining files",
     })
-  if (result.tool === "edit_file")
-    return advance(task, { files: result.files ?? [], completed: [...task.completed, "fix errors"], next: "run diagnostics" })
+  if (result.tool === "edit_file") return advance(task, { files: result.files ?? [], next: "run diagnostics" })
   if (result.tool === "install_dependencies")
     return advance(task, {
       completed: [...task.completed, "install dependencies"],
       next: "run diagnostics",
     })
-  if (result.tool === "inspect_diagnostics" || result.tool === "run_tests")
+  // Diagnostics prove the code type-checks; only tests prove the task works. Neither may mark the other complete.
+  if (result.tool === "inspect_diagnostics")
     return advance(task, {
-      verification: [`${result.tool} passed`],
-      completed: [...task.completed, "run diagnostics", "verify the result"],
+      verification: [...task.verification, `${result.tool} passed`],
+      completed: [...task.completed, "run diagnostics", ...(task.errors.length > 0 ? ["fix errors"] : [])],
+      errors: [],
+      next: "verify the result",
+    })
+  if (result.tool === "run_tests")
+    return advance(task, {
+      verification: [...task.verification, `${result.tool} passed`],
+      completed: [...task.completed, "verify the result", ...(task.errors.length > 0 ? ["fix errors"] : [])],
+      errors: [],
       next: "report the result",
     })
   if (result.tool === "find_symbols")

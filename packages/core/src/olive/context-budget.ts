@@ -120,9 +120,19 @@ export function fit(items: readonly Item[], budget: number): Fit {
   return { kept, dropped, tokens }
 }
 
+export interface ConversationCall {
+  readonly id: string
+  readonly name: string
+  readonly arguments: string
+}
+
 export interface ConversationMessage {
   readonly role: string
   readonly content: string
+  /** Set on a tool result so it stays paired with the assistant call that produced it. */
+  readonly toolCallId?: string
+  /** Set on the assistant message that requested tools. */
+  readonly toolCalls?: readonly ConversationCall[]
 }
 
 export interface Compacted {
@@ -137,14 +147,15 @@ export interface Compacted {
  * what happened before without replaying every message.
  */
 export function compactConversation(messages: readonly ConversationMessage[], budget: number): Compacted {
-  const kept: ConversationMessage[] = []
+  const newest: ConversationMessage[] = []
   let tokens = 0
   for (const message of [...messages].reverse()) {
     const cost = estimateTokens(message.content)
     if (tokens + cost > budget) break
-    kept.unshift(message)
+    newest.unshift(message)
     tokens += cost
   }
+  const kept = pairToolCalls(newest)
   const replaced = messages.slice(0, messages.length - kept.length)
   if (replaced.length === 0) return { kept, tokens }
   const counts = new Map<string, number>()
@@ -153,5 +164,29 @@ export function compactConversation(messages: readonly ConversationMessage[], bu
     counts,
     ([role, count]) => ` ${count} ${role}`,
   ).join(",")}.`
-  return { summary, kept, tokens: tokens + estimateTokens(summary) }
+  return {
+    summary,
+    kept,
+    tokens: kept.reduce((sum, message) => sum + estimateTokens(message.content), 0) + estimateTokens(summary),
+  }
+}
+
+/**
+ * Keeps tool results with the assistant call that produced them. Compaction can split the pair; OpenAI-compatible
+ * endpoints reject a request where a tool result has no matching call or a call has no result, so an unpaired half is
+ * dropped rather than sent.
+ */
+function pairToolCalls(messages: readonly ConversationMessage[]): ConversationMessage[] {
+  const responded = new Set(messages.flatMap((message) => (message.role === "tool" && message.toolCallId ? [message.toolCallId] : [])))
+  const anchored = messages.flatMap((message) => {
+    if (message.role === "tool") return [message]
+    if (!message.toolCalls?.length) return [message]
+    const calls = message.toolCalls.filter((call) => responded.has(call.id))
+    if (calls.length === 0 && message.content.length === 0) return []
+    return [{ ...message, toolCalls: calls }]
+  })
+  const calls = new Set(anchored.flatMap((message) => message.toolCalls?.map((call) => call.id) ?? []))
+  return anchored.flatMap((message) =>
+    message.role === "tool" && (!message.toolCallId || !calls.has(message.toolCallId)) ? [] : [message],
+  )
 }

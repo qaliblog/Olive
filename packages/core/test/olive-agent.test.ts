@@ -21,11 +21,32 @@ function stream(chunks: readonly string[]) {
 }
 
 function toolCall(name: string, args: Record<string, unknown>) {
+  return toolCalls([{ name, args }])
+}
+
+function toolCalls(calls: readonly { name: string; args: Record<string, unknown> }[]) {
   return stream([
     `data: ${JSON.stringify({
       choices: [
-        { delta: { tool_calls: [{ index: 0, id: "call_1", function: { name, arguments: JSON.stringify(args) } }] } },
+        {
+          delta: {
+            tool_calls: calls.map((call, index) => ({
+              index,
+              id: `call_${index + 1}`,
+              function: { name: call.name, arguments: JSON.stringify(call.args) },
+            })),
+          },
+        },
       ],
+    })}\n\n`,
+    "data: [DONE]\n\n",
+  ])
+}
+
+function rawToolCall(name: string, argumentsText: string) {
+  return stream([
+    `data: ${JSON.stringify({
+      choices: [{ delta: { tool_calls: [{ index: 0, id: "call_1", function: { name, arguments: argumentsText } }] } }],
     })}\n\n`,
     "data: [DONE]\n\n",
   ])
@@ -143,6 +164,147 @@ describe("olive agent", () => {
         expect(outcome.failures).toHaveLength(1)
         expect(outcome.failures[0]?.error.code).toBe("not-found")
         expect(outcome.task.errors.join(" ")).toContain("not-found")
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("returns each executed call to the endpoint as a paired tool message", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "create hello.txt"
+      const fixture = mock([() => toolCall("write_file", { path: "hello.txt", content: "hi" }), () => answer("created")])
+      try {
+        await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        const second = fixture.requests[1] as {
+          messages: { role: string; content: string; tool_calls?: { id: string }[]; tool_call_id?: string }[]
+        }
+        const assistant = second.messages.find((message) => message.tool_calls?.length)
+        const results = second.messages.filter((message) => message.role === "tool")
+        expect(assistant?.tool_calls?.map((call) => call.id)).toEqual(["call_1"])
+        expect(results.map((message) => message.tool_call_id)).toEqual(["call_1"])
+        expect(results[0]?.content).toContain("write_file ok")
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("runs at most two calls per step and never records a call it skipped", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "write three files"
+      const fixture = mock([
+        () =>
+          toolCalls([
+            { name: "write_file", args: { path: "a.txt", content: "a" } },
+            { name: "write_file", args: { path: "b.txt", content: "b" } },
+            { name: "write_file", args: { path: "c.txt", content: "c" } },
+          ]),
+        () => answer("wrote two files"),
+      ])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(await readFile(path.join(directory, "a.txt"), "utf8")).toBe("a")
+        expect(await readFile(path.join(directory, "b.txt"), "utf8")).toBe("b")
+        expect(await readFile(path.join(directory, "c.txt"), "utf8").catch(() => undefined)).toBeUndefined()
+        expect(outcome.task.files).toEqual(["a.txt", "b.txt"])
+        const second = fixture.requests[1] as { messages: { role: string; tool_calls?: unknown[] }[] }
+        expect(second.messages.find((message) => message.tool_calls?.length)?.tool_calls).toHaveLength(2)
+        expect(second.messages.filter((message) => message.role === "tool")).toHaveLength(2)
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("does not report completion when the model never performed an operation", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "build the login page"
+      const fixture = mock([() => answer("done, everything works")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.completed).toBe(false)
+        expect(outcome.failures).toEqual([])
+        expect(outcome.error).toContain("any tool operation")
+        expect(outcome.task.completed).toEqual([])
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("does not mark verification complete when only diagnostics ran", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "type-check the project"
+      const fixture = mock([() => toolCall("inspect_diagnostics", { command: "true" }), () => answer("types are fine")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.task.completed).toContain("run diagnostics")
+        expect(outcome.task.completed).not.toContain("verify the result")
+        expect(outcome.task.verification).toEqual(["inspect_diagnostics passed"])
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("does not mark the diagnostics step complete when only tests ran", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "run the test suite"
+      const fixture = mock([() => toolCall("run_tests", { command: "true" }), () => answer("tests pass")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.task.completed).toContain("verify the result")
+        expect(outcome.task.completed).not.toContain("run diagnostics")
+        expect(outcome.task.verification).toEqual(["run_tests passed"])
+        expect(outcome.completed).toBe(true)
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("reports malformed tool arguments without executing the tool", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "create hello.txt"
+      const fixture = mock([() => rawToolCall("write_file", '{"path": "hello.txt"'), () => answer("created")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(await readFile(path.join(directory, "hello.txt"), "utf8").catch(() => undefined)).toBeUndefined()
+        expect(outcome.failures).toHaveLength(1)
+        expect(outcome.failures[0]?.error.code).toBe("invalid-arguments")
+        expect(outcome.failures[0]?.error.message).toContain("not valid JSON")
+        expect(outcome.completed).toBe(false)
       } finally {
         fixture.server.stop(true)
       }

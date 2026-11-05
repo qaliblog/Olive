@@ -81,8 +81,20 @@ export function build(input: Input): Built {
         ? [{ role: "system" as const, content: truncate(conversation.summary, plan.sections.conversation) }]
         : []),
       ...conversation.kept.map((message): OliveProvider.ChatMessage => {
-        const role = message.role === "assistant" ? "assistant" : message.role === "system" ? "system" : "user"
-        return { role, content: message.content }
+        const role =
+          message.role === "assistant"
+            ? "assistant"
+            : message.role === "system"
+              ? "system"
+              : message.role === "tool"
+                ? "tool"
+                : "user"
+        return {
+          role,
+          content: message.content,
+          ...(message.toolCallId ? { toolCallId: message.toolCallId } : {}),
+          ...(message.toolCalls?.length ? { toolCalls: message.toolCalls } : {}),
+        }
       }),
       {
         role: "user",

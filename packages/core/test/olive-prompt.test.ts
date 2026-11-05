@@ -49,6 +49,22 @@ describe("olive prompt", () => {
     expect(step).not.toContain("whole file contents")
   })
 
+  test("renders a tool call and its result with the ids the endpoint pairs on", () => {
+    const plan = OliveContextBudget.plan({ context: 4096, maxOutput: 256 })
+    const built = OlivePrompt.build({
+      plan,
+      task: task(),
+      conversation: [
+        { role: "assistant", content: "", toolCalls: [{ id: "call_1", name: "write_file", arguments: "{}" }] },
+        { role: "tool", content: "write_file ok", toolCallId: "call_1" },
+      ],
+    })
+    const assistant = built.messages.find((message) => message.toolCalls?.length)
+    expect(assistant?.role).toBe("assistant")
+    expect(assistant?.toolCalls?.[0]?.id).toBe("call_1")
+    expect(built.messages.find((message) => message.role === "tool")?.toolCallId).toBe("call_1")
+  })
+
   test("keeps the newest tool results when the budget is small", () => {
     const kept = OlivePrompt.compressResults(["old ".repeat(100), "newest result"], 20)
     expect(kept.at(-1)).toContain("newest result")

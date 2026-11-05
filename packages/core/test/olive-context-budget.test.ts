@@ -62,6 +62,34 @@ describe("olive context budget", () => {
     expect(compacted.tokens).toBeGreaterThan(30)
   })
 
+  test("never keeps a tool result without the assistant call that produced it", () => {
+    const messages: OliveContextBudget.ConversationMessage[] = [
+      { role: "user", content: "build the page" },
+      { role: "assistant", content: "thinking ".repeat(20), toolCalls: [{ id: "call_1", name: "write_file", arguments: "{}" }] },
+      { role: "tool", content: "write_file ok", toolCallId: "call_1" },
+    ]
+    const compacted = OliveContextBudget.compactConversation(messages, 10)
+    expect(compacted.kept).toEqual([])
+    expect(compacted.summary).toContain("3 message(s)")
+  })
+
+  test("keeps a full call and result pair when both fit", () => {
+    const messages: OliveContextBudget.ConversationMessage[] = [
+      {
+        role: "assistant",
+        content: "writing",
+        toolCalls: [
+          { id: "call_1", name: "write_file", arguments: "{}" },
+          { id: "call_2", name: "edit_file", arguments: "{}" },
+        ],
+      },
+      { role: "tool", content: "write_file ok", toolCallId: "call_2" },
+    ]
+    const compacted = OliveContextBudget.compactConversation(messages, 100)
+    expect(compacted.kept.map((message) => message.toolCallId ?? message.role)).toEqual(["assistant", "call_2"])
+    expect(compacted.kept[0]?.toolCalls?.map((call) => call.id)).toEqual(["call_2"])
+  })
+
   test("estimates tokens from text length instead of claiming a tokenizer", () => {
     expect(OliveContextBudget.estimateTokens("")).toBe(0)
     expect(OliveContextBudget.estimateTokens("abcd")).toBe(1)

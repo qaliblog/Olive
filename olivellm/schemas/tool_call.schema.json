@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olive.dev/olivellm/tool_call.schema.json",
+  "title": "Olive tool call",
+  "description": "One tool call the model is expected to emit. The name enum and every argument schema mirror packages/core/src/olive/tools.ts exactly; changing a tool there requires changing this file and rerunning scripts/validate.js --parity.",
+  "type": "object",
+  "required": ["name", "arguments", "why"],
+  "additionalProperties": false,
+  "properties": {
+    "name": { "enum": ["read_file", "write_file", "edit_file", "list_directory", "search_code", "find_symbols", "run_shell", "run_tests", "install_dependencies", "inspect_diagnostics", "project_structure"] },
+    "arguments": { "type": "object" },
+    "why": { "type": "string", "minLength": 8 },
+    "expect": { "enum": ["ok", "failure"], "default": "ok" }
+  },
+  "$defs": {
+    "read_file": {
+      "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string", "minLength": 1 }, "start": { "type": "integer", "minimum": 0 }, "end": { "type": "integer", "minimum": 0 } },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "workspace": "existing-file"
+    },
+    "write_file": {
+      "description": "Create or replace a file with the given content.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string", "minLength": 1 }, "content": { "type": "string" } },
+        "required": ["path", "content"],
+        "additionalProperties": false
+      },
+      "workspace": "any-file"
+    },
+    "edit_file": {
+      "description": "Replace one exact occurrence of old text in a file. Fails when the text is missing or ambiguous.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string", "minLength": 1 }, "old": { "type": "string", "minLength": 1 }, "new": { "type": "string" } },
+        "required": ["path", "old", "new"],
+        "additionalProperties": false
+      },
+      "workspace": "existing-file"
+    },
+    "list_directory": {
+      "description": "List the entries of one directory.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string" } },
+        "additionalProperties": false
+      },
+      "workspace": "existing-directory"
+    },
+    "search_code": {
+      "description": "Search project text for a literal string and return matching lines.",
+      "parameters": {
+        "type": "object",
+        "properties": { "query": { "type": "string", "minLength": 1 }, "path": { "type": "string" }, "max": { "type": "integer", "minimum": 1 } },
+        "required": ["query"],
+        "additionalProperties": false
+      },
+      "workspace": "existing-directory"
+    },
+    "find_symbols": {
+      "description": "Index function, class, type, and CSS declarations in project source files.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string" }, "max": { "type": "integer", "minimum": 1 } },
+        "additionalProperties": false
+      },
+      "workspace": "existing-directory"
+    },
+    "run_shell": {
+      "description": "Run a shell command in the project directory and return its output.",
+      "parameters": {
+        "type": "object",
+        "properties": { "command": { "type": "string", "minLength": 1 }, "timeoutMs": { "type": "integer", "minimum": 1 } },
+        "required": ["command"],
+        "additionalProperties": false
+      },
+      "workspace": "any"
+    },
+    "run_tests": {
+      "description": "Run the project test script, or a given test command.",
+      "parameters": {
+        "type": "object",
+        "properties": { "command": { "type": "string", "minLength": 1 }, "timeoutMs": { "type": "integer", "minimum": 1 } },
+        "additionalProperties": false
+      },
+      "workspace": "any",
+      "verifies": ["verify the result"]
+    },
+    "install_dependencies": {
+      "description": "Install project dependencies with the package manager detected from the lockfile.",
+      "parameters": {
+        "type": "object",
+        "properties": { "command": { "type": "string", "minLength": 1 }, "timeoutMs": { "type": "integer", "minimum": 1 } },
+        "additionalProperties": false
+      },
+      "workspace": "any",
+      "completes": ["install dependencies"]
+    },
+    "inspect_diagnostics": {
+      "description": "Run the project type check or diagnostics script.",
+      "parameters": {
+        "type": "object",
+        "properties": { "command": { "type": "string", "minLength": 1 }, "timeoutMs": { "type": "integer", "minimum": 1 } },
+        "additionalProperties": false
+      },
+      "workspace": "any",
+      "completes": ["run diagnostics"]
+    },
+    "project_structure": {
+      "description": "Show the project tree to a shallow depth, skipping build and dependency directories.",
+      "parameters": {
+        "type": "object",
+        "properties": { "path": { "type": "string" }, "depth": { "type": "integer", "minimum": 1 } },
+        "additionalProperties": false
+      },
+      "workspace": "existing-directory"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olive.dev/olivellm/example.schema.json",
+  "title": "OliveLLM training example",
+  "description": "One supervised step of the Olive agent. `context` is everything the model sees before it acts; `expected_*` is everything the agent would then do deterministically. A tool result is never implied by a request: expected_tool_results is either as long as expected_tool_calls or empty for selection-only examples.",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "category",
+    "language",
+    "difficulty",
+    "objective",
+    "system",
+    "context",
+    "expected_plan",
+    "expected_tool_calls",
+    "expected_tool_results",
+    "expected_task_state",
+    "expected_response",
+    "validation",
+    "source",
+    "split"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^olive\\.[a-z_]+\\.[a-z0-9_]+\\.[a-z]{2}\\.[0-9]{4}$" },
+    "version": { "const": "1.0.0" },
+    "category": {
+      "enum": [
+        "intent_understanding",
+        "requirement_extraction",
+        "task_planning",
+        "project_structure",
+        "file_reading",
+        "file_creation",
+        "file_editing",
+        "code_generation",
+        "dependency_installation",
+        "diagnostics",
+        "test_execution",
+        "error_recovery",
+        "task_state_update",
+        "task_resumption",
+        "completion_verification"
+      ]
+    },
+    "language": { "enum": ["en", "fa", "mixed"] },
+    "difficulty": { "enum": ["easy", "medium", "hard"] },
+    "objective": { "type": "string", "minLength": 3, "maxLength": 600 },
+    "system": { "type": "string", "minLength": 40 },
+    "context": {
+      "type": "object",
+      "required": ["task_state", "conversation", "code", "tool_results", "workspace"],
+      "additionalProperties": false,
+      "properties": {
+        "task_state": { "anyOf": [{ "$ref": "task_state.schema.json" }, { "type": "null" }] },
+        "conversation": { "type": "array", "maxItems": 8, "items": { "$ref": "#/$defs/message" } },
+        "code": { "type": "array", "maxItems": 6, "items": { "$ref": "#/$defs/snippet" } },
+        "tool_results": { "type": "array", "maxItems": 6, "items": { "type": "string", "minLength": 1 } },
+        "workspace": { "type": "array", "maxItems": 40, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "expected_plan": { "type": "array", "maxItems": 9, "items": { "$ref": "task_state.schema.json#/$defs/step" } },
+    "expected_tool_calls": { "type": "array", "maxItems": 2, "items": { "$ref": "tool_call.schema.json" } },
+    "expected_tool_results": { "type": "array", "maxItems": 2, "items": { "$ref": "#/$defs/tool_result" } },
+    "expected_task_state": { "$ref": "task_state.schema.json" },
+    "expected_response": { "$ref": "#/$defs/response" },
+    "validation": { "$ref": "#/$defs/validation" },
+    "source": { "$ref": "#/$defs/source" },
+    "split": { "enum": ["train", "validation", "test", "heldout"] }
+  },
+  "$defs": {
+    "message": {
+      "type": "object",
+      "required": ["role", "content"],
+      "additionalProperties": false,
+      "properties": {
+        "role": { "enum": ["system", "user", "assistant", "tool"] },
+        "content": { "type": "string" },
+        "toolCallId": { "type": "string", "minLength": 1 },
+        "toolCalls": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "arguments"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "name": { "type": "string", "minLength": 1 },
+              "arguments": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "snippet": {
+      "type": "object",
+      "required": ["file", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["symbol", "snippet", "summary", "file"], "default": "snippet" }
+      }
+    },
+    "tool_result": {
+      "type": "object",
+      "required": ["index", "tool", "ok", "output"],
+      "additionalProperties": false,
+      "properties": {
+        "index": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "tool": { "enum": ["read_file", "write_file", "edit_file", "list_directory", "search_code", "find_symbols", "run_shell", "run_tests", "install_dependencies", "inspect_diagnostics", "project_structure"] },
+        "ok": { "type": "boolean" },
+        "output": { "type": "string" },
+        "error_code": { "enum": ["invalid-arguments", "outside-workspace", "not-found", "no-match", "ambiguous-match", "command-failed", "timeout", "io-error"] },
+        "files": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "response": {
+      "type": "object",
+      "required": ["kind", "text", "completion"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["tool_call", "text"] },
+        "text": { "type": "string", "maxLength": 1200 },
+        "completion": { "enum": ["continue", "done", "blocked"] }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": ["status", "checks", "notes", "commands"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["unverified", "passed", "failed"] },
+        "checks": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "notes": { "type": "string" },
+        "commands": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["kind", "generator", "seed"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["template", "handwritten", "teacher"] },
+        "generator": { "type": "string", "minLength": 1 },
+        "seed": { "type": "integer", "minimum": 0 },
+        "model": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

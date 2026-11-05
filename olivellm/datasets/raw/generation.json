@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "total": 379,
+  "per_category": {
+    "intent_understanding": 53,
+    "requirement_extraction": 74,
+    "task_planning": 53,
+    "project_structure": 27,
+    "file_reading": 34,
+    "file_editing": 28,
+    "file_creation": 9,
+    "code_generation": 20,
+    "dependency_installation": 8,
+    "diagnostics": 7,
+    "test_execution": 7,
+    "error_recovery": 36,
+    "task_state_update": 8,
+    "task_resumption": 6,
+    "completion_verification": 9
+  },
+  "per_language": {
+    "en": 295,
+    "fa": 84
+  },
+  "generators": {
+    "intent_understanding": 53,
+    "requirement_extraction": 74,
+    "file_creation": 9,
+    "task_planning": 53,
+    "project_structure": 27,
+    "file_reading": 34,
+    "code_generation": 20,
+    "dependency_installation": 8,
+    "diagnostics": 7,
+    "test_execution": 7,
+    "error_recovery": 36,
+    "task_state_update": 8,
+    "task_resumption": 6,
+    "completion_verification": 9,
+    "file_editing": 28
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "renderer": "olivellm/scripts/lib/lfm2.js (LFM2.5 chat template, single-quoted tool arguments)",
+  "tools": [
+    "read_file",
+    "write_file",
+    "edit_file",
+    "list_directory",
+    "search_code",
+    "find_symbols",
+    "run_shell",
+    "run_tests",
+    "install_dependencies",
+    "inspect_diagnostics",
+    "project_structure"
+  ],
+  "splits": {
+    "train": {
+      "examples": 280,
+      "tokens": 347963
+    },
+    "validation": {
+      "examples": 33,
+      "tokens": 41252
+    },
+    "test": {
+      "examples": 29,
+      "tokens": 35318
+    },
+    "heldout": {
+      "examples": 34,
+      "tokens": 42740
+    }
+  },
+  "preference_pairs": 18,
+  "heldout_cases": 34
+}

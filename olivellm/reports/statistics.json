@@ -1,0 +1,189 @@
+{
+  "version": "1.0.0",
+  "records": {
+    "generated": 379,
+    "validated": 376,
+    "rejected": 0,
+    "duplicates_removed": 3,
+    "rejection_rate": 0.008
+  },
+  "splits": {
+    "train": 280,
+    "validation": 33,
+    "test": 29,
+    "heldout": 34
+  },
+  "categories": {
+    "intent_understanding": 53,
+    "requirement_extraction": 74,
+    "task_planning": 53,
+    "project_structure": 26,
+    "file_reading": 34,
+    "file_editing": 28,
+    "file_creation": 9,
+    "code_generation": 20,
+    "dependency_installation": 8,
+    "diagnostics": 5,
+    "test_execution": 7,
+    "error_recovery": 36,
+    "task_state_update": 8,
+    "task_resumption": 6,
+    "completion_verification": 9
+  },
+  "languages": {
+    "en": 292,
+    "fa": 84
+  },
+  "difficulties": {
+    "easy": 127,
+    "medium": 238,
+    "hard": 11
+  },
+  "completions": {
+    "continue": 347,
+    "done": 26,
+    "blocked": 3
+  },
+  "kinds": {
+    "tool_call": 347,
+    "text": 29
+  },
+  "tools": {
+    "project_structure": 72,
+    "read_file": 130,
+    "list_directory": 58,
+    "write_file": 31,
+    "install_dependencies": 11,
+    "inspect_diagnostics": 8,
+    "run_tests": 9,
+    "edit_file": 26,
+    "run_shell": 4,
+    "find_symbols": 1,
+    "search_code": 1
+  },
+  "failures": {
+    "outside-workspace": 1,
+    "not-found": 3,
+    "command-failed": 2,
+    "invalid-arguments": 5,
+    "no-match": 1,
+    "ambiguous-match": 1
+  },
+  "tokens": {
+    "estimated_total": 140513,
+    "average": 373.705,
+    "median": 357,
+    "p95": 487,
+    "max": 656
+  },
+  "coverage": [
+    {
+      "goal": "intent and requirement",
+      "target": 200,
+      "categories": [
+        "intent_understanding",
+        "requirement_extraction"
+      ],
+      "count": 127,
+      "shortfall": 73
+    },
+    {
+      "goal": "planning",
+      "target": 200,
+      "categories": [
+        "task_planning"
+      ],
+      "count": 53,
+      "shortfall": 147
+    },
+    {
+      "goal": "tool selection",
+      "target": 300,
+      "categories": [
+        "project_structure",
+        "file_reading"
+      ],
+      "count": 60,
+      "shortfall": 240
+    },
+    {
+      "goal": "tool execution",
+      "target": 300,
+      "categories": [
+        "file_creation",
+        "file_editing",
+        "dependency_installation",
+        "diagnostics",
+        "test_execution"
+      ],
+      "count": 57,
+      "shortfall": 243
+    },
+    {
+      "goal": "task state",
+      "target": 300,
+      "categories": [
+        "task_state_update",
+        "task_resumption"
+      ],
+      "count": 14,
+      "shortfall": 286
+    },
+    {
+      "goal": "coding",
+      "target": 300,
+      "categories": [
+        "file_creation",
+        "file_editing",
+        "code_generation"
+      ],
+      "count": 57,
+      "shortfall": 243
+    },
+    {
+      "goal": "debugging",
+      "target": 200,
+      "categories": [
+        "error_recovery"
+      ],
+      "count": 36,
+      "shortfall": 164
+    },
+    {
+      "goal": "verification",
+      "target": 100,
+      "categories": [
+        "completion_verification",
+        "test_execution"
+      ],
+      "count": 16,
+      "shortfall": 84
+    },
+    {
+      "goal": "persian",
+      "target": 100,
+      "languages": [
+        "fa"
+      ],
+      "count": 84,
+      "shortfall": 16
+    }
+  ],
+  "shortfalls": [
+    "intent and requirement: 127/200",
+    "planning: 53/200",
+    "tool selection: 60/300",
+    "tool execution: 57/300",
+    "task state: 14/300",
+    "coding: 57/300",
+    "debugging: 36/200",
+    "verification: 16/100",
+    "persian: 84/100"
+  ],
+  "rejection_reasons": {},
+  "duplicate_reasons": {
+    "same tool calls, results and answer as olive.project_structure.html_rtl.en.0007": 1,
+    "same tool calls, results and answer as olive.diagnostics.react_dashboard.en.0001": 1,
+    "same tool calls, results and answer as olive.diagnostics.node_api.en.0003": 1
+  }
+}

@@ -1,0 +1,70 @@
+OliveLLM dataset engineering - task ledger
+==========================================
+Branch: addOliveLlm
+Format: [ ] open, [x] done and verified, [!] blocked or needs a decision.
+Every [x] entry names how it was verified. Do not mark a task done because
+files exist: run the check.
+
+PHASE 1 - REPOSITORY AUDIT
+[x] Read packages/core/src/olive/{agent,provider,task-state,tools,prompt,
+    context-budget,model}.ts and packages/cli/src/commands/handlers/agent.ts.
+    Verified: read end to end; findings in documentation/architecture.md and
+    documentation/agent_workflow.md.
+[x] Read the existing olive tests (7 files, 52 tests) and record the baseline.
+    Verified: `bun run script/test.ts test/olive-*.test.ts` from packages/core.
+[x] Record defects with concrete failure modes.
+    Verified: each defect below has a regression test or a documented reason
+    for being left alone in documentation/architecture.md.
+[x] Fix D1 tool history never returned + skipped calls recorded.
+    Verified: "returns each executed call to the endpoint as a paired tool
+    message", "runs at most two calls per step and never records a call it
+    skipped".
+[x] Fix D2 compaction could orphan a tool result.
+    Verified: "never keeps a tool result without the assistant call that
+    produced it", "keeps a full call and result pair when both fit".
+[x] Fix D3 diagnostics marked the test-verification step complete.
+    Verified: "does not mark verification complete when only diagnostics ran",
+    "does not mark the diagnostics step complete when only tests ran".
+[x] Fix D4 completion without any operation.
+    Verified: "does not report completion when the model never performed an
+    operation".
+[x] Fix D5 malformed tool arguments reached the tool as a raw string.
+    Verified: "reports malformed tool arguments without executing the tool".
+[x] Fix D6 duplicate task-state writes per transition.
+    Verified: single write call in each branch; no behaviour change observable,
+    covered by the existing persisted-state assertions.
+
+PHASE 2 - OLIVELLM PROJECT
+[x] Create olivellm/ with documentation, datasets, schemas, scripts,
+    evaluation and reports directories.
+    Verified: directory listing + `git status`.
+[ ] Documentation set complete and consistent with the code.
+
+PHASE 3 - MODEL FINDINGS
+[ ] model_findings.md separates observed, documented and untested facts.
+
+PHASE 4 - DATASET FORMAT
+[ ] schemas/example.schema.json, tool_call.schema.json, task_state.schema.json.
+[ ] dataset_specification.md documents every field and invariant.
+
+PHASE 5..8 - GENERATION
+[ ] Tool-calling examples for all 11 tools (selection + execution + failure).
+[ ] Coding examples for the supported stack.
+[ ] Persian and bilingual examples.
+[ ] Error-recovery examples that fix, not apologize.
+
+PHASE 9 - VALIDATION
+[ ] validate.js: schema, duplicates, tool names/arguments, task transitions,
+    contradictions, leakage, length, language.
+[ ] Code snippets checked with node/python/bun parsers where available.
+
+PHASE 10 - DATASET GENERATION
+[ ] Batches generated with real counts recorded, shortfalls reported.
+
+PHASE 11 - TRAINING AND EVALUATION PREPARATION
+[ ] LFM2.5 rendering that matches the real chat template.
+[ ] Preference pairs.
+[ ] Frozen baseline evaluation set separate from training.
+
+PHASE 12 - FINAL REPORT
+[ ] reports/FINAL_DATASET_REPORT.md with measured numbers only.

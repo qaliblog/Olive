@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olive.dev/olivellm/task_state.schema.json",
+  "title": "Olive durable task state",
+  "description": "Mirror of OliveTaskState.TaskState in packages/core/src/olive/task-state.ts. `updated` is deterministic in examples (a fixed epoch plus the example index) so regeneration is byte-stable.",
+  "type": "object",
+  "required": ["objective", "plan", "completed", "remaining", "files", "symbols", "pending", "verification", "errors", "updated"],
+  "additionalProperties": false,
+  "properties": {
+    "objective": { "type": "string", "minLength": 1, "maxLength": 600 },
+    "project": { "type": "string", "minLength": 1 },
+    "plan": { "type": "array", "maxItems": 9, "items": { "$ref": "#/$defs/step" } },
+    "completed": { "type": "array", "maxItems": 9, "items": { "$ref": "#/$defs/step" } },
+    "remaining": { "type": "array", "maxItems": 9, "items": { "$ref": "#/$defs/step" } },
+    "files": { "type": "array", "maxItems": 40, "items": { "type": "string", "minLength": 1 } },
+    "symbols": { "type": "array", "maxItems": 40, "items": { "type": "string", "minLength": 1 } },
+    "pending": { "type": "array", "maxItems": 20, "items": { "type": "string", "minLength": 1 } },
+    "verification": { "type": "array", "maxItems": 9, "items": { "$ref": "#/$defs/verification" } },
+    "errors": { "type": "array", "maxItems": 10, "items": { "type": "string", "minLength": 1, "maxLength": 300 } },
+    "next": { "type": "string", "minLength": 1 },
+    "updated": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "step": {
+      "description": "The fixed OliveAgent.WORKFLOW list, in order.",
+      "enum": [
+        "analyze requirements",
+        "write an implementation plan",
+        "create project directories",
+        "write initial files",
+        "implement remaining files",
+        "install dependencies",
+        "run diagnostics",
+        "fix errors",
+        "verify the result"
+      ]
+    },
+    "verification": {
+      "description": "Only a real, successful tool run may be recorded here.",
+      "type": "string",
+      "pattern": "^(inspect_diagnostics|run_tests) passed$"
+    }
+  }
+}

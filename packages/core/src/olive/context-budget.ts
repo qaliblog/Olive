@@ -27,10 +27,15 @@ export const DEFAULT_ALLOCATION: Allocation = {
   generation: 0.1,
 }
 
-/** Heuristic estimate used when a tokenizer is not configured; it never claims to be exact model tokenization. */
+/**
+ * Heuristic estimate used when a tokenizer is not configured; it never claims to be exact model tokenization. Latin
+ * text averages four characters per token, while scripts such as Persian or Arabic tokenize at roughly one to two
+ * characters per token, so counting them at four would overflow the window for exactly the users this agent supports.
+ */
 export function estimateTokens(text: string) {
   if (text.length === 0) return 0
-  return Math.max(1, Math.ceil(text.length / 4))
+  const nonAscii = text.match(/[^\x00-\x7f]/g)?.length ?? 0
+  return Math.max(1, Math.ceil((text.length - nonAscii + nonAscii * 3) / 4))
 }
 
 export interface PlanInput {

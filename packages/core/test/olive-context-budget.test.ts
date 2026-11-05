@@ -95,4 +95,11 @@ describe("olive context budget", () => {
     expect(OliveContextBudget.estimateTokens("abcd")).toBe(1)
     expect(OliveContextBudget.estimateTokens("a".repeat(401))).toBe(101)
   })
+
+  test("counts non-Latin script higher than Latin text of the same length", () => {
+    const persian = "یک برنامه ریاکت بساز"
+    expect(persian.length).toBe(20)
+    expect(OliveContextBudget.estimateTokens(persian)).toBeGreaterThan(OliveContextBudget.estimateTokens("a".repeat(20)))
+    expect(OliveContextBudget.estimateTokens("a".repeat(20))).toBe(5)
+  })
 })

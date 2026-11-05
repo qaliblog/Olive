@@ -153,18 +153,17 @@ export async function run(options: Options): Promise<Outcome> {
     const calls = asked.calls.slice(0, 2)
     history.push({ role: "assistant", content: asked.text, ...(calls.length > 0 ? { toolCalls: calls } : {}) })
     if (calls.length === 0) {
-      task = await options.state.write(advance(task, { next: "report the result" }))
-      const completed = failures.length === 0 && operations.operations.some((operation) => operation.ok)
-      options.onEvent?.({ type: "done", text: asked.text, completed })
+      // Stopping is only a success when the real executor produced the evidence the task needs.
+      const verdict = completion(operations.operations, failures)
+      task = await options.state.write(advance(task, { next: verdict.completed ? "report the result" : verdict.next }))
+      options.onEvent?.({ type: "done", text: asked.text, completed: verdict.completed })
       return {
         task,
         steps: step,
         text: asked.text,
         failures,
-        completed,
-        ...(completed || failures.length > 0
-          ? {}
-          : { error: "the model stopped before it performed any tool operation" }),
+        completed: verdict.completed,
+        ...(verdict.completed ? {} : { error: verdict.error }),
       }
     }
 
@@ -188,6 +187,42 @@ export async function run(options: Options): Promise<Outcome> {
   const message = `step limit reached after ${maxSteps} steps; the task state is saved and can be resumed`
   options.onEvent?.({ type: "error", message })
   return { task, steps: maxSteps, text: "", failures, completed: false, error: message }
+}
+
+/**
+ * Decides whether the run may report completion. Only the executor's own record counts: an unresolved failure blocks
+ * it, an inspection-only task may stop once it inspected something, and a task that changed files needs a test run
+ * that really happened after the last change. Diagnostics alone do not verify behaviour.
+ */
+function completion(
+  operations: readonly OliveTools.Operation[],
+  failures: readonly OliveTools.Failure[],
+): { readonly completed: boolean } & ({ readonly completed: true } | { readonly completed: false; readonly error: string; readonly next: string }) {
+  if (failures.length > 0)
+    return {
+      completed: false,
+      error: `${failures.length} tool failure(s) were never resolved`,
+      next: retry[failures[0]!.tool] ?? "recover from the failed operation",
+    }
+  const lastChange = operations.findLastIndex(
+    (operation) => operation.ok && (operation.tool === "write_file" || operation.tool === "edit_file"),
+  )
+  if (lastChange === -1) {
+    if (operations.some((operation) => operation.ok)) return { completed: true }
+    return {
+      completed: false,
+      error: "the model stopped before it performed any tool operation",
+      next: "inspect the project before reporting a result",
+    }
+  }
+  const lastTest = operations.findLastIndex((operation) => operation.ok && operation.tool === "run_tests")
+  if (lastTest < lastChange)
+    return {
+      completed: false,
+      error: "files changed but no test run succeeded after the last change",
+      next: "verify the result",
+    }
+  return { completed: true }
 }
 
 /** Runs one requested call, turning unparseable arguments into a failure the model can correct. */

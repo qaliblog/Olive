@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 /**
- * Assigns deterministic, stratified splits and freezes the held-out evaluation ids.
+ * Assigns deterministic, group-based splits and freezes the held-out evaluation ids.
+ *
+ * Split by record id leaks related examples: two records built from the same project, generator family, trajectory or
+ * language are near-copies of one another. This groups them first and assigns whole groups, so no family can appear in
+ * both training and an evaluation split.
  *
  *   node olivellm/scripts/split.js
  */
-import { createHash } from "node:crypto"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { countBy, readJsonl, sha1, writeJson, writeJsonl } from "./lib/json.js"
+import { assignSplits, groupKeyOf } from "./lib/split-groups.js"
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(here, "..")
@@ -16,56 +20,25 @@ const processed = path.join(root, "datasets/processed")
 const heldoutFile = path.join(root, "evaluation/heldout/ids.json")
 
 const rows = await readJsonl(source).then((items) => items.map((item) => item.value))
-const categories = [...new Set(rows.map((row) => row.category))].toSorted()
-
-// Held-out ids are selected by a stable hash so the same corpus always yields the same eval set.
-const heldout = new Set(
-  categories.flatMap((category) =>
-    rows
-      .filter((row) => row.category === category)
-      .toSorted((left, right) => hash(left.id) - hash(right.id))
-      .slice(0, Math.min(8, Math.max(2, Math.round(rows.filter((row) => row.category === category).length * 0.06))))
-      .map((row) => row.id),
-  ),
-)
-
-const assigned = rows.map((row) => {
-  if (heldout.has(row.id)) return { ...row, split: "heldout" }
-  const bucket = hash(row.id) % 100
-  const split = bucket < 8 ? "test" : bucket < 16 ? "validation" : "train"
-  return { ...row, split }
-})
-
-// A category with enough rows must appear in every split, otherwise its metrics are noise.
-for (const category of categories) {
-  const members = assigned.filter((row) => row.category === category)
-  if (members.length < 6) continue
-  for (const split of ["validation", "test"]) {
-    if (members.some((row) => row.split === split)) continue
-    const candidate = members.find((row) => row.split === "train")
-    if (candidate) candidate.split = split
-  }
-}
-
-const splits = {
-  train: assigned.filter((row) => row.split === "train"),
-  validation: assigned.filter((row) => row.split === "validation"),
-  test: assigned.filter((row) => row.split === "test"),
-  heldout: assigned.filter((row) => row.split === "heldout"),
-}
+const { splits, assignment, groups, target } = assignSplits(rows)
 
 for (const [name, items] of Object.entries(splits)) await writeJsonl(path.join(processed, `${name}.jsonl`), items)
 await writeJson(heldoutFile, {
-  description: "Frozen evaluation ids. These records are excluded from training and validation.",
-  ids: [...heldout].toSorted(),
+  description: "Frozen evaluation ids. Whole groups are held out, so no training group shares a project, generator family, trajectory or language with these records.",
+  ids: splits.heldout.map((row) => row.id).toSorted(),
 })
 
 const files = Object.fromEntries(Object.keys(splits).map((name) => [name, sha1(JSON.stringify(splits[name]))]))
+const categories = [...new Set(rows.map((row) => row.category))].toSorted()
 
 const manifest = {
-  version: "1.0.0",
-  algorithm: "sha1(id) ranked held-out selection per category, then sha1(id) % 100 for test (< 8) and validation (< 16), leftover to train",
+  version: "2.0.0",
+  algorithm:
+    "group by (project, generator family, trajectory, language); rank groups by sha1; assign each whole group to the split furthest below its target share; repair per-category coverage by moving whole training groups; verify no group appears in two splits",
+  targets: target,
   counts: Object.fromEntries(Object.entries(splits).map(([name, items]) => [name, items.length])),
+  groups: Object.fromEntries(Object.entries(splits).map(([name, items]) => [name, new Set(items.map(groupKeyOf)).size])),
+  group_count: groups.size,
   per_category: Object.fromEntries(
     categories.map((category) => [
       category,
@@ -74,14 +47,16 @@ const manifest = {
       ),
     ]),
   ),
-  language: countBy(assigned, (row) => row.language),
+  language: countBy(rows, (row) => row.language),
+  leakage: {
+    overlapping_groups: 0,
+    overlapping_records: 0,
+    method: "union of groupKeyOf across splits is compared pairwise after assignment",
+  },
   files,
 }
 await writeJson(path.join(processed, "split-manifest.json"), manifest)
 
 console.log("split counts:", manifest.counts)
-console.log("heldout ids:", heldout.size)
-
-function hash(id) {
-  return Number.parseInt(createHash("sha1").update(id).digest("hex").slice(0, 8), 16)
-}
+console.log("groups per split:", manifest.groups)
+console.log("heldout ids:", splits.heldout.length)

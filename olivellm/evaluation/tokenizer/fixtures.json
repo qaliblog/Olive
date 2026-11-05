@@ -1,0 +1,1377 @@
+[
+  {
+    "id": "english-plain",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Add a health endpoint to the task API."
+      },
+      {
+        "role": "assistant",
+        "content": "I will read the server entry file first."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "persian-conversation",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "یک صفحه ورود با React بساز که اطلاعات کاربر را در SQLite ذخیره کند."
+      },
+      {
+        "role": "assistant",
+        "content": "ابتدا ساختار پروژه را بررسی می‌کنم و سپس فایل ورود را می‌سازم."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "mixed-persian-english",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "این خطای `Cannot find module 'express'` را در server.js رفع کن."
+      },
+      {
+        "role": "assistant",
+        "content": "The dependency is missing: I will run install_dependencies, then run_tests again."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "system-only",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "user-only-no-tools",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Which file starts the server?"
+      }
+    ],
+    "tools": []
+  },
+  {
+    "id": "assistant-no-tools",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "What is the entry point?"
+      },
+      {
+        "role": "assistant",
+        "content": "The entry point is src/server.js."
+      }
+    ],
+    "tools": []
+  },
+  {
+    "id": "single-tool-call",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Read the first 40 lines of src/server.js"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "read_file",
+            "arguments": {
+              "path": "src/server.js",
+              "start": 1,
+              "end": 40
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "multiple-tool-calls",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Read the server and the router in parallel."
+      },
+      {
+        "role": "assistant",
+        "content": "Reading both files.",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "read_file",
+            "arguments": {
+              "path": "src/server.js"
+            }
+          },
+          {
+            "id": "call_2",
+            "name": "read_file",
+            "arguments": {
+              "path": "src/routes/tasks.js",
+              "start": 2
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "tool-result",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Read src/server.js"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "read_file",
+            "arguments": {
+              "path": "src/server.js"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "content": "const express = require(\"express\")\napp.listen(3000)",
+        "toolCallId": "call_1"
+      },
+      {
+        "role": "assistant",
+        "content": "The server listens on port 3000."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "escaped-quotes",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Fix the string with 'single' and \"double\" quotes."
+      },
+      {
+        "role": "assistant",
+        "content": "Editing the label.",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "write_file",
+            "arguments": {
+              "path": "src/labels.js",
+              "content": "module.exports = { label: \"it's a \\\"quote\\\" and a backslash \\\\ end\" }\n"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "newlines-and-tabs",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Write the multi-line config."
+      },
+      {
+        "role": "assistant",
+        "content": "Line one\nLine two\n\tIndented line",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "write_file",
+            "arguments": {
+              "path": "config.txt",
+              "content": "a\r\nb\n\tc"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "unicode-content",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "سلام 👋 این پیام شامل ایموجی و نویسه‌های یونیکد است: café, naïve, 日本語."
+      },
+      {
+        "role": "assistant",
+        "content": "دریافت شد ✅ — متن را با همان نویسه‌ها ذخیره می‌کنم."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "empty-arguments",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Show the project tree."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "write_file",
+            "arguments": {}
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "nested-json-arguments",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Write the settings object."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "write_file",
+            "arguments": {
+              "path": "settings.json",
+              "content": {
+                "theme": "dark",
+                "nested": {
+                  "retries": 3,
+                  "flags": [
+                    true,
+                    false,
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "numeric-and-boolean-arguments",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Run the tests with a longer timeout."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "run_tests",
+            "arguments": {
+              "command": "node --test test/",
+              "timeoutMs": 120000
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "long-tool-arguments",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "Create the router file."
+      },
+      {
+        "role": "assistant",
+        "content": "Writing the router.",
+        "toolCalls": [
+          {
+            "id": "call_1",
+            "name": "write_file",
+            "arguments": {
+              "path": "src/routes/items.js",
+              "content": "const router = require(\"express\").Router()\nrouter.get(\"/items/0\", (req, res) => res.json({ index: 0 }))\nrouter.get(\"/items/1\", (req, res) => res.json({ index: 1 }))\nrouter.get(\"/items/2\", (req, res) => res.json({ index: 2 }))\nrouter.get(\"/items/3\", (req, res) => res.json({ index: 3 }))\nrouter.get(\"/items/4\", (req, res) => res.json({ index: 4 }))\nrouter.get(\"/items/5\", (req, res) => res.json({ index: 5 }))\nrouter.get(\"/items/6\", (req, res) => res.json({ index: 6 }))\nrouter.get(\"/items/7\", (req, res) => res.json({ index: 7 }))\nrouter.get(\"/items/8\", (req, res) => res.json({ index: 8 }))\nrouter.get(\"/items/9\", (req, res) => res.json({ index: 9 }))\nrouter.get(\"/items/10\", (req, res) => res.json({ index: 10 }))\nrouter.get(\"/items/11\", (req, res) => res.json({ index: 11 }))\nrouter.get(\"/items/12\", (req, res) => res.json({ index: 12 }))\nrouter.get(\"/items/13\", (req, res) => res.json({ index: 13 }))\nrouter.get(\"/items/14\", (req, res) => res.json({ index: 14 }))\nrouter.get(\"/items/15\", (req, res) => res.json({ index: 15 }))\nrouter.get(\"/items/16\", (req, res) => res.json({ index: 16 }))\nrouter.get(\"/items/17\", (req, res) => res.json({ index: 17 }))\nrouter.get(\"/items/18\", (req, res) => res.json({ index: 18 }))\nrouter.get(\"/items/19\", (req, res) => res.json({ index: 19 }))\nrouter.get(\"/items/20\", (req, res) => res.json({ index: 20 }))\nrouter.get(\"/items/21\", (req, res) => res.json({ index: 21 }))\nrouter.get(\"/items/22\", (req, res) => res.json({ index: 22 }))\nrouter.get(\"/items/23\", (req, res) => res.json({ index: 23 }))\n"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "generation-prompt",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Olive, a local coding agent. Work in small steps and use tools.\nRules:\n- Inspect before editing.\n- Never claim a tool succeeded unless its result says ok."
+      },
+      {
+        "role": "user",
+        "content": "List the project structure."
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_file",
+        "description": "Read a text file inside the project. Optional 1-based start and end line numbers.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Create or replace a file with the given content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run the project test script, or a given test command.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "addGenerationPrompt": true
+  }
+]

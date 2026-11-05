@@ -1,0 +1,9 @@
+{
+  "status": "authenticated",
+  "method": "HF_TOKEN environment variable injected with the colab CLI --env option",
+  "token_present": true,
+  "account": "Qalibgh",
+  "plan": null,
+  "token_logged": false,
+  "recorded_at": "2026-11-05T13:03:57.455Z"
+}

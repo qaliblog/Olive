@@ -24,7 +24,7 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "id": { "type": "string", "pattern": "^olive\\.[a-z_]+\\.[a-z0-9_]+\\.[a-z]{2}\\.[0-9]{4}$" },
+    "id": { "type": "string", "pattern": "^olive\\.[a-z_]+\\.[a-z0-9_]+\\.[a-z]{2,5}\\.[0-9]{4}$" },
     "version": { "const": "1.0.0" },
     "category": {
       "enum": [
@@ -144,8 +144,9 @@
       "required": ["kind", "generator", "seed"],
       "additionalProperties": false,
       "properties": {
-        "kind": { "enum": ["template", "handwritten", "teacher"] },
+        "kind": { "enum": ["template", "handwritten", "teacher", "execution", "fixture"] },
         "generator": { "type": "string", "minLength": 1 },
+        "trajectory": { "type": "string", "minLength": 1 },
         "seed": { "type": "integer", "minimum": 0 },
         "model": { "type": "string", "minLength": 1 }
       }

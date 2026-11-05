@@ -23,9 +23,13 @@ import { WORKFLOW, initialize, progress, summarize } from "./lib/state.js"
 const here = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(here, "..")
 const repository = path.resolve(root, "..")
-const input = path.join(root, "datasets/raw/examples.jsonl")
-const output = path.join(root, "datasets/validated/validated.jsonl")
-const rejectedFile = path.join(root, "datasets/rejected/rejected.jsonl")
+// Paths can be overridden so tests run the real pipeline against fixtures instead of the shipped corpus.
+const options = parseArgs(process.argv.slice(2))
+const inputs = options.input
+  ? [options.input]
+  : [path.join(root, "datasets/raw/examples.jsonl"), path.join(root, "datasets/raw/executed.jsonl")]
+const output = options.output ?? path.join(root, "datasets/validated/validated.jsonl")
+const rejectedFile = options.rejected ?? path.join(root, "datasets/rejected/rejected.jsonl")
 
 const schemas = {
   example: await readJson(path.join(root, "schemas/example.schema.json")),
@@ -43,7 +47,9 @@ const VOID = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input"
 
 if (process.argv.includes("--parity")) await parity()
 
-const rows = await readJsonl(input)
+const rows = (await Promise.all(inputs.map((file) => readJsonl(file)))).flat()
+// An empty corpus is a broken run, not a clean one: do not let the pipeline continue on nothing.
+if (rows.length === 0) throw new Error(`no examples found in ${inputs.join(", ")}`)
 const accepted = []
 const rejected = []
 const seenObjective = new Map()
@@ -54,8 +60,12 @@ try {
   for (const { line, value } of rows) {
     const inspected = await inspect(value)
     const reasons = inspected.reasons
-    const key = `${value.category}|${normalize(value.objective)}`
-    if (seenObjective.has(key)) reasons.push(`duplicate objective (same as ${seenObjective.get(key)})`)
+    const key = `${value.category}|${normalize(typeof value.objective === "string" ? value.objective : "")}`
+    // Template rows with one objective are the same example twice. Trajectory steps legitimately share the objective
+    // and differ in their real conversation, and the record fingerprint below still catches exact repeats.
+    if (value.source?.kind !== "template") {
+      // no objective-level dedupe for executed traces
+    } else if (seenObjective.has(key)) reasons.push(`duplicate objective (same as ${seenObjective.get(key)})`)
     else seenObjective.set(key, value.id)
     const fingerprint = stable(value)
     if (seenFingerprint.has(fingerprint)) reasons.push(`duplicate record (same as ${seenFingerprint.get(fingerprint)})`)
@@ -86,7 +96,8 @@ const reasonCounts = countBy(rejected.flatMap((item) => item.reasons.map((reason
 console.log(`validated ${accepted.length}/${rows.length} examples, rejected ${rejected.length}`)
 console.log("per category:", countBy(accepted, (row) => row.category))
 if (rejected.length > 0) console.log("rejection reasons:", reasonCounts)
-process.exitCode = rejected.length === 0 ? 0 : 0
+// A rejected example is a pipeline failure: downstream stages read validated.jsonl, so the exit code must stop them.
+process.exitCode = rejected.length === 0 ? 0 : 1
 
 async function inspect(row) {
   const reasons = []
@@ -148,8 +159,16 @@ async function inspect(row) {
     const evidence = advisory || results.some((result) => result.ok) || row.context.tool_results.some((text) => /^\w+ ok\n/.test(text))
     if (!evidence) reasons.push("completion done without any successful operation")
     if (expected.errors.length > 0) reasons.push("completion done while errors remain in the state")
-    const wroteFiles = expected.files.length > 0 || expected.completed.length > 0
-    if (wroteFiles && !expected.verification.includes("run_tests passed")) reasons.push("completion done without a passing test run")
+    // Only a task that actually produced files needs tests. An inspection-only task may stop after inspecting, which
+    // is the same rule the runtime applies in `completion`.
+    const modifiedFiles = expected.files.length > 0 || calls.some((call) => call.name === "write_file" || call.name === "edit_file")
+    if (modifiedFiles && !expected.verification.includes("run_tests passed")) reasons.push("completion done without a passing test run")
+    // The passing test must be the last evidence, not something that happened before the change.
+    const changedHere = calls.some((call) => call.name === "write_file" || call.name === "edit_file")
+    const testedHere = results.some((result) => result.ok && result.tool === "run_tests")
+    if (changedHere && !testedHere && !row.context.tool_results.some((text) => text.startsWith("run_tests ok\n"))) {
+      reasons.push("completion done after a file change in this step without running the tests afterwards")
+    }
   }
   if (response.completion === "blocked") {
     if (calls.length > 0) reasons.push("blocked with a tool call")
@@ -368,6 +387,22 @@ function toRuntime(result) {
 
 function normalize(text) {
   return text.toLowerCase().replace(/[^a-z0-9\u0600-\u06ff]+/g, " ").trim()
+}
+
+/** `--input <file> --output <file> --rejected <file>`; anything else is rejected loudly. */
+function parseArgs(argv) {
+  const parsed = {}
+  for (let index = 0; index < argv.length; index += 1) {
+    const flag = argv[index]
+    if (flag === "--parity") continue
+    const name = { "--input": "input", "--output": "output", "--rejected": "rejected" }[flag]
+    if (!name) throw new Error(`unknown argument ${flag}`)
+    const value = argv[index + 1]
+    if (value === undefined) throw new Error(`${flag} needs a file path`)
+    parsed[name] = path.resolve(value)
+    index += 1
+  }
+  return parsed
 }
 
 async function parity() {

@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "note": "Records whose source.kind is `execution` were produced by running packages/core/src/olive/tools.ts against a temporary fixture workspace. Failures are real executor results.",
+  "scenarios": [
+    {
+      "id": "node_cli_verify",
+      "language": "en",
+      "steps": 7
+    },
+    {
+      "id": "search_and_symbols",
+      "language": "en",
+      "steps": 4
+    },
+    {
+      "id": "install_and_shell",
+      "language": "en",
+      "steps": 4
+    },
+    {
+      "id": "persian_greeting",
+      "language": "fa",
+      "steps": 5
+    },
+    {
+      "id": "write_new_module",
+      "language": "en",
+      "steps": 5
+    },
+    {
+      "id": "mixed_error_recovery",
+      "language": "mixed",
+      "steps": 7
+    }
+  ],
+  "records": 80,
+  "per_category": {
+    "error_recovery": 14,
+    "project_structure": 4,
+    "dependency_installation": 10,
+    "code_generation": 5,
+    "file_creation": 11,
+    "file_reading": 12,
+    "diagnostics": 12,
+    "test_execution": 6,
+    "file_editing": 6
+  },
+  "per_language": {
+    "en": 68,
+    "fa": 5,
+    "mixed": 7
+  },
+  "tools": {
+    "project_structure": 1,
+    "read_file": 4,
+    "run_tests": 14,
+    "edit_file": 10,
+    "inspect_diagnostics": 8,
+    "list_directory": 1,
+    "search_code": 7,
+    "find_symbols": 7,
+    "install_dependencies": 7,
+    "run_shell": 8,
+    "write_file": 7
+  }
+}

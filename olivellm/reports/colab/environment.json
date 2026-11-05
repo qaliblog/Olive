@@ -1,0 +1,11 @@
+{
+  "runtime": "google colab (colab cli)",
+  "session": "olivellm-probe",
+  "python": "3.13.18",
+  "python_version": "3.13.18",
+  "torch": "2.11.0+cpu",
+  "cuda": false,
+  "device": "cpu",
+  "transformers": "5.22.0",
+  "recorded_at": "2026-11-05T13:03:57.447Z"
+}

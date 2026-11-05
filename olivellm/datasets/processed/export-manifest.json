@@ -16,22 +16,22 @@
   ],
   "splits": {
     "train": {
-      "examples": 280,
-      "tokens": 347963
+      "examples": 292,
+      "tokens": 369277
     },
     "validation": {
-      "examples": 33,
-      "tokens": 41252
+      "examples": 48,
+      "tokens": 61261
     },
     "test": {
-      "examples": 29,
-      "tokens": 35318
+      "examples": 58,
+      "tokens": 71987
     },
     "heldout": {
-      "examples": 34,
-      "tokens": 42740
+      "examples": 57,
+      "tokens": 76499
     }
   },
-  "preference_pairs": 18,
-  "heldout_cases": 34
+  "preference_pairs": 25,
+  "heldout_cases": 57
 }

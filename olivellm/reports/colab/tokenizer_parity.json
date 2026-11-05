@@ -1,0 +1,79 @@
+{
+  "status": "verified",
+  "model": "LiquidAI/LFM2.5-350M",
+  "tokenizer_class": "TokenizersBackend",
+  "comparison": "byte-for-byte against tokenizer.apply_chat_template(messages, tools, tokenize=False)",
+  "cases": 17,
+  "matched": 17,
+  "mismatched": 0,
+  "results": [
+    {
+      "id": "english-plain",
+      "matched": true
+    },
+    {
+      "id": "persian-conversation",
+      "matched": true
+    },
+    {
+      "id": "mixed-persian-english",
+      "matched": true
+    },
+    {
+      "id": "system-only",
+      "matched": true
+    },
+    {
+      "id": "user-only-no-tools",
+      "matched": true
+    },
+    {
+      "id": "assistant-no-tools",
+      "matched": true
+    },
+    {
+      "id": "single-tool-call",
+      "matched": true
+    },
+    {
+      "id": "multiple-tool-calls",
+      "matched": true
+    },
+    {
+      "id": "tool-result",
+      "matched": true
+    },
+    {
+      "id": "escaped-quotes",
+      "matched": true
+    },
+    {
+      "id": "newlines-and-tabs",
+      "matched": true
+    },
+    {
+      "id": "unicode-content",
+      "matched": true
+    },
+    {
+      "id": "empty-arguments",
+      "matched": true
+    },
+    {
+      "id": "nested-json-arguments",
+      "matched": true
+    },
+    {
+      "id": "numeric-and-boolean-arguments",
+      "matched": true
+    },
+    {
+      "id": "long-tool-arguments",
+      "matched": true
+    },
+    {
+      "id": "generation-prompt",
+      "matched": true
+    }
+  ]
+}

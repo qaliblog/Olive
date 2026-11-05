@@ -1,6 +1,6 @@
 export * as OliveTools from "./tools.js"
 
-import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises"
+import { lstat, mkdir, readdir, readFile, realpath, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Option, Schema } from "effect"
 
@@ -115,11 +115,31 @@ const ok = (tool: Name, output: string, extra: Pick<Success, "truncated" | "file
 const fail = (tool: Name, code: ErrorCode, message: string): Failure => ({ ok: false, tool, error: { code, message } })
 const relative = (context: Context, file: string) => path.relative(context.directory, file) || "."
 
-function resolve(context: Context, value: string) {
-  const root = path.resolve(context.directory)
+/**
+ * Resolves a requested path and proves that it stays inside the workspace once symlinks are followed.
+ *
+ * A lexical check alone is not enough: `link -> /etc` inside the project passes it and then reads outside. So the
+ * lexical containment is checked first, then the real path of the target, or of its deepest existing ancestor when the
+ * target does not exist yet. A dangling symlink is refused because its destination cannot be verified.
+ */
+async function contained(context: Context, value: string): Promise<string | undefined> {
+  const root = await realpath(path.resolve(context.directory)).catch(() => undefined)
+  if (!root) return undefined
   const target = path.resolve(root, value.length > 0 ? value : ".")
   if (target !== root && !target.startsWith(`${root}${path.sep}`)) return undefined
-  return target
+  let probe = target
+  for (;;) {
+    const resolved = await realpath(probe).catch(() => undefined)
+    if (resolved !== undefined) {
+      if (resolved !== root && !resolved.startsWith(`${root}${path.sep}`)) return undefined
+      return probe === target ? resolved : path.join(resolved, path.relative(probe, target))
+    }
+    // `lstat` succeeds for a symlink whose target is missing; writing through it would create a file outside.
+    if (await lstat(probe).catch(() => undefined)) return undefined
+    const parent = path.dirname(probe)
+    if (parent === probe) return undefined
+    probe = parent
+  }
 }
 
 function bounded(context: Context, text: string) {
@@ -274,7 +294,7 @@ const definitions: readonly Definition[] = [
     parameters: {
       type: "object",
       properties: {
-        path: { type: "string" },
+        path: { type: "string", minLength: 1 },
         start: { type: "integer", minimum: 0 },
         end: { type: "integer", minimum: 0 },
       },
@@ -284,7 +304,8 @@ const definitions: readonly Definition[] = [
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseRead(input))
       if (!args) return fail("read_file", "invalid-arguments", "read_file expects { path, start?, end? } with integer lines")
-      const target = resolve(context, args.path)
+      if (args.path.length === 0) return fail("read_file", "invalid-arguments", "path must not be empty")
+      const target = await contained(context, args.path)
       if (!target) return fail("read_file", "outside-workspace", `${args.path} is outside the project`)
       const text = await readText(target)
       if (text === undefined) return fail("read_file", "not-found", `${args.path} could not be read`)
@@ -298,14 +319,15 @@ const definitions: readonly Definition[] = [
     description: "Create or replace a file with the given content.",
     parameters: {
       type: "object",
-      properties: { path: { type: "string" }, content: { type: "string" } },
+      properties: { path: { type: "string", minLength: 1 }, content: { type: "string" } },
       required: ["path", "content"],
       additionalProperties: false,
     },
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseWrite(input))
       if (!args) return fail("write_file", "invalid-arguments", "write_file expects { path, content }")
-      const target = resolve(context, args.path)
+      if (args.path.length === 0) return fail("write_file", "invalid-arguments", "path must not be empty")
+      const target = await contained(context, args.path)
       if (!target) return fail("write_file", "outside-workspace", `${args.path} is outside the project`)
       const directory = await mkdir(path.dirname(target), { recursive: true }).catch((cause: unknown) => cause)
       if (directory instanceof Error) return fail("write_file", "io-error", `${args.path}: ${directory.message}`)
@@ -321,15 +343,16 @@ const definitions: readonly Definition[] = [
     description: "Replace one exact occurrence of old text in a file. Fails when the text is missing or ambiguous.",
     parameters: {
       type: "object",
-      properties: { path: { type: "string" }, old: { type: "string" }, new: { type: "string" } },
+      properties: { path: { type: "string", minLength: 1 }, old: { type: "string", minLength: 1 }, new: { type: "string" } },
       required: ["path", "old", "new"],
       additionalProperties: false,
     },
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseEdit(input))
       if (!args) return fail("edit_file", "invalid-arguments", "edit_file expects { path, old, new }")
+      if (args.path.length === 0) return fail("edit_file", "invalid-arguments", "path must not be empty")
       if (args.old.length === 0) return fail("edit_file", "invalid-arguments", "old text must not be empty")
-      const target = resolve(context, args.path)
+      const target = await contained(context, args.path)
       if (!target) return fail("edit_file", "outside-workspace", `${args.path} is outside the project`)
       const text = await readText(target)
       if (text === undefined) return fail("edit_file", "not-found", `${args.path} could not be read`)
@@ -355,7 +378,7 @@ const definitions: readonly Definition[] = [
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseList(input))
       if (!args) return fail("list_directory", "invalid-arguments", "list_directory expects { path? }")
-      const target = resolve(context, args.path ?? ".")
+      const target = await contained(context, args.path ?? ".")
       if (!target) return fail("list_directory", "outside-workspace", `${args.path ?? "."} is outside the project`)
       const entries = await readdir(target, { withFileTypes: true }).catch(() => undefined)
       if (!entries) return fail("list_directory", "not-found", `${args.path ?? "."} could not be listed`)
@@ -372,7 +395,7 @@ const definitions: readonly Definition[] = [
     parameters: {
       type: "object",
       properties: {
-        query: { type: "string" },
+        query: { type: "string", minLength: 1 },
         path: { type: "string" },
         max: { type: "integer", minimum: 1 },
       },
@@ -383,7 +406,7 @@ const definitions: readonly Definition[] = [
       const args = Option.getOrUndefined(parseSearch(input))
       if (!args) return fail("search_code", "invalid-arguments", "search_code expects { query, path?, max? }")
       if (args.query.length === 0) return fail("search_code", "invalid-arguments", "query must not be empty")
-      const root = resolve(context, args.path ?? ".")
+      const root = await contained(context, args.path ?? ".")
       if (!root) return fail("search_code", "outside-workspace", `${args.path ?? "."} is outside the project`)
       const limit = Math.min(args.max ?? 40, 200)
       const { files, truncated: walkTruncated } = await listFiles(root, { ignore: context.ignore ?? DEFAULT_IGNORE })
@@ -415,7 +438,7 @@ const definitions: readonly Definition[] = [
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseSymbols(input))
       if (!args) return fail("find_symbols", "invalid-arguments", "find_symbols expects { path?, max? }")
-      const root = resolve(context, args.path ?? ".")
+      const root = await contained(context, args.path ?? ".")
       if (!root) return fail("find_symbols", "outside-workspace", `${args.path ?? "."} is outside the project`)
       const limit = Math.min(args.max ?? 60, 200)
       const { files } = await listFiles(root, { ignore: context.ignore ?? DEFAULT_IGNORE, max: 2_000 })
@@ -439,7 +462,7 @@ const definitions: readonly Definition[] = [
     description: "Run a shell command in the project directory and return its output.",
     parameters: {
       type: "object",
-      properties: { command: { type: "string" }, timeoutMs: { type: "integer", minimum: 1 } },
+      properties: { command: { type: "string", minLength: 1 }, timeoutMs: { type: "integer", minimum: 1 } },
       required: ["command"],
       additionalProperties: false,
     },
@@ -456,12 +479,13 @@ const definitions: readonly Definition[] = [
     description: "Run the project test script, or a given test command.",
     parameters: {
       type: "object",
-      properties: { command: { type: "string" }, timeoutMs: { type: "integer", minimum: 1 } },
+      properties: { command: { type: "string", minLength: 1 }, timeoutMs: { type: "integer", minimum: 1 } },
       additionalProperties: false,
     },
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseTests(input))
       if (!args) return fail("run_tests", "invalid-arguments", "run_tests expects { command?, timeoutMs? }")
+      if (args.command !== undefined && args.command.length === 0) return fail("run_tests", "invalid-arguments", "command must not be empty")
       const scripts = await packageScripts(context)
       const command = args.command ?? (scripts.test ? "bun run test" : "bun test")
       const executed = await exec(command, context, args.timeoutMs ?? 240_000)
@@ -473,12 +497,14 @@ const definitions: readonly Definition[] = [
     description: "Install project dependencies with the package manager detected from the lockfile.",
     parameters: {
       type: "object",
-      properties: { command: { type: "string" }, timeoutMs: { type: "integer", minimum: 1 } },
+      properties: { command: { type: "string", minLength: 1 }, timeoutMs: { type: "integer", minimum: 1 } },
       additionalProperties: false,
     },
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseInstall(input))
       if (!args) return fail("install_dependencies", "invalid-arguments", "install_dependencies expects { command?, timeoutMs? }")
+      if (args.command !== undefined && args.command.length === 0)
+        return fail("install_dependencies", "invalid-arguments", "command must not be empty")
       const command = await installCommand(context, args.command)
       if (!command) return fail("install_dependencies", "not-found", "no package manager files were found")
       const executed = await exec(command, context, args.timeoutMs ?? 300_000)
@@ -490,12 +516,14 @@ const definitions: readonly Definition[] = [
     description: "Run the project type check or diagnostics script.",
     parameters: {
       type: "object",
-      properties: { command: { type: "string" }, timeoutMs: { type: "integer", minimum: 1 } },
+      properties: { command: { type: "string", minLength: 1 }, timeoutMs: { type: "integer", minimum: 1 } },
       additionalProperties: false,
     },
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseDiagnostics(input))
       if (!args) return fail("inspect_diagnostics", "invalid-arguments", "inspect_diagnostics expects { command?, timeoutMs? }")
+      if (args.command !== undefined && args.command.length === 0)
+        return fail("inspect_diagnostics", "invalid-arguments", "command must not be empty")
       const scripts = await packageScripts(context)
       const command = args.command ?? (scripts.typecheck ? "bun run typecheck" : scripts.check ? "bun run check" : undefined)
       if (!command)
@@ -519,7 +547,7 @@ const definitions: readonly Definition[] = [
     run: async (input, context) => {
       const args = Option.getOrUndefined(parseStructure(input))
       if (!args) return fail("project_structure", "invalid-arguments", "project_structure expects { path?, depth? }")
-      const root = resolve(context, args.path ?? ".")
+      const root = await contained(context, args.path ?? ".")
       if (!root) return fail("project_structure", "outside-workspace", `${args.path ?? "."} is outside the project`)
       const depth = Math.min(args.depth ?? 2, 5)
       const ignore = context.ignore ?? DEFAULT_IGNORE

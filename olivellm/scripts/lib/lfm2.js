@@ -16,20 +16,29 @@ export const IM_END = "<|im_end|>"
 export const TOOL_START = "<|tool_call_start|>"
 export const TOOL_END = "<|tool_call_end|>"
 
-/** `format_arg_value`: single quotes for strings, bare scalars otherwise. */
+/**
+ * `format_arg_value`: single quotes for strings, `tojson` for mappings and iterables, `string` otherwise.
+ * Jinja's `tojson` is `json.dumps` with its default separators, which is what `pythonJson` produces.
+ */
 export function formatArgumentValue(value) {
   if (typeof value === "string")
     return `'${value.replaceAll("\\", "\\\\").replaceAll("'", "\\'").replaceAll("\n", "\\n").replaceAll("\r", "\\r")}'`
   if (value === null) return "None"
   if (value === true) return "True"
   if (value === false) return "False"
+  if (typeof value === "object") return pythonJson(value)
   return String(value)
 }
 
-/** `"name(arg='value', n=3)"`; arguments must be a mapping, exactly as the template requires. */
+/**
+ * `"name(arg='value', n=3)"`. A JSON-encoded argument string is refused exactly like the template's
+ * `raise_exception`, except for the empty forms the template tolerates, which render as no arguments at all.
+ */
 export function renderCall(call) {
-  if (typeof call.arguments === "string")
+  if (typeof call.arguments === "string") {
+    if (["", "{}", "null"].includes(call.arguments.trim())) return `${call.name}()`
     throw new Error(`tool call arguments for ${call.name} must be a mapping, not a JSON string`)
+  }
   const args = Object.entries(call.arguments).map(([name, value]) => `${name}=${formatArgumentValue(value)}`)
   return `${call.name}(${args.join(", ")})`
 }
@@ -56,8 +65,24 @@ export function renderTools(tools) {
   return `List of tools: [${tools.map((tool) => pythonJson(tool)).join(", ")}]`
 }
 
+/** `parse_content`: a string as-is, a mapping as `tojson`, a list of parts concatenated. */
+export function parseContent(content) {
+  if (typeof content === "string") return content
+  if (Array.isArray(content))
+    return content
+      .map((item) => {
+        if (typeof item === "string") return item
+        if (item && typeof item === "object" && item.type === "image") return "<image>"
+        if (item && typeof item === "object" && item.type === "text") return String(item.text ?? "")
+        return pythonJson(item)
+      })
+      .join("")
+  if (content === null || content === undefined) return ""
+  return pythonJson(content)
+}
+
 export function renderMessage(message) {
-  const content = typeof message.content === "string" ? message.content : pythonJson(message.content)
+  const content = parseContent(message.content)
   const calls = message.toolCalls?.length ? renderToolCalls(message.toolCalls) : ""
   return `${IM_START}${message.role}\n${content}${calls}${IM_END}\n`
 }

@@ -1,0 +1,17 @@
+{
+  "name": "olivellm",
+  "private": true,
+  "type": "module",
+  "description": "OliveLLM dataset engineering: generation, validation, splitting, export, and evaluation harness.",
+  "scripts": {
+    "generate": "node scripts/generate.js",
+    "executed": "bun scripts/executed.js",
+    "validate": "node scripts/validate.js",
+    "deduplicate": "node scripts/deduplicate.js",
+    "split": "node scripts/split.js",
+    "statistics": "node scripts/statistics.js",
+    "export": "node scripts/export.js",
+    "pipeline": "node scripts/generate.js && bun scripts/executed.js && node scripts/validate.js && node scripts/deduplicate.js && node scripts/split.js && node scripts/statistics.js && node scripts/export.js",
+    "test": "bun test test/"
+  }
+}

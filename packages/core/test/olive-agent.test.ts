@@ -94,7 +94,13 @@ describe("olive agent", () => {
   test("writes files incrementally and persists the task state after each operation", async () => {
     await withDirectory(async (directory) => {
       const objective = "create hello.txt"
-      const fixture = mock([() => toolCall("write_file", { path: "hello.txt", content: "hi" }), () => answer("created hello.txt")])
+      // A file change only counts as complete once a test run really succeeded after it, so the scripted model
+      // writes, runs the tests, and only then stops.
+      const fixture = mock([
+        () => toolCall("write_file", { path: "hello.txt", content: "hi" }),
+        () => toolCall("run_tests", { command: "true" }),
+        () => answer("created hello.txt"),
+      ])
       try {
         const outcome = await OliveAgent.run({
           registry: registry(fixture.baseURL),
@@ -103,7 +109,7 @@ describe("olive agent", () => {
           state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
         })
         expect(outcome.completed).toBe(true)
-        expect(outcome.steps).toBe(2)
+        expect(outcome.steps).toBe(3)
         expect(outcome.failures).toEqual([])
         expect(await readFile(path.join(directory, "hello.txt"), "utf8")).toBe("hi")
         expect(outcome.task.files).toContain("hello.txt")
@@ -121,7 +127,11 @@ describe("olive agent", () => {
     await withDirectory(async (directory) => {
       const objective = "create hello.txt"
       const file = OliveAgent.stateFile(directory)
-      const first = mock([() => toolCall("write_file", { path: "hello.txt", content: "hi" }), () => answer("created")])
+      const first = mock([
+        () => toolCall("write_file", { path: "hello.txt", content: "hi" }),
+        () => toolCall("run_tests", { command: "true" }),
+        () => answer("created"),
+      ])
       try {
         await OliveAgent.run({
           registry: registry(first.baseURL),
@@ -132,7 +142,11 @@ describe("olive agent", () => {
       } finally {
         first.server.stop(true)
       }
-      const second = mock([() => toolCall("edit_file", { path: "hello.txt", old: "hi", new: "bye" }), () => answer("edited")])
+      const second = mock([
+        () => toolCall("edit_file", { path: "hello.txt", old: "hi", new: "bye" }),
+        () => toolCall("run_tests", { command: "true" }),
+        () => answer("edited"),
+      ])
       try {
         const outcome = await OliveAgent.run({
           registry: registry(second.baseURL),
@@ -145,6 +159,30 @@ describe("olive agent", () => {
         expect(outcome.task.files).toContain("hello.txt")
       } finally {
         second.server.stop(true)
+      }
+    })
+  })
+
+  test("does not report completion when a change was never tested", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "write the config file"
+      const fixture = mock([
+        () => toolCall("write_file", { path: "config.json", content: "{}\n" }),
+        () => answer("Wrote config.json and verified it works."),
+      ])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.completed).toBe(false)
+        expect(outcome.error).toContain("no test run succeeded")
+        expect(outcome.task.next).toBe("verify the result")
+        expect(await readFile(path.join(directory, "config.json"), "utf8")).toBe("{}\n")
+      } finally {
+        fixture.server.stop(true)
       }
     })
   })

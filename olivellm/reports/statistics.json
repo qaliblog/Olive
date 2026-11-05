@@ -1,84 +1,140 @@
 {
   "version": "1.0.0",
   "records": {
-    "generated": 379,
-    "validated": 376,
+    "generated": 459,
+    "validated": 455,
     "rejected": 0,
-    "duplicates_removed": 3,
-    "rejection_rate": 0.008
+    "duplicates_removed": 4,
+    "rejection_rate": 0.009
   },
   "splits": {
-    "train": 280,
-    "validation": 33,
-    "test": 29,
-    "heldout": 34
+    "train": 292,
+    "validation": 48,
+    "test": 58,
+    "heldout": 57
   },
   "categories": {
     "intent_understanding": 53,
     "requirement_extraction": 74,
     "task_planning": 53,
-    "project_structure": 26,
-    "file_reading": 34,
-    "file_editing": 28,
-    "file_creation": 9,
-    "code_generation": 20,
-    "dependency_installation": 8,
-    "diagnostics": 5,
-    "test_execution": 7,
-    "error_recovery": 36,
+    "project_structure": 30,
+    "file_reading": 46,
+    "file_editing": 34,
+    "file_creation": 19,
+    "code_generation": 25,
+    "dependency_installation": 18,
+    "diagnostics": 17,
+    "test_execution": 13,
+    "error_recovery": 50,
     "task_state_update": 8,
     "task_resumption": 6,
     "completion_verification": 9
   },
   "languages": {
-    "en": 292,
-    "fa": 84
+    "en": 359,
+    "fa": 89,
+    "mixed": 7
   },
   "difficulties": {
-    "easy": 127,
+    "easy": 175,
     "medium": 238,
-    "hard": 11
+    "hard": 42
   },
   "completions": {
-    "continue": 347,
-    "done": 26,
-    "blocked": 3
+    "continue": 421,
+    "done": 27,
+    "blocked": 7
   },
   "kinds": {
-    "tool_call": 347,
-    "text": 29
+    "tool_call": 421,
+    "text": 34
   },
   "tools": {
-    "project_structure": 72,
-    "read_file": 130,
-    "list_directory": 58,
-    "write_file": 31,
-    "install_dependencies": 11,
-    "inspect_diagnostics": 8,
-    "run_tests": 9,
-    "edit_file": 26,
-    "run_shell": 4,
-    "find_symbols": 1,
-    "search_code": 1
+    "project_structure": 73,
+    "read_file": 134,
+    "list_directory": 59,
+    "write_file": 38,
+    "install_dependencies": 18,
+    "inspect_diagnostics": 16,
+    "run_tests": 23,
+    "edit_file": 36,
+    "run_shell": 12,
+    "find_symbols": 8,
+    "search_code": 8
   },
+  "tool_coverage": [
+    {
+      "tool": "find_symbols",
+      "count": 8,
+      "target": 60,
+      "shortfall": 52
+    },
+    {
+      "tool": "search_code",
+      "count": 8,
+      "target": 60,
+      "shortfall": 52
+    },
+    {
+      "tool": "run_shell",
+      "count": 12,
+      "target": 60,
+      "shortfall": 48
+    },
+    {
+      "tool": "inspect_diagnostics",
+      "count": 16,
+      "target": 60,
+      "shortfall": 44
+    },
+    {
+      "tool": "run_tests",
+      "count": 23,
+      "target": 60,
+      "shortfall": 37
+    },
+    {
+      "tool": "install_dependencies",
+      "count": 18,
+      "target": 60,
+      "shortfall": 42
+    },
+    {
+      "tool": "edit_file",
+      "count": 36,
+      "target": 60,
+      "shortfall": 24
+    },
+    {
+      "tool": "write_file",
+      "count": 38,
+      "target": 60,
+      "shortfall": 22
+    }
+  ],
+  "sources": {
+    "template": 376,
+    "execution": 79
+  },
+  "trajectories": 14,
   "failures": {
-    "outside-workspace": 1,
-    "not-found": 3,
-    "command-failed": 2,
+    "outside-workspace": 2,
+    "not-found": 6,
+    "command-failed": 18,
     "invalid-arguments": 5,
-    "no-match": 1,
+    "no-match": 6,
     "ambiguous-match": 1
   },
   "tokens": {
-    "estimated_total": 140513,
-    "average": 373.705,
-    "median": 357,
-    "p95": 487,
-    "max": 656
+    "estimated_total": 181825,
+    "average": 399.615,
+    "median": 356,
+    "p95": 607,
+    "max": 1859
   },
   "coverage": [
     {
-      "goal": "intent and requirement",
+      "goal": "intent",
       "target": 200,
       "categories": [
         "intent_understanding",
@@ -103,8 +159,8 @@
         "project_structure",
         "file_reading"
       ],
-      "count": 60,
-      "shortfall": 240
+      "count": 76,
+      "shortfall": 224
     },
     {
       "goal": "tool execution",
@@ -116,18 +172,18 @@
         "diagnostics",
         "test_execution"
       ],
-      "count": 57,
-      "shortfall": 243
+      "count": 101,
+      "shortfall": 199
     },
     {
       "goal": "task state",
-      "target": 300,
+      "target": 200,
       "categories": [
         "task_state_update",
         "task_resumption"
       ],
       "count": 14,
-      "shortfall": 286
+      "shortfall": 186
     },
     {
       "goal": "coding",
@@ -137,8 +193,8 @@
         "file_editing",
         "code_generation"
       ],
-      "count": 57,
-      "shortfall": 243
+      "count": 78,
+      "shortfall": 222
     },
     {
       "goal": "debugging",
@@ -146,8 +202,8 @@
       "categories": [
         "error_recovery"
       ],
-      "count": 36,
-      "shortfall": 164
+      "count": 50,
+      "shortfall": 150
     },
     {
       "goal": "verification",
@@ -156,34 +212,45 @@
         "completion_verification",
         "test_execution"
       ],
-      "count": 16,
-      "shortfall": 84
+      "count": 22,
+      "shortfall": 78
     },
     {
       "goal": "persian",
-      "target": 100,
+      "target": 200,
       "languages": [
         "fa"
       ],
-      "count": 84,
-      "shortfall": 16
+      "count": 89,
+      "shortfall": 111
+    },
+    {
+      "goal": "mixed language",
+      "target": 50,
+      "languages": [
+        "mixed"
+      ],
+      "count": 7,
+      "shortfall": 43
     }
   ],
   "shortfalls": [
-    "intent and requirement: 127/200",
+    "intent: 127/200",
     "planning: 53/200",
-    "tool selection: 60/300",
-    "tool execution: 57/300",
-    "task state: 14/300",
-    "coding: 57/300",
-    "debugging: 36/200",
-    "verification: 16/100",
-    "persian: 84/100"
+    "tool selection: 76/300",
+    "tool execution: 101/300",
+    "task state: 14/200",
+    "coding: 78/300",
+    "debugging: 50/200",
+    "verification: 22/100",
+    "persian: 89/200",
+    "mixed language: 7/50"
   ],
   "rejection_reasons": {},
   "duplicate_reasons": {
     "same tool calls, results and answer as olive.project_structure.html_rtl.en.0007": 1,
     "same tool calls, results and answer as olive.diagnostics.react_dashboard.en.0001": 1,
-    "same tool calls, results and answer as olive.diagnostics.node_api.en.0003": 1
+    "same tool calls, results and answer as olive.diagnostics.node_api.en.0003": 1,
+    "same tool calls, results and answer as olive.error_recovery.node_cli_verify_report.en.0007": 1
   }
 }

@@ -47,6 +47,8 @@ export function makeExample(input) {
     seed,
     workspace,
     notes = "",
+    sourceKind = "template",
+    trajectory,
   } = input
 
   if (calls.length > 2) throw new Error(`${id}: more than two calls per step`)
@@ -91,7 +93,7 @@ export function makeExample(input) {
       completion: response.completion ?? "continue",
     },
     validation: { status: "unverified", checks: [], notes, commands: [] },
-    source: { kind: "template", generator, seed },
+    source: { kind: sourceKind, generator, seed, ...(trajectory ? { trajectory } : {}) },
     split: input.split ?? "train",
   }
 }

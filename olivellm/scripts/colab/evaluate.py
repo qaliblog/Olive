@@ -3,6 +3,10 @@
 Inputs come from OLIVE_CASES (default /content/cases.json, uploaded from olivellm/evaluation/colab/cases.json).
 Generation is greedy so a rerun reproduces the same text. The report records tokens and latency per case, and the raw
 outputs are returned so the scoring happens in the same place the corpus lives.
+
+Set OLIVE_ADAPTER to the directory a training run saved to measure the fine-tuned model on exactly these cases; with
+the variable unset the base checkpoint is measured. Everything else (cases, prompt, greedy decoding, token limits) is
+identical, which is what makes the two numbers comparable.
 """
 
 import json
@@ -25,6 +29,11 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(MODEL, token=token)
     dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
     model = AutoModelForCausalLM.from_pretrained(MODEL, token=token, dtype=dtype)
+    adapter = os.environ.get("OLIVE_ADAPTER")
+    if adapter:
+        from peft import PeftModel
+
+        model = PeftModel.from_pretrained(model, adapter)
     model.eval()
     model.to("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -63,6 +72,7 @@ def main():
         json.dumps(
             {
                 "model": MODEL,
+                "adapter": adapter or None,
                 "device": str(model.device),
                 "cases": results,
             }

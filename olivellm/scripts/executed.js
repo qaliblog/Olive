@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url"
 import { OliveTools } from "../../packages/core/src/olive/tools.ts"
 import { EPOCH, makeExample, makeId, rendered } from "./lib/emit.js"
 import { countBy, writeJson, writeJsonl } from "./lib/json.js"
-import { initialize, progress } from "./lib/state.js"
+import { advance, initialize, progress } from "./lib/state.js"
 import { SYSTEM } from "./lib/prompt.js"
 
 const here = path.dirname(fileURLToPath(import.meta.url))
@@ -78,7 +78,7 @@ const SCENARIOS = [
     category: "error_recovery",
     objective: "fix the failing CLI greeting test and verify the fix",
     seed: {
-      "package.json": `${JSON.stringify({ name: "cli-fixture", private: true, scripts: { test: "node --test test/", typecheck: "node --check src/cli.js" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "cli-fixture", private: true, scripts: { test: "node --test test/cli.test.js", typecheck: "node --check src/cli.js" } }, null, 2)}\n`,
       "src/cli.js": cli,
       "test/cli.test.js": cliTest,
     },
@@ -122,7 +122,7 @@ const SCENARIOS = [
       "src/user.js": loginModule,
       "src/routes.js": `const { createUser } = require("./user")\n\nmodule.exports = (req, res) => res.json(createUser(req.body.email))\n`,
       "test/user.test.js": loginTest,
-      "package.json": `${JSON.stringify({ name: "user-fixture", private: true, scripts: { test: "node --test test/" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "user-fixture", private: true, scripts: { test: "node --test test/user.test.js" } }, null, 2)}\n`,
     },
     steps: [
       {
@@ -149,7 +149,7 @@ const SCENARIOS = [
     category: "dependency_installation",
     objective: "install the project dependencies and check the entry file",
     seed: {
-      "package.json": `${JSON.stringify({ name: "shell-fixture", private: true, version: "0.0.1", scripts: { test: "node --test test/", typecheck: "node --check src/cli.js" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "shell-fixture", private: true, version: "0.0.1", scripts: { test: "node --test test/cli.test.js", typecheck: "node --check src/cli.js" } }, null, 2)}\n`,
       "src/cli.js": cli,
       "test/cli.test.js": cliTest,
     },
@@ -169,7 +169,7 @@ const SCENARIOS = [
       {
         calls: [],
         text: "Dependencies are installed and the entry file parses, but the suite still fails, so the task is not complete. The next step is the argument fix in src/cli.js.",
-        fallback: "blocked",
+        fallback: "Dependencies are installed and the entry file parses, but the suite still fails on the argument handling, so the task is not complete and I am not reporting it as done.",
       },
     ],
   },
@@ -179,7 +179,7 @@ const SCENARIOS = [
     category: "code_generation",
     objective: "تابع greeting را درست کن تا تست فارسی پاس شود",
     seed: {
-      "package.json": `${JSON.stringify({ name: "greeting-fixture", private: true, scripts: { test: "node --test test/", typecheck: "node --check src/greeting.js" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "greeting-fixture", private: true, scripts: { test: "node --test test/greeting.test.js", typecheck: "node --check src/greeting.js" } }, null, 2)}\n`,
       "src/greeting.js": greeting,
       "test/greeting.test.js": greetingTest,
     },
@@ -212,7 +212,7 @@ const SCENARIOS = [
     category: "file_creation",
     objective: "create the missing sum module the test imports",
     seed: {
-      "package.json": `${JSON.stringify({ name: "sum-fixture", private: true, scripts: { test: "node --test test/", typecheck: "node --check src/sum.js" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "sum-fixture", private: true, scripts: { test: "node --test test/sum.test.js", typecheck: "node --check src/sum.js" } }, null, 2)}\n`,
       "test/sum.test.js": `const test = require("node:test")\nconst assert = require("node:assert")\nconst { sum } = require("../src/sum")\n\ntest("sums two numbers", () => {\n  assert.strictEqual(sum(2, 3), 5)\n})\n`,
     },
     steps: [
@@ -248,7 +248,7 @@ const SCENARIOS = [
     category: "error_recovery",
     objective: "fail the missing-file error را fix کن و test createUser را پاس کن",
     seed: {
-      "package.json": `${JSON.stringify({ name: "mixed-fixture", private: true, scripts: { test: "node --test test/" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "mixed-fixture", private: true, scripts: { test: "node --test test/user.test.js" } }, null, 2)}\n`,
       "src/user.js": loginModule,
       "test/user.test.js": loginTest,
     },
@@ -283,6 +283,170 @@ const SCENARIOS = [
       },
     ],
   },
+  {
+    id: "question_missing_file",
+    language: "en",
+    category: "completion_verification",
+    objective: "add the changelog entry the release checklist asks for",
+    seed: {
+      "package.json": `${JSON.stringify({ name: "release-fixture", version: "0.0.1", private: true, scripts: { test: "node --test test/app.test.js", typecheck: "node --check src/app.js" } }, null, 2)}\n`,
+      "src/app.js": `const version = require("../package.json").version\n\nmodule.exports = { version }\n`,
+      "test/app.test.js": `const test = require("node:test")\nconst assert = require("node:assert")\nconst { version } = require("../src/app")\n\ntest("exposes the package version", () => {\n  assert.strictEqual(version, "0.0.1")\n})\n`,
+    },
+    steps: [
+      {
+        call: { name: "list_directory", arguments: {}, why: "see whether a changelog already exists" },
+        text: "The listing shows package.json, src and test; no changelog file.",
+      },
+      {
+        call: { name: "read_file", arguments: { path: "CHANGELOG.md" }, why: "read the file the checklist names" },
+        text: "The read failed: there is no CHANGELOG.md in this project.",
+      },
+      {
+        call: { name: "search_code", arguments: { query: "CHANGELOG" }, why: "check whether anything refers to a changelog" },
+        text: "The search found no reference to a changelog anywhere in the project.",
+      },
+      {
+        calls: [],
+        completion: "blocked",
+        text: "QUESTION: The release checklist refers to a changelog entry, but this project has no CHANGELOG.md and no reference to one. Should I create a new CHANGELOG.md, and which entries belong in it?",
+      },
+    ],
+  },
+  {
+    id: "resume_after_interrupt",
+    language: "en",
+    category: "task_resumption",
+    objective: "finish the price formatting fix the last run left unfinished",
+    resume: {
+      completed: ["analyze requirements", "write an implementation plan", "write initial files"],
+      files: ["src/format.js"],
+      errors: ["run_tests: command-failed: node --test test/format.test.js exited with code 1"],
+      next: "fix the failing tests",
+    },
+    seed: {
+      "package.json": `${JSON.stringify({ name: "format-fixture", private: true, scripts: { test: "node --test test/format.test.js", typecheck: "node --check src/format.js" } }, null, 2)}\n`,
+      "src/format.js": `const formatPrice = (cents) => \`\${cents / 100}$\`\n\nmodule.exports = { formatPrice }\n`,
+      "test/format.test.js": `const test = require("node:test")\nconst assert = require("node:assert")\nconst { formatPrice } = require("../src/format")\n\ntest("keeps two decimals", () => {\n  assert.strictEqual(formatPrice(1990), "19.90$")\n})\n`,
+    },
+    steps: [
+      {
+        call: { name: "read_file", arguments: { path: "src/format.js" }, why: "resume from the saved state by reading the file it names" },
+        text: "The helper divides by 100 without fixing the decimals, so 1990 renders as 19.9 instead of 19.90. That matches the error the previous run recorded.",
+      },
+      {
+        call: {
+          name: "edit_file",
+          arguments: { path: "src/format.js", old: "`${cents / 100}$`", new: "`${(cents / 100).toFixed(2)}$`" },
+          why: "apply the fix the saved state was waiting for",
+        },
+        text: "The helper now formats with two decimals. The test still has to prove it.",
+      },
+      {
+        call: { name: "run_tests", arguments: {}, why: "clear the recorded failure with a real test run" },
+        text: "The suite passes, so the error from the previous run is resolved.",
+      },
+      {
+        calls: [],
+        text: "The price helper now keeps two decimals, the suite passed after the edit, and the state that was left mid-run is finished.",
+      },
+    ],
+  },
+  {
+    id: "mixed_install_recovery",
+    language: "mixed",
+    category: "dependency_installation",
+    objective: "خطای نصب را درست کن و بعد test suite را پاس کن",
+    seed: {
+      // The test script names the file: this Node build resolves a bare directory argument as a module path.
+      "package.json": `${JSON.stringify({ name: "install-fixture", private: true, scripts: { test: "node --test test/app.test.js", typecheck: "node --check src/app.js" } }, null, 2)}\n`,
+      "src/app.js": `module.exports = { started: true }\n`,
+      "test/app.test.js": `const test = require("node:test")\nconst assert = require("node:assert")\nconst { started } = require("../src/app")\n\ntest("starts", () => {\n  assert.strictEqual(started, true)\n})\n`,
+    },
+    steps: [
+      {
+        call: { name: "install_dependencies", arguments: { command: "npm run install:nothing --offline" }, why: "اجرای اسکریپت نصبی که در package.json نیست" },
+        text: "The install failed: the script does not exist. اسکریپت نصب وجود ندارد و باید مسیر درست را انتخاب کنم.",
+      },
+      {
+        call: { name: "install_dependencies", arguments: { command: "npm install --offline --no-audit --no-fund" }, why: "نصب واقعی با مدیریت بسته‌ای که lockfile نشان می‌دهد" },
+        text: "The install succeeded this time. نصب انجام شد و حالا باید تست‌ها را اجرا کنم.",
+      },
+      {
+        call: { name: "run_tests", arguments: {}, why: "تأیید با اجرای واقعی تست‌ها" },
+        text: "The suite passed after the install. تست‌ها پاس شدند.",
+      },
+      {
+        calls: [],
+        completion: "done",
+        text: "نصب وابستگی‌ها با موفقیت انجام شد و همه‌ی تست‌ها بعد از آن پاس شدند. The install ran with the package manager the lockfile implies, the suite passed afterwards, and the state records both steps, so the task is complete.",
+      },
+    ],
+  },
+  {
+    id: "mixed_symbol_lookup",
+    language: "mixed",
+    category: "file_reading",
+    objective: "تابع createUser کجاست و چه کسی آن را صدا می‌زند؟",
+    seed: {
+      "package.json": `${JSON.stringify({ name: "symbol-fixture", private: true, scripts: { test: "node --test test/user.test.js" } }, null, 2)}\n`,
+      "src/user.js": loginModule,
+      "src/routes.js": `const { createUser } = require("./user")\n\nmodule.exports = (req, res) => res.json(createUser(req.body.email))\n`,
+      "test/user.test.js": loginTest,
+    },
+    steps: [
+      {
+        call: { name: "find_symbols", arguments: { path: "src" }, why: "ایندکس اعلان‌ها را بگیر تا خط تعریف معلوم شود" },
+        text: "The index lists createUser in src/user.js. ایندکس خط تعریف را نشان داد.",
+      },
+      {
+        call: { name: "search_code", arguments: { query: "createUser" }, why: "همه‌ی ارجاع‌ها را پیدا کن، نه فقط تعریف را" },
+        text: "The search returned the definition in src/user.js and the call in src/routes.js. تنها یک فراخوانی وجود دارد.",
+      },
+      {
+        calls: [],
+        completion: "done",
+        text: "createUser در src/user.js تعریف شده و فقط src/routes.js آن را صدا می‌زند. Both the symbol index and the code search returned the same declaration and the same single call site, so the answer needs no edit and no further inspection.",
+      },
+    ],
+  },
+  {
+    id: "persian_tests_recovery",
+    language: "fa",
+    category: "error_recovery",
+    objective: "تست خروجی فارسی را پاس کن",
+    seed: {
+      "package.json": `${JSON.stringify({ name: "greeting-fa-fixture", private: true, scripts: { test: "node --test test/greeting.test.js", typecheck: "node --check src/greeting.js" } }, null, 2)}\n`,
+      "src/greeting.js": `const greeting = (name) => \`hi \${name}\`\n\nmodule.exports = { greeting }\n`,
+      "test/greeting.test.js": greetingTest,
+    },
+    steps: [
+      {
+        call: { name: "run_tests", arguments: {}, why: "اول خطای واقعی را ببین، بعد تغییر بده" },
+        text: "تست شکست خورد: خروجی تابع با رشته‌ی فارسی مورد انتظار برابر نیست.",
+      },
+      {
+        call: { name: "read_file", arguments: { path: "src/greeting.js" }, why: "متن دقیق تابع را بخوان" },
+        text: "تابع پیشوند انگلیسی «hi» برمی‌گرداند و باید به «سلام» تغییر کند.",
+      },
+      {
+        call: {
+          name: "edit_file",
+          arguments: { path: "src/greeting.js", old: "`hi ${name}`", new: "`سلام ${name}`" },
+          why: "پیشوند فارسی را جای پیشوند انگلیسی بگذار",
+        },
+        text: "تابع اصلاح شد و حالا باید همان تست را دوباره اجرا کنم.",
+      },
+      {
+        call: { name: "run_tests", arguments: {}, why: "تأیید نهایی با اجرای واقعی تست" },
+        text: "تست پس از اصلاح پاس شد و نتیجه‌ی واقعی ابزار همین را نشان می‌دهد.",
+      },
+      {
+        calls: [],
+        text: "تابع greeting اکنون پیشوند «سلام» را برمی‌گرداند و تست فارسی پاس شده است. وضعیت کار، اجرای موفق run_tests را ثبت کرده و خطای قبلی پاک شده است.",
+      },
+    ],
+  },
 ]
 
 const counts = {}
@@ -298,12 +462,18 @@ for (const [index, scenario] of SCENARIOS.entries()) {
     const workspace = scenarioWorkspace(scenario)
     const conversation = []
     const prior = []
-    let task = initialize(scenario.objective, EPOCH + index)
+    // A resumed trajectory starts from the durable state a previous run left behind, exactly as `initialize` reads it
+    // back from `.olive/task.json`, so the first record shows the interrupted task rather than a fresh one.
+    let task = scenario.resume
+      ? advance(initialize(scenario.objective, EPOCH + index), scenario.resume, EPOCH + index)
+      : initialize(scenario.objective, EPOCH + index)
     let counter = 0
     for (const step of scenario.steps) {
       counter += 1
       if (!step.call) {
-        const completion = completionOf(task, scenario)
+        // A step may state its own verdict: asking the user is neither a successful report nor a generic block, and the
+        // sentence that goes with it is authored per scenario.
+        const completion = step.completion ?? completionOf(task, scenario)
         const record = makeExample({
           id: makeId(scenario.category, `${scenario.id}_report`, scenario.language, (counts[scenario.category] = (counts[scenario.category] ?? 0) + 1)),
           category: scenario.category,
@@ -316,7 +486,10 @@ for (const [index, scenario] of SCENARIOS.entries()) {
           priorResults: prior.slice(-6),
           calls: [],
           results: [],
-          response: { text: completion === "done" ? step.text : (step.fallback ?? blockedText(scenario)), completion },
+          response: {
+            text: step.completion ? step.text : completion === "done" ? step.text : (step.fallback ?? blockedText(scenario)),
+            completion,
+          },
           sourceKind: "execution",
           trajectory: scenario.id,
           generator: `executed.${scenario.id}`,
@@ -437,7 +610,7 @@ function blockedText(scenario) {
 /** Declared in a hoisted function so the coverage run above can use it during module evaluation. */
 function coveragePlan() {
   const COVERAGE_FIXTURE = {
-  "package.json": `${JSON.stringify({ name: "coverage-fixture", private: true, scripts: { test: "node --test test/" } }, null, 2)}\n`,
+  "package.json": `${JSON.stringify({ name: "coverage-fixture", private: true, scripts: { test: "node --test test/user.test.js" } }, null, 2)}\n`,
   "src/cli.js": cli,
   "src/greeting.js": greeting,
   "src/user.js": loginModule,

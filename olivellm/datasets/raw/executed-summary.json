@@ -31,35 +31,62 @@
       "id": "mixed_error_recovery",
       "language": "mixed",
       "steps": 7
+    },
+    {
+      "id": "question_missing_file",
+      "language": "en",
+      "steps": 4
+    },
+    {
+      "id": "resume_after_interrupt",
+      "language": "en",
+      "steps": 4
+    },
+    {
+      "id": "mixed_install_recovery",
+      "language": "mixed",
+      "steps": 4
+    },
+    {
+      "id": "mixed_symbol_lookup",
+      "language": "mixed",
+      "steps": 3
+    },
+    {
+      "id": "persian_tests_recovery",
+      "language": "fa",
+      "steps": 5
     }
   ],
-  "records": 80,
+  "records": 100,
   "per_category": {
-    "error_recovery": 14,
+    "error_recovery": 19,
     "project_structure": 4,
-    "dependency_installation": 10,
+    "dependency_installation": 14,
     "code_generation": 5,
     "file_creation": 11,
-    "file_reading": 12,
+    "completion_verification": 4,
+    "task_resumption": 4,
+    "file_reading": 15,
     "diagnostics": 12,
     "test_execution": 6,
     "file_editing": 6
   },
   "per_language": {
-    "en": 68,
-    "fa": 5,
-    "mixed": 7
+    "en": 76,
+    "fa": 10,
+    "mixed": 14
   },
   "tools": {
     "project_structure": 1,
-    "read_file": 4,
-    "run_tests": 14,
-    "edit_file": 10,
+    "read_file": 7,
+    "run_tests": 18,
+    "edit_file": 12,
     "inspect_diagnostics": 8,
-    "list_directory": 1,
-    "search_code": 7,
-    "find_symbols": 7,
-    "install_dependencies": 7,
+    "list_directory": 2,
+    "search_code": 9,
+    "find_symbols": 8,
+    "install_dependencies": 9,
     "run_shell": 8,
     "write_file": 7
   }

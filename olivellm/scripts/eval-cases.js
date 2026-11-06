@@ -5,7 +5,10 @@
  * The held-out suite stays separate from training and validation. Each suite is capped at a fixed number of cases
  * (deterministic: ids are sorted, then an even stride is taken) so a baseline run finishes on one Colab session.
  *
- *   node olivellm/scripts/eval-cases.js [--limit 24]
+ *   node olivellm/scripts/eval-cases.js [--limit 24] [--out evaluation/colab/cases.json]
+ *
+ * `--out` writes an additional suite, so a dataset change can be measured on its own held-out split without
+ * overwriting the frozen set that earlier published runs used.
  */
 import { readFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +18,10 @@ import { countBy, readJsonl, sha1, writeJson, writeJsonl } from "./lib/json.js"
 const here = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(here, "..")
 const evaluation = path.join(root, "evaluation")
-const output = path.join(evaluation, "colab/cases.json")
+const outIndex = process.argv.indexOf("--out")
+const relative = outIndex === -1 ? "evaluation/colab/cases.json" : path.join("evaluation", process.argv[outIndex + 1])
+const output = path.join(root, relative)
+const outputJsonl = output.replace(/\.json$/, ".jsonl")
 const limit = Number(process.argv[process.argv.indexOf("--limit") + 1] ?? 24) || 24
 const file = process.argv.includes("--limit") ? 24 : limit
 
@@ -42,7 +48,7 @@ for (const suite of suites) {
 
 const heldout = await readFile(path.join(evaluation, "heldout/ids.json"), "utf8")
 
-await writeJsonl(path.join(evaluation, "colab/cases.jsonl"), cases)
+await writeJsonl(outputJsonl, cases)
 
 await writeJson(output, {
   version: "1.0.0",

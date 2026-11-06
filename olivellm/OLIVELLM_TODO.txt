@@ -104,8 +104,38 @@ PHASE 2 CONTINUATION - DIRECTIVE, CONTEXT AND MEASUREMENT (2026-11-06)
     "Tool call arguments must be a mapping".
 [!] Instruction quality is measured, not solved: 13 of 71 cases emit a call and
     10 of 65 choose the expected tool, at agent level 0 of 5 scenarios complete.
-    Needs a decision: train at this prompt, or widen the directive first.
+    Decision taken: keep the measured v4 prompt and train next; prompt rewrites
+    moved calls 0 -> 10 -> 13 and then stopped moving.
+    Evidence for the cause: the 13 emitted calls use only inspect_diagnostics (9),
+    run_shell (3) and project_structure (1), all zero-or-one-string-argument
+    tools. Cases whose expected tool takes no required argument: 7/22 correct;
+    with at least one required argument: 3/43.
 [ ] Controlled LoRA at the corrected prompt, with the probe settings recorded in
     documentation/training_feasibility.md.
+[ ] Re-measure the base checkpoint on the new held-out suite (the split changed
+    in the dataset phase below, so the v4 numbers are no longer the baseline).
 [ ] Base vs fine-tuned comparison on the same 71 cases and the same directive.
 [ ] Dataset coverage improvements (argument values, Persian, error recovery).
+
+PHASE 2 CONTINUATION - DATASET (2026-11-06)
+[x] Add five real-execution scenarios instead of more template bulk.
+    question_missing_file, resume_after_interrupt, mixed_install_recovery,
+    mixed_symbol_lookup, persian_tests_recovery.
+    Verified: 455 -> 476 validated records, execution 79 -> 100, done 27 -> 35,
+    mixed 7 -> 14, fa 89 -> 94; every added result produced by
+    OliveTools.execute against a temporary fixture.
+[x] Make a resumed trajectory start from the state a previous run left behind.
+    Verified: resume_after_interrupt's first record carries three completed
+    steps, one file, one recorded failure and next="fix the failing tests".
+[x] Fix the fixture test scripts that could never run.
+    Every fixture used "node --test test/", which Node 22.23.4 resolves as a
+    module path, so nested suites failed before running a test and narration
+    describing a pass contradicted its own tool result.
+    Verified: fixtures name their test file; 11 run_tests calls pass and 7 fail
+    as designed; an audit of all 100 execution records reports 0
+    result/narration mismatches and 0 records whose text is the literal
+    "blocked".
+[x] Re-run the whole pipeline and the tests after the changes.
+    Verified: validate 479/479 with 0 rejected, 3 duplicates removed, split
+    309/54/57/56 with 0 overlapping groups, olivellm 37 pass, core olive-* 84
+    pass.

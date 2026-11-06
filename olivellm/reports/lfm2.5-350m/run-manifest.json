@@ -1,0 +1,81 @@
+{
+  "run_id": "2026-11-06-colab-t4",
+  "recorded_at": "2026-11-06",
+  "model": "LiquidAI/LFM2.5-350M",
+  "model_revision": "9921cd4d82c0e3986887aa4b376f9446729ef8a3",
+  "model_last_modified": "2026-11-03T18:09:20Z",
+  "repository": {
+    "path": "/root/Olive",
+    "branch": "addOliveLlm",
+    "head": "c4f6a90c93",
+    "remote": "git@github.com:qaliblog/Olive.git",
+    "ahead": 0,
+    "behind": 0
+  },
+  "local_tooling": {
+    "bun": "1.4.4",
+    "uv": "0.13.6",
+    "colab_cli": "0.7.5"
+  },
+  "remote_environment": {
+    "runtime": "google colab",
+    "session": "olive-lfm-gpu",
+    "hardware": "Tesla T4",
+    "shape": "Standard",
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.22.0",
+    "peft": "0.21.2",
+    "torchao": ">=0.16.0 (upgraded from 0.10.0)",
+    "dtype": "bfloat16",
+    "causal_conv1d": false
+  },
+  "compute": {
+    "balance_at_start": "0.00 compute units",
+    "cpu_session_rate": "0.08/hr",
+    "t4_session_rate": "1.23/hr",
+    "gpu_allocated_despite_zero_balance": true,
+    "sessions_stopped_after_run": ["olive-lfm-research", "olive-lfm-gpu"]
+  },
+  "authentication": {
+    "huggingface": "authenticated",
+    "account": "Qalibgh",
+    "token_source": "HF_TOKEN in the git-ignored repository .env",
+    "token_injection": "colab --env KEY=VALUE via scripts/colab/colab-env.sh",
+    "token_printed": false
+  },
+  "artifacts": {
+    "inference_validation": "inference_validation.json",
+    "benchmark": "benchmark.json",
+    "prompt_ablation": "prompt_ablation.json",
+    "prompt_directive": "prompt_directive.json",
+    "lora_probe": "lora_probe.json",
+    "baseline_rerun_generations": "../colab/raw/generations-2026-11-06.json"
+  },
+  "commands": [
+    "olivellm/scripts/colab/colab-env.sh new -s olive-lfm-gpu --gpu T4",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/validate_inference.py --timeout 1500",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/benchmark.py --timeout 1500",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/evaluate.py --timeout 1500",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/prompt_ablation.py --timeout 1500",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/prompt_directive.py --timeout 1200",
+    "olivellm/scripts/colab/colab-env.sh exec -s olive-lfm-gpu -f olivellm/scripts/colab/lora_probe.py --timeout 1200"
+  ],
+  "measured_summary": {
+    "inference_checks_passed": 12,
+    "inference_checks_total": 12,
+    "tool_call_emitted_from_a_direct_question": true,
+    "frozen_baseline_cases": 71,
+    "frozen_baseline_tool_calls": 0,
+    "frozen_baseline_reproduced_exactly": true,
+    "prompt_ablations_without_a_call": 40,
+    "directive_conditions_with_a_call": { "as_is": 0, "next_action": 0, "call_it": 5, "objective_first": 0, "probe_shape": 0 },
+    "directive_cases": 8,
+    "max_stable_context_tested": 8192,
+    "decode_tokens_per_second": 57.16,
+    "prefill_tokens_per_second_at_8192": 1872.7,
+    "lora_trainable_parameters": 491520,
+    "lora_step_seconds": 0.94,
+    "lora_peak_gpu_memory_mb": 2322.3
+  }
+}

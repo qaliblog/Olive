@@ -1,0 +1,68 @@
+{
+  "status": "measured",
+  "model": "LiquidAI/LFM2.5-350M",
+  "device": "cuda",
+  "gpu": "Tesla T4",
+  "torch": "2.11.0+cu130",
+  "transformers": "5.22.0",
+  "load_seconds": 0.4,
+  "base_parameters": 354483968,
+  "linear_suffix_counts": {
+    "in_proj": 10,
+    "out_proj": 16,
+    "w1": 16,
+    "w3": 16,
+    "w2": 16,
+    "q_proj": 6,
+    "k_proj": 6,
+    "v_proj": 6,
+    "lm_head": 1
+  },
+  "linear_module_examples": [
+    "model.layers.0.conv.in_proj",
+    "model.layers.0.conv.out_proj",
+    "model.layers.0.feed_forward.w1",
+    "model.layers.0.feed_forward.w3",
+    "model.layers.0.feed_forward.w2",
+    "model.layers.1.conv.in_proj",
+    "model.layers.1.conv.out_proj",
+    "model.layers.1.feed_forward.w1",
+    "model.layers.1.feed_forward.w3",
+    "model.layers.1.feed_forward.w2",
+    "model.layers.2.self_attn.q_proj",
+    "model.layers.2.self_attn.k_proj"
+  ],
+  "lora": {
+    "rank": 16,
+    "alpha": 32
+  },
+  "sequence_length": 512,
+  "batch_size": 2,
+  "peft": "0.21.2",
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "records": 6,
+  "trainable_parameters": 491520,
+  "trainable_share": 0.00138,
+  "first_step_peak_gpu_memory_mb": 2310.5,
+  "steps": 3,
+  "losses": [
+    4.2659,
+    2.5302,
+    4.2723
+  ],
+  "step_seconds": [
+    1.1,
+    0.93,
+    0.94
+  ],
+  "tokens_per_step": 1024,
+  "tokens_per_second": 1034.3,
+  "peak_gpu_memory_mb": 2322.3,
+  "gradient_checkpointing": {
+    "supported": true
+  }
+}

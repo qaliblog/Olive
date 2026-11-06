@@ -1,0 +1,383 @@
+{
+  "status": "measured",
+  "model": "LiquidAI/LFM2.5-350M",
+  "cases": 8,
+  "decoding": "greedy, max_new_tokens=192",
+  "summary": {
+    "as_is": {
+      "cases_with_a_call": 0,
+      "correct_tool_cases": 0,
+      "unknown_tool_calls": 0
+    },
+    "next_action": {
+      "cases_with_a_call": 0,
+      "correct_tool_cases": 0,
+      "unknown_tool_calls": 0
+    },
+    "call_it": {
+      "cases_with_a_call": 6,
+      "correct_tool_cases": 4,
+      "unknown_tool_calls": 0
+    },
+    "objective_first": {
+      "cases_with_a_call": 0,
+      "correct_tool_cases": 0,
+      "unknown_tool_calls": 0
+    },
+    "probe_shape": {
+      "cases_with_a_call": 0,
+      "correct_tool_cases": 0,
+      "unknown_tool_calls": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0001",
+      "expected_tool": "install_dependencies",
+      "objective": "install the project dependencies and check the entry file",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 69,
+          "seconds": 1.729,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no actionable steps are available. The system lacks a tool to execute the plan's requirements (e.g., analyzing requirements, writing implementation plans, etc.). \n\n**Next action:**  \nProvide the speci"
+        },
+        "next_action": {
+          "output_tokens": 25,
+          "seconds": 0.78,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run the diagnostics tool to verify the project's type and ensure all components are installed correctly.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 11,
+          "seconds": 0.596,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The relevant code is:\n\n(none yet)<|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 185,
+          "seconds": 4.241,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires installing project dependencies, analyzing requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining files, and installing dependencies, followed by running diagnostics and verifying the result. However, **none of the "
+        },
+        "probe_shape": {
+          "output_tokens": 12,
+          "seconds": 0.562,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **analyze requirements**.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "expected_tool": "run_tests",
+      "objective": "install the project dependencies and check the entry file",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 9,
+          "seconds": 0.542,
+          "call_blocks": 0,
+          "names": [],
+          "text": "Task completed. All steps executed successfully.<|im_end|>"
+        },
+        "next_action": {
+          "output_tokens": 10,
+          "seconds": 0.572,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run diagnostics.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 22,
+          "seconds": 0.796,
+          "call_blocks": 1,
+          "names": [
+            "inspect_diagnostics"
+          ],
+          "text": "<|tool_call_start|>[inspect_diagnostics(command=\"run_diagnostics\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 9,
+          "seconds": 0.566,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: run diagnostics.<|im_end|>"
+        },
+        "probe_shape": {
+          "output_tokens": 6,
+          "seconds": 0.491,
+          "call_blocks": 0,
+          "names": [],
+          "text": "Next action: run diagnostics<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0008",
+      "expected_tool": "inspect_diagnostics",
+      "objective": "use inspect_diagnostics on the fixture project: check the CLI module",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 42,
+          "seconds": 1.126,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires a detailed implementation plan, but the provided code snippet is incomplete and lacks the necessary context. To proceed, I need the actual implementation plan text. Could you share the plan details?<|im_end|>"
+        },
+        "next_action": {
+          "output_tokens": 20,
+          "seconds": 0.668,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run the diagnostics tool to verify the result of the previous steps.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 24,
+          "seconds": 0.784,
+          "call_blocks": 1,
+          "names": [
+            "inspect_diagnostics"
+          ],
+          "text": "<|tool_call_start|>[inspect_diagnostics(command=\"inspect_diagnostics\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 98,
+          "seconds": 2.384,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires analyzing requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining files, installing dependencies, running diagnostics, and verifying the result. However, the only relevant tool available is `inspect_diagnostics`. Sin"
+        },
+        "probe_shape": {
+          "output_tokens": 12,
+          "seconds": 0.611,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **analyze requirements**.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0010",
+      "expected_tool": "inspect_diagnostics",
+      "objective": "use inspect_diagnostics on the fixture project: check a file that does not exist",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 192,
+          "seconds": 4.147,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no code yet. The relevant code is empty, and the tool results show no tool calls executed. To proceed, the plan must include:\n\n1. **Analyze requirements** (e.g., extract requirements from the file)\n2."
+        },
+        "next_action": {
+          "output_tokens": 25,
+          "seconds": 0.809,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run the diagnostics tool to verify the project's health and ensure all components are functioning correctly.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 19,
+          "seconds": 0.701,
+          "call_blocks": 1,
+          "names": [
+            "inspect_diagnostics"
+          ],
+          "text": "<|tool_call_start|>[inspect_diagnostics(command=\"none\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 92,
+          "seconds": 2.075,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires analyzing requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining files, installing dependencies, running diagnostics, and verifying the result. However, none of the provided tools can perform these actions. The only"
+        },
+        "probe_shape": {
+          "output_tokens": 12,
+          "seconds": 0.553,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **analyze requirements**.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0012",
+      "expected_tool": "inspect_diagnostics",
+      "objective": "use inspect_diagnostics on the fixture project: run a passing check command",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 192,
+          "seconds": 4.229,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The task requires a detailed plan with specific actions, but the provided code and results indicate no code yet. The relevant code is empty, and the tool results show no tool calls executed. To proceed, the plan must include:\n\n1. **Analysis of requirements** (e.g., extract specifications)\n2. **Imple"
+        },
+        "next_action": {
+          "output_tokens": 31,
+          "seconds": 1.078,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run the `inspect_diagnostics` tool on the `fixture` project to analyze its health and performance.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 23,
+          "seconds": 0.757,
+          "call_blocks": 1,
+          "names": [
+            "inspect_diagnostics"
+          ],
+          "text": "<|tool_call_start|>[inspect_diagnostics(command=\"run_a_passing_check\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 23,
+          "seconds": 0.765,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: `run_diagnostics` to execute the passing check command on the fixture project.<|im_end|>"
+        },
+        "probe_shape": {
+          "output_tokens": 12,
+          "seconds": 0.56,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **analyze requirements**.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0009",
+      "expected_tool": "run_shell",
+      "objective": "fail the missing-file error را fix کن و test createUser را پاس کن",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 54,
+          "seconds": 1.375,
+          "call_blocks": 0,
+          "names": [],
+          "text": "Task completed successfully. All steps executed without errors. The project structure is intact, and the required files (src/users.js) are present. Pending tasks (analyze requirements, write implementation plan) are marked as \"pending\" and will be addressed next.<|im_end|>"
+        },
+        "next_action": {
+          "output_tokens": 50,
+          "seconds": 1.32,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to **recover from the failed operation**. \n\nThis aligns with the objective's requirement to \"recover from the failed operation\" and the tool's recent failure with `read_file: not-found`.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 18,
+          "seconds": 0.694,
+          "call_blocks": 1,
+          "names": [
+            "run_shell"
+          ],
+          "text": "<|tool_call_start|>[run_shell(command=\"read_file\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 15,
+          "seconds": 0.643,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **recover from the failed operation**.<|im_end|>"
+        },
+        "probe_shape": {
+          "output_tokens": 15,
+          "seconds": 0.659,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **recover from the failed operation**.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0011",
+      "expected_tool": "read_file",
+      "objective": "fail the missing-file error را fix کن و test createUser را پاس کن",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 31,
+          "seconds": 1.194,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The edit failed because the old text does not exist. I must read the file first. متن قديم درس شما نیست.<|im_end|>"
+        },
+        "next_action": {
+          "output_tokens": 32,
+          "seconds": 1.234,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is:\n\n**Read the file and retry the edit**\n\nThis aligns with the plan and current state of the project.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 20,
+          "seconds": 1.148,
+          "call_blocks": 1,
+          "names": [
+            "edit_file"
+          ],
+          "text": "<|tool_call_start|>[edit_file(path=\"src/users.js\", old=\"\", new=\"\")]<|tool_call_end|><|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 12,
+          "seconds": 0.908,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: **run_tests**.<|im_end|>"
+        },
+        "probe_shape": {
+          "output_tokens": 16,
+          "seconds": 1.075,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: re-read the file and retry the edit.<|im_end|>"
+        }
+      }
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0013",
+      "expected_tool": "run_tests",
+      "objective": "fail the missing-file error را fix کن و test createUser را پاس کن",
+      "conditions": {
+        "as_is": {
+          "output_tokens": 9,
+          "seconds": 0.828,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: run_tests<|im_end|>"
+        },
+        "next_action": {
+          "output_tokens": 12,
+          "seconds": 0.898,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The single next action is to run the diagnostics tool.<|im_end|>"
+        },
+        "call_it": {
+          "output_tokens": 4,
+          "seconds": 0.747,
+          "call_blocks": 0,
+          "names": [],
+          "text": "call one tool<|im_end|>"
+        },
+        "objective_first": {
+          "output_tokens": 9,
+          "seconds": 0.846,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: run_tests<|im_end|>"
+        },
+        "probe_shape": {
+          "output_tokens": 23,
+          "seconds": 1.095,
+          "call_blocks": 0,
+          "names": [],
+          "text": "The next action is: run_tests\n\nrelevant code:\n(read_file failed (not-found))<|im_end|>"
+        }
+      }
+    }
+  ]
+}

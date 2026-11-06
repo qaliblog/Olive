@@ -15,6 +15,8 @@ try:
     report["torch"] = torch.__version__
     report["cuda"] = bool(torch.cuda.is_available())
     report["device"] = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu"
+    if torch.cuda.is_available():
+        report["device_total_memory_gb"] = round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 2)
 except Exception as error:  # noqa: BLE001 - report the class only, never the message
     report["torch_error"] = type(error).__name__
 

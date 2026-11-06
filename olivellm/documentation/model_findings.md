@@ -74,6 +74,30 @@ schema that is created - instead of long impressive-looking programs.
 - H4: LoRA (r=16, alpha=32, all linear layers) will reach usable tool selection, but exact argument fidelity
   for long `write_file` content will stay the limiting factor.
 
+## 2026-11-06 corrections
+
+A measured run on a Colab T4 replaces several **Untested** entries above. Evidence:
+`reports/lfm2.5-350m/inference_validation.json`, `benchmark.json`, `prompt_ablation.json`,
+`prompt_directive.json`, `lora_probe.json`. Full analysis in `documentation/model_compatibility.md` and
+`reports/lfm2.5-350m/REPORT.md`.
+
+1. **Tool calling with the native template is no longer untested, and it works.** Asked directly, the checkpoint emits
+   `<|tool_call_start|>[list_directory(path="src")]<|tool_call_end|>` in 12 tokens, greedy and sampled.
+2. **The 0/65 baseline is reproducible and is not a model limitation.** Re-running the frozen cases reproduced it
+   exactly (71 cases, 5,020 output tokens, 126 s, 0 call blocks). Isolating the cause: replacing the system message,
+   trimming the tool list to one, or removing the system message all still gave 0 calls in 40 ablations. The step
+   message itself contains no instruction, so the model summarizes it. Adding
+   `"Call one tool now. Reply with the tool call only."` produced a call in 5 of 8 cases. This is Olive defect D11.
+3. **The model writes double quotes where the template writes single quotes.** `lfm2-parse.js` accepted only single
+   quotes, so a genuine call scored as `invalid`. Fixed, with `test/lfm2-parse.test.js`.
+4. **Context: 32,768 is documented, 128,000 is the positional config, and 8,192 is what a T4 actually holds.**
+   32,768 raises `OutOfMemoryError` on a 16 GB T4 at 8,192-token prefill.
+5. **The card recommends `temperature 0.1 / top_k 50 / repetition_penalty 1.05`**, not greedy. Greedy is deterministic
+   (three runs byte-identical) and produced the same tool call as the recommended sampling here.
+6. **`o_proj` does not exist on this architecture**; the attention output projection is `out_proj`, shared with the
+   conv blocks. See `training_feasibility.md`.
+7. **Persian is surface paper, not capability.** Persian characters appear; the content is incoherent and repetitive.
+
 ## Untested capabilities
 
 No result exists for any of the following, and none is claimed anywhere in this dataset:

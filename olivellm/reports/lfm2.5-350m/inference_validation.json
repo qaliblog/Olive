@@ -1,0 +1,258 @@
+{
+  "status": "measured",
+  "model": "LiquidAI/LFM2.5-350M",
+  "revision": "9921cd4d82c0e3986887aa4b376f9446729ef8a3",
+  "runtime": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.22.0",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "gpu": "Tesla T4"
+  },
+  "checks": 12,
+  "passed": 12,
+  "failed": 0,
+  "results": {
+    "01_download": {
+      "status": "pass",
+      "result": {
+        "sha": "9921cd4d82c0e3986887aa4b376f9446729ef8a3",
+        "last_modified": "2026-11-03 18:09:20+00:00",
+        "file_count": 14,
+        "total_bytes": 713753256,
+        "files": [
+          {
+            "name": "model.safetensors",
+            "bytes": 708984464
+          },
+          {
+            "name": "tokenizer.json",
+            "bytes": 4733389
+          }
+        ],
+        "load": {
+          "tokenizer_seconds": 1.57,
+          "model_seconds": 14.89,
+          "dtype": "bfloat16",
+          "device": "cuda:0"
+        }
+      },
+      "seconds": 0.1
+    },
+    "02_tokenizer_init": {
+      "status": "pass",
+      "result": {
+        "class": "TokenizersBackend",
+        "vocab_size": 64400,
+        "len": 64402,
+        "bos_token": "<|startoftext|>",
+        "eos_token": "<|im_end|>",
+        "pad_token": "<|pad|>",
+        "padding_side": "right",
+        "has_chat_template": true,
+        "chat_template_chars": 5487,
+        "chat_template_has_tool_block": true,
+        "sample_tokens": {
+          "bos": [
+            1
+          ],
+          "im_start": [
+            6
+          ],
+          "tool_call_start": [
+            10
+          ]
+        }
+      },
+      "seconds": 0.0
+    },
+    "03_model_init": {
+      "status": "pass",
+      "result": {
+        "class": "Lfm2ForCausalLM",
+        "parameters": 354483968,
+        "trainable_parameters": 354483968,
+        "dtype": "bfloat16",
+        "device": "cuda:0",
+        "layers": 16,
+        "layer_types": {
+          "conv": 10,
+          "full_attention": 6
+        },
+        "hidden_size": 1024,
+        "intermediate_size": 6656,
+        "attention_heads": 16,
+        "kv_heads": 8,
+        "vocab_size": 65536,
+        "max_position_embeddings": 128000,
+        "tied_embeddings": false,
+        "weight_bytes": 708967936,
+        "cuda_peak_allocated_mb": 678.1,
+        "load": {
+          "tokenizer_seconds": 1.57,
+          "model_seconds": 14.89,
+          "dtype": "bfloat16",
+          "device": "cuda:0"
+        }
+      },
+      "seconds": 0.0
+    },
+    "04_text_completion": {
+      "status": "pass",
+      "result": {
+        "prompt": "def parse_flags(argv):\n    \"\"\"Parse CLI flags.\"\"\"\n",
+        "text": "    flags = {}\n    for arg in argv:\n        if arg in flags:\n            flags[arg] += 1\n        else:\n            flags[arg] = 1\n    return flags<|im_end|>",
+        "prompt_tokens": 15,
+        "output_tokens": 42,
+        "seconds": 2.119,
+        "non_empty": true
+      },
+      "seconds": 2.12
+    },
+    "05_chat_style": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nYou are a helpful coding assistant.<|im_end|>\n<|im_start|>user\nIn one sentence, what does npm ci do compared with npm install?<|im_end|>\n<|im_start|>assistant\n",
+        "text": "npm ci automates the installation of dependencies, while npm install installs them.<|im_end|>",
+        "prompt_tokens": 38,
+        "output_tokens": 19,
+        "seconds": 0.421,
+        "non_empty": true
+      },
+      "seconds": 0.45
+    },
+    "06_multi_turn": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nYou are a helpful coding assistant. Answer briefly.<|im_end|>\n<|im_start|>user\nI am building a Node.js CLI with yargs. Where do I define the commands?<|im_end|>\n<|im_start|>assistant\nDefine them with yargs.command() in the file that builds the parser.<|im_end|>\n<|im_start|>user\nAnd how do I add a required --name option to one of them?<|im_end|>\n<|im_start|>assistant\n",
+        "text": "Use yargs.command(\"--name\", \"value\") to add a required option.<|im_end|>",
+        "prompt_tokens": 86,
+        "output_tokens": 19,
+        "seconds": 0.384,
+        "non_empty": true
+      },
+      "seconds": 0.39
+    },
+    "07_persian": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nشما یک دستیار برنامه‌نویسی هستید. کوتاه پاسخ بدهید.<|im_end|>\n<|im_start|>user\nچطور در Tailwind CSS یک چیدمان راست‌به‌چپ (RTL) بسازم؟<|im_end|>\n<|im_start|>assistant\n",
+        "text": "در Tailwind CSS، چطور درگیر کرده‌اید را به‌صورت به‌صورت میانگینی گذاشتن؟\n\nدر Tailwind، چیزی به‌صورت به‌صورت میانگینی گذاشتن از گذشته‌ها است که درگیر کرده‌اید. اگرچه این گذشته‌ها به‌طور خاص به‌صورت به‌",
+        "prompt_tokens": 94,
+        "output_tokens": 160,
+        "seconds": 3.009,
+        "non_empty": true,
+        "persian_characters": 138,
+        "persian_ratio": 0.69
+      },
+      "seconds": 3.01
+    },
+    "08_english_coding": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nYou write small, complete JavaScript files. Return only code.<|im_end|>\n<|im_start|>user\nWrite a Node.js function that reads a JSON file with fs and returns its parsed contents, throwing on invalid JSON. One file, no explanation.<|im_end|>\n<|im_start|>assistant\n",
+        "text": "```javascript\nconst fs = require('fs');\n\nfunction readJsonFile(filePath) {\n  try {\n    const data = fs.readFileSync(filePath, 'utf-8');\n    return JSON.parse(data);\n  } catch (error) {\n    throw new Error('Invalid JSON file');\n  }\n}\n```<|im_end|>",
+        "prompt_tokens": 56,
+        "output_tokens": 65,
+        "seconds": 1.269,
+        "has_function": true,
+        "uses_fs": true,
+        "has_parse": true,
+        "has_code_fence": true
+      },
+      "seconds": 1.27
+    },
+    "09_structured_output": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nYou answer only with a single JSON object. No prose, no code fence.<|im_end|>\n<|im_start|>user\nReturn {\"file\": \"src/index.js\", \"action\": \"read_file\", \"reason\": \"<short>\"} for a task that must read src/index.js before editing.<|im_end|>\n<|im_start|>assistant\n",
+        "text": "```json\n{\n\"file\": \"src/index.js\",\n\"action\": \"read_file\",\n\"reason\": \"\"\n}\n```<|im_end|>",
+        "prompt_tokens": 67,
+        "output_tokens": 28,
+        "seconds": 0.57,
+        "valid_json": true,
+        "parsed": {
+          "file": "src/index.js",
+          "action": "read_file",
+          "reason": ""
+        },
+        "parse_error": null
+      },
+      "seconds": 0.57
+    },
+    "10_long_context": {
+      "status": "pass",
+      "result": {
+        "prompt": "<|startoftext|><|im_start|>system\nAnswer questions about the document with one short phrase.<|im_end|>\n<|im_start|>user\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nDeployment note: the staging host for this project is OLIVE-MARKER-7412. The build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nThe build pipeline copies assets, rewrites imports and emits a bundle. Each stage logs one line and may fail without stopping the whole run. \n\nQuestion: what is the staging host?<|im_end|>\n<|im_start|>assistant\n",
+        "text": "The staging host is OLIVE-MARKER-7412.<|im_end|>",
+        "prompt_tokens": 3254,
+        "output_tokens": 15,
+        "seconds": 1.206,
+        "needle": "OLIVE-MARKER-7412",
+        "found": true
+      },
+      "seconds": 1.22
+    },
+    "11_repeated_generation": {
+      "status": "pass",
+      "result": {
+        "text": "```javascript\nconst http = require('http');\n```<|im_end|>",
+        "runs": 3,
+        "identical": true,
+        "output_tokens": [
+          12,
+          12,
+          12
+        ],
+        "seconds": [
+          0.235,
+          0.227,
+          0.246
+        ]
+      },
+      "seconds": 0.71
+    },
+    "12_tool_call_format": {
+      "status": "pass",
+      "result": {
+        "tools_sent": [
+          "list_directory",
+          "read_file"
+        ],
+        "prompt_contains_tool_list": true,
+        "greedy": {
+          "text": "<|tool_call_start|>[list_directory(path=\"src\")]<|tool_call_end|><|im_end|>",
+          "call_blocks": 1,
+          "raw_blocks": [
+            "[list_directory(path=\"src\")]"
+          ],
+          "names_a_tool": true,
+          "output_tokens": 12,
+          "seconds": 0.251
+        },
+        "recommended_sampling": {
+          "text": "<|tool_call_start|>[list_directory(path=\"src\")]<|tool_call_end|><|im_end|>",
+          "call_blocks": 1,
+          "raw_blocks": [
+            "[list_directory(path=\"src\")]"
+          ],
+          "names_a_tool": true,
+          "output_tokens": 12,
+          "seconds": 0.37
+        },
+        "json_instruction": {
+          "text": "<|tool_call_start|>[list_directory(path=\"src\")]<|tool_call_end|><|im_end|>",
+          "call_blocks": 1,
+          "raw_blocks": [
+            "[list_directory(path=\"src\")]"
+          ],
+          "names_a_tool": true,
+          "output_tokens": 12,
+          "seconds": 0.262
+        }
+      },
+      "seconds": 0.89
+    }
+  }
+}

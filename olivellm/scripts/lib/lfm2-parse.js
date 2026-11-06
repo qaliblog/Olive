@@ -37,13 +37,14 @@ function parseCall(source) {
 }
 
 function parseValue(source) {
-  if (source.startsWith("'") && source.endsWith("'"))
+  // The chat template renders single quotes, but the model writes double quotes for the same value
+  // (`list_directory(path="src")` on the real checkpoint). Both are a Python string literal; one pass unescapes
+  // whichever quote opened it together with the `\\`, `\n` and `\r` escapes.
+  const quote = source[0]
+  if (source.length >= 2 && (quote === "'" || quote === '"') && source.endsWith(quote))
     return source
       .slice(1, -1)
-      .replaceAll("\\\\n", "\n")
-      .replaceAll("\\\\r", "\r")
-      .replaceAll("\\\\'", "'")
-      .replaceAll("\\\\\\\\", "\\")
+      .replace(/\\(.)/g, (_, character) => (character === "n" ? "\n" : character === "r" ? "\r" : character))
   if (source === "True") return true
   if (source === "False") return false
   if (source === "None") return null

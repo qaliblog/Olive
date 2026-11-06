@@ -1,0 +1,111 @@
+{
+  "status": "measured",
+  "model": "LiquidAI/LFM2.5-350M",
+  "runtime": "OliveAgent.run with the real OliveTools executor; only the model transport is bridged to Colab",
+  "scenarios": 5,
+  "completed": 0,
+  "completed_without_verification": 0,
+  "scenarios_with_a_tool_call": 0,
+  "tool_calls_chosen": [],
+  "model_requests": 5,
+  "average_prompt_tokens": 1283,
+  "average_output_tokens": 95,
+  "results": [
+    {
+      "id": "inspect-node-project",
+      "objective": "list the files in this Node.js project and name the entry point",
+      "expected_tools": [
+        "project_structure",
+        "list_directory",
+        "read_file"
+      ],
+      "model_requests": 1,
+      "steps": 1,
+      "completed": false,
+      "error": "the model stopped before it performed any tool operation",
+      "tool_failures": 0,
+      "files": [],
+      "tool_calls_chosen": [],
+      "next": "inspect the project before reporting a result",
+      "response_excerpt": "Task state: Objective is to list the files in this Node.js project and name the entry point. Plan is to analyze requirements, write an implementation plan, create project directories, write initial files, implement remaining files, install ",
+      "verified": [],
+      "index": 0
+    },
+    {
+      "id": "create-node-cli",
+      "objective": "create src/cli.js that prints hello and a test that checks it",
+      "expected_tools": [
+        "write_file"
+      ],
+      "model_requests": 1,
+      "steps": 1,
+      "completed": false,
+      "error": "the model stopped before it performed any tool operation",
+      "tool_failures": 0,
+      "files": [],
+      "tool_calls_chosen": [],
+      "next": "inspect the project before reporting a result",
+      "response_excerpt": "Task state: Objective to create src/cli.js that prints \"hello\" and a test that checks it. Plan: analyze requirements; write an implementation plan; create project directories; write initial files; implement remaining files; install dependen",
+      "verified": [],
+      "index": 1
+    },
+    {
+      "id": "debug-broken-function",
+      "objective": "the sum test fails, find out why and fix it",
+      "expected_tools": [
+        "run_tests",
+        "read_file",
+        "edit_file"
+      ],
+      "model_requests": 1,
+      "steps": 1,
+      "completed": false,
+      "error": "the model stopped before it performed any tool operation",
+      "tool_failures": 0,
+      "files": [],
+      "tool_calls_chosen": [],
+      "next": "inspect the project before reporting a result",
+      "response_excerpt": "The task requires a detailed plan with specific actions, but the provided code and results indicate no code yet. Here's a revised plan based on the context:\n\n**Task State:**  \nObjective: the sum test fails, plan: analyze requirements; write",
+      "verified": [],
+      "index": 2
+    },
+    {
+      "id": "find-symbol",
+      "objective": "where is createUser defined and who calls it?",
+      "expected_tools": [
+        "search_code",
+        "find_symbols"
+      ],
+      "model_requests": 1,
+      "steps": 1,
+      "completed": false,
+      "error": "the model stopped before it performed any tool operation",
+      "tool_failures": 0,
+      "files": [],
+      "tool_calls_chosen": [],
+      "next": "inspect the project before reporting a result",
+      "response_excerpt": "The task requires analyzing requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining files, installing dependencies, running diagnostics, and verifying the result. However, th",
+      "verified": [],
+      "index": 3
+    },
+    {
+      "id": "missing-file",
+      "objective": "read src/nope.js and fix what is broken in it",
+      "expected_tools": [
+        "read_file"
+      ],
+      "model_requests": 1,
+      "steps": 1,
+      "completed": false,
+      "error": "the model stopped before it performed any tool operation",
+      "tool_failures": 0,
+      "files": [],
+      "tool_calls_chosen": [],
+      "next": "inspect the project before reporting a result",
+      "response_excerpt": "Task state: Objective is to read `src/nope.js` and fix what is broken in it. Plan: analyze requirements; write an implementation plan; create project directories; write initial files; implement remaining files; install dependencies; run dia",
+      "verified": [],
+      "index": 4
+    }
+  ],
+  "comparison": "Direct generation and the agent workflow see the same prompts. The difference is what happens next: the agent cannot report completion without a real, successful tool record, while a direct generation can claim anything."
+}

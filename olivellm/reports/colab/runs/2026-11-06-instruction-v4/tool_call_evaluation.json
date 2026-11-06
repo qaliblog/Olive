@@ -1,0 +1,156 @@
+{
+  "status": "measured",
+  "suite": "tool_calling",
+  "cases": 24,
+  "valid_call_rate": 0.208,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0.167,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 1,
+  "argument_types_rate": 1,
+  "response_kind_accuracy": 0.208,
+  "tool_call_cases": 24,
+  "failures": [
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0001",
+      "language": "en",
+      "expected": "install_dependencies",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "language": "en",
+      "expected": "run_tests",
+      "parsed": "inspect_diagnostics",
+      "text": "<|tool_call_start|>[inspect_diagnostics(command=\"run_diagnostics\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0011",
+      "language": "mixed",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The next action is: run_tests<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0013",
+      "language": "mixed",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "Tool call: run_tests<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0006",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0008",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from file creation to verification were successfully executed. The final result matches the expected outcome.<|im_en"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0010",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result matches the specified DONE statu"
+    },
+    {
+      "id": "olive.file_editing.css_logical_properties.en.0016",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: The task requires analyzing requirements, writing an implementation plan, creating project directories, writing initial files, implementing remaining files, installing dependencies, running diagnostics, and ver"
+    },
+    {
+      "id": "olive.file_editing.css_rtl_nav.en.0015",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: The task requires modifying the navigation style for right-to-left text in the project.<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.html_rtl_nav.en.0014",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: The task cannot be completed as no tool has been executed to address the requirements.<|im_end|>"
+    },
+    {
+      "id": "olive.file_reading.python_cli.en.0011",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, pending actions, or verified results. The relevant code and tool results were"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0015",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0017",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    },
+    {
+      "id": "olive.project_structure.node_api.en.0001",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "The task is completed. No errors were encountered during execution. All steps from Pending to Verified were successfully completed.<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0021",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0023",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0025",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0027",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0018",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0020",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    }
+  ]
+}

@@ -13,12 +13,26 @@ export const SYSTEM = [
 ].join("\n")
 
 /**
+ * Verbatim copy of `OlivePrompt.instruction` in packages/core/src/olive/prompt.ts. Every dataset example is rendered
+ * with the same operative instruction the runtime sends; `olivellm/test/prompt-parity.test.js` fails if the two
+ * drift.
+ */
+export function instruction(next) {
+  const target = next ? `"${next}"` : "the next step"
+  return [
+    "Stop only when the task is finished and verified (DONE), an error blocks every tool (BLOCKED: <error>), or no " +
+      "tool can find the answer (QUESTION: <question>). Never describe a tool result you did not receive.",
+    `Call one tool now for ${target}. Reply with the tool call only.`,
+  ].join("\n")
+}
+
+/**
  * `OlivePrompt.build` without budget truncation. Examples are capped at 2048 estimated tokens by the validator, which
  * is below the point where the budget would start dropping sections, so the rendered step message is the whole
  * prompt rather than a truncated one.
  */
 export function buildStep({ task, code = [], toolResults = [] }) {
-  return [
+  const body = [
     "Task state:",
     summarize(task),
     "",
@@ -28,6 +42,7 @@ export function buildStep({ task, code = [], toolResults = [] }) {
     "Recent tool results:",
     [...toolResults].reverse().join("\n") || "(none yet)",
   ].join("\n")
+  return `${body}\n\n${instruction(task.next)}`
 }
 
 /** The conversation Olive sends before the step message: kept history plus an optional compaction summary. */

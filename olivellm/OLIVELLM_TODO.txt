@@ -68,3 +68,44 @@ PHASE 11 - TRAINING AND EVALUATION PREPARATION
 
 PHASE 12 - FINAL REPORT
 [ ] reports/FINAL_DATASET_REPORT.md with measured numbers only.
+
+PHASE 2 CONTINUATION - DIRECTIVE, CONTEXT AND MEASUREMENT (2026-11-06)
+[x] Fix D11: the step message asked the model to plan but never to act.
+    Verified: "always ends the step message with the operative instruction",
+    "keeps the instruction when the body is truncated to nothing", "names each
+    stop form so a stop can be told from a failure", "sends the operative
+    instruction on every model request", "records a blocked reply as the run
+    error", "records a question to the user as the run error", "does not treat
+    DONE as evidence of completion". 40 tests pass in packages/core, 37 in
+    olivellm.
+[x] Correct the false premise that the base model cannot emit tool calls.
+    Verified: 71 frozen cases re-generated per instruction shape; call counts
+    0, 0, 10, 0, 13 for as_is, menu-first, imperative-last, imperative-first,
+    gated-imperative-last. docs/training_strategy.md and training_feasibility.md
+    rewritten from the artifacts.
+[x] Keep the dataset prompt mirror byte-identical to the runtime prompt.
+    Verified: olivellm/test/prompt-parity.test.js (4 tests).
+[x] Adaptive context tiers keyed on usable prompt tokens.
+    Verified: "picks the tier from usable prompt tokens, not the declared
+    window", "spends the whole prompt budget in every tier", "gives the extra
+    window to code and history instead of scaling every section", "caps how
+    much each tier may retain", "trims items to the tier limit before the
+    budget", "an explicit allocation still overrides the tier policy".
+[x] Re-measure the 71 frozen cases with the corrected prompt.
+    Verified: reports/colab/runs/2026-11-06-instruction{,-v2,-v3,-v4}/. The
+    frozen evaluation/colab/cases.json and its baseline reports are untouched.
+[x] Score with the shared parser instead of a second copy.
+    Verified: scripts/eval-report.js imports lib/lfm2-parse.js.
+[x] Run the real OliveAgent on the T4 and report execution, not generations.
+    Verified: reports/colab/agent_workflow_evaluation.json, 0 of 5 scenarios
+    completed, 3 calls.
+[x] Fix the bridge dropping tool-call argument mappings.
+    Verified: scenarios now advance past a call instead of failing with
+    "Tool call arguments must be a mapping".
+[!] Instruction quality is measured, not solved: 13 of 71 cases emit a call and
+    10 of 65 choose the expected tool, at agent level 0 of 5 scenarios complete.
+    Needs a decision: train at this prompt, or widen the directive first.
+[ ] Controlled LoRA at the corrected prompt, with the probe settings recorded in
+    documentation/training_feasibility.md.
+[ ] Base vs fine-tuned comparison on the same 71 cases and the same directive.
+[ ] Dataset coverage improvements (argument values, Persian, error recovery).

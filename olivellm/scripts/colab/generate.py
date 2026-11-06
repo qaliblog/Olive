@@ -29,13 +29,45 @@ def load():
     return tokenizer, model
 
 
+def normalise(messages):
+    """The OpenAI wire format carries tool-call arguments as a JSON string; the chat template needs a mapping.
+
+    Without this the template raises "Tool call arguments must be a mapping", which surfaces to the agent as a provider
+    error on the second step of every run that called a tool.
+    """
+    normalised = []
+    for message in messages:
+        calls = message.get("tool_calls") or []
+        if not calls:
+            normalised.append(message)
+            continue
+        normalised.append(
+            {
+                **message,
+                "tool_calls": [
+                    {
+                        **call,
+                        "function": {
+                            **call["function"],
+                            "arguments": json.loads(call["function"]["arguments"])
+                            if isinstance(call["function"].get("arguments"), str)
+                            else call["function"].get("arguments", {}),
+                        },
+                    }
+                    for call in calls
+                ],
+            }
+        )
+    return normalised
+
+
 def main():
     with open("/content/request.json", encoding="utf-8") as handle:
         request = json.load(handle)
     tokenizer, model = load()
     started = time.time()
     prompt = tokenizer.apply_chat_template(
-        request["messages"],
+        normalise(request["messages"]),
         tools=request.get("tools") or None,
         tokenize=False,
         add_generation_prompt=True,

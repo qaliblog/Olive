@@ -1,0 +1,184 @@
+{
+  "status": "measured",
+  "suite": "tool_calling",
+  "cases": 24,
+  "valid_call_rate": 0,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 0,
+  "argument_types_rate": 0,
+  "response_kind_accuracy": 0,
+  "tool_call_cases": 24,
+  "failures": [
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0001",
+      "language": "en",
+      "expected": "install_dependencies",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the provided plan and results?<|im_end|>"
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "language": "en",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0008",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the current state and results?<|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0010",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "QUESTION: WHAT ARE THE ERRORS IN THE PROJECT?<|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0012",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the current state and results?<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0009",
+      "language": "mixed",
+      "expected": "run_shell",
+      "parsed": null,
+      "text": "QUESTION: READ_FILE_NOT_FOUND<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0011",
+      "language": "mixed",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0013",
+      "language": "mixed",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0006",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the provided code and results?<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0008",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the provided code and results?<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0010",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the provided requirements and tool results?<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.css_logical_properties.en.0016",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.css_rtl_nav.en.0015",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.html_rtl_nav.en.0014",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "DONE<|im_end|>"
+    },
+    {
+      "id": "olive.file_reading.python_cli.en.0011",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks outlined in the task state, given the tools available and the results so far?<|im_end|>"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0015",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the project tasks based on the provided code and results?<|im_end|>"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0017",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "QUESTION: How can I implement AsyncStorage in the mobile-notes project?<|im_end|>"
+    },
+    {
+      "id": "olive.project_structure.node_api.en.0001",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "QUESTION: How can I proceed with the task-api project based on the provided plan and results?<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0021",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: How can I add a route for a reports page in the dashboard project?<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0023",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: How can I make the dashboard layout responsive with Tailwind?<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0025",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: How can I make progress on the requirements for input validation in the dashboard project?<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0027",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: How can I add a loading skeleton to the stat cards in the dashboard project?<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0018",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "QUESTION: How to proceed with the remaining tasks in the project plan?<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0020",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "QUESTION: How can I resolve the Capacitor sync failure in the field-app project?<|im_end|>"
+    }
+  ]
+}

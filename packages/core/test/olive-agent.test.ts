@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { mkdtemp, readFile, rm } from "node:fs/promises"
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { OliveAgent } from "../src/olive/agent.js"
@@ -359,6 +359,86 @@ describe("olive agent", () => {
           state: OliveTaskState.store(OliveAgent.stateFile(directory), "anything"),
         }),
       ).rejects.toThrow("no provider is configured")
+    })
+  })
+
+  test("records a declared block instead of reporting completion", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "publish the package"
+      const fixture = mock([() => answer("BLOCKED: the registry rejects the token")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.completed).toBe(false)
+        expect(outcome.error).toContain("registry rejects the token")
+        expect(outcome.task.errors.join(" ")).toContain("registry rejects the token")
+        expect(outcome.task.next).toBe("recover from the blocked operation")
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("records a declared question and refuses to invent progress", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "deploy to the production host"
+      const fixture = mock([() => answer("QUESTION: which host should I deploy to?")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.completed).toBe(false)
+        expect(outcome.error).toContain("needs clarification")
+        expect(outcome.task.next).toBe("ask the user for the missing information")
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("does not accept a DONE sentence as completion evidence", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "write the config file"
+      const fixture = mock([() => answer("DONE")])
+      try {
+        const outcome = await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        expect(outcome.completed).toBe(false)
+        expect(outcome.error).toContain("any tool operation")
+      } finally {
+        fixture.server.stop(true)
+      }
+    })
+  })
+
+  test("sends the operative instruction on every model request", async () => {
+    await withDirectory(async (directory) => {
+      const objective = "read the package manifest"
+      const fixture = mock([() => toolCall("read_file", { path: "package.json" }), () => answer("read it")])
+      try {
+        await writeFile(path.join(directory, "package.json"), "{}\n", "utf8")
+        await OliveAgent.run({
+          registry: registry(fixture.baseURL),
+          directory,
+          objective,
+          state: OliveTaskState.store(OliveAgent.stateFile(directory), objective),
+        })
+        const first = fixture.requests[0] as { messages: { role: string; content: string }[] }
+        expect(first.messages.at(-1)?.content).toContain("Call one tool now")
+      } finally {
+        fixture.server.stop(true)
+      }
     })
   })
 })

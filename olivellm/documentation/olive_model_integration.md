@@ -78,7 +78,7 @@ Adding one imperative line at the end of the step message changes the outcome me
 | --- | --- |
 | As implemented today | 0 |
 | `+ "Decide the single next action … call the tool that performs it now."` | 0 |
-| `+ "Call one tool now. Reply with the tool call only."` | **5** |
+| `+ "Call one tool now. Reply with the tool call only."` | **6** |
 
 This explains the two results the previous report left as model failures: the 0/65 tool-call baseline and the 0/5
 agent scenarios. The checkpoint can call tools; Olive never asked it to.
@@ -90,7 +90,7 @@ value, for example:
 Next: call one tool now for "<task.next>". Reply with the tool call only.
 ```
 
-5 of 8 is still a base-model limitation - the other 3 need fine-tuning - but 0 to 5 is the difference between an agent
+6 of 8 is still a base-model limitation - the other 3 need fine-tuning - but 0 to 6 is the difference between an agent
 that works and one that cannot act.
 
 ### D12 - the call parser rejects the model's own quoting (fixed)
@@ -111,7 +111,7 @@ For a 350M model driving a coding agent, the split that the evidence supports:
 
 | Decision | Owner | Reason |
 | --- | --- | --- |
-| Which tool to call next | Model | Measured: correct tool on 5 of 8 cases once asked |
+| Which tool to call next | Model | Measured: correct tool on 4 of 8 cases once asked |
 | Which file path to read | Model | Correct in the measured probe |
 | Boilerplate file contents (persian: package.json, configs, test skeletons) | Template | Deterministic, and the model adds no value |
 | Business logic inside a file | Model, small units | It produces good single functions; weak on wiring |

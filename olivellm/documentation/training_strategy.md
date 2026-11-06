@@ -1,13 +1,19 @@
 # OliveLLM training strategy
 
-Status: preparation only. No LoRA run has been started, because the base model does not yet emit tool calls at all and
-the dataset coverage targets are not met. Everything below is the plan the measured results support.
+Status: one controlled LoRA run on the corrected prompt is justified now, and a long run is not. The earlier claim that
+the base model cannot emit tool calls was wrong: it emits native calls, and the zero-call baseline was caused by a
+runtime prompt with no instruction (defect D11, fixed in `packages/core/src/olive/prompt.ts`). See
+`documentation/training_feasibility.md` for the measured probe and `reports/lfm2.5-350m/REPORT.md` for the evidence.
+Everything below is the plan the measured results support.
 
 ## Base model
 
 `LiquidAI/LFM2.5-350M`, unmodified, is the baseline. It was evaluated on a Colab T4 with greedy decoding over 71
-held-out cases (`reports/colab/baseline_metrics.json`). The result that matters for planning: 0 of 65 tool-call cases
-produced a parseable tool call, and response-kind accuracy was 8.5%. The model answers in prose.
+held-out cases (`reports/colab/baseline_metrics.json`). The recorded result was 0 of 65 tool-call cases producing a
+parseable call, and that number reproduces exactly - but it is a property of the prompt, not of the checkpoint. Given
+an instruction to act, the same model called a tool in 6 of 8 frozen cases and chose the expected tool in 4 of them
+(`reports/lfm2.5-350m/prompt_directive.json`). The baseline must therefore be re-measured with the corrected runtime
+prompt before any fine-tuned comparison; the old number is kept only as the pre-fix record.
 
 A 350M model has roughly 350M parameters; a tool-calling LoRA on this base is a behaviour-injection job, not a
 knowledge job. The corpus is small (455 records, ~182k prompt+answer tokens), so the realistic goal for a first run is
@@ -33,14 +39,20 @@ Consequences for training:
 
 ## LoRA strategy
 
-- Target the attention projections (`q_proj`, `k_proj`, `v_proj`, `o_proj`) and, in a second run, the MLP projections.
+- Target the attention projections and, in a second run, the MLP projections. There is **no `o_proj`** on this
+  architecture: the attention output is `out_proj`, and that name is shared with the 10 convolution blocks, so it must
+  be selected by pattern (`re:.*self_attn\.out_proj$`), never by bare suffix. Measured linear inventory: `q_proj`,
+  `k_proj`, `v_proj` 6 each, `out_proj` 16 (6 attention + 10 conv), `in_proj` 10, `w1`/`w2`/`w3` 16 each, `lm_head` 1.
   At 350M parameters a rank of 16 with alpha 32 is a reasonable first point; sweep rank 8/16/32.
 - Freeze embeddings and the LM head in the first run. The vocabulary is fixed and the task is formatting plus
   behaviour, not new tokens.
 - Sequence length 1024 covers the p95 prompt (607 estimated tokens) plus a 192-token answer. The longest record is
   1859 estimated tokens; pad to 2048 in a second configuration rather than truncating.
-- Train in bf16 on the T4-compatible path; keep gradient accumulation at 8-16 with a small batch, since the corpus is
-  ~465k tokens total.
+- The probe ran bf16 and worked, but the T4 has no bf16 tensor cores: fp16 with a gradient scaler is faster on this
+  GPU, while bf16 is the better choice on Ampere or newer. Keep gradient accumulation at 8-16 with a small batch,
+  since the corpus is ~465k tokens total.
+- Measured cost at batch 2 x 512 tokens: 0.93-1.10 s/step and 1,034 tokens/s, so the 292-record training split is about
+  6 minutes per epoch on a T4.
 
 ## Dataset formatting
 

@@ -7,10 +7,10 @@ Raw numbers: `reports/lfm2.5-350m/lora_probe.json`.
 
 The previous strategy said training was blocked because "the base model does not yet emit tool calls at all". That
 premise is **false**. The base checkpoint emits a correct native call in 12 output tokens when it is asked to
-(`reports/lfm2.5-350m/inference_validation.json`), and 5 of 8 frozen cases produce a call once the step message ends
+(`reports/lfm2.5-350m/inference_validation.json`), and 6 of 8 frozen cases produce a call once the step message ends
 with `"Call one tool now. Reply with the tool call only."` (`prompt_directive.json`).
 
-So the target of a first run is narrower than "teach tool calling from zero": it is to close the remaining 3 of 8 and
+So the target of a first run is narrower than "teach tool calling from zero": it is to close the remaining 2 of 8 and
 to improve argument fidelity. **A short SFT run is justified. A long one is not.**
 
 ## LoRA compatibility, measured
@@ -100,7 +100,7 @@ LoraConfig(
 - **The corpus is small and template-heavy**: 455 records, 376 of them template-generated. A LoRA can learn the
   template's voice rather than the behaviour.
 - **Coverage shortfalls are real**: task state 14, verification 22, mixed language 7 records.
-- **5 of 8 is the base ceiling under a directive**; the other 3 cases are the actual learning target, and 8 cases is a
+- **6 of 8 is the base ceiling under a directive**; the other 3 cases are the actual learning target, and 8 cases is a
   very small sample for that claim.
 - **Persian is not a capability yet**: the model produces Persian characters with incoherent content. Persian should be
   evaluated, not claimed.

@@ -153,9 +153,17 @@ export async function run(options: Options): Promise<Outcome> {
     const calls = asked.calls.slice(0, 2)
     history.push({ role: "assistant", content: asked.text, ...(calls.length > 0 ? { toolCalls: calls } : {}) })
     if (calls.length === 0) {
-      // Stopping is only a success when the real executor produced the evidence the task needs.
+      // Stopping is only a success when the real executor produced the evidence the task needs. A model that declares
+      // itself blocked or in need of an answer is recorded as saying so, but its sentence still cannot complete the
+      // task: the verdict always comes from the executor's record.
       const verdict = completion(operations.operations, failures)
-      task = await options.state.write(advance(task, { next: verdict.completed ? "report the result" : verdict.next }))
+      const declared = verdict.completed ? undefined : stopped(asked.text)
+      task = await options.state.write(
+        advance(task, {
+          next: verdict.completed ? "report the result" : (declared?.next ?? verdict.next),
+          ...(declared ? { errors: [...task.errors.slice(-9), declared.error.slice(0, 300)] } : {}),
+        }),
+      )
       options.onEvent?.({ type: "done", text: asked.text, completed: verdict.completed })
       return {
         task,
@@ -163,7 +171,7 @@ export async function run(options: Options): Promise<Outcome> {
         text: asked.text,
         failures,
         completed: verdict.completed,
-        ...(verdict.completed ? {} : { error: verdict.error }),
+        ...(verdict.completed ? {} : { error: declared?.error ?? verdict.error }),
       }
     }
 
@@ -187,6 +195,25 @@ export async function run(options: Options): Promise<Outcome> {
   const message = `step limit reached after ${maxSteps} steps; the task state is saved and can be resumed`
   options.onEvent?.({ type: "error", message })
   return { task, steps: maxSteps, text: "", failures, completed: false, error: message }
+}
+
+/**
+ * Reads the stop form the step instruction allows. `DONE` is deliberately absent: a completion sentence is just another
+ * stop, and `completion` decides whether the evidence exists. These two forms only make the recorded reason honest.
+ */
+function stopped(text: string) {
+  const line = text
+    .split("\n")
+    .map((value) => value.trim())
+    .find((value) => value.startsWith("BLOCKED:") || value.startsWith("QUESTION:"))
+  if (line === undefined) return undefined
+  const detail = line.slice(line.indexOf(":") + 1).trim()
+  return line.startsWith("BLOCKED:")
+    ? { error: detail || "the model reported a blocked task", next: "recover from the blocked operation" }
+    : {
+        error: `needs clarification: ${detail || "the model asked the user a question"}`,
+        next: "ask the user for the missing information",
+      }
 }
 
 /**

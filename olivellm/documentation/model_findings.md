@@ -87,7 +87,7 @@ A measured run on a Colab T4 replaces several **Untested** entries above. Eviden
    exactly (71 cases, 5,020 output tokens, 126 s, 0 call blocks). Isolating the cause: replacing the system message,
    trimming the tool list to one, or removing the system message all still gave 0 calls in 40 ablations. The step
    message itself contains no instruction, so the model summarizes it. Adding
-   `"Call one tool now. Reply with the tool call only."` produced a call in 5 of 8 cases. This is Olive defect D11.
+   `"Call one tool now. Reply with the tool call only."` produced a call in 6 of 8 cases. This is Olive defect D11.
 3. **The model writes double quotes where the template writes single quotes.** `lfm2-parse.js` accepted only single
    quotes, so a genuine call scored as `invalid`. Fixed, with `test/lfm2-parse.test.js`.
 4. **Context: 32,768 is documented, 128,000 is the positional config, and 8,192 is what a T4 actually holds.**

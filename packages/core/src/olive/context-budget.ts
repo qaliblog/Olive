@@ -28,6 +28,66 @@ export const DEFAULT_ALLOCATION: Allocation = {
 }
 
 /**
+ * A larger window is not a uniformly scaled version of a small one: what is worth keeping changes with the space
+ * available, so each tier reweights the sections and caps how many items may enter them. The tier is chosen from the
+ * tokens actually usable for the prompt - after the generation reserve - never from the model's advertised maximum,
+ * because a declared 32K window that cannot prefill without exhausting a T4 is not 32K of usable context.
+ */
+export const Tiers = ["under4k", "4k_to_8k", "8k_to_16k", "over16k"] as const
+export type Tier = (typeof Tiers)[number]
+
+export interface Limits {
+  /** Maximum code items carried into the prompt. */
+  readonly code: number
+  /** Maximum conversation messages kept before compaction. */
+  readonly conversation: number
+  /** Maximum tool results carried into the prompt. */
+  readonly toolResults: number
+}
+
+interface Policy {
+  readonly allocation: Omit<Allocation, "generation">
+  readonly limits: Limits
+}
+
+/**
+ * Below 4K there is room for the next action, a few symbols, and the last result. Extra space goes to code first, then
+ * to history, then to larger source sections; it is never spread evenly across every section.
+ */
+const POLICIES: Readonly<Record<Tier, Policy>> = {
+  under4k: {
+    allocation: { system: 0.14, task: 0.24, code: 0.3, conversation: 0.06, toolResults: 0.26 },
+    // Four, not two: one assistant call plus its two results is three messages, and a cap that splits that group
+    // hides the model's own call from the next request.
+    limits: { code: 4, conversation: 4, toolResults: 2 },
+  },
+  "4k_to_8k": {
+    allocation: { system: 0.14, task: 0.18, code: 0.33, conversation: 0.12, toolResults: 0.23 },
+    limits: { code: 8, conversation: 6, toolResults: 4 },
+  },
+  "8k_to_16k": {
+    allocation: { system: 0.12, task: 0.16, code: 0.35, conversation: 0.22, toolResults: 0.15 },
+    limits: { code: 14, conversation: 14, toolResults: 6 },
+  },
+  over16k: {
+    allocation: { system: 0.1, task: 0.14, code: 0.4, conversation: 0.26, toolResults: 0.1 },
+    limits: { code: 24, conversation: 30, toolResults: 10 },
+  },
+}
+
+/** The tier boundary is applied to usable prompt tokens, so `4k_to_8k` means 4096-8191 prompt tokens. */
+export function tierOf(prompt: number): Tier {
+  if (prompt < 4096) return "under4k"
+  if (prompt < 8192) return "4k_to_8k"
+  if (prompt < 16384) return "8k_to_16k"
+  return "over16k"
+}
+
+export function limitsOf(tier: Tier): Limits {
+  return POLICIES[tier].limits
+}
+
+/**
  * Heuristic estimate used when a tokenizer is not configured; it never claims to be exact model tokenization. Latin
  * text averages four characters per token, while scripts such as Persian or Arabic tokenize at roughly one to two
  * characters per token, so counting them at four would overflow the window for exactly the users this agent supports.
@@ -50,6 +110,9 @@ export interface Plan {
   readonly sections: Readonly<Record<Section, number>>
   /** Tokens available to prompt sections, excluding the generation reserve. */
   readonly prompt: number
+  /** Which retention policy was applied, derived from `prompt`. */
+  readonly tier: Tier
+  readonly limits: Limits
 }
 
 export function plan(input: PlanInput): Plan {
@@ -59,7 +122,10 @@ export function plan(input: PlanInput): Plan {
   const context = Math.floor(input.context)
   const generation = Math.min(Math.floor(input.maxOutput), Math.max(1, Math.floor(context * allocation.generation)), context - 1)
   const prompt = context - generation
-  const weights = Section.map((section) => [section, Math.max(0, allocation[section])] as const)
+  const tier = tierOf(prompt)
+  // An explicit allocation wins over the tier policy: the overflow retry narrows code and history on purpose.
+  const policy = input.allocation ? allocation : { ...allocation, ...POLICIES[tier].allocation }
+  const weights = Section.map((section) => [section, Math.max(0, policy[section])] as const)
   const total = weights.reduce((sum, [, weight]) => sum + weight, 0) || 1
   const sections = weights.reduce<Record<Section, number>>(
     (result, [section, weight]) => ({ ...result, [section]: Math.floor((prompt * weight) / total) }),
@@ -68,7 +134,7 @@ export function plan(input: PlanInput): Plan {
   // Flooring leaves a remainder; the code section carries it because it is the largest consumer.
   const assigned = Section.reduce((sum, section) => sum + sections[section], 0)
   sections.code += prompt - assigned
-  return { context, generation, sections, prompt }
+  return { context, generation, sections, prompt, tier, limits: POLICIES[tier].limits }
 }
 
 export type ItemKind = "symbol" | "snippet" | "summary" | "file"
@@ -103,7 +169,7 @@ export interface Fit {
 }
 
 /** Fits items into a token budget, keeping the most relevant and most precise context first. */
-export function fit(items: readonly Item[], budget: number): Fit {
+export function fit(items: readonly Item[], budget: number, limit = Number.POSITIVE_INFINITY): Fit {
   const ranked = preferSymbols(items)
     .map((item, index) => ({ item, index }))
     .toSorted(
@@ -117,7 +183,8 @@ export function fit(items: readonly Item[], budget: number): Fit {
   let tokens = 0
   for (const { item } of ranked) {
     const cost = estimateTokens(item.text)
-    if (tokens + cost <= budget) {
+    if (kept.length >= limit) dropped.push(item)
+    else if (tokens + cost <= budget) {
       kept.push(item)
       tokens += cost
     } else dropped.push(item)
@@ -151,10 +218,15 @@ export interface Compacted {
  * Keeps the newest messages that fit and replaces the rest with a short summary, so a small window still carries
  * what happened before without replaying every message.
  */
-export function compactConversation(messages: readonly ConversationMessage[], budget: number): Compacted {
+export function compactConversation(
+  messages: readonly ConversationMessage[],
+  budget: number,
+  limit = Number.POSITIVE_INFINITY,
+): Compacted {
   const newest: ConversationMessage[] = []
   let tokens = 0
   for (const message of [...messages].reverse()) {
+    if (newest.length >= limit) break
     const cost = estimateTokens(message.content)
     if (tokens + cost > budget) break
     newest.unshift(message)

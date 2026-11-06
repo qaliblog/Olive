@@ -1,0 +1,46 @@
+{
+  "status": "measured",
+  "model": "LiquidAI/LFM2.5-350M",
+  "device": "cuda:0",
+  "evaluation_set": {
+    "source": "olivellm/evaluation/colab/cases.jsonl",
+    "held_out": true,
+    "excluded_from_training": true,
+    "cases": 71,
+    "by_suite": {
+      "tool_calling": 24,
+      "coding": 11,
+      "multilingual": 12,
+      "baseline": 24
+    },
+    "by_language": {
+      "en": 51,
+      "mixed": 14,
+      "fa": 6
+    }
+  },
+  "conditions": "greedy decoding, max_new_tokens=192, temperature 0 (no sampling), identical prompts for any later fine-tuned model",
+  "overall": {
+    "valid_call_rate": 0.138,
+    "invalid_call_rate": 0,
+    "unknown_tool_rate": 0,
+    "tool_accuracy": 0.092,
+    "argument_names_accuracy": 0.111,
+    "required_arguments_rate": 0.889,
+    "argument_types_rate": 1,
+    "response_kind_accuracy": 0.197,
+    "tool_call_cases": 65
+  },
+  "efficiency": {
+    "cases": 71,
+    "prompt_tokens": 104193,
+    "output_tokens": 1336,
+    "average_prompt_tokens": 1467.507,
+    "average_output_tokens": 18.817,
+    "total_seconds": 54.004,
+    "tokens_per_second": 24.739,
+    "average_seconds_per_case": 0.761,
+    "context_usage": 0.045
+  },
+  "measured_at": "2026-11-06T11:53:51.095Z"
+}

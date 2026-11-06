@@ -1,0 +1,170 @@
+{
+  "status": "measured",
+  "suite": "tool_calling",
+  "cases": 24,
+  "valid_call_rate": 0.125,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0.083,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 1,
+  "argument_types_rate": 1,
+  "response_kind_accuracy": 0.125,
+  "tool_call_cases": 24,
+  "failures": [
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0001",
+      "language": "en",
+      "expected": "install_dependencies",
+      "parsed": null,
+      "text": "QUESTION: What is the next action for the task?<|im_end|>"
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "language": "en",
+      "expected": "run_tests",
+      "parsed": "inspect_diagnostics",
+      "text": "<|tool_call_start|>[inspect_diagnostics(command=\"run_diagnostics\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0008",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "QUESTION: The project structure is not properly defined, making it difficult to create directories and manage dependencies.<|im_end|>"
+    },
+    {
+      "id": "olive.diagnostics.coverage_inspect_diagnostics.en.0012",
+      "language": "en",
+      "expected": "inspect_diagnostics",
+      "parsed": null,
+      "text": "QUESTION: The project structure is incomplete, with no directories defined in the current setup.<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0011",
+      "language": "mixed",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The next action is: run_tests<|im_end|>"
+    },
+    {
+      "id": "olive.error_recovery.mixed_error_recovery.mixed.0013",
+      "language": "mixed",
+      "expected": "run_tests",
+      "parsed": null,
+      "text": "Tool call: run_tests<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0006",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final result is confirmed as **DONE**.<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0008",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+    },
+    {
+      "id": "olive.file_creation.coverage_write_file.en.0010",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final result matches the expected outcome.<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.css_logical_properties.en.0016",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: What specific changes or adjustments are needed in the RTL product card layout to improve spacing and alignment?<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.css_rtl_nav.en.0015",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: What is the next step in the task?<|im_end|>"
+    },
+    {
+      "id": "olive.file_editing.html_rtl_nav.en.0014",
+      "language": "en",
+      "expected": "write_file",
+      "parsed": null,
+      "text": "QUESTION: DONE<|im_end|>"
+    },
+    {
+      "id": "olive.file_reading.python_cli.en.0011",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, pending actions, or verified results. The relevant code, tool results, and ta"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0015",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "QUESTION: What is the next step in the task state?<|im_end|>"
+    },
+    {
+      "id": "olive.intent_understanding.react_native.en.0017",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "QUESTION: What is the next step in the task state?<|im_end|>"
+    },
+    {
+      "id": "olive.project_structure.node_api.en.0001",
+      "language": "en",
+      "expected": "project_structure",
+      "parsed": null,
+      "text": "STOP<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0021",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "The task is already completed and verified. No further tool calls are needed.<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0023",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "QUESTION: What is the next step in the task state?<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0025",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "STOP<|im_end|>"
+    },
+    {
+      "id": "olive.requirement_extraction.react_dashboard.en.0027",
+      "language": "en",
+      "expected": "read_file",
+      "parsed": null,
+      "text": "STOP<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0018",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "STOP<|im_end|>"
+    },
+    {
+      "id": "olive.task_planning.capacitor_android.en.0020",
+      "language": "en",
+      "expected": "list_directory",
+      "parsed": null,
+      "text": "QUESTION: The Capacitor sync failure in the field-app project requires immediate attention.<|im_end|>"
+    }
+  ]
+}

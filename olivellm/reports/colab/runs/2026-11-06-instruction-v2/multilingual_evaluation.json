@@ -1,0 +1,42 @@
+{
+  "status": "measured",
+  "suite": "multilingual",
+  "cases": 12,
+  "by_language": {
+    "fa": {
+      "valid_call_rate": 0.25,
+      "invalid_call_rate": 0,
+      "unknown_tool_rate": 0,
+      "tool_accuracy": 0.25,
+      "argument_names_accuracy": 1,
+      "required_arguments_rate": 1,
+      "argument_types_rate": 1,
+      "response_kind_accuracy": 0.4,
+      "tool_call_cases": 4
+    },
+    "mixed": {
+      "valid_call_rate": 0.333,
+      "invalid_call_rate": 0,
+      "unknown_tool_rate": 0,
+      "tool_accuracy": 0.167,
+      "argument_names_accuracy": 0,
+      "required_arguments_rate": 0.5,
+      "argument_types_rate": 1,
+      "response_kind_accuracy": 0.429,
+      "tool_call_cases": 6
+    }
+  },
+  "unicode_robustness": {
+    "cases_with_replacement_characters": 0,
+    "cases_with_persian_output": 0
+  },
+  "valid_call_rate": 0.3,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0.2,
+  "argument_names_accuracy": 0.333,
+  "required_arguments_rate": 0.667,
+  "argument_types_rate": 1,
+  "response_kind_accuracy": 0.417,
+  "tool_call_cases": 10
+}

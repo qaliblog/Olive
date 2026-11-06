@@ -138,7 +138,7 @@ varied only the prompt:
   list trimmed to one, and the system prompt replaced by a two-line instruction.
 - The step message is a status report (`Task state: … Plan: … Recent tool results: (none yet)`) with no sentence
   asking for anything, so the model summarizes it: "The task requires a detailed plan with specific actions…".
-- Appending `"Call one tool now. Reply with the tool call only."` produced a call in **5 of 8** cases
+- Appending `"Call one tool now. Reply with the tool call only."` produced a call in **6 of 8** cases
   (`prompt_directive.json`).
 
 This is an Olive defect, not a model defect, and it invalidates the previous report's two headline conclusions (0/65
@@ -154,7 +154,7 @@ Full analysis: `documentation/training_feasibility.md`. Measured, not estimated:
 - The 292-record training split at 3 epochs is about 18 minutes on this GPU.
 
 Verdict: a **short** SFT run is justified now, because the base model already emits calls and the real target is the
-remaining 3 of 8 cases plus argument fidelity. A long run is still not justified: 455 records, 376 of them
+remaining 2 of 8 cases plus argument fidelity. A long run is still not justified: 455 records, 376 of them
 template-generated, with task-state (14), verification (22) and mixed-language (7) coverage far below target.
 
 ## 10. Proposed Olive integration
@@ -191,7 +191,8 @@ JSON artifacts in this directory, and `reports/colab/raw/generations-2026-11-06.
 
 1. **Fix D11 in `packages/core/src/olive/prompt.ts`**: end the step message with
    `Next: call one tool now for "<task.next>". Reply with the tool call only.` Re-run the 5 `OliveAgent.run` scenarios
-   and the 71 frozen cases, and confirm the call rate moves from 0/8 to about 5/8 in both. Nothing downstream is
+   and the 71 frozen cases. The 71-case run is the one that counts: the shipped instruction emits a call in 13 of 71
+   cases and picks the expected tool in 10 of 65, against 0 for the pre-fix runtime. Nothing downstream is
    meaningful until this is done.
 2. **Re-score the re-run generations with the fixed parser** (`bun olivellm/scripts/eval-report.js` against
    `reports/colab/raw/generations-2026-11-06.json` into a new file; do not overwrite the published baseline).
@@ -202,3 +203,81 @@ JSON artifacts in this directory, and `reports/colab/raw/generations-2026-11-06.
 5. **Install `causal_conv1d`** and re-run `benchmark.py` to record the optimized-kernel numbers alongside these.
 6. **Grow the dataset where it is thin** (task state, verification, mixed language) before any second training run.
 7. **Do not claim Persian or coding capability** from a 350M model; both are measured and both are weak.
+
+### Directive measurement detail
+
+`prompt_directive.json`, 8 frozen cases x 5 conditions, greedy, `max_new_tokens=192`:
+
+| Condition | Cases emitting a call | Cases choosing the expected tool |
+| --- | --- | --- |
+| `as_is` (the runtime step message before this change) | 0 | 0 |
+| `next_action` | 0 | 0 |
+| `call_it` (`Call one tool now. Reply with the tool call only.`) | 6 | 4 |
+| `objective_first` | 0 | 0 |
+| `probe_shape` | 0 | 0 |
+
+### The 71-case measurement of the shipped instruction
+
+The 8-case probe was not enough. The instruction was then rendered into the full frozen set and generated on a T4,
+one run per shape, before anything was trained. The frozen `evaluation/colab/cases.json` was never modified; each
+condition is a separate file and a separate run directory under `reports/colab/runs/`.
+
+| Run | Directive shape | Calls (of 71) | Correct tool (of 65) | Kind accuracy | `QUESTION:` | `BLOCKED:` | Output tokens |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `as_is` | none (pre-fix runtime) | 0 | 0 | 0.085 | 0 | 0 | 5020 |
+| `2026-11-06-instruction` | four-option menu first, call bullet second | 0 | 0 | 0.085 | 26 | 0 | 1075 |
+| `2026-11-06-instruction-v2` | stop line first, call sentence last | 10 | 6 | 0.197 | 26 | 0 | 1336 |
+| `2026-11-06-instruction-v3` | call sentence first, stop line last | 0 | 0 | 0.085 | 3 | 21 | 1843 |
+| `2026-11-06-instruction-v4` | gated stop line first, call sentence last | **13** | **10** | **0.239** | 11 | 0 | 2192 |
+
+What this measured, and it changed the implementation:
+
+1. **A menu of reply forms cancels the call.** Listing four options and asking for a call as one of them produced zero
+   calls in 71 cases - the same as having no instruction at all, at a quarter of the output tokens. The model read the
+   menu and answered in prose or with `QUESTION:`.
+2. **The trailing line is what this model obeys.** Same sentences, different order: imperative last gave 10 calls,
+   imperative first gave 0 and 21 `BLOCKED:`. Position, not wording, decided the behaviour.
+3. **An ungated escape hatch is used as a default.** With `QUESTION:` offered as an equal option it absorbed 26 of 71
+   cases; gating it behind "no tool can find the answer" cut it to 11 and raised calls from 10 to 13.
+4. **The shipped instruction is `v4`** (`packages/core/src/olive/prompt.ts`), the best measured variant. It is not a
+   solved instruction: 10 of 65 correct tools is a starting point for the LoRA, not a success.
+
+Emission, selection, argument validity, execution and end-to-end completion are separate claims and are never merged.
+Every number above is generation only: no case executed a tool. Selection still runs ahead of argument fidelity -
+`inspect_diagnostics(command="run_diagnostics", timeoutMs=10)` and `inspect_diagnostics(command="none", timeoutMs=10)`
+are both counted as a correct tool with invented argument values - so the argument-name accuracy of 0.083 for `v4` is
+the number to trust for argument fidelity, not the 0.239 kind accuracy.
+
+One discarded run is worth recording as a process note: the first `v4` measurement scored identically to `v3` because a
+`colab upload` aborted remotely and the session still held the previous case file. The guard that caught it compares
+prompt-token totals across runs and refuses to score an identical set; the artifact was deleted, not reported.
+
+### Agent-level run with the shipped instruction
+
+`olivellm/scripts/agent-eval.js` drives the real `OliveAgent.run` against the T4, so this measured execution rather than
+generation:
+
+| Scenario | Steps | Calls | Completed |
+| --- | --- | --- | --- |
+| `inspect-node-project` | 1 | none | no |
+| `create-node-cli` | 2 | `inspect_diagnostics` | no |
+| `debug-broken-function` | 2 | `inspect_diagnostics` | no |
+| `find-symbol` | 1 | none | no |
+| `missing-file` | 2 | `inspect_diagnostics` | no |
+
+0 of 5 completed, 3 calls across 5 scenarios, every one of them `inspect_diagnostics`. The model acts on the first tool
+in the list and never reaches the point of writing a file, so the runtime is not the only limit: tool selection is.
+Two runs stopped at step 1 with no call - `find-symbol` asked for the missing information and `inspect-node-project`
+described what it would inspect - and both were recorded as incomplete with the reason, never as success.
+
+Two harness defects surfaced here that a generation-only benchmark cannot see:
+
+- The bridge passed OpenAI-style `arguments` JSON strings straight into the chat template, which raised "Tool call
+  arguments must be a mapping" on the second step of every run that had called a tool; all five scenarios ended in a
+  provider error. `scripts/colab/generate.py` now parses arguments before templating. The defective run is preserved at
+  `reports/colab/runs/2026-11-06-provider-error-defect/`.
+- The scorer in `scripts/eval-report.js` carried its own copy of the call parser, still broken for double-quoted
+  arguments; it now imports the shared parser, so scoring and execution can no longer disagree.
+
+The honest-failure path also proved itself on the first run: the agent reported "resolve the provider error before
+continuing" and refused to claim progress, which is exactly what D11's stop forms exist for.

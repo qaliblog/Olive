@@ -1,0 +1,14 @@
+{
+  "status": "measured",
+  "suite": "baseline",
+  "cases": 24,
+  "valid_call_rate": 0.2,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0.2,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 1,
+  "argument_types_rate": 1,
+  "response_kind_accuracy": 0.292,
+  "tool_call_cases": 20
+}

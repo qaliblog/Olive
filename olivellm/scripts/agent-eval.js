@@ -24,6 +24,11 @@ const here = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(here, "..")
 const session = process.env.OLIVE_COLAB_SESSION ?? "olivellm-eval"
 const requestFile = "/tmp/olive-agent-request.json"
+// A run id writes into its own directory, so a later measurement never overwrites a published report.
+const runId = process.env.OLIVE_RUN
+const reports = runId ? path.join(root, "reports/colab/runs", runId) : path.join(root, "reports/colab")
+// The same harness measures the base checkpoint and a trained adapter; only the adapter the Colab kernel loads differs.
+const adapter = process.env.OLIVE_ADAPTER
 
 const SCENARIOS = [
   {
@@ -38,14 +43,16 @@ const SCENARIOS = [
   {
     id: "create-node-cli",
     objective: "create src/cli.js that prints hello and a test that checks it",
-    seed: { "package.json": `${JSON.stringify({ name: "cli-scenario", private: true, scripts: { test: "node --test test/" } }, null, 2)}\n` },
+    // The directory argument made `node --test` itself fail on Node 22, which made the fixture look broken; naming the
+    // file keeps the failure about the model's edit rather than about the runner.
+    seed: { "package.json": `${JSON.stringify({ name: "cli-scenario", private: true, scripts: { test: "node --test test/cli.test.js" } }, null, 2)}\n` },
     expected: ["write_file"],
   },
   {
     id: "debug-broken-function",
     objective: "the sum test fails, find out why and fix it",
     seed: {
-      "package.json": `${JSON.stringify({ name: "debug-scenario", private: true, scripts: { test: "node --test test/" } }, null, 2)}\n`,
+      "package.json": `${JSON.stringify({ name: "debug-scenario", private: true, scripts: { test: "node --test test/sum.test.js" } }, null, 2)}\n`,
       "src/sum.js": "const sum = (left, right) => left - right\n\nmodule.exports = { sum }\n",
       "test/sum.test.js": "const test = require(\"node:test\")\nconst assert = require(\"node:assert\")\nconst { sum } = require(\"../src/sum\")\n\ntest(\"sums\", () => {\n  assert.strictEqual(sum(2, 3), 5)\n})\n",
     },
@@ -66,9 +73,50 @@ const SCENARIOS = [
     seed: { "src/app.js": "module.exports = {}\n" },
     expected: ["read_file"],
   },
+  {
+    id: "resume-partial-project",
+    objective: "the previous run only wrote src/index.js; finish the project so its test passes",
+    seed: {
+      "package.json": `${JSON.stringify({ name: "resume-scenario", private: true, scripts: { test: "node --test test/index.test.js" } }, null, 2)}\n`,
+      "src/index.js": "module.exports = { greet: (name) => `hello ${name}` }\n",
+    },
+    expected: ["read_file", "write_file", "run_tests"],
+  },
+  {
+    id: "answer-from-missing-doc",
+    objective: "read docs/setup.md and tell me which command installs the project",
+    seed: { "package.json": `${JSON.stringify({ name: "docs-scenario", private: true }, null, 2)}\n` },
+    expected: ["read_file"],
+  },
+  {
+    id: "install-then-test",
+    objective: "install the dependencies this project declares, then run its tests",
+    seed: {
+      "package.json": `${JSON.stringify({ name: "install-scenario", private: true, scripts: { test: "node --test test/add.test.js" } }, null, 2)}\n`,
+      "src/add.js": "module.exports = { add: (left, right) => left + right }\n",
+      "test/add.test.js": "const test = require(\"node:test\")\nconst assert = require(\"node:assert\")\nconst { add } = require(\"../src/add\")\n\ntest(\"adds\", () => {\n  assert.strictEqual(add(2, 3), 5)\n})\n",
+    },
+    expected: ["install_dependencies", "run_tests"],
+  },
+  {
+    id: "persian-symbol-lookup",
+    objective: "تابع createUser کجا تعریف شده و چه کسی آن را صدا می‌زند؟",
+    seed: {
+      "src/user.js": "function createUser(email) {\n  return { id: \"1\", email }\n}\n\nmodule.exports = { createUser }\n",
+      "src/routes.js": "const { createUser } = require(\"./user\")\n\nmodule.exports = (req, res) => res.json(createUser(req.body.email))\n",
+    },
+    expected: ["search_code", "find_symbols"],
+  },
+  {
+    id: "edit-without-reading",
+    objective: "change the error message in src/api.js to \"invalid request\"",
+    seed: { "src/api.js": "module.exports = () => ({ error: \"bad request\" })\n" },
+    expected: ["read_file", "edit_file"],
+  },
 ]
 
 const generations = []
+let current
 
 /** One model request: upload it, generate on the live Colab session, return the text. */
 function generate(request) {
@@ -82,7 +130,17 @@ function generate(request) {
   ])
   const result = spawnSync(
     "bash",
-    [path.join(here, "colab/colab-env.sh"), "exec", "-s", session, "-f", path.join(here, "colab/generate.py"), "--timeout", "600"],
+    [
+      path.join(here, "colab/colab-env.sh"),
+      "exec",
+      "-s",
+      session,
+      "-f",
+      path.join(here, "colab/generate.py"),
+      "--timeout",
+      "600",
+      ...(adapter ? ["--env", `OLIVE_ADAPTER=${adapter}`] : []),
+    ],
     { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 },
   )
   const match = /OLIVE_JSON_BEGIN\n([\s\S]*?)\nOLIVE_JSON_END/.exec(result.stdout ?? "")
@@ -120,7 +178,7 @@ const server = Bun.serve({
     await writeFile(requestFile, JSON.stringify({ messages: body.messages, tools: body.tools ?? [], max_tokens: 192 }), "utf8")
     const generated = generate(body)
     generations.push({
-      scenario: undefined,
+      scenario: current,
       prompt_tokens: generated.prompt_tokens,
       output_tokens: generated.output_tokens,
       seconds: generated.seconds,
@@ -150,6 +208,7 @@ for (const [index, scenario] of SCENARIOS.entries()) {
       await mkdir(path.dirname(path.join(directory, file)), { recursive: true })
       await writeFile(path.join(directory, file), content, "utf8")
     }
+    current = scenario.id
     const before = generations.length
     const outcome = await OliveAgent.run({
       registry,
@@ -184,6 +243,8 @@ server.stop(true)
 
 const report = {
   status: "measured",
+  run_id: runId ?? null,
+  adapter: adapter ?? null,
   model: "LiquidAI/LFM2.5-350M",
   runtime: "OliveAgent.run with the real OliveTools executor; only the model transport is bridged to Colab",
   scenarios: results.length,
@@ -199,8 +260,9 @@ const report = {
     "Direct generation and the agent workflow see the same prompts. The difference is what happens next: the agent cannot report completion without a real, successful tool record, while a direct generation can claim anything.",
 }
 
-await writeJson(path.join(root, "reports/colab/agent_workflow_evaluation.json"), report)
-await writeJson(path.join(root, "reports/colab/raw/agent-generations.json"), generations)
+await mkdir(path.join(reports, "raw"), { recursive: true })
+await writeJson(path.join(reports, "agent_workflow_evaluation.json"), report)
+await writeJson(path.join(reports, "raw/agent-generations.json"), generations)
 
 console.log("agent scenarios:", report.scenarios, "completed:", report.completed, "tool calls:", report.tool_calls_chosen.length)
 for (const item of results) console.log(`- ${item.id}: steps=${item.steps} completed=${item.completed} calls=[${item.tool_calls_chosen.join(",")}] next=${item.next ?? "-"}`)

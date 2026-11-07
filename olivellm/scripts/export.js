@@ -73,8 +73,15 @@ await writeJson(path.join(processed, "export-manifest.json"), {
 console.log("exported:", exported)
 console.log(`preference pairs: ${preference.length}`)
 
+/**
+ * The supervised span is the assistant turn without the closing `<|im_end|>`, which the trainer requires to be the last
+ * thing in `text`. `assistantTarget` reads `text`, so it must be given the message's `content`: passing the message
+ * itself (whose field is `content`) silently produced the literal string "undefined" as the prefix of every tool-call
+ * target.
+ */
 function toRecord(row, toolList) {
-  const messages = [...promptMessages(row), assistantMessage(row)]
+  const assistant = assistantMessage(row)
+  const messages = [...promptMessages(row), assistant]
   const text = render({ messages, tools: toolList })
   return {
     id: row.id,
@@ -84,7 +91,7 @@ function toRecord(row, toolList) {
     messages,
     tools: toolList,
     text,
-    target: assistantTarget(assistantMessage(row)),
+    target: assistantTarget({ text: assistant.content, toolCalls: assistant.toolCalls }),
     tokens: estimateTokens(text),
   }
 }

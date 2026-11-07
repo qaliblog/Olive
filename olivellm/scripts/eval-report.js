@@ -50,6 +50,8 @@ for (const generation of run.cases) {
     correct_tool: Boolean(first && expected.tool && first.name === expected.tool),
     unknown_tool: Boolean(first && !item.tools.some((tool) => tool.name === first.name)),
     argument_names: first && expected.arguments ? sameKeys(first.arguments, expected.arguments) : undefined,
+    argument_values: first && expected.arguments ? sameValues(first.arguments, expected.arguments) : undefined,
+    false_completion: expected.kind === "tool_call" && parsed.calls.length === 0 && claimsCompletion(generation.text),
     required_arguments: first && expectedSchema ? (expectedSchema.required ?? []).every((key) => key in first.arguments) : undefined,
     argument_types: first && expectedSchema ? typesMatch(first.arguments, expectedSchema) : undefined,
     kind_correct: expected.kind === "tool_call" ? parsed.calls.length > 0 : parsed.calls.length === 0,
@@ -92,10 +94,12 @@ const efficiency = {
 
 const metrics = {
   status: "measured",
+  run_id: runId ?? null,
+  adapter: run.adapter ?? null,
   model: run.model,
   device: run.device,
   evaluation_set: {
-    source: "olivellm/evaluation/colab/cases.jsonl",
+    source: path.relative(root, casesFile),
     held_out: true,
     excluded_from_training: true,
     cases: scored.length,
@@ -104,6 +108,9 @@ const metrics = {
   },
   conditions: "greedy decoding, max_new_tokens=192, temperature 0 (no sampling), identical prompts for any later fine-tuned model",
   overall: aggregate,
+  by_language: Object.fromEntries(
+    [...new Set(scored.map((item) => item.language))].map((language) => [language, summarise(scored.filter((item) => item.language === language))]),
+  ),
   efficiency,
   measured_at: new Date().toISOString(),
 }
@@ -188,6 +195,10 @@ function summarise(items) {
     argument_names_accuracy: round(ratio(withCall.filter((item) => item.argument_names === true).length, withCall.filter((item) => item.argument_names !== undefined).length)),
     required_arguments_rate: round(ratio(withCall.filter((item) => item.required_arguments === true).length, withCall.filter((item) => item.required_arguments !== undefined).length)),
     argument_types_rate: round(ratio(withCall.filter((item) => item.argument_types === true).length, withCall.filter((item) => item.argument_types !== undefined).length)),
+    argument_values_accuracy: round(
+      ratio(withCall.filter((item) => item.argument_values === true).length, withCall.filter((item) => item.argument_values !== undefined).length),
+    ),
+    false_completion_rate: round(ratio(withCall.filter((item) => item.false_completion === true).length, withCall.length)),
     response_kind_accuracy: round(ratio(items.filter((item) => item.kind_correct).length, items.length)),
     tool_call_cases: withCall.length,
   }
@@ -229,6 +240,16 @@ function sameKeys(left, right) {
   const a = Object.keys(left).toSorted()
   const b = Object.keys(right).toSorted()
   return a.length === b.length && a.every((key, index) => key === b[index])
+}
+
+/** Every expected argument is present with exactly the expected value. */
+function sameValues(actual, expected) {
+  return Object.entries(expected).every(([key, value]) => key in actual && JSON.stringify(actual[key]) === JSON.stringify(value))
+}
+
+/** Prose that claims the work is finished on a case where a tool call was required. */
+function claimsCompletion(text) {
+  return /\b(done|complete|completed|finished|verified)\b/i.test(text)
 }
 
 function typesMatch(argumentsValue, schema) {

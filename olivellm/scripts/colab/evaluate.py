@@ -1,6 +1,6 @@
-"""Runs the frozen evaluation cases through the unmodified base model on Colab.
+"""Measures the frozen evaluation cases on Colab, with or without a trained adapter.
 
-Inputs come from OLIVE_CASES (default /content/cases.json, uploaded from olivellm/evaluation/colab/cases.json).
+Inputs come from OLIVE_CASES (default /content/cases.json, uploaded from one of olivellm/evaluation/colab/cases*.json).
 Generation is greedy so a rerun reproduces the same text. The report records tokens and latency per case, and the raw
 outputs are returned so the scoring happens in the same place the corpus lives.
 
@@ -11,12 +11,48 @@ identical, which is what makes the two numbers comparable.
 
 import json
 import os
+import sys
 import time
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 MODEL = "LiquidAI/LFM2.5-350M"
+
+# A Colab kernel outlives a single `exec`, so the weights are cached on a module keyed by adapter: a baseline run and
+# an adapter run can share one session, and a repeated invocation does not reload the checkpoint.
+_cache = sys.modules.get("olive_lfm_cache")
+if _cache is None:
+    _cache = type(sys)("olive_lfm_cache")
+    sys.modules["olive_lfm_cache"] = _cache
+
+
+def load():
+    adapter = os.environ.get("OLIVE_ADAPTER")
+    key = f"evaluate:{adapter or 'base'}"
+    if getattr(_cache, "evaluate_key", None) == key:
+        return _cache.tokenizer, _cache.model, adapter
+    token = os.environ.get("HF_TOKEN")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL, token=token)
+    dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
+    model = AutoModelForCausalLM.from_pretrained(MODEL, token=token, dtype=dtype)
+    if adapter:
+        from peft import PeftModel
+
+        model = PeftModel.from_pretrained(model, adapter)
+    model.eval()
+    model.to("cuda" if torch.cuda.is_available() else "cpu")
+    _cache.evaluate_key, _cache.tokenizer, _cache.model = key, tokenizer, model
+    return tokenizer, model, adapter
+
+
+def revision():
+    try:
+        from huggingface_hub import model_info
+
+        return model_info(MODEL, token=os.environ.get("HF_TOKEN")).sha
+    except Exception:  # noqa: BLE001 - a missing revision must not lose the measurement
+        return None
 
 
 def main():
@@ -25,17 +61,7 @@ def main():
         payload = json.load(handle)
     cases = payload["cases"]
 
-    token = os.environ.get("HF_TOKEN")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL, token=token)
-    dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
-    model = AutoModelForCausalLM.from_pretrained(MODEL, token=token, dtype=dtype)
-    adapter = os.environ.get("OLIVE_ADAPTER")
-    if adapter:
-        from peft import PeftModel
-
-        model = PeftModel.from_pretrained(model, adapter)
-    model.eval()
-    model.to("cuda" if torch.cuda.is_available() else "cpu")
+    tokenizer, model, adapter = load()
 
     results = []
     for case in cases:
@@ -72,7 +98,10 @@ def main():
         json.dumps(
             {
                 "model": MODEL,
+                "revision": revision(),
                 "adapter": adapter or None,
+                "cases_file": path,
+                "cases_sha256": __import__("hashlib").sha256(open(path, "rb").read()).hexdigest(),
                 "device": str(model.device),
                 "cases": results,
             }

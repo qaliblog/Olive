@@ -21,11 +21,15 @@ if ! "$cli" exec -s "$session" --timeout 60 -f <(echo 'print("ready")') >/dev/nu
   remote new -s "$session" --gpu "${OLIVE_COLAB_GPU:-T4}"
 fi
 
+# A fresh runtime's hostname does not always resolve on the first attempt, so a single failure here is a transient
+# network error rather than a bad input; retry before giving up.
 upload() {
-  if ! "$cli" upload -s "$session" "$1" "$2" >/dev/null 2>&1; then
-    echo "run-remote: upload failed: $1 -> $2" >&2
-    exit 1
-  fi
+  for attempt in 1 2 3 4; do
+    if "$cli" upload -s "$session" "$1" "$2" >/dev/null 2>&1; then return 0; fi
+    sleep 5
+  done
+  echo "run-remote: upload failed after 4 attempts: $1 -> $2" >&2
+  exit 1
 }
 
 upload "$here/train_lora.py" /content/train_lora.py

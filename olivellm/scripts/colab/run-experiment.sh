@@ -20,6 +20,9 @@ logs="${OLIVE_LOG_DIR:-/tmp}"
 sequence="${OLIVE_SEQUENCE:-3072}"
 adapter_local="${OLIVE_ADAPTER_LOCAL:-$package/reports/lfm2.5-350m/2026-11-07-lora}"
 results_local="${OLIVE_RESULTS_LOCAL:-$package/reports/lfm2.5-350m/2026-11-07-lora/colab-results}"
+# The report has to name the code that produced it. A hardcoded value here once recorded a commit that had nothing to
+# do with the files actually uploaded.
+commit="$(git -C "$package" rev-parse --short=12 HEAD 2>/dev/null || echo unknown)"
 
 remote() { bash "$here/colab-env.sh" "$@"; }
 marker() { printf '%s\n' "$*"; }
@@ -32,9 +35,7 @@ ensure_session() {
 
 upload() {
   for attempt in 1 2 3 4; do
-    # An upload onto a path that already exists in the runtime fails, so the remote file is removed first; without this
-    # a rerun against a live session aborted here with no useful signal.
-    "$cli" rm -s "$session" "$2" > /dev/null 2>&1 || true
+    # An upload overwrites an existing remote path, so a rerun against a live session replaces the previous inputs.
     if "$cli" upload -s "$session" "$1" "$2" > /dev/null 2>&1; then return 0; fi
     sleep 5
   done
@@ -65,7 +66,9 @@ upload "$package/evaluation/colab/eval-ids.json" /content/eval-ids.json || exit 
 upload "$package/evaluation/colab/cases-2026-11-07-heldout-v2.json" /content/cases.json || exit 1
 
 marker "== run =="
-remote exec -s "$session" --timeout 7200 -f /content/run_all.py \
+# `-f` is a LOCAL path: the CLI sends the file's source to the kernel. The upload above makes the same file importable
+# as a module from /content, but the executed copy has to come from here.
+remote exec -s "$session" --timeout 7200 -f "$here/run_all.py" \
   --env OLIVE_SEQUENCE="$sequence" \
   --env OLIVE_DATA=/content/sft-train.jsonl \
   --env OLIVE_VAL=/content/sft-validation.jsonl \
@@ -73,7 +76,7 @@ remote exec -s "$session" --timeout 7200 -f /content/run_all.py \
   --env OLIVE_CASES=/content/cases.json \
   --env OLIVE_ADAPTER=/content/olive-lora-adapter \
   --env OLIVE_OUT=/content/olive-lora-train.json \
-  --env "OLIVE_GIT_COMMIT=f297cf54d3 (uncommitted experiment changes)" > "$logs/experiment-run.txt" 2>&1
+  --env "OLIVE_GIT_COMMIT=$commit" > "$logs/experiment-run.txt" 2>&1
 marker "exec exit: $?"
 
 marker "== download =="

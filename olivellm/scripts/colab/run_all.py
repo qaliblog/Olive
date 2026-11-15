@@ -74,6 +74,9 @@ def mask():
 
 
 def baseline():
+    # The adapter is read from the environment, and a kernel that already ran the adapter stage keeps it set. Without
+    # this the baseline of a rerun would measure the fine-tuned model and report it as the base checkpoint.
+    os.environ.pop("OLIVE_ADAPTER", None)
     import evaluate
 
     evaluate.main()

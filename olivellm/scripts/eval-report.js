@@ -60,7 +60,17 @@ for (const generation of run.cases) {
 
 const directory = await mkdtemp(path.join(os.tmpdir(), "olivellm-eval-"))
 
-const aggregate = summarise(scored)
+// A record can belong to more than one suite (a coding case that is also in the baseline subsample), so `scored` has
+// one entry per case entry. Headline metrics count each held-out record once: counting an entry twice weights that
+// record twice and makes the overall rate depend on how the suites happen to overlap.
+const unique = [...new Map(scored.map((item) => [item.id, item])).values()]
+const duplicates = scored.filter((item, index) => scored.findIndex((other) => other.id === item.id) !== index)
+const duplicateChecks = [...new Set(scored.map((item) => item.id))]
+  .map((id) => scored.filter((item) => item.id === id))
+  .filter((items) => items.length > 1)
+  .map((items) => ({ id: items[0].id, suites: items.map((item) => item.suite), identical: new Set(items.map((item) => item.text)).size === 1 }))
+
+const aggregate = summarise(unique)
 const tool = scored.filter((item) => item.suite === "tool_calling")
 const coding = scored.filter((item) => item.suite === "coding")
 const multilingual = scored.filter((item) => item.suite === "multilingual")
@@ -81,7 +91,7 @@ for (const item of coding) {
 await rm(directory, { recursive: true, force: true })
 
 const efficiency = {
-  cases: scored.length,
+  cases: unique.length,
   prompt_tokens: sum(scored, (item) => item.prompt_tokens),
   output_tokens: sum(scored, (item) => item.output_tokens),
   average_prompt_tokens: round(average(scored.map((item) => item.prompt_tokens))),
@@ -102,14 +112,17 @@ const metrics = {
     source: path.relative(root, casesFile),
     held_out: true,
     excluded_from_training: true,
-    cases: scored.length,
+    cases: unique.length,
+    entries: scored.length,
+    note: "`cases` counts each held-out record once; `entries` counts every suite entry, because a record can belong to two suites (for example a coding case that is also in the baseline subsample).",
     by_suite: countBy(scored, (item) => item.suite),
-    by_language: countBy(scored, (item) => item.language),
+    by_language: countBy(unique, (item) => item.language),
   },
+  duplicate_suite_entries: { pairs: duplicateChecks.length, identical: duplicateChecks.filter((item) => item.identical).length, details: duplicateChecks },
   conditions: "greedy decoding, max_new_tokens=192, temperature 0 (no sampling), identical prompts for any later fine-tuned model",
   overall: aggregate,
   by_language: Object.fromEntries(
-    [...new Set(scored.map((item) => item.language))].map((language) => [language, summarise(scored.filter((item) => item.language === language))]),
+    [...new Set(unique.map((item) => item.language))].map((language) => [language, summarise(unique.filter((item) => item.language === language))]),
   ),
   efficiency,
   measured_at: new Date().toISOString(),
@@ -162,13 +175,13 @@ await writeJson(path.join(reports, "baseline_evaluation.json"), {
 
 await writeJsonl(path.join(reports, "raw/generations.jsonl"), scored.map((item) => ({ ...item, parsed: item.parsed, text: item.text })))
 
-const failures = scored.filter((item) => !item.correct_tool)
+const failures = unique.filter((item) => !item.correct_tool)
 await writeFile(
   path.join(reports, "FAILURES.md"),
   [
     "# Base-model failures",
     "",
-    `Model: ${run.model} on ${run.device}. ${scored.length} cases, ${aggregate.tool_accuracy === undefined ? 0 : Math.round(aggregate.tool_accuracy * 100)}% correct tool selection.`,
+    `Model: ${run.model} on ${run.device}. ${unique.length} held-out cases, ${aggregate.tool_accuracy === undefined ? 0 : Math.round(aggregate.tool_accuracy * 100)}% correct tool selection.`,
     "",
     "Every case below was scored from the model's raw generation; nothing was repaired by hand.",
     "",
@@ -176,7 +189,8 @@ await writeFile(
     "| --- | --- | --- | --- | --- |",
     ...failures.slice(0, 80).map((item) => `| ${item.id} | ${item.suite} | ${item.language} | ${item.expected.tool ?? "(text)"} | ${item.parsed.calls[0] ? item.parsed.calls[0].name : item.parsed.text ? "text only" : "unparseable"} |`),
     "",
-    `Total failing cases: ${failures.length} of ${scored.length}.`,
+    `Total failing cases: ${failures.length} of ${unique.length}.`,
+    duplicates.length === 0 ? "" : `\n${duplicates.length} case entries repeat a record from another suite; the headline metrics count each record once.`,
     "",
   ].join("\n"),
 )

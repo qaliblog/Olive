@@ -139,3 +139,63 @@ PHASE 2 CONTINUATION - DATASET (2026-11-06)
     Verified: validate 479/479 with 0 rejected, 3 duplicates removed, split
     309/54/57/56 with 0 overlapping groups, olivellm 37 pass, core olive-* 84
     pass.
+
+PHASE A - AUDIT OF THE SFT EXPORT, MASK AND EVALUATION SET (2026-11-15)
+[x] Re-derive the exported splits from source instead of trusting the files.
+    Verified: `node scripts/export.js` re-run against the committed splits
+    produced no diff, so sft-{train,validation,test,heldout}.jsonl are exactly
+    what the current exporter writes. Counts 309/54/57/56.
+[x] Every SFT target is the final assistant turn of its own record.
+    Verified: `bun test` from olivellm, 42 pass, including "every training
+    target is the final assistant turn" (309 records) and the validation
+    equivalent (54): target appears verbatim, the only text after it is
+    <|im_end|>\n, and the prefix ends with <|im_start|>assistant\n.
+[x] The end-of-turn token is supervised, on the real tokenizer.
+    Verified: scripts/colab/test_masking.py on the T4, 10/10 pass.
+    "the closing <|im_end|> is supervised in every record" covers all 309
+    training records (eos_token_id 7); the supervision starts at the answer's
+    first token, never at the terminator, and a native call keeps both control
+    tokens.
+[x] Training and validation records pass the real tokenizer mask test.
+    Verified: same run, "training split aligns end to end" (309) and
+    "validation split aligns end to end" (54), plus decoded-span checks for
+    English, Persian, mixed, ordinary replies and tool calls with arguments.
+[x] Held-out evaluation cases do not overlap training, validation or test.
+    Verified: evaluation/colab/eval-ids.json compared with every split: 0 ids
+    in train, 0 in validation; all 58 case entries come from the heldout split;
+    0 id overlap between any two of the four splits, and the split manifest
+    reports 0 overlapping groups and 0 overlapping records.
+[x] The documented LoRA configuration matches the trainer.
+    Verified: r16/alpha 32/dropout 0.05, lr 2e-4, 3 epochs, accumulation 8 and
+    targets q_proj,k_proj,v_proj,w1,w2,w3,re:.*self_attn\.out_proj$ are the
+    defaults in train_lora.py and the config block in training_feasibility.md.
+[x] Fix: headline metrics counted 12 held-out records twice.
+    scripts/eval-report.js scored one entry per suite entry, and 12 records
+    belong to two suites (for example a coding case that is also in the
+    baseline subsample), so `overall` weighted those records twice. Now
+    `overall` and `by_language` count each record once, the report records
+    both `cases` and `entries`, and duplicate entries are compared for
+    determinism.
+    Verified: the case file has 58 entries / 46 unique ids; the dedupe rule
+    yields 46. Real confirmation comes from the Phase B report.
+[x] Fix: a rerun could measure the adapter and report it as the base model.
+    run_all.py read OLIVE_ADAPTER from the environment, and a kernel that had
+    already run the adapter stage keeps it set. baseline() now clears it.
+[x] Fix: run-experiment.sh could never have run.
+    It executed `-f /content/run_all.py`, but `colab exec -f` reads a LOCAL
+    path and ships that source to the kernel, so every attempt died with
+    FileNotFoundError before the first stage. Also replaced the hardcoded
+    OLIVE_GIT_COMMIT ("f297cf54d3 (uncommitted experiment changes)") with the
+    real HEAD, removed a `colab rm` call that this CLI does not implement, and
+    retried uploads in run-remote.sh because a fresh runtime's hostname does
+    not always resolve on the first attempt.
+    Verified: observed both failures on the live session, then ran the same
+    exec form successfully against the kernel.
+[!] The documented sequence length is arithmetically impossible.
+    Measured on the real tokenizer: record lengths p50 1313, p90 1485,
+    p95 1716, max 2678 tokens, but training_feasibility.md claims "sequence
+    length 1024 covers the p95 prompt (607 estimated tokens)". At 1024 every
+    one of the 309 records loses prompt tokens (share 1.000), above the
+    trainer's 0.10 budget, so the run aborts instead of training. 2048 leaves
+    3.9% truncated; 3072 leaves none. Decision: run at 3072, record the
+    deviation with its reason, and correct the document.

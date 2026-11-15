@@ -307,9 +307,14 @@ def main():
             "lora_dropout": DROPOUT,
             "target_modules": TARGETS,
             "seed": SEED,
+            "batch_size": 1,
             "effective_batch_size": ACCUMULATE,
             "optimizer": "adamw_torch",
             "scheduler": "none (constant learning rate)",
+            "gradient_clipping": None,
+            "save_every_optimizer_steps": SAVE_EVERY,
+            "resume": RESUME,
+            "max_prompt_truncation": MAX_PROMPT_TRUNCATION,
         },
     }
 

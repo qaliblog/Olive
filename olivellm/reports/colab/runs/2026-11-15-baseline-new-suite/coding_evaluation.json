@@ -1,0 +1,44 @@
+{
+  "status": "measured",
+  "suite": "coding",
+  "cases": 4,
+  "produced_file_rate": 0,
+  "syntax_valid_rate": 0,
+  "syntax_results": {
+    "missing": 4
+  },
+  "checks": [
+    {
+      "id": "olive.file_creation.rn_edit_screen.en.0007",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.rn_add_note.en.0010",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.tailwind_hero.en.0019",
+      "produced_file": false,
+      "syntax": "missing"
+    },
+    {
+      "id": "olive.file_editing.tailwind_pricing.en.0020",
+      "produced_file": false,
+      "syntax": "missing"
+    }
+  ],
+  "note": "JavaScript is checked with `node --check`; CSS and HTML are checked for balanced braces and tags. A case that produced no file cannot pass a syntax check.",
+  "valid_call_rate": 0,
+  "invalid_call_rate": 0,
+  "unknown_tool_rate": 0,
+  "tool_accuracy": 0,
+  "argument_names_accuracy": 0,
+  "required_arguments_rate": 0,
+  "argument_types_rate": 0,
+  "argument_values_accuracy": 0,
+  "false_completion_rate": 0,
+  "response_kind_accuracy": 0,
+  "tool_call_cases": 4
+}

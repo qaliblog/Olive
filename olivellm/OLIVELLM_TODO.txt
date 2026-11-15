@@ -199,3 +199,35 @@ PHASE A - AUDIT OF THE SFT EXPORT, MASK AND EVALUATION SET (2026-11-15)
     trainer's 0.10 budget, so the run aborts instead of training. 2048 leaves
     3.9% truncated; 3072 leaves none. Decision: run at 3072, record the
     deviation with its reason, and correct the document.
+
+PHASE B - NEW BASELINE ON THE FROZEN HELD-OUT SUITE (2026-11-15)
+[x] Measure the unmodified LiquidAI/LFM2.5-350M checkpoint on the new suite.
+    Model revision 9921cd4d82c0e3986887aa4b376f9446729ef8a3, adapter none,
+    device cuda:0 (Tesla T4), greedy decoding, max_new_tokens 192, the same
+    messages and tool list the adapter run will use. 58 case entries, 46 unique
+    held-out records (12 records belong to two suites), 45 tool-call cases.
+    Verified: evaluation/colab/baseline-run-2026-11-15.json (raw text per case)
+    and reports/colab/runs/2026-11-15-baseline-new-suite/.
+[x] The run is reproducible, measured rather than assumed.
+    12 duplicate suite entries produced byte-identical text, so the same prompt
+    and greedy decoding reproduced the same output inside one run.
+[x] Report the required metrics with real counts.
+    Tool-call rate 10/45 = 22.2%; invalid call blocks 2/45; correct tool
+    6/45 = 13.3%; argument names 4/10; required arguments present 9/10;
+    argument types 10/10; exact argument values 1/10 = 10.0%; false completion
+    27/45 = 60.0%; response kind 11/46 = 23.9%.
+    English: 10/40 calls, 6/40 correct tool, 24/40 false completions.
+    Persian: 0/5 calls, 2/5 invalid call blocks, 0/5 correct tool, 3/5 false
+    completions, 1/6 correct response kind.
+[x] Measure execution success instead of inferring it from the generation.
+    scripts/execution-score.js runs each parsed call through the real
+    OliveTools.execute in a workspace seeded from the record, and gates each
+    case on its own reference call so a fixture the record cannot satisfy is
+    excluded instead of scored. 19 of 45 tool-call cases are not executable
+    from the record's own context; on the remaining 26 the base model emitted
+    2 calls and executed 0 (0.0%), 26/26 unserved: one timeout, one
+    invalid-arguments, 25 no call at all.
+    Verified: reports/.../execution_evaluation.json.
+[ ] Task completion rate is not a one-step metric.
+    A held-out record is a single step, so completion is measured where it is
+    real: the OliveAgent scenarios in Phase E, on both checkpoints.

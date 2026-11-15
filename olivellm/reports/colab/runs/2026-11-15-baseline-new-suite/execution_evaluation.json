@@ -1,0 +1,77 @@
+{
+  "status": "measured",
+  "run_id": "2026-11-15-baseline-new-suite",
+  "adapter": null,
+  "model": "LiquidAI/LFM2.5-350M",
+  "definition": "The parsed call is executed by the real OliveTools.execute in a workspace seeded from the record's context.code and context.workspace. A case is gated on its own reference call: when the expected call cannot execute in that workspace the case is `not-executable` and excluded, so both models are scored on the same executable cases. `ok` means the executor returned success; a failure carries the executor's error code.",
+  "cases": 46,
+  "executable_cases": 27,
+  "not_executable_cases": 19,
+  "tool_call_cases": 45,
+  "scored_tool_call_cases": 26,
+  "calls_emitted": 2,
+  "executed": 0,
+  "execution_success_rate_of_tool_call_cases": 0,
+  "execution_success_rate_of_emitted_calls": 0,
+  "rejections": 1,
+  "statuses": {
+    "no-call": 25,
+    "not-executable": 19,
+    "failed": 2
+  },
+  "error_codes": {
+    "timeout": 1,
+    "invalid-arguments": 1
+  },
+  "by_language": {
+    "en": {
+      "cases": 40,
+      "executable_tool_call_cases": 23,
+      "calls_emitted": 2,
+      "executed": 0,
+      "execution_success_rate": 0,
+      "not_executable": 17
+    },
+    "fa": {
+      "cases": 6,
+      "executable_tool_call_cases": 3,
+      "calls_emitted": 0,
+      "executed": 0,
+      "execution_success_rate": 0,
+      "not_executable": 2
+    }
+  },
+  "by_tool": {
+    "inspect_diagnostics": 1,
+    "run_diagnostics": 1
+  },
+  "failures": [
+    {
+      "id": "olive.intent_understanding.python_cli.en.0022",
+      "suite": "tool_calling",
+      "language": "en",
+      "expected_tool": "project_structure",
+      "tool": "inspect_diagnostics",
+      "arguments": {
+        "command": "project_structure",
+        "timeoutMs": 10
+      },
+      "reference": "ok",
+      "status": "failed",
+      "error": "timeout"
+    },
+    {
+      "id": "olive.dependency_installation.install_and_shell.en.0003",
+      "suite": "baseline",
+      "language": "en",
+      "expected_tool": "run_tests",
+      "tool": "run_diagnostics",
+      "arguments": {
+        "command": "run_diagnostics"
+      },
+      "reference": "ok",
+      "status": "failed",
+      "error": "invalid-arguments"
+    }
+  ]
+}

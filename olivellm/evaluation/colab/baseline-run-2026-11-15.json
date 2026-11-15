@@ -1,0 +1,532 @@
+{
+ "model": "LiquidAI/LFM2.5-350M",
+ "revision": "9921cd4d82c0e3986887aa4b376f9446729ef8a3",
+ "adapter": null,
+ "cases_file": "/content/cases.json",
+ "cases_sha256": "9ffea3e7a8adc34de2b3a0979676d146bb6013f582c08f27c4f4224217fff5f7",
+ "device": "cuda:0",
+ "cases": [
+  {
+   "id": "olive.completion_verification.question_missing_file.en.0001",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1242,
+   "output_tokens": 40,
+   "seconds": 2.372,
+   "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result matches the specified DONE status.<|im_end|>"
+  },
+  {
+   "id": "olive.completion_verification.question_missing_file.en.0003",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1376,
+   "output_tokens": 18,
+   "seconds": 0.808,
+   "text": "<|tool_call_start|>[run_shell(command=\"recover from the failed operation\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.dependency_installation.install_and_shell.en.0002",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1305,
+   "output_tokens": 17,
+   "seconds": 0.626,
+   "text": "<|tool_call_start|>[run_diagnostics(command=\"run_diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.dependency_installation.tailwind_landing.en.0007",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1239,
+   "output_tokens": 52,
+   "seconds": 1.284,
+   "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, verified results, or pending tasks. The relevant code, tool results, and final output are all as specified.<|im_end|>"
+  },
+  {
+   "id": "olive.error_recovery.missing_prop.fa.0036",
+   "suite": "tool_calling",
+   "language": "fa",
+   "prompt_tokens": 1372,
+   "output_tokens": 17,
+   "seconds": 0.63,
+   "text": "<|tool_call_start|>[fix the reported diagnostics(command=\"fix the reported diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_creation.rn_edit_screen.en.0007",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1357,
+   "output_tokens": 41,
+   "seconds": 1.104,
+   "text": "QUESTION: The task requires executing a series of steps including file creation, dependency installation, diagnostics, and error handling. However, the provided code and recent tool results indicate no valid actions can be taken.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0002",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 38,
+   "seconds": 1.015,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0004",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1244,
+   "output_tokens": 40,
+   "seconds": 1.063,
+   "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result matches the specified DONE status.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0006",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1246,
+   "output_tokens": 79,
+   "seconds": 1.816,
+   "text": "The task cannot be completed as none of the available tools are designed to address the error encountered. The system detected no valid tool calls to execute, and the task requires a different approach (e.g., manual review, code analysis, or dependency checks). Since none of the provided tools can resolve this error, the correct response is:\n\n**Tool call:** `inspect_diagnostics`<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.tailwind_hero.en.0019",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1655,
+   "output_tokens": 45,
+   "seconds": 1.258,
+   "text": "QUESTION: The task requires executing a series of steps including reading a file, writing a project, installing dependencies, running diagnostics, and verifying results. The provided code and tool results do not align with the task requirements.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0004",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1242,
+   "output_tokens": 18,
+   "seconds": 0.64,
+   "text": "<|tool_call_start|>[search_code(query=\"declaration\", path=\"fixture\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0006",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 20,
+   "seconds": 0.787,
+   "text": "<|tool_call_start|>[search_code(query=\"search one directory only\", path=\"fixture\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0008",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 17,
+   "seconds": 0.685,
+   "text": "<|tool_call_start|>[search_code(query=\"none\", path=\"fixture\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.python_cli_range.en.0012",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 53,
+   "seconds": 1.589,
+   "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, pending actions, or verified results. The relevant code, tool results, and task details have been analyzed and confirmed.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.static_site_fa.fa.0034",
+   "suite": "tool_calling",
+   "language": "fa",
+   "prompt_tokens": 1241,
+   "output_tokens": 38,
+   "seconds": 1.047,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.static_site.en.0021",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1238,
+   "output_tokens": 38,
+   "seconds": 1.1,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.tailwind_landing.en.0015",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1239,
+   "output_tokens": 38,
+   "seconds": 1.082,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.intent_understanding.python_cli.en.0022",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1248,
+   "output_tokens": 21,
+   "seconds": 0.682,
+   "text": "<|tool_call_start|>[inspect_diagnostics(command=\"project_structure\", timeoutMs=10)]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.project_structure.static_site_fa.fa.0027",
+   "suite": "tool_calling",
+   "language": "fa",
+   "prompt_tokens": 1242,
+   "output_tokens": 38,
+   "seconds": 1.006,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0052",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1246,
+   "output_tokens": 38,
+   "seconds": 1.01,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were successfully executed. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0054",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 38,
+   "seconds": 1.018,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0056",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 38,
+   "seconds": 1.007,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.task_planning.capacitor_android.en.0019",
+   "suite": "tool_calling",
+   "language": "en",
+   "prompt_tokens": 1246,
+   "output_tokens": 38,
+   "seconds": 1.035,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.task_planning.static_site_fa.fa.0053",
+   "suite": "tool_calling",
+   "language": "fa",
+   "prompt_tokens": 1270,
+   "output_tokens": 38,
+   "seconds": 1.193,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.file_creation.rn_edit_screen.en.0007",
+   "suite": "coding",
+   "language": "en",
+   "prompt_tokens": 1357,
+   "output_tokens": 41,
+   "seconds": 1.308,
+   "text": "QUESTION: The task requires executing a series of steps including file creation, dependency installation, diagnostics, and error handling. However, the provided code and recent tool results indicate no valid actions can be taken.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.rn_add_note.en.0010",
+   "suite": "coding",
+   "language": "en",
+   "prompt_tokens": 1517,
+   "output_tokens": 15,
+   "seconds": 0.766,
+   "text": "QUESTION: The error blockged the tool for diagnostics and verification steps.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.tailwind_hero.en.0019",
+   "suite": "coding",
+   "language": "en",
+   "prompt_tokens": 1655,
+   "output_tokens": 45,
+   "seconds": 1.263,
+   "text": "QUESTION: The task requires executing a series of steps including reading a file, writing a project, installing dependencies, running diagnostics, and verifying results. The provided code and tool results do not align with the task requirements.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.tailwind_pricing.en.0020",
+   "suite": "coding",
+   "language": "en",
+   "prompt_tokens": 1655,
+   "output_tokens": 21,
+   "seconds": 0.802,
+   "text": "QUESTION: The task requires a tool to verify the result of the provided code and recent tool results.<|im_end|>"
+  },
+  {
+   "id": "olive.code_generation.react_reports_page_fa.fa.0015",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1241,
+   "output_tokens": 38,
+   "seconds": 1.004,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were successfully executed. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.error_recovery.missing_prop.fa.0036",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1372,
+   "output_tokens": 17,
+   "seconds": 0.643,
+   "text": "<|tool_call_start|>[fix the reported diagnostics(command=\"fix the reported diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.error_recovery.wrong_import_path.fa.0010",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1373,
+   "output_tokens": 17,
+   "seconds": 0.66,
+   "text": "<|tool_call_start|>[fix the reported diagnostics(command=\"fix the reported diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.static_site_fa.fa.0034",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1241,
+   "output_tokens": 38,
+   "seconds": 1.016,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.project_structure.static_site_fa.fa.0027",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1242,
+   "output_tokens": 38,
+   "seconds": 1.031,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.task_planning.static_site_fa.fa.0053",
+   "suite": "multilingual",
+   "language": "fa",
+   "prompt_tokens": 1270,
+   "output_tokens": 38,
+   "seconds": 1.05,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.code_generation.react_reports_page_fa.fa.0015",
+   "suite": "baseline",
+   "language": "fa",
+   "prompt_tokens": 1241,
+   "output_tokens": 38,
+   "seconds": 1.047,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were successfully executed. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.completion_verification.question_missing_file.en.0001",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1242,
+   "output_tokens": 40,
+   "seconds": 1.041,
+   "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result matches the specified DONE status.<|im_end|>"
+  },
+  {
+   "id": "olive.completion_verification.question_missing_file.en.0003",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1376,
+   "output_tokens": 18,
+   "seconds": 0.786,
+   "text": "<|tool_call_start|>[run_shell(command=\"recover from the failed operation\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.dependency_installation.install_and_shell.en.0001",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1240,
+   "output_tokens": 36,
+   "seconds": 1.127,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.dependency_installation.install_and_shell.en.0003",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1360,
+   "output_tokens": 17,
+   "seconds": 0.794,
+   "text": "<|tool_call_start|>[run_diagnostics(command=\"run_diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.diagnostics.python_cli.en.0004",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1239,
+   "output_tokens": 52,
+   "seconds": 1.295,
+   "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, no files, no symbols, and no pending tasks. The relevant code and recent tool results were also confirmed.<|im_end|>"
+  },
+  {
+   "id": "olive.error_recovery.wrong_import_path.fa.0010",
+   "suite": "baseline",
+   "language": "fa",
+   "prompt_tokens": 1373,
+   "output_tokens": 17,
+   "seconds": 0.648,
+   "text": "<|tool_call_start|>[fix the reported diagnostics(command=\"fix the reported diagnostics\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0001",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 40,
+   "seconds": 1.047,
+   "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result matches the specified DONE status.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0003",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 36,
+   "seconds": 0.969,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from analysis to verification were successfully executed. The final output matches the task requirements.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.coverage_edit_file.en.0005",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 39,
+   "seconds": 1.011,
+   "text": "The task has been completed as no errors were encountered during execution. All steps from analysis to verification were successfully executed, and no tools were blocked. The final result is confirmed as DONE.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.rn_add_note.en.0010",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1517,
+   "output_tokens": 15,
+   "seconds": 0.664,
+   "text": "QUESTION: The error blockged the tool for diagnostics and verification steps.<|im_end|>"
+  },
+  {
+   "id": "olive.file_editing.tailwind_pricing.en.0020",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1655,
+   "output_tokens": 21,
+   "seconds": 0.804,
+   "text": "QUESTION: The task requires a tool to verify the result of the provided code and recent tool results.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0005",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1243,
+   "output_tokens": 20,
+   "seconds": 0.686,
+   "text": "<|tool_call_start|>[search_code(query=\"limit the match count\", path=\"fixture\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0007",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1245,
+   "output_tokens": 17,
+   "seconds": 0.64,
+   "text": "<|tool_call_start|>[search_code(query=\"find every node:test import\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.coverage_search_code.en.0009",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1244,
+   "output_tokens": 13,
+   "seconds": 0.543,
+   "text": "<|tool_call_start|>[search_code(query=\"export line\")]<|tool_call_end|><|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.python_cli.en.0011",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1240,
+   "output_tokens": 54,
+   "seconds": 1.304,
+   "text": "The task has been completed as per the provided instructions. The system has verified the task is finished and verified (DONE) with no errors, pending actions, or verified results. The relevant code and tool results were analyzed, and no further tool calls are needed.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.static_site_range.en.0022",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1241,
+   "output_tokens": 38,
+   "seconds": 1.174,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.file_reading.tailwind_landing_range.en.0016",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1242,
+   "output_tokens": 38,
+   "seconds": 1.208,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.intent_understanding.python_cli.en.0021",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 61,
+   "seconds": 1.56,
+   "text": "The task is incomplete and requires a specific action to proceed. The relevant code and recent tool results are not provided. To continue, I need the next action (e.g., \"add a --json flag\" or \"create a new project directory\"). Could you clarify what step should be taken next?<|im_end|>"
+  },
+  {
+   "id": "olive.intent_understanding.python_cli.en.0023",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1245,
+   "output_tokens": 38,
+   "seconds": 1.074,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0051",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1247,
+   "output_tokens": 54,
+   "seconds": 1.291,
+   "text": "The task is incomplete and requires a specific action to proceed. The relevant code and recent tool results are not provided. To continue, I need the next action (e.g., \"analyze requirements,\" \"create project directories,\" \"write initial files,\" etc.).<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0053",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1248,
+   "output_tokens": 38,
+   "seconds": 1.01,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.requirement_extraction.tailwind_landing.en.0055",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1248,
+   "output_tokens": 38,
+   "seconds": 0.998,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were successfully executed. The final result matches the expected outcome.<|im_end|>"
+  },
+  {
+   "id": "olive.task_planning.capacitor_android.en.0018",
+   "suite": "baseline",
+   "language": "en",
+   "prompt_tokens": 1245,
+   "output_tokens": 38,
+   "seconds": 1.01,
+   "text": "The task has been completed as per the provided instructions. No errors were encountered, and all steps from Pending to Verified were executed successfully. The final result matches the task description.<|im_end|>"
+  }
+ ]
+}

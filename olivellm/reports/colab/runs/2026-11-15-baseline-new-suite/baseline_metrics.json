@@ -1,0 +1,181 @@
+{
+  "status": "measured",
+  "run_id": "2026-11-15-baseline-new-suite",
+  "adapter": null,
+  "model": "LiquidAI/LFM2.5-350M",
+  "device": "cuda:0",
+  "evaluation_set": {
+    "source": "evaluation/colab/cases-2026-11-07-heldout-v2.jsonl",
+    "held_out": true,
+    "excluded_from_training": true,
+    "cases": 46,
+    "entries": 58,
+    "note": "`cases` counts each held-out record once; `entries` counts every suite entry, because a record can belong to two suites (for example a coding case that is also in the baseline subsample).",
+    "by_suite": {
+      "tool_calling": 24,
+      "coding": 4,
+      "multilingual": 6,
+      "baseline": 24
+    },
+    "by_language": {
+      "en": 40,
+      "fa": 6
+    }
+  },
+  "duplicate_suite_entries": {
+    "pairs": 12,
+    "identical": 12,
+    "details": [
+      {
+        "id": "olive.completion_verification.question_missing_file.en.0001",
+        "suites": [
+          "tool_calling",
+          "baseline"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.completion_verification.question_missing_file.en.0003",
+        "suites": [
+          "tool_calling",
+          "baseline"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.error_recovery.missing_prop.fa.0036",
+        "suites": [
+          "tool_calling",
+          "multilingual"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.file_creation.rn_edit_screen.en.0007",
+        "suites": [
+          "tool_calling",
+          "coding"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.file_editing.tailwind_hero.en.0019",
+        "suites": [
+          "tool_calling",
+          "coding"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.file_reading.static_site_fa.fa.0034",
+        "suites": [
+          "tool_calling",
+          "multilingual"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.project_structure.static_site_fa.fa.0027",
+        "suites": [
+          "tool_calling",
+          "multilingual"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.task_planning.static_site_fa.fa.0053",
+        "suites": [
+          "tool_calling",
+          "multilingual"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.file_editing.rn_add_note.en.0010",
+        "suites": [
+          "coding",
+          "baseline"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.file_editing.tailwind_pricing.en.0020",
+        "suites": [
+          "coding",
+          "baseline"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.code_generation.react_reports_page_fa.fa.0015",
+        "suites": [
+          "multilingual",
+          "baseline"
+        ],
+        "identical": true
+      },
+      {
+        "id": "olive.error_recovery.wrong_import_path.fa.0010",
+        "suites": [
+          "multilingual",
+          "baseline"
+        ],
+        "identical": true
+      }
+    ]
+  },
+  "conditions": "greedy decoding, max_new_tokens=192, temperature 0 (no sampling), identical prompts for any later fine-tuned model",
+  "overall": {
+    "valid_call_rate": 0.222,
+    "invalid_call_rate": 0.044,
+    "unknown_tool_rate": 0.044,
+    "tool_accuracy": 0.133,
+    "argument_names_accuracy": 0.4,
+    "required_arguments_rate": 0.9,
+    "argument_types_rate": 1,
+    "argument_values_accuracy": 0.1,
+    "false_completion_rate": 0.6,
+    "response_kind_accuracy": 0.239,
+    "tool_call_cases": 45
+  },
+  "by_language": {
+    "en": {
+      "valid_call_rate": 0.25,
+      "invalid_call_rate": 0,
+      "unknown_tool_rate": 0.05,
+      "tool_accuracy": 0.15,
+      "argument_names_accuracy": 0.4,
+      "required_arguments_rate": 0.9,
+      "argument_types_rate": 1,
+      "argument_values_accuracy": 0.1,
+      "false_completion_rate": 0.6,
+      "response_kind_accuracy": 0.25,
+      "tool_call_cases": 40
+    },
+    "fa": {
+      "valid_call_rate": 0,
+      "invalid_call_rate": 0.4,
+      "unknown_tool_rate": 0,
+      "tool_accuracy": 0,
+      "argument_names_accuracy": 0,
+      "required_arguments_rate": 0,
+      "argument_types_rate": 0,
+      "argument_values_accuracy": 0,
+      "false_completion_rate": 0.6,
+      "response_kind_accuracy": 0.167,
+      "tool_call_cases": 5
+    }
+  },
+  "efficiency": {
+    "cases": 46,
+    "prompt_tokens": 75552,
+    "output_tokens": 1982,
+    "average_prompt_tokens": 1302.621,
+    "average_output_tokens": 34.172,
+    "total_seconds": 59.131,
+    "tokens_per_second": 33.519,
+    "average_seconds_per_case": 1.019,
+    "context_usage": 0.04
+  },
+  "measured_at": "2026-11-15T12:24:59.950Z"
+}
